@@ -149,6 +149,20 @@ function in `IndexVisitor` and update `ParseStreaming`.
 
 
 
+### MultiLineRange
+
+MultiLineRange represents a half-open [start, end) range spanning multiple lines.
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+|  **start_line** | int32 | 
+|  **start_character** | int32 | 
+|  **end_line** | int32 | 
+|  **end_character** | int32 | 
+
+
+
+
 ### Occurrence
 
 Occurrence associates a source position with a symbol and/or highlighting
@@ -159,39 +173,34 @@ across occurrences into a single occurrence to reduce payload sizes.
 
 | Name | Type | Description |
 | ---- | ---- | ----------- |
-| repeated **range** | int32 | Half-open [start, end) range of this occurrence. Must be exactly three or four elements:
+| repeated **range** | int32 | Deprecated: Use `single_line_range` or `multi_line_range` instead.
+|  **single_line_range** | SingleLineRange | Range spanning a single line.
+|  **multi_line_range** | MultiLineRange | Range spanning multiple lines.
 |  **symbol** | string | (optional) The symbol that appears at this position. See `SymbolInformation.symbol` for how to format symbols as strings.
 |  **symbol_roles** | int32 | (optional) Bitset containing `SymbolRole`s in this occurrence. See `SymbolRole`'s documentation for how to read and write this field.
 | repeated **override_documentation** | string | (optional) CommonMark-formatted documentation for this specific range. If empty, the `Symbol.documentation` field is used instead. One example where this field might be useful is when the symbol represents a generic function (with abstract type parameters such as `List<T>`) and at this occurrence we know the exact values (such as `List<String>`).
 |  **syntax_kind** | SyntaxKind | (optional) What syntax highlighting class should be used for this range?
 | repeated **diagnostics** | Diagnostic | (optional) Diagnostics that have been reported for this specific range.
-| repeated **enclosing_range** | int32 | (optional) Using the same encoding as the sibling `range` field, half-open source range of the nearest non-trivial enclosing AST node. This range must enclose the `range` field. Example applications that make use of the enclosing_range field:
+| repeated **enclosing_range** | int32 | Deprecated: Use `typed_enclosing_range` instead.
+|  **single_line_enclosing_range** | SingleLineRange | 
+|  **multi_line_enclosing_range** | MultiLineRange | 
 
 Additional notes on **range**:
 
-Half-open [start, end) range of this occurrence. Must be exactly three or four
-elements:
+Deprecated: Use `single_line_range` or `multi_line_range` instead.
 
+Half-open [start, end) range. Must be exactly three or four elements:
+- Three elements: `[startLine, startCharacter, endCharacter]` (single-line)
 - Four elements: `[startLine, startCharacter, endLine, endCharacter]`
-- Three elements: `[startLine, startCharacter, endCharacter]`. The end line
-  is inferred to have the same value as the start line.
-
-It is allowed for the range to be empty (i.e. start==end).
-
-Line numbers and characters are always 0-based. Make sure to increment the
-line/character values before displaying them in an editor-like UI because
-editors conventionally use 1-based numbers.
-
-The 'character' value is interpreted based on the PositionEncoding for
-the Document.
 
 Historical note: the original draft of this schema had a `Range` message
 type with `start` and `end` fields of type `Position`, mirroring LSP.
 Benchmarks revealed that this encoding was inefficient and that we could
 reduce the total payload size of an index by 50% by using `repeated int32`
-instead. The `repeated int32` encoding is admittedly more embarrassing to
-work with in some programming languages but we hope the performance
-improvements make up for it.
+instead. However, the lack of type safety led to the introduction of
+`single_line_range` and `multi_line_range` as typed alternatives.
+
+
 
 
 
@@ -210,60 +219,7 @@ which commonly allow for type-changing assignment.
 
 
 
-Additional notes on **enclosing_range**:
 
-(optional) Using the same encoding as the sibling `range` field, half-open
-source range of the nearest non-trivial enclosing AST node. This range must
-enclose the `range` field. Example applications that make use of the
-enclosing_range field:
-
-- Call hierarchies: to determine what symbols are references from the body
-  of a function
-- Symbol outline: to display breadcrumbs from the cursor position to the
-  root of the file
-- Expand selection: to select the nearest enclosing AST node.
-- Highlight range: to indicate the AST expression that is associated with a
-  hover popover
-
-For definition occurrences, the enclosing range should indicate the
-start/end bounds of the entire definition AST node, including
-documentation.
-```
-const n = 3
-      ^ range
-^^^^^^^^^^^ enclosing_range
-
-/** Parses the string into something */
-^ enclosing_range start --------------------------------------|
-function parse(input string): string {                        |
-         ^^^^^ range                                          |
-    return input.slice(n)                                     |
-}                                                             |
-^ enclosing_range end <---------------------------------------|
-```
-
-Any attributes/decorators/attached macros should also be part of the
-enclosing range.
-
-```python
-@cache
-^ enclosing_range start---------------------|
-def factorial(n):                           |
-    return n * factorial(n-1) if n else 1   |
-< enclosing_range end-----------------------|
-
-```
-
-For reference occurrences, the enclosing range should indicate the start/end
-bounds of the parent expression.
-```
-const a = a.b
-            ^ range
-          ^^^ enclosing_range
-const b = a.b(41).f(42).g(43)
-                  ^ range
-          ^^^^^^^^^^^^^ enclosing_range
-```
 
 ### Package
 
@@ -324,6 +280,18 @@ signatures using the Document message type.
 |  **language** | string | The language of the signature, e.g. "java", "go", "python".
 |  **text** | string | The text content of the signature, e.g. "void add(int a, int b)".
 | repeated **occurrences** | Occurrence | (optional) Occurrences within the signature text that reference other symbols, enabling hyperlinking of types in the signature. Ranges are relative to the `text` field.
+
+
+
+### SingleLineRange
+
+SingleLineRange represents a half-open [start, end) range within a single line.
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+|  **line** | int32 | 
+|  **start_character** | int32 | 
+|  **end_character** | int32 | 
 
 
 

@@ -9,13 +9,17 @@ module Proto.Scip (
         Descriptor'Suffix'UnrecognizedValue, Diagnostic(),
         DiagnosticTag(..), DiagnosticTag(),
         DiagnosticTag'UnrecognizedValue, Document(), Index(), Language(..),
-        Language(), Language'UnrecognizedValue, Metadata(), Occurrence(),
-        Package(), PositionEncoding(..), PositionEncoding(),
+        Language(), Language'UnrecognizedValue, Metadata(),
+        MultiLineRange(), Occurrence(), Occurrence'TypedRange(..),
+        Occurrence'TypedEnclosingRange(..), _Occurrence'SingleLineRange,
+        _Occurrence'MultiLineRange, _Occurrence'SingleLineEnclosingRange,
+        _Occurrence'MultiLineEnclosingRange, Package(),
+        PositionEncoding(..), PositionEncoding(),
         PositionEncoding'UnrecognizedValue, ProtocolVersion(..),
         ProtocolVersion(), ProtocolVersion'UnrecognizedValue,
         Relationship(), Severity(..), Severity(),
-        Severity'UnrecognizedValue, Signature(), Symbol(),
-        SymbolInformation(), SymbolInformation'Kind(..),
+        Severity'UnrecognizedValue, Signature(), SingleLineRange(),
+        Symbol(), SymbolInformation(), SymbolInformation'Kind(..),
         SymbolInformation'Kind(), SymbolInformation'Kind'UnrecognizedValue,
         SymbolRole(..), SymbolRole(), SymbolRole'UnrecognizedValue,
         SyntaxKind(..), SyntaxKind(IdentifierKeyword, IdentifierModule),
@@ -2524,6 +2528,245 @@ instance Control.DeepSeq.NFData Metadata where
                          (_Metadata'textDocumentEncoding x__) ()))))
 {- | Fields :
      
+         * 'Proto.Scip_Fields.startLine' @:: Lens' MultiLineRange Data.Int.Int32@
+         * 'Proto.Scip_Fields.startCharacter' @:: Lens' MultiLineRange Data.Int.Int32@
+         * 'Proto.Scip_Fields.endLine' @:: Lens' MultiLineRange Data.Int.Int32@
+         * 'Proto.Scip_Fields.endCharacter' @:: Lens' MultiLineRange Data.Int.Int32@ -}
+data MultiLineRange
+  = MultiLineRange'_constructor {_MultiLineRange'startLine :: !Data.Int.Int32,
+                                 _MultiLineRange'startCharacter :: !Data.Int.Int32,
+                                 _MultiLineRange'endLine :: !Data.Int.Int32,
+                                 _MultiLineRange'endCharacter :: !Data.Int.Int32,
+                                 _MultiLineRange'_unknownFields :: !Data.ProtoLens.FieldSet}
+  deriving stock (Prelude.Eq, Prelude.Ord)
+instance Prelude.Show MultiLineRange where
+  showsPrec _ __x __s
+    = Prelude.showChar
+        '{'
+        (Prelude.showString
+           (Data.ProtoLens.showMessageShort __x) (Prelude.showChar '}' __s))
+instance Data.ProtoLens.Field.HasField MultiLineRange "startLine" Data.Int.Int32 where
+  fieldOf _
+    = (Prelude..)
+        (Lens.Family2.Unchecked.lens
+           _MultiLineRange'startLine
+           (\ x__ y__ -> x__ {_MultiLineRange'startLine = y__}))
+        Prelude.id
+instance Data.ProtoLens.Field.HasField MultiLineRange "startCharacter" Data.Int.Int32 where
+  fieldOf _
+    = (Prelude..)
+        (Lens.Family2.Unchecked.lens
+           _MultiLineRange'startCharacter
+           (\ x__ y__ -> x__ {_MultiLineRange'startCharacter = y__}))
+        Prelude.id
+instance Data.ProtoLens.Field.HasField MultiLineRange "endLine" Data.Int.Int32 where
+  fieldOf _
+    = (Prelude..)
+        (Lens.Family2.Unchecked.lens
+           _MultiLineRange'endLine
+           (\ x__ y__ -> x__ {_MultiLineRange'endLine = y__}))
+        Prelude.id
+instance Data.ProtoLens.Field.HasField MultiLineRange "endCharacter" Data.Int.Int32 where
+  fieldOf _
+    = (Prelude..)
+        (Lens.Family2.Unchecked.lens
+           _MultiLineRange'endCharacter
+           (\ x__ y__ -> x__ {_MultiLineRange'endCharacter = y__}))
+        Prelude.id
+instance Data.ProtoLens.Message MultiLineRange where
+  messageName _ = Data.Text.pack "scip.MultiLineRange"
+  packedMessageDescriptor _
+    = "\n\
+      \\SOMultiLineRange\DC2\GS\n\
+      \\n\
+      \start_line\CAN\SOH \SOH(\ENQR\tstartLine\DC2'\n\
+      \\SIstart_character\CAN\STX \SOH(\ENQR\SOstartCharacter\DC2\EM\n\
+      \\bend_line\CAN\ETX \SOH(\ENQR\aendLine\DC2#\n\
+      \\rend_character\CAN\EOT \SOH(\ENQR\fendCharacter"
+  packedFileDescriptor _ = packedFileDescriptor
+  fieldsByTag
+    = let
+        startLine__field_descriptor
+          = Data.ProtoLens.FieldDescriptor
+              "start_line"
+              (Data.ProtoLens.ScalarField Data.ProtoLens.Int32Field ::
+                 Data.ProtoLens.FieldTypeDescriptor Data.Int.Int32)
+              (Data.ProtoLens.PlainField
+                 Data.ProtoLens.Optional
+                 (Data.ProtoLens.Field.field @"startLine")) ::
+              Data.ProtoLens.FieldDescriptor MultiLineRange
+        startCharacter__field_descriptor
+          = Data.ProtoLens.FieldDescriptor
+              "start_character"
+              (Data.ProtoLens.ScalarField Data.ProtoLens.Int32Field ::
+                 Data.ProtoLens.FieldTypeDescriptor Data.Int.Int32)
+              (Data.ProtoLens.PlainField
+                 Data.ProtoLens.Optional
+                 (Data.ProtoLens.Field.field @"startCharacter")) ::
+              Data.ProtoLens.FieldDescriptor MultiLineRange
+        endLine__field_descriptor
+          = Data.ProtoLens.FieldDescriptor
+              "end_line"
+              (Data.ProtoLens.ScalarField Data.ProtoLens.Int32Field ::
+                 Data.ProtoLens.FieldTypeDescriptor Data.Int.Int32)
+              (Data.ProtoLens.PlainField
+                 Data.ProtoLens.Optional (Data.ProtoLens.Field.field @"endLine")) ::
+              Data.ProtoLens.FieldDescriptor MultiLineRange
+        endCharacter__field_descriptor
+          = Data.ProtoLens.FieldDescriptor
+              "end_character"
+              (Data.ProtoLens.ScalarField Data.ProtoLens.Int32Field ::
+                 Data.ProtoLens.FieldTypeDescriptor Data.Int.Int32)
+              (Data.ProtoLens.PlainField
+                 Data.ProtoLens.Optional
+                 (Data.ProtoLens.Field.field @"endCharacter")) ::
+              Data.ProtoLens.FieldDescriptor MultiLineRange
+      in
+        Data.Map.fromList
+          [(Data.ProtoLens.Tag 1, startLine__field_descriptor),
+           (Data.ProtoLens.Tag 2, startCharacter__field_descriptor),
+           (Data.ProtoLens.Tag 3, endLine__field_descriptor),
+           (Data.ProtoLens.Tag 4, endCharacter__field_descriptor)]
+  unknownFields
+    = Lens.Family2.Unchecked.lens
+        _MultiLineRange'_unknownFields
+        (\ x__ y__ -> x__ {_MultiLineRange'_unknownFields = y__})
+  defMessage
+    = MultiLineRange'_constructor
+        {_MultiLineRange'startLine = Data.ProtoLens.fieldDefault,
+         _MultiLineRange'startCharacter = Data.ProtoLens.fieldDefault,
+         _MultiLineRange'endLine = Data.ProtoLens.fieldDefault,
+         _MultiLineRange'endCharacter = Data.ProtoLens.fieldDefault,
+         _MultiLineRange'_unknownFields = []}
+  parseMessage
+    = let
+        loop ::
+          MultiLineRange
+          -> Data.ProtoLens.Encoding.Bytes.Parser MultiLineRange
+        loop x
+          = do end <- Data.ProtoLens.Encoding.Bytes.atEnd
+               if end then
+                   do (let missing = []
+                       in
+                         if Prelude.null missing then
+                             Prelude.return ()
+                         else
+                             Prelude.fail
+                               ((Prelude.++)
+                                  "Missing required fields: "
+                                  (Prelude.show (missing :: [Prelude.String]))))
+                      Prelude.return
+                        (Lens.Family2.over
+                           Data.ProtoLens.unknownFields (\ !t -> Prelude.reverse t) x)
+               else
+                   do tag <- Data.ProtoLens.Encoding.Bytes.getVarInt
+                      case tag of
+                        8 -> do y <- (Data.ProtoLens.Encoding.Bytes.<?>)
+                                       (Prelude.fmap
+                                          Prelude.fromIntegral
+                                          Data.ProtoLens.Encoding.Bytes.getVarInt)
+                                       "start_line"
+                                loop
+                                  (Lens.Family2.set (Data.ProtoLens.Field.field @"startLine") y x)
+                        16
+                          -> do y <- (Data.ProtoLens.Encoding.Bytes.<?>)
+                                       (Prelude.fmap
+                                          Prelude.fromIntegral
+                                          Data.ProtoLens.Encoding.Bytes.getVarInt)
+                                       "start_character"
+                                loop
+                                  (Lens.Family2.set
+                                     (Data.ProtoLens.Field.field @"startCharacter") y x)
+                        24
+                          -> do y <- (Data.ProtoLens.Encoding.Bytes.<?>)
+                                       (Prelude.fmap
+                                          Prelude.fromIntegral
+                                          Data.ProtoLens.Encoding.Bytes.getVarInt)
+                                       "end_line"
+                                loop (Lens.Family2.set (Data.ProtoLens.Field.field @"endLine") y x)
+                        32
+                          -> do y <- (Data.ProtoLens.Encoding.Bytes.<?>)
+                                       (Prelude.fmap
+                                          Prelude.fromIntegral
+                                          Data.ProtoLens.Encoding.Bytes.getVarInt)
+                                       "end_character"
+                                loop
+                                  (Lens.Family2.set
+                                     (Data.ProtoLens.Field.field @"endCharacter") y x)
+                        wire
+                          -> do !y <- Data.ProtoLens.Encoding.Wire.parseTaggedValueFromWire
+                                        wire
+                                loop
+                                  (Lens.Family2.over
+                                     Data.ProtoLens.unknownFields (\ !t -> (:) y t) x)
+      in
+        (Data.ProtoLens.Encoding.Bytes.<?>)
+          (do loop Data.ProtoLens.defMessage) "MultiLineRange"
+  buildMessage
+    = \ _x
+        -> (Data.Monoid.<>)
+             (let
+                _v = Lens.Family2.view (Data.ProtoLens.Field.field @"startLine") _x
+              in
+                if (Prelude.==) _v Data.ProtoLens.fieldDefault then
+                    Data.Monoid.mempty
+                else
+                    (Data.Monoid.<>)
+                      (Data.ProtoLens.Encoding.Bytes.putVarInt 8)
+                      ((Prelude..)
+                         Data.ProtoLens.Encoding.Bytes.putVarInt Prelude.fromIntegral _v))
+             ((Data.Monoid.<>)
+                (let
+                   _v
+                     = Lens.Family2.view
+                         (Data.ProtoLens.Field.field @"startCharacter") _x
+                 in
+                   if (Prelude.==) _v Data.ProtoLens.fieldDefault then
+                       Data.Monoid.mempty
+                   else
+                       (Data.Monoid.<>)
+                         (Data.ProtoLens.Encoding.Bytes.putVarInt 16)
+                         ((Prelude..)
+                            Data.ProtoLens.Encoding.Bytes.putVarInt Prelude.fromIntegral _v))
+                ((Data.Monoid.<>)
+                   (let
+                      _v = Lens.Family2.view (Data.ProtoLens.Field.field @"endLine") _x
+                    in
+                      if (Prelude.==) _v Data.ProtoLens.fieldDefault then
+                          Data.Monoid.mempty
+                      else
+                          (Data.Monoid.<>)
+                            (Data.ProtoLens.Encoding.Bytes.putVarInt 24)
+                            ((Prelude..)
+                               Data.ProtoLens.Encoding.Bytes.putVarInt Prelude.fromIntegral _v))
+                   ((Data.Monoid.<>)
+                      (let
+                         _v
+                           = Lens.Family2.view (Data.ProtoLens.Field.field @"endCharacter") _x
+                       in
+                         if (Prelude.==) _v Data.ProtoLens.fieldDefault then
+                             Data.Monoid.mempty
+                         else
+                             (Data.Monoid.<>)
+                               (Data.ProtoLens.Encoding.Bytes.putVarInt 32)
+                               ((Prelude..)
+                                  Data.ProtoLens.Encoding.Bytes.putVarInt Prelude.fromIntegral _v))
+                      (Data.ProtoLens.Encoding.Wire.buildFieldSet
+                         (Lens.Family2.view Data.ProtoLens.unknownFields _x)))))
+instance Control.DeepSeq.NFData MultiLineRange where
+  rnf
+    = \ x__
+        -> Control.DeepSeq.deepseq
+             (_MultiLineRange'_unknownFields x__)
+             (Control.DeepSeq.deepseq
+                (_MultiLineRange'startLine x__)
+                (Control.DeepSeq.deepseq
+                   (_MultiLineRange'startCharacter x__)
+                   (Control.DeepSeq.deepseq
+                      (_MultiLineRange'endLine x__)
+                      (Control.DeepSeq.deepseq (_MultiLineRange'endCharacter x__) ()))))
+{- | Fields :
+     
          * 'Proto.Scip_Fields.range' @:: Lens' Occurrence [Data.Int.Int32]@
          * 'Proto.Scip_Fields.vec'range' @:: Lens' Occurrence (Data.Vector.Unboxed.Vector Data.Int.Int32)@
          * 'Proto.Scip_Fields.symbol' @:: Lens' Occurrence Data.Text.Text@
@@ -2534,7 +2777,17 @@ instance Control.DeepSeq.NFData Metadata where
          * 'Proto.Scip_Fields.diagnostics' @:: Lens' Occurrence [Diagnostic]@
          * 'Proto.Scip_Fields.vec'diagnostics' @:: Lens' Occurrence (Data.Vector.Vector Diagnostic)@
          * 'Proto.Scip_Fields.enclosingRange' @:: Lens' Occurrence [Data.Int.Int32]@
-         * 'Proto.Scip_Fields.vec'enclosingRange' @:: Lens' Occurrence (Data.Vector.Unboxed.Vector Data.Int.Int32)@ -}
+         * 'Proto.Scip_Fields.vec'enclosingRange' @:: Lens' Occurrence (Data.Vector.Unboxed.Vector Data.Int.Int32)@
+         * 'Proto.Scip_Fields.maybe'typedRange' @:: Lens' Occurrence (Prelude.Maybe Occurrence'TypedRange)@
+         * 'Proto.Scip_Fields.maybe'singleLineRange' @:: Lens' Occurrence (Prelude.Maybe SingleLineRange)@
+         * 'Proto.Scip_Fields.singleLineRange' @:: Lens' Occurrence SingleLineRange@
+         * 'Proto.Scip_Fields.maybe'multiLineRange' @:: Lens' Occurrence (Prelude.Maybe MultiLineRange)@
+         * 'Proto.Scip_Fields.multiLineRange' @:: Lens' Occurrence MultiLineRange@
+         * 'Proto.Scip_Fields.maybe'typedEnclosingRange' @:: Lens' Occurrence (Prelude.Maybe Occurrence'TypedEnclosingRange)@
+         * 'Proto.Scip_Fields.maybe'singleLineEnclosingRange' @:: Lens' Occurrence (Prelude.Maybe SingleLineRange)@
+         * 'Proto.Scip_Fields.singleLineEnclosingRange' @:: Lens' Occurrence SingleLineRange@
+         * 'Proto.Scip_Fields.maybe'multiLineEnclosingRange' @:: Lens' Occurrence (Prelude.Maybe MultiLineRange)@
+         * 'Proto.Scip_Fields.multiLineEnclosingRange' @:: Lens' Occurrence MultiLineRange@ -}
 data Occurrence
   = Occurrence'_constructor {_Occurrence'range :: !(Data.Vector.Unboxed.Vector Data.Int.Int32),
                              _Occurrence'symbol :: !Data.Text.Text,
@@ -2543,6 +2796,8 @@ data Occurrence
                              _Occurrence'syntaxKind :: !SyntaxKind,
                              _Occurrence'diagnostics :: !(Data.Vector.Vector Diagnostic),
                              _Occurrence'enclosingRange :: !(Data.Vector.Unboxed.Vector Data.Int.Int32),
+                             _Occurrence'typedRange :: !(Prelude.Maybe Occurrence'TypedRange),
+                             _Occurrence'typedEnclosingRange :: !(Prelude.Maybe Occurrence'TypedEnclosingRange),
                              _Occurrence'_unknownFields :: !Data.ProtoLens.FieldSet}
   deriving stock (Prelude.Eq, Prelude.Ord)
 instance Prelude.Show Occurrence where
@@ -2551,6 +2806,14 @@ instance Prelude.Show Occurrence where
         '{'
         (Prelude.showString
            (Data.ProtoLens.showMessageShort __x) (Prelude.showChar '}' __s))
+data Occurrence'TypedRange
+  = Occurrence'SingleLineRange !SingleLineRange |
+    Occurrence'MultiLineRange !MultiLineRange
+  deriving stock (Prelude.Show, Prelude.Eq, Prelude.Ord)
+data Occurrence'TypedEnclosingRange
+  = Occurrence'SingleLineEnclosingRange !SingleLineRange |
+    Occurrence'MultiLineEnclosingRange !MultiLineRange
+  deriving stock (Prelude.Show, Prelude.Eq, Prelude.Ord)
 instance Data.ProtoLens.Field.HasField Occurrence "range" [Data.Int.Int32] where
   fieldOf _
     = (Prelude..)
@@ -2633,20 +2896,153 @@ instance Data.ProtoLens.Field.HasField Occurrence "vec'enclosingRange" (Data.Vec
            _Occurrence'enclosingRange
            (\ x__ y__ -> x__ {_Occurrence'enclosingRange = y__}))
         Prelude.id
+instance Data.ProtoLens.Field.HasField Occurrence "maybe'typedRange" (Prelude.Maybe Occurrence'TypedRange) where
+  fieldOf _
+    = (Prelude..)
+        (Lens.Family2.Unchecked.lens
+           _Occurrence'typedRange
+           (\ x__ y__ -> x__ {_Occurrence'typedRange = y__}))
+        Prelude.id
+instance Data.ProtoLens.Field.HasField Occurrence "maybe'singleLineRange" (Prelude.Maybe SingleLineRange) where
+  fieldOf _
+    = (Prelude..)
+        (Lens.Family2.Unchecked.lens
+           _Occurrence'typedRange
+           (\ x__ y__ -> x__ {_Occurrence'typedRange = y__}))
+        (Lens.Family2.Unchecked.lens
+           (\ x__
+              -> case x__ of
+                   (Prelude.Just (Occurrence'SingleLineRange x__val))
+                     -> Prelude.Just x__val
+                   _otherwise -> Prelude.Nothing)
+           (\ _ y__ -> Prelude.fmap Occurrence'SingleLineRange y__))
+instance Data.ProtoLens.Field.HasField Occurrence "singleLineRange" SingleLineRange where
+  fieldOf _
+    = (Prelude..)
+        (Lens.Family2.Unchecked.lens
+           _Occurrence'typedRange
+           (\ x__ y__ -> x__ {_Occurrence'typedRange = y__}))
+        ((Prelude..)
+           (Lens.Family2.Unchecked.lens
+              (\ x__
+                 -> case x__ of
+                      (Prelude.Just (Occurrence'SingleLineRange x__val))
+                        -> Prelude.Just x__val
+                      _otherwise -> Prelude.Nothing)
+              (\ _ y__ -> Prelude.fmap Occurrence'SingleLineRange y__))
+           (Data.ProtoLens.maybeLens Data.ProtoLens.defMessage))
+instance Data.ProtoLens.Field.HasField Occurrence "maybe'multiLineRange" (Prelude.Maybe MultiLineRange) where
+  fieldOf _
+    = (Prelude..)
+        (Lens.Family2.Unchecked.lens
+           _Occurrence'typedRange
+           (\ x__ y__ -> x__ {_Occurrence'typedRange = y__}))
+        (Lens.Family2.Unchecked.lens
+           (\ x__
+              -> case x__ of
+                   (Prelude.Just (Occurrence'MultiLineRange x__val))
+                     -> Prelude.Just x__val
+                   _otherwise -> Prelude.Nothing)
+           (\ _ y__ -> Prelude.fmap Occurrence'MultiLineRange y__))
+instance Data.ProtoLens.Field.HasField Occurrence "multiLineRange" MultiLineRange where
+  fieldOf _
+    = (Prelude..)
+        (Lens.Family2.Unchecked.lens
+           _Occurrence'typedRange
+           (\ x__ y__ -> x__ {_Occurrence'typedRange = y__}))
+        ((Prelude..)
+           (Lens.Family2.Unchecked.lens
+              (\ x__
+                 -> case x__ of
+                      (Prelude.Just (Occurrence'MultiLineRange x__val))
+                        -> Prelude.Just x__val
+                      _otherwise -> Prelude.Nothing)
+              (\ _ y__ -> Prelude.fmap Occurrence'MultiLineRange y__))
+           (Data.ProtoLens.maybeLens Data.ProtoLens.defMessage))
+instance Data.ProtoLens.Field.HasField Occurrence "maybe'typedEnclosingRange" (Prelude.Maybe Occurrence'TypedEnclosingRange) where
+  fieldOf _
+    = (Prelude..)
+        (Lens.Family2.Unchecked.lens
+           _Occurrence'typedEnclosingRange
+           (\ x__ y__ -> x__ {_Occurrence'typedEnclosingRange = y__}))
+        Prelude.id
+instance Data.ProtoLens.Field.HasField Occurrence "maybe'singleLineEnclosingRange" (Prelude.Maybe SingleLineRange) where
+  fieldOf _
+    = (Prelude..)
+        (Lens.Family2.Unchecked.lens
+           _Occurrence'typedEnclosingRange
+           (\ x__ y__ -> x__ {_Occurrence'typedEnclosingRange = y__}))
+        (Lens.Family2.Unchecked.lens
+           (\ x__
+              -> case x__ of
+                   (Prelude.Just (Occurrence'SingleLineEnclosingRange x__val))
+                     -> Prelude.Just x__val
+                   _otherwise -> Prelude.Nothing)
+           (\ _ y__ -> Prelude.fmap Occurrence'SingleLineEnclosingRange y__))
+instance Data.ProtoLens.Field.HasField Occurrence "singleLineEnclosingRange" SingleLineRange where
+  fieldOf _
+    = (Prelude..)
+        (Lens.Family2.Unchecked.lens
+           _Occurrence'typedEnclosingRange
+           (\ x__ y__ -> x__ {_Occurrence'typedEnclosingRange = y__}))
+        ((Prelude..)
+           (Lens.Family2.Unchecked.lens
+              (\ x__
+                 -> case x__ of
+                      (Prelude.Just (Occurrence'SingleLineEnclosingRange x__val))
+                        -> Prelude.Just x__val
+                      _otherwise -> Prelude.Nothing)
+              (\ _ y__ -> Prelude.fmap Occurrence'SingleLineEnclosingRange y__))
+           (Data.ProtoLens.maybeLens Data.ProtoLens.defMessage))
+instance Data.ProtoLens.Field.HasField Occurrence "maybe'multiLineEnclosingRange" (Prelude.Maybe MultiLineRange) where
+  fieldOf _
+    = (Prelude..)
+        (Lens.Family2.Unchecked.lens
+           _Occurrence'typedEnclosingRange
+           (\ x__ y__ -> x__ {_Occurrence'typedEnclosingRange = y__}))
+        (Lens.Family2.Unchecked.lens
+           (\ x__
+              -> case x__ of
+                   (Prelude.Just (Occurrence'MultiLineEnclosingRange x__val))
+                     -> Prelude.Just x__val
+                   _otherwise -> Prelude.Nothing)
+           (\ _ y__ -> Prelude.fmap Occurrence'MultiLineEnclosingRange y__))
+instance Data.ProtoLens.Field.HasField Occurrence "multiLineEnclosingRange" MultiLineRange where
+  fieldOf _
+    = (Prelude..)
+        (Lens.Family2.Unchecked.lens
+           _Occurrence'typedEnclosingRange
+           (\ x__ y__ -> x__ {_Occurrence'typedEnclosingRange = y__}))
+        ((Prelude..)
+           (Lens.Family2.Unchecked.lens
+              (\ x__
+                 -> case x__ of
+                      (Prelude.Just (Occurrence'MultiLineEnclosingRange x__val))
+                        -> Prelude.Just x__val
+                      _otherwise -> Prelude.Nothing)
+              (\ _ y__ -> Prelude.fmap Occurrence'MultiLineEnclosingRange y__))
+           (Data.ProtoLens.maybeLens Data.ProtoLens.defMessage))
 instance Data.ProtoLens.Message Occurrence where
   messageName _ = Data.Text.pack "scip.Occurrence"
   packedMessageDescriptor _
     = "\n\
       \\n\
-      \Occurrence\DC2\DC4\n\
-      \\ENQrange\CAN\SOH \ETX(\ENQR\ENQrange\DC2\SYN\n\
+      \Occurrence\DC2\CAN\n\
+      \\ENQrange\CAN\SOH \ETX(\ENQR\ENQrangeB\STX\CAN\SOH\DC2C\n\
+      \\DC1single_line_range\CAN\b \SOH(\v2\NAK.scip.SingleLineRangeH\NULR\SIsingleLineRange\DC2@\n\
+      \\DLEmulti_line_range\CAN\t \SOH(\v2\DC4.scip.MultiLineRangeH\NULR\SOmultiLineRange\DC2\SYN\n\
       \\ACKsymbol\CAN\STX \SOH(\tR\ACKsymbol\DC2!\n\
       \\fsymbol_roles\CAN\ETX \SOH(\ENQR\vsymbolRoles\DC25\n\
       \\SYNoverride_documentation\CAN\EOT \ETX(\tR\NAKoverrideDocumentation\DC21\n\
       \\vsyntax_kind\CAN\ENQ \SOH(\SO2\DLE.scip.SyntaxKindR\n\
       \syntaxKind\DC22\n\
-      \\vdiagnostics\CAN\ACK \ETX(\v2\DLE.scip.DiagnosticR\vdiagnostics\DC2'\n\
-      \\SIenclosing_range\CAN\a \ETX(\ENQR\SOenclosingRange"
+      \\vdiagnostics\CAN\ACK \ETX(\v2\DLE.scip.DiagnosticR\vdiagnostics\DC2+\n\
+      \\SIenclosing_range\CAN\a \ETX(\ENQR\SOenclosingRangeB\STX\CAN\SOH\DC2V\n\
+      \\ESCsingle_line_enclosing_range\CAN\n\
+      \ \SOH(\v2\NAK.scip.SingleLineRangeH\SOHR\CANsingleLineEnclosingRange\DC2S\n\
+      \\SUBmulti_line_enclosing_range\CAN\v \SOH(\v2\DC4.scip.MultiLineRangeH\SOHR\ETBmultiLineEnclosingRangeB\r\n\
+      \\vtyped_rangeB\ETB\n\
+      \\NAKtyped_enclosing_range"
   packedFileDescriptor _ = packedFileDescriptor
   fieldsByTag
     = let
@@ -2711,6 +3107,38 @@ instance Data.ProtoLens.Message Occurrence where
                  Data.ProtoLens.Packed
                  (Data.ProtoLens.Field.field @"enclosingRange")) ::
               Data.ProtoLens.FieldDescriptor Occurrence
+        singleLineRange__field_descriptor
+          = Data.ProtoLens.FieldDescriptor
+              "single_line_range"
+              (Data.ProtoLens.MessageField Data.ProtoLens.MessageType ::
+                 Data.ProtoLens.FieldTypeDescriptor SingleLineRange)
+              (Data.ProtoLens.OptionalField
+                 (Data.ProtoLens.Field.field @"maybe'singleLineRange")) ::
+              Data.ProtoLens.FieldDescriptor Occurrence
+        multiLineRange__field_descriptor
+          = Data.ProtoLens.FieldDescriptor
+              "multi_line_range"
+              (Data.ProtoLens.MessageField Data.ProtoLens.MessageType ::
+                 Data.ProtoLens.FieldTypeDescriptor MultiLineRange)
+              (Data.ProtoLens.OptionalField
+                 (Data.ProtoLens.Field.field @"maybe'multiLineRange")) ::
+              Data.ProtoLens.FieldDescriptor Occurrence
+        singleLineEnclosingRange__field_descriptor
+          = Data.ProtoLens.FieldDescriptor
+              "single_line_enclosing_range"
+              (Data.ProtoLens.MessageField Data.ProtoLens.MessageType ::
+                 Data.ProtoLens.FieldTypeDescriptor SingleLineRange)
+              (Data.ProtoLens.OptionalField
+                 (Data.ProtoLens.Field.field @"maybe'singleLineEnclosingRange")) ::
+              Data.ProtoLens.FieldDescriptor Occurrence
+        multiLineEnclosingRange__field_descriptor
+          = Data.ProtoLens.FieldDescriptor
+              "multi_line_enclosing_range"
+              (Data.ProtoLens.MessageField Data.ProtoLens.MessageType ::
+                 Data.ProtoLens.FieldTypeDescriptor MultiLineRange)
+              (Data.ProtoLens.OptionalField
+                 (Data.ProtoLens.Field.field @"maybe'multiLineEnclosingRange")) ::
+              Data.ProtoLens.FieldDescriptor Occurrence
       in
         Data.Map.fromList
           [(Data.ProtoLens.Tag 1, range__field_descriptor),
@@ -2719,7 +3147,12 @@ instance Data.ProtoLens.Message Occurrence where
            (Data.ProtoLens.Tag 4, overrideDocumentation__field_descriptor),
            (Data.ProtoLens.Tag 5, syntaxKind__field_descriptor),
            (Data.ProtoLens.Tag 6, diagnostics__field_descriptor),
-           (Data.ProtoLens.Tag 7, enclosingRange__field_descriptor)]
+           (Data.ProtoLens.Tag 7, enclosingRange__field_descriptor),
+           (Data.ProtoLens.Tag 8, singleLineRange__field_descriptor),
+           (Data.ProtoLens.Tag 9, multiLineRange__field_descriptor),
+           (Data.ProtoLens.Tag 10, 
+            singleLineEnclosingRange__field_descriptor),
+           (Data.ProtoLens.Tag 11, multiLineEnclosingRange__field_descriptor)]
   unknownFields
     = Lens.Family2.Unchecked.lens
         _Occurrence'_unknownFields
@@ -2733,6 +3166,8 @@ instance Data.ProtoLens.Message Occurrence where
          _Occurrence'syntaxKind = Data.ProtoLens.fieldDefault,
          _Occurrence'diagnostics = Data.Vector.Generic.empty,
          _Occurrence'enclosingRange = Data.Vector.Generic.empty,
+         _Occurrence'typedRange = Prelude.Nothing,
+         _Occurrence'typedEnclosingRange = Prelude.Nothing,
          _Occurrence'_unknownFields = []}
   parseMessage
     = let
@@ -2912,6 +3347,50 @@ instance Data.ProtoLens.Message Occurrence where
                                 loop
                                   x mutable'diagnostics y mutable'overrideDocumentation
                                   mutable'range
+                        66
+                          -> do y <- (Data.ProtoLens.Encoding.Bytes.<?>)
+                                       (do len <- Data.ProtoLens.Encoding.Bytes.getVarInt
+                                           Data.ProtoLens.Encoding.Bytes.isolate
+                                             (Prelude.fromIntegral len) Data.ProtoLens.parseMessage)
+                                       "single_line_range"
+                                loop
+                                  (Lens.Family2.set
+                                     (Data.ProtoLens.Field.field @"singleLineRange") y x)
+                                  mutable'diagnostics mutable'enclosingRange
+                                  mutable'overrideDocumentation mutable'range
+                        74
+                          -> do y <- (Data.ProtoLens.Encoding.Bytes.<?>)
+                                       (do len <- Data.ProtoLens.Encoding.Bytes.getVarInt
+                                           Data.ProtoLens.Encoding.Bytes.isolate
+                                             (Prelude.fromIntegral len) Data.ProtoLens.parseMessage)
+                                       "multi_line_range"
+                                loop
+                                  (Lens.Family2.set
+                                     (Data.ProtoLens.Field.field @"multiLineRange") y x)
+                                  mutable'diagnostics mutable'enclosingRange
+                                  mutable'overrideDocumentation mutable'range
+                        82
+                          -> do y <- (Data.ProtoLens.Encoding.Bytes.<?>)
+                                       (do len <- Data.ProtoLens.Encoding.Bytes.getVarInt
+                                           Data.ProtoLens.Encoding.Bytes.isolate
+                                             (Prelude.fromIntegral len) Data.ProtoLens.parseMessage)
+                                       "single_line_enclosing_range"
+                                loop
+                                  (Lens.Family2.set
+                                     (Data.ProtoLens.Field.field @"singleLineEnclosingRange") y x)
+                                  mutable'diagnostics mutable'enclosingRange
+                                  mutable'overrideDocumentation mutable'range
+                        90
+                          -> do y <- (Data.ProtoLens.Encoding.Bytes.<?>)
+                                       (do len <- Data.ProtoLens.Encoding.Bytes.getVarInt
+                                           Data.ProtoLens.Encoding.Bytes.isolate
+                                             (Prelude.fromIntegral len) Data.ProtoLens.parseMessage)
+                                       "multi_line_enclosing_range"
+                                loop
+                                  (Lens.Family2.set
+                                     (Data.ProtoLens.Field.field @"multiLineEnclosingRange") y x)
+                                  mutable'diagnostics mutable'enclosingRange
+                                  mutable'overrideDocumentation mutable'range
                         wire
                           -> do !y <- Data.ProtoLens.Encoding.Wire.parseTaggedValueFromWire
                                         wire
@@ -3049,8 +3528,68 @@ instance Data.ProtoLens.Message Occurrence where
                                                     Data.ProtoLens.Encoding.Bytes.putVarInt
                                                     Prelude.fromIntegral)
                                                  p))))
-                               (Data.ProtoLens.Encoding.Wire.buildFieldSet
-                                  (Lens.Family2.view Data.ProtoLens.unknownFields _x))))))))
+                               ((Data.Monoid.<>)
+                                  (case
+                                       Lens.Family2.view
+                                         (Data.ProtoLens.Field.field @"maybe'typedRange") _x
+                                   of
+                                     Prelude.Nothing -> Data.Monoid.mempty
+                                     (Prelude.Just (Occurrence'SingleLineRange v))
+                                       -> (Data.Monoid.<>)
+                                            (Data.ProtoLens.Encoding.Bytes.putVarInt 66)
+                                            ((Prelude..)
+                                               (\ bs
+                                                  -> (Data.Monoid.<>)
+                                                       (Data.ProtoLens.Encoding.Bytes.putVarInt
+                                                          (Prelude.fromIntegral
+                                                             (Data.ByteString.length bs)))
+                                                       (Data.ProtoLens.Encoding.Bytes.putBytes bs))
+                                               Data.ProtoLens.encodeMessage v)
+                                     (Prelude.Just (Occurrence'MultiLineRange v))
+                                       -> (Data.Monoid.<>)
+                                            (Data.ProtoLens.Encoding.Bytes.putVarInt 74)
+                                            ((Prelude..)
+                                               (\ bs
+                                                  -> (Data.Monoid.<>)
+                                                       (Data.ProtoLens.Encoding.Bytes.putVarInt
+                                                          (Prelude.fromIntegral
+                                                             (Data.ByteString.length bs)))
+                                                       (Data.ProtoLens.Encoding.Bytes.putBytes bs))
+                                               Data.ProtoLens.encodeMessage v))
+                                  ((Data.Monoid.<>)
+                                     (case
+                                          Lens.Family2.view
+                                            (Data.ProtoLens.Field.field
+                                               @"maybe'typedEnclosingRange")
+                                            _x
+                                      of
+                                        Prelude.Nothing -> Data.Monoid.mempty
+                                        (Prelude.Just (Occurrence'SingleLineEnclosingRange v))
+                                          -> (Data.Monoid.<>)
+                                               (Data.ProtoLens.Encoding.Bytes.putVarInt 82)
+                                               ((Prelude..)
+                                                  (\ bs
+                                                     -> (Data.Monoid.<>)
+                                                          (Data.ProtoLens.Encoding.Bytes.putVarInt
+                                                             (Prelude.fromIntegral
+                                                                (Data.ByteString.length bs)))
+                                                          (Data.ProtoLens.Encoding.Bytes.putBytes
+                                                             bs))
+                                                  Data.ProtoLens.encodeMessage v)
+                                        (Prelude.Just (Occurrence'MultiLineEnclosingRange v))
+                                          -> (Data.Monoid.<>)
+                                               (Data.ProtoLens.Encoding.Bytes.putVarInt 90)
+                                               ((Prelude..)
+                                                  (\ bs
+                                                     -> (Data.Monoid.<>)
+                                                          (Data.ProtoLens.Encoding.Bytes.putVarInt
+                                                             (Prelude.fromIntegral
+                                                                (Data.ByteString.length bs)))
+                                                          (Data.ProtoLens.Encoding.Bytes.putBytes
+                                                             bs))
+                                                  Data.ProtoLens.encodeMessage v))
+                                     (Data.ProtoLens.Encoding.Wire.buildFieldSet
+                                        (Lens.Family2.view Data.ProtoLens.unknownFields _x))))))))))
 instance Control.DeepSeq.NFData Occurrence where
   rnf
     = \ x__
@@ -3068,7 +3607,56 @@ instance Control.DeepSeq.NFData Occurrence where
                             (_Occurrence'syntaxKind x__)
                             (Control.DeepSeq.deepseq
                                (_Occurrence'diagnostics x__)
-                               (Control.DeepSeq.deepseq (_Occurrence'enclosingRange x__) ())))))))
+                               (Control.DeepSeq.deepseq
+                                  (_Occurrence'enclosingRange x__)
+                                  (Control.DeepSeq.deepseq
+                                     (_Occurrence'typedRange x__)
+                                     (Control.DeepSeq.deepseq
+                                        (_Occurrence'typedEnclosingRange x__) ())))))))))
+instance Control.DeepSeq.NFData Occurrence'TypedRange where
+  rnf (Occurrence'SingleLineRange x__) = Control.DeepSeq.rnf x__
+  rnf (Occurrence'MultiLineRange x__) = Control.DeepSeq.rnf x__
+instance Control.DeepSeq.NFData Occurrence'TypedEnclosingRange where
+  rnf (Occurrence'SingleLineEnclosingRange x__)
+    = Control.DeepSeq.rnf x__
+  rnf (Occurrence'MultiLineEnclosingRange x__)
+    = Control.DeepSeq.rnf x__
+_Occurrence'SingleLineRange ::
+  Data.ProtoLens.Prism.Prism' Occurrence'TypedRange SingleLineRange
+_Occurrence'SingleLineRange
+  = Data.ProtoLens.Prism.prism'
+      Occurrence'SingleLineRange
+      (\ p__
+         -> case p__ of
+              (Occurrence'SingleLineRange p__val) -> Prelude.Just p__val
+              _otherwise -> Prelude.Nothing)
+_Occurrence'MultiLineRange ::
+  Data.ProtoLens.Prism.Prism' Occurrence'TypedRange MultiLineRange
+_Occurrence'MultiLineRange
+  = Data.ProtoLens.Prism.prism'
+      Occurrence'MultiLineRange
+      (\ p__
+         -> case p__ of
+              (Occurrence'MultiLineRange p__val) -> Prelude.Just p__val
+              _otherwise -> Prelude.Nothing)
+_Occurrence'SingleLineEnclosingRange ::
+  Data.ProtoLens.Prism.Prism' Occurrence'TypedEnclosingRange SingleLineRange
+_Occurrence'SingleLineEnclosingRange
+  = Data.ProtoLens.Prism.prism'
+      Occurrence'SingleLineEnclosingRange
+      (\ p__
+         -> case p__ of
+              (Occurrence'SingleLineEnclosingRange p__val) -> Prelude.Just p__val
+              _otherwise -> Prelude.Nothing)
+_Occurrence'MultiLineEnclosingRange ::
+  Data.ProtoLens.Prism.Prism' Occurrence'TypedEnclosingRange MultiLineRange
+_Occurrence'MultiLineEnclosingRange
+  = Data.ProtoLens.Prism.prism'
+      Occurrence'MultiLineEnclosingRange
+      (\ p__
+         -> case p__ of
+              (Occurrence'MultiLineEnclosingRange p__val) -> Prelude.Just p__val
+              _otherwise -> Prelude.Nothing)
 {- | Fields :
      
          * 'Proto.Scip_Fields.manager' @:: Lens' Package Data.Text.Text@
@@ -4010,6 +4598,201 @@ instance Control.DeepSeq.NFData Signature where
                 (Control.DeepSeq.deepseq
                    (_Signature'text x__)
                    (Control.DeepSeq.deepseq (_Signature'occurrences x__) ())))
+{- | Fields :
+     
+         * 'Proto.Scip_Fields.line' @:: Lens' SingleLineRange Data.Int.Int32@
+         * 'Proto.Scip_Fields.startCharacter' @:: Lens' SingleLineRange Data.Int.Int32@
+         * 'Proto.Scip_Fields.endCharacter' @:: Lens' SingleLineRange Data.Int.Int32@ -}
+data SingleLineRange
+  = SingleLineRange'_constructor {_SingleLineRange'line :: !Data.Int.Int32,
+                                  _SingleLineRange'startCharacter :: !Data.Int.Int32,
+                                  _SingleLineRange'endCharacter :: !Data.Int.Int32,
+                                  _SingleLineRange'_unknownFields :: !Data.ProtoLens.FieldSet}
+  deriving stock (Prelude.Eq, Prelude.Ord)
+instance Prelude.Show SingleLineRange where
+  showsPrec _ __x __s
+    = Prelude.showChar
+        '{'
+        (Prelude.showString
+           (Data.ProtoLens.showMessageShort __x) (Prelude.showChar '}' __s))
+instance Data.ProtoLens.Field.HasField SingleLineRange "line" Data.Int.Int32 where
+  fieldOf _
+    = (Prelude..)
+        (Lens.Family2.Unchecked.lens
+           _SingleLineRange'line
+           (\ x__ y__ -> x__ {_SingleLineRange'line = y__}))
+        Prelude.id
+instance Data.ProtoLens.Field.HasField SingleLineRange "startCharacter" Data.Int.Int32 where
+  fieldOf _
+    = (Prelude..)
+        (Lens.Family2.Unchecked.lens
+           _SingleLineRange'startCharacter
+           (\ x__ y__ -> x__ {_SingleLineRange'startCharacter = y__}))
+        Prelude.id
+instance Data.ProtoLens.Field.HasField SingleLineRange "endCharacter" Data.Int.Int32 where
+  fieldOf _
+    = (Prelude..)
+        (Lens.Family2.Unchecked.lens
+           _SingleLineRange'endCharacter
+           (\ x__ y__ -> x__ {_SingleLineRange'endCharacter = y__}))
+        Prelude.id
+instance Data.ProtoLens.Message SingleLineRange where
+  messageName _ = Data.Text.pack "scip.SingleLineRange"
+  packedMessageDescriptor _
+    = "\n\
+      \\SISingleLineRange\DC2\DC2\n\
+      \\EOTline\CAN\SOH \SOH(\ENQR\EOTline\DC2'\n\
+      \\SIstart_character\CAN\STX \SOH(\ENQR\SOstartCharacter\DC2#\n\
+      \\rend_character\CAN\ETX \SOH(\ENQR\fendCharacter"
+  packedFileDescriptor _ = packedFileDescriptor
+  fieldsByTag
+    = let
+        line__field_descriptor
+          = Data.ProtoLens.FieldDescriptor
+              "line"
+              (Data.ProtoLens.ScalarField Data.ProtoLens.Int32Field ::
+                 Data.ProtoLens.FieldTypeDescriptor Data.Int.Int32)
+              (Data.ProtoLens.PlainField
+                 Data.ProtoLens.Optional (Data.ProtoLens.Field.field @"line")) ::
+              Data.ProtoLens.FieldDescriptor SingleLineRange
+        startCharacter__field_descriptor
+          = Data.ProtoLens.FieldDescriptor
+              "start_character"
+              (Data.ProtoLens.ScalarField Data.ProtoLens.Int32Field ::
+                 Data.ProtoLens.FieldTypeDescriptor Data.Int.Int32)
+              (Data.ProtoLens.PlainField
+                 Data.ProtoLens.Optional
+                 (Data.ProtoLens.Field.field @"startCharacter")) ::
+              Data.ProtoLens.FieldDescriptor SingleLineRange
+        endCharacter__field_descriptor
+          = Data.ProtoLens.FieldDescriptor
+              "end_character"
+              (Data.ProtoLens.ScalarField Data.ProtoLens.Int32Field ::
+                 Data.ProtoLens.FieldTypeDescriptor Data.Int.Int32)
+              (Data.ProtoLens.PlainField
+                 Data.ProtoLens.Optional
+                 (Data.ProtoLens.Field.field @"endCharacter")) ::
+              Data.ProtoLens.FieldDescriptor SingleLineRange
+      in
+        Data.Map.fromList
+          [(Data.ProtoLens.Tag 1, line__field_descriptor),
+           (Data.ProtoLens.Tag 2, startCharacter__field_descriptor),
+           (Data.ProtoLens.Tag 3, endCharacter__field_descriptor)]
+  unknownFields
+    = Lens.Family2.Unchecked.lens
+        _SingleLineRange'_unknownFields
+        (\ x__ y__ -> x__ {_SingleLineRange'_unknownFields = y__})
+  defMessage
+    = SingleLineRange'_constructor
+        {_SingleLineRange'line = Data.ProtoLens.fieldDefault,
+         _SingleLineRange'startCharacter = Data.ProtoLens.fieldDefault,
+         _SingleLineRange'endCharacter = Data.ProtoLens.fieldDefault,
+         _SingleLineRange'_unknownFields = []}
+  parseMessage
+    = let
+        loop ::
+          SingleLineRange
+          -> Data.ProtoLens.Encoding.Bytes.Parser SingleLineRange
+        loop x
+          = do end <- Data.ProtoLens.Encoding.Bytes.atEnd
+               if end then
+                   do (let missing = []
+                       in
+                         if Prelude.null missing then
+                             Prelude.return ()
+                         else
+                             Prelude.fail
+                               ((Prelude.++)
+                                  "Missing required fields: "
+                                  (Prelude.show (missing :: [Prelude.String]))))
+                      Prelude.return
+                        (Lens.Family2.over
+                           Data.ProtoLens.unknownFields (\ !t -> Prelude.reverse t) x)
+               else
+                   do tag <- Data.ProtoLens.Encoding.Bytes.getVarInt
+                      case tag of
+                        8 -> do y <- (Data.ProtoLens.Encoding.Bytes.<?>)
+                                       (Prelude.fmap
+                                          Prelude.fromIntegral
+                                          Data.ProtoLens.Encoding.Bytes.getVarInt)
+                                       "line"
+                                loop (Lens.Family2.set (Data.ProtoLens.Field.field @"line") y x)
+                        16
+                          -> do y <- (Data.ProtoLens.Encoding.Bytes.<?>)
+                                       (Prelude.fmap
+                                          Prelude.fromIntegral
+                                          Data.ProtoLens.Encoding.Bytes.getVarInt)
+                                       "start_character"
+                                loop
+                                  (Lens.Family2.set
+                                     (Data.ProtoLens.Field.field @"startCharacter") y x)
+                        24
+                          -> do y <- (Data.ProtoLens.Encoding.Bytes.<?>)
+                                       (Prelude.fmap
+                                          Prelude.fromIntegral
+                                          Data.ProtoLens.Encoding.Bytes.getVarInt)
+                                       "end_character"
+                                loop
+                                  (Lens.Family2.set
+                                     (Data.ProtoLens.Field.field @"endCharacter") y x)
+                        wire
+                          -> do !y <- Data.ProtoLens.Encoding.Wire.parseTaggedValueFromWire
+                                        wire
+                                loop
+                                  (Lens.Family2.over
+                                     Data.ProtoLens.unknownFields (\ !t -> (:) y t) x)
+      in
+        (Data.ProtoLens.Encoding.Bytes.<?>)
+          (do loop Data.ProtoLens.defMessage) "SingleLineRange"
+  buildMessage
+    = \ _x
+        -> (Data.Monoid.<>)
+             (let _v = Lens.Family2.view (Data.ProtoLens.Field.field @"line") _x
+              in
+                if (Prelude.==) _v Data.ProtoLens.fieldDefault then
+                    Data.Monoid.mempty
+                else
+                    (Data.Monoid.<>)
+                      (Data.ProtoLens.Encoding.Bytes.putVarInt 8)
+                      ((Prelude..)
+                         Data.ProtoLens.Encoding.Bytes.putVarInt Prelude.fromIntegral _v))
+             ((Data.Monoid.<>)
+                (let
+                   _v
+                     = Lens.Family2.view
+                         (Data.ProtoLens.Field.field @"startCharacter") _x
+                 in
+                   if (Prelude.==) _v Data.ProtoLens.fieldDefault then
+                       Data.Monoid.mempty
+                   else
+                       (Data.Monoid.<>)
+                         (Data.ProtoLens.Encoding.Bytes.putVarInt 16)
+                         ((Prelude..)
+                            Data.ProtoLens.Encoding.Bytes.putVarInt Prelude.fromIntegral _v))
+                ((Data.Monoid.<>)
+                   (let
+                      _v
+                        = Lens.Family2.view (Data.ProtoLens.Field.field @"endCharacter") _x
+                    in
+                      if (Prelude.==) _v Data.ProtoLens.fieldDefault then
+                          Data.Monoid.mempty
+                      else
+                          (Data.Monoid.<>)
+                            (Data.ProtoLens.Encoding.Bytes.putVarInt 24)
+                            ((Prelude..)
+                               Data.ProtoLens.Encoding.Bytes.putVarInt Prelude.fromIntegral _v))
+                   (Data.ProtoLens.Encoding.Wire.buildFieldSet
+                      (Lens.Family2.view Data.ProtoLens.unknownFields _x))))
+instance Control.DeepSeq.NFData SingleLineRange where
+  rnf
+    = \ x__
+        -> Control.DeepSeq.deepseq
+             (_SingleLineRange'_unknownFields x__)
+             (Control.DeepSeq.deepseq
+                (_SingleLineRange'line x__)
+                (Control.DeepSeq.deepseq
+                   (_SingleLineRange'startCharacter x__)
+                   (Control.DeepSeq.deepseq (_SingleLineRange'endCharacter x__) ())))
 {- | Fields :
      
          * 'Proto.Scip_Fields.scheme' @:: Lens' Symbol Data.Text.Text@
@@ -6419,17 +7202,34 @@ packedFileDescriptor
     \\fis_reference\CAN\STX \SOH(\bR\visReference\DC2+\n\
     \\DC1is_implementation\CAN\ETX \SOH(\bR\DLEisImplementation\DC2,\n\
     \\DC2is_type_definition\CAN\EOT \SOH(\bR\DLEisTypeDefinition\DC2#\n\
-    \\ris_definition\CAN\ENQ \SOH(\bR\fisDefinition\"\164\STX\n\
+    \\ris_definition\CAN\ENQ \SOH(\bR\fisDefinition\"s\n\
+    \\SISingleLineRange\DC2\DC2\n\
+    \\EOTline\CAN\SOH \SOH(\ENQR\EOTline\DC2'\n\
+    \\SIstart_character\CAN\STX \SOH(\ENQR\SOstartCharacter\DC2#\n\
+    \\rend_character\CAN\ETX \SOH(\ENQR\fendCharacter\"\152\SOH\n\
+    \\SOMultiLineRange\DC2\GS\n\
     \\n\
-    \Occurrence\DC2\DC4\n\
-    \\ENQrange\CAN\SOH \ETX(\ENQR\ENQrange\DC2\SYN\n\
+    \start_line\CAN\SOH \SOH(\ENQR\tstartLine\DC2'\n\
+    \\SIstart_character\CAN\STX \SOH(\ENQR\SOstartCharacter\DC2\EM\n\
+    \\bend_line\CAN\ETX \SOH(\ENQR\aendLine\DC2#\n\
+    \\rend_character\CAN\EOT \SOH(\ENQR\fendCharacter\"\136\ENQ\n\
+    \\n\
+    \Occurrence\DC2\CAN\n\
+    \\ENQrange\CAN\SOH \ETX(\ENQR\ENQrangeB\STX\CAN\SOH\DC2C\n\
+    \\DC1single_line_range\CAN\b \SOH(\v2\NAK.scip.SingleLineRangeH\NULR\SIsingleLineRange\DC2@\n\
+    \\DLEmulti_line_range\CAN\t \SOH(\v2\DC4.scip.MultiLineRangeH\NULR\SOmultiLineRange\DC2\SYN\n\
     \\ACKsymbol\CAN\STX \SOH(\tR\ACKsymbol\DC2!\n\
     \\fsymbol_roles\CAN\ETX \SOH(\ENQR\vsymbolRoles\DC25\n\
     \\SYNoverride_documentation\CAN\EOT \ETX(\tR\NAKoverrideDocumentation\DC21\n\
     \\vsyntax_kind\CAN\ENQ \SOH(\SO2\DLE.scip.SyntaxKindR\n\
     \syntaxKind\DC22\n\
-    \\vdiagnostics\CAN\ACK \ETX(\v2\DLE.scip.DiagnosticR\vdiagnostics\DC2'\n\
-    \\SIenclosing_range\CAN\a \ETX(\ENQR\SOenclosingRange\"\167\SOH\n\
+    \\vdiagnostics\CAN\ACK \ETX(\v2\DLE.scip.DiagnosticR\vdiagnostics\DC2+\n\
+    \\SIenclosing_range\CAN\a \ETX(\ENQR\SOenclosingRangeB\STX\CAN\SOH\DC2V\n\
+    \\ESCsingle_line_enclosing_range\CAN\n\
+    \ \SOH(\v2\NAK.scip.SingleLineRangeH\SOHR\CANsingleLineEnclosingRange\DC2S\n\
+    \\SUBmulti_line_enclosing_range\CAN\v \SOH(\v2\DC4.scip.MultiLineRangeH\SOHR\ETBmultiLineEnclosingRangeB\r\n\
+    \\vtyped_rangeB\ETB\n\
+    \\NAKtyped_enclosing_range\"\167\SOH\n\
     \\n\
     \Diagnostic\DC2*\n\
     \\bseverity\CAN\SOH \SOH(\SO2\SO.scip.SeverityR\bseverity\DC2\DC2\n\
@@ -6655,9 +7455,9 @@ packedFileDescriptor
     \\ETXXSL\DLE \DC2\b\n\
     \\EOTYAML\DLEJ\DC2\a\n\
     \\ETXZig\DLE&BN\n\
-    \\DC2org.scip_code.scipB\tScipProtoP\SOHZ+github.com/scip-code/scip/bindings/go/scip/J\158\191\STX\n\
+    \\DC2org.scip_code.scipB\tScipProtoP\SOHZ+github.com/scip-code/scip/bindings/go/scip/J\167\199\STX\n\
     \\a\DC2\ENQ\n\
-    \\NUL\131\a\SOH\n\
+    \\NUL\156\a\SOH\n\
     \\130\EOT\n\
     \\SOH\f\DC2\ETX\n\
     \\NUL\DC22\247\ETX An index contains one or more pieces of information about a given piece of\n\
@@ -8467,29 +9267,124 @@ packedFileDescriptor
     \\n\
     \\r\n\
     \\ENQ\ENQ\EOT\STX&\STX\DC2\EOT\255\EOT\DC1\DC3\n\
-    \\249\SOH\n\
+    \_\n\
     \\STX\EOT\n\
-    \\DC2\ACK\135\ENQ\NUL\232\ENQ\SOH\SUB\234\SOH Occurrence associates a source position with a symbol and/or highlighting\n\
+    \\DC2\ACK\131\ENQ\NUL\135\ENQ\SOH\SUBQ SingleLineRange represents a half-open [start, end) range within a single line.\n\
+    \\n\
+    \\v\n\
+    \\ETX\EOT\n\
+    \\SOH\DC2\EOT\131\ENQ\b\ETB\n\
+    \\r\n\
+    \\ENQ\EOT\n\
+    \\STX\NUL\ENQ\DC2\EOT\132\ENQ\STX\a\n\
+    \\f\n\
+    \\EOT\EOT\n\
+    \\STX\NUL\DC2\EOT\132\ENQ\STX\DC1\n\
+    \\r\n\
+    \\ENQ\EOT\n\
+    \\STX\NUL\SOH\DC2\EOT\132\ENQ\b\f\n\
+    \\r\n\
+    \\ENQ\EOT\n\
+    \\STX\NUL\ETX\DC2\EOT\132\ENQ\SI\DLE\n\
+    \\r\n\
+    \\ENQ\EOT\n\
+    \\STX\SOH\ENQ\DC2\EOT\133\ENQ\STX\a\n\
+    \\f\n\
+    \\EOT\EOT\n\
+    \\STX\SOH\DC2\EOT\133\ENQ\STX\FS\n\
+    \\r\n\
+    \\ENQ\EOT\n\
+    \\STX\SOH\SOH\DC2\EOT\133\ENQ\b\ETB\n\
+    \\r\n\
+    \\ENQ\EOT\n\
+    \\STX\SOH\ETX\DC2\EOT\133\ENQ\SUB\ESC\n\
+    \\r\n\
+    \\ENQ\EOT\n\
+    \\STX\STX\ENQ\DC2\EOT\134\ENQ\STX\a\n\
+    \\f\n\
+    \\EOT\EOT\n\
+    \\STX\STX\DC2\EOT\134\ENQ\STX\SUB\n\
+    \\r\n\
+    \\ENQ\EOT\n\
+    \\STX\STX\SOH\DC2\EOT\134\ENQ\b\NAK\n\
+    \\r\n\
+    \\ENQ\EOT\n\
+    \\STX\STX\ETX\DC2\EOT\134\ENQ\CAN\EM\n\
+    \a\n\
+    \\STX\EOT\v\DC2\ACK\138\ENQ\NUL\143\ENQ\SOH\SUBS MultiLineRange represents a half-open [start, end) range spanning multiple lines.\n\
+    \\n\
+    \\v\n\
+    \\ETX\EOT\v\SOH\DC2\EOT\138\ENQ\b\SYN\n\
+    \\r\n\
+    \\ENQ\EOT\v\STX\NUL\ENQ\DC2\EOT\139\ENQ\STX\a\n\
+    \\f\n\
+    \\EOT\EOT\v\STX\NUL\DC2\EOT\139\ENQ\STX\ETB\n\
+    \\r\n\
+    \\ENQ\EOT\v\STX\NUL\SOH\DC2\EOT\139\ENQ\b\DC2\n\
+    \\r\n\
+    \\ENQ\EOT\v\STX\NUL\ETX\DC2\EOT\139\ENQ\NAK\SYN\n\
+    \\r\n\
+    \\ENQ\EOT\v\STX\SOH\ENQ\DC2\EOT\140\ENQ\STX\a\n\
+    \\f\n\
+    \\EOT\EOT\v\STX\SOH\DC2\EOT\140\ENQ\STX\FS\n\
+    \\r\n\
+    \\ENQ\EOT\v\STX\SOH\SOH\DC2\EOT\140\ENQ\b\ETB\n\
+    \\r\n\
+    \\ENQ\EOT\v\STX\SOH\ETX\DC2\EOT\140\ENQ\SUB\ESC\n\
+    \\r\n\
+    \\ENQ\EOT\v\STX\STX\ENQ\DC2\EOT\141\ENQ\STX\a\n\
+    \\f\n\
+    \\EOT\EOT\v\STX\STX\DC2\EOT\141\ENQ\STX\NAK\n\
+    \\r\n\
+    \\ENQ\EOT\v\STX\STX\SOH\DC2\EOT\141\ENQ\b\DLE\n\
+    \\r\n\
+    \\ENQ\EOT\v\STX\STX\ETX\DC2\EOT\141\ENQ\DC3\DC4\n\
+    \\r\n\
+    \\ENQ\EOT\v\STX\ETX\ENQ\DC2\EOT\142\ENQ\STX\a\n\
+    \\f\n\
+    \\EOT\EOT\v\STX\ETX\DC2\EOT\142\ENQ\STX\SUB\n\
+    \\r\n\
+    \\ENQ\EOT\v\STX\ETX\SOH\DC2\EOT\142\ENQ\b\NAK\n\
+    \\r\n\
+    \\ENQ\EOT\v\STX\ETX\ETX\DC2\EOT\142\ENQ\CAN\EM\n\
+    \\249\SOH\n\
+    \\STX\EOT\f\DC2\ACK\150\ENQ\NUL\129\ACK\SOH\SUB\234\SOH Occurrence associates a source position with a symbol and/or highlighting\n\
     \ information.\n\
     \\n\
     \ If possible, indexers should try to bundle logically related information\n\
     \ across occurrences into a single occurrence to reduce payload sizes.\n\
     \\n\
     \\v\n\
-    \\ETX\EOT\n\
-    \\SOH\DC2\EOT\135\ENQ\b\DC2\n\
+    \\ETX\EOT\f\SOH\DC2\EOT\150\ENQ\b\DC2\n\
     \\r\n\
-    \\ENQ\EOT\n\
-    \\STX\NUL\EOT\DC2\EOT\159\ENQ\STX\n\
+    \\ENQ\EOT\f\STX\NUL\EOT\DC2\EOT\163\ENQ\STX\n\
     \\n\
-    \\232\b\n\
-    \\EOT\EOT\n\
-    \\STX\NUL\DC2\EOT\159\ENQ\STX\ESC\SUB\217\b Half-open [start, end) range of this occurrence. Must be exactly three or four\n\
-    \ elements:\n\
+    \\224\ENQ\n\
+    \\EOT\EOT\f\STX\NUL\DC2\EOT\163\ENQ\STX/\SUB\209\ENQ Deprecated: Use `single_line_range` or `multi_line_range` instead.\n\
     \\n\
+    \ Half-open [start, end) range. Must be exactly three or four elements:\n\
+    \ - Three elements: `[startLine, startCharacter, endCharacter]` (single-line)\n\
     \ - Four elements: `[startLine, startCharacter, endLine, endCharacter]`\n\
-    \ - Three elements: `[startLine, startCharacter, endCharacter]`. The end line\n\
-    \   is inferred to have the same value as the start line.\n\
+    \\n\
+    \ Historical note: the original draft of this schema had a `Range` message\n\
+    \ type with `start` and `end` fields of type `Position`, mirroring LSP.\n\
+    \ Benchmarks revealed that this encoding was inefficient and that we could\n\
+    \ reduce the total payload size of an index by 50% by using `repeated int32`\n\
+    \ instead. However, the lack of type safety led to the introduction of\n\
+    \ `single_line_range` and `multi_line_range` as typed alternatives.\n\
+    \\n\
+    \\r\n\
+    \\ENQ\EOT\f\STX\NUL\ENQ\DC2\EOT\163\ENQ\v\DLE\n\
+    \\r\n\
+    \\ENQ\EOT\f\STX\NUL\SOH\DC2\EOT\163\ENQ\DC1\SYN\n\
+    \\r\n\
+    \\ENQ\EOT\f\STX\NUL\ETX\DC2\EOT\163\ENQ\EM\SUB\n\
+    \\r\n\
+    \\ENQ\EOT\f\STX\NUL\b\DC2\EOT\163\ENQ\ESC.\n\
+    \\SO\n\
+    \\ACK\EOT\f\STX\NUL\b\ETX\DC2\EOT\163\ENQ\FS-\n\
+    \\164\ETX\n\
+    \\EOT\EOT\f\b\NUL\DC2\ACK\175\ENQ\STX\180\ENQ\ETX\SUB\147\ETX Half-open [start, end) source range of this occurrence.\n\
     \\n\
     \ It is allowed for the range to be empty (i.e. start==end).\n\
     \\n\
@@ -8500,58 +9395,51 @@ packedFileDescriptor
     \ The 'character' value is interpreted based on the PositionEncoding for\n\
     \ the Document.\n\
     \\n\
-    \ Historical note: the original draft of this schema had a `Range` message\n\
-    \ type with `start` and `end` fields of type `Position`, mirroring LSP.\n\
-    \ Benchmarks revealed that this encoding was inefficient and that we could\n\
-    \ reduce the total payload size of an index by 50% by using `repeated int32`\n\
-    \ instead. The `repeated int32` encoding is admittedly more embarrassing to\n\
-    \ work with in some programming languages but we hope the performance\n\
-    \ improvements make up for it.\n\
+    \\r\n\
+    \\ENQ\EOT\f\b\NUL\SOH\DC2\EOT\175\ENQ\b\DC3\n\
+    \\r\n\
+    \\ENQ\EOT\f\STX\SOH\ACK\DC2\EOT\177\ENQ\EOT\DC3\n\
+    \-\n\
+    \\EOT\EOT\f\STX\SOH\DC2\EOT\177\ENQ\EOT*\SUB\US Range spanning a single line.\n\
     \\n\
     \\r\n\
-    \\ENQ\EOT\n\
-    \\STX\NUL\ENQ\DC2\EOT\159\ENQ\v\DLE\n\
+    \\ENQ\EOT\f\STX\SOH\SOH\DC2\EOT\177\ENQ\DC4%\n\
     \\r\n\
-    \\ENQ\EOT\n\
-    \\STX\NUL\SOH\DC2\EOT\159\ENQ\DC1\SYN\n\
+    \\ENQ\EOT\f\STX\SOH\ETX\DC2\EOT\177\ENQ()\n\
     \\r\n\
-    \\ENQ\EOT\n\
-    \\STX\NUL\ETX\DC2\EOT\159\ENQ\EM\SUB\n\
+    \\ENQ\EOT\f\STX\STX\ACK\DC2\EOT\179\ENQ\EOT\DC2\n\
+    \.\n\
+    \\EOT\EOT\f\STX\STX\DC2\EOT\179\ENQ\EOT(\SUB  Range spanning multiple lines.\n\
+    \\n\
     \\r\n\
-    \\ENQ\EOT\n\
-    \\STX\SOH\ENQ\DC2\EOT\162\ENQ\STX\b\n\
+    \\ENQ\EOT\f\STX\STX\SOH\DC2\EOT\179\ENQ\DC3#\n\
+    \\r\n\
+    \\ENQ\EOT\f\STX\STX\ETX\DC2\EOT\179\ENQ&'\n\
+    \\r\n\
+    \\ENQ\EOT\f\STX\ETX\ENQ\DC2\EOT\183\ENQ\STX\b\n\
     \\138\SOH\n\
-    \\EOT\EOT\n\
-    \\STX\SOH\DC2\EOT\162\ENQ\STX\DC4\SUB| (optional) The symbol that appears at this position. See\n\
+    \\EOT\EOT\f\STX\ETX\DC2\EOT\183\ENQ\STX\DC4\SUB| (optional) The symbol that appears at this position. See\n\
     \ `SymbolInformation.symbol` for how to format symbols as strings.\n\
     \\n\
     \\r\n\
-    \\ENQ\EOT\n\
-    \\STX\SOH\SOH\DC2\EOT\162\ENQ\t\SI\n\
+    \\ENQ\EOT\f\STX\ETX\SOH\DC2\EOT\183\ENQ\t\SI\n\
     \\r\n\
-    \\ENQ\EOT\n\
-    \\STX\SOH\ETX\DC2\EOT\162\ENQ\DC2\DC3\n\
+    \\ENQ\EOT\f\STX\ETX\ETX\DC2\EOT\183\ENQ\DC2\DC3\n\
     \\r\n\
-    \\ENQ\EOT\n\
-    \\STX\STX\ENQ\DC2\EOT\165\ENQ\STX\a\n\
+    \\ENQ\EOT\f\STX\EOT\ENQ\DC2\EOT\186\ENQ\STX\a\n\
     \\151\SOH\n\
-    \\EOT\EOT\n\
-    \\STX\STX\DC2\EOT\165\ENQ\STX\EM\SUB\136\SOH (optional) Bitset containing `SymbolRole`s in this occurrence.\n\
+    \\EOT\EOT\f\STX\EOT\DC2\EOT\186\ENQ\STX\EM\SUB\136\SOH (optional) Bitset containing `SymbolRole`s in this occurrence.\n\
     \ See `SymbolRole`'s documentation for how to read and write this field.\n\
     \\n\
     \\r\n\
-    \\ENQ\EOT\n\
-    \\STX\STX\SOH\DC2\EOT\165\ENQ\b\DC4\n\
+    \\ENQ\EOT\f\STX\EOT\SOH\DC2\EOT\186\ENQ\b\DC4\n\
     \\r\n\
-    \\ENQ\EOT\n\
-    \\STX\STX\ETX\DC2\EOT\165\ENQ\ETB\CAN\n\
+    \\ENQ\EOT\f\STX\EOT\ETX\DC2\EOT\186\ENQ\ETB\CAN\n\
     \\r\n\
-    \\ENQ\EOT\n\
-    \\STX\ETX\EOT\DC2\EOT\174\ENQ\STX\n\
+    \\ENQ\EOT\f\STX\ENQ\EOT\DC2\EOT\195\ENQ\STX\n\
     \\n\
     \\241\ETX\n\
-    \\EOT\EOT\n\
-    \\STX\ETX\DC2\EOT\174\ENQ\STX-\SUB\226\ETX (optional) CommonMark-formatted documentation for this specific range. If\n\
+    \\EOT\EOT\f\STX\ENQ\DC2\EOT\195\ENQ\STX-\SUB\226\ETX (optional) CommonMark-formatted documentation for this specific range. If\n\
     \ empty, the `Symbol.documentation` field is used instead. One example\n\
     \ where this field might be useful is when the symbol represents a generic\n\
     \ function (with abstract type parameters such as `List<T>`) and at this\n\
@@ -8561,56 +9449,53 @@ packedFileDescriptor
     \ which commonly allow for type-changing assignment.\n\
     \\n\
     \\r\n\
-    \\ENQ\EOT\n\
-    \\STX\ETX\ENQ\DC2\EOT\174\ENQ\v\DC1\n\
+    \\ENQ\EOT\f\STX\ENQ\ENQ\DC2\EOT\195\ENQ\v\DC1\n\
     \\r\n\
-    \\ENQ\EOT\n\
-    \\STX\ETX\SOH\DC2\EOT\174\ENQ\DC2(\n\
+    \\ENQ\EOT\f\STX\ENQ\SOH\DC2\EOT\195\ENQ\DC2(\n\
     \\r\n\
-    \\ENQ\EOT\n\
-    \\STX\ETX\ETX\DC2\EOT\174\ENQ+,\n\
+    \\ENQ\EOT\f\STX\ENQ\ETX\DC2\EOT\195\ENQ+,\n\
     \\r\n\
-    \\ENQ\EOT\n\
-    \\STX\EOT\ACK\DC2\EOT\176\ENQ\STX\f\n\
+    \\ENQ\EOT\f\STX\ACK\ACK\DC2\EOT\197\ENQ\STX\f\n\
     \X\n\
-    \\EOT\EOT\n\
-    \\STX\EOT\DC2\EOT\176\ENQ\STX\GS\SUBJ (optional) What syntax highlighting class should be used for this range?\n\
+    \\EOT\EOT\f\STX\ACK\DC2\EOT\197\ENQ\STX\GS\SUBJ (optional) What syntax highlighting class should be used for this range?\n\
     \\n\
     \\r\n\
-    \\ENQ\EOT\n\
-    \\STX\EOT\SOH\DC2\EOT\176\ENQ\r\CAN\n\
+    \\ENQ\EOT\f\STX\ACK\SOH\DC2\EOT\197\ENQ\r\CAN\n\
     \\r\n\
-    \\ENQ\EOT\n\
-    \\STX\EOT\ETX\DC2\EOT\176\ENQ\ESC\FS\n\
+    \\ENQ\EOT\f\STX\ACK\ETX\DC2\EOT\197\ENQ\ESC\FS\n\
     \\r\n\
-    \\ENQ\EOT\n\
-    \\STX\ENQ\EOT\DC2\EOT\178\ENQ\STX\n\
+    \\ENQ\EOT\f\STX\a\EOT\DC2\EOT\199\ENQ\STX\n\
     \\n\
     \W\n\
-    \\EOT\EOT\n\
-    \\STX\ENQ\DC2\EOT\178\ENQ\STX&\SUBI (optional) Diagnostics that have been reported for this specific range.\n\
+    \\EOT\EOT\f\STX\a\DC2\EOT\199\ENQ\STX&\SUBI (optional) Diagnostics that have been reported for this specific range.\n\
     \\n\
     \\r\n\
-    \\ENQ\EOT\n\
-    \\STX\ENQ\ACK\DC2\EOT\178\ENQ\v\NAK\n\
+    \\ENQ\EOT\f\STX\a\ACK\DC2\EOT\199\ENQ\v\NAK\n\
     \\r\n\
-    \\ENQ\EOT\n\
-    \\STX\ENQ\SOH\DC2\EOT\178\ENQ\SYN!\n\
+    \\ENQ\EOT\f\STX\a\SOH\DC2\EOT\199\ENQ\SYN!\n\
     \\r\n\
-    \\ENQ\EOT\n\
-    \\STX\ENQ\ETX\DC2\EOT\178\ENQ$%\n\
+    \\ENQ\EOT\f\STX\a\ETX\DC2\EOT\199\ENQ$%\n\
     \\r\n\
-    \\ENQ\EOT\n\
-    \\STX\ACK\EOT\DC2\EOT\231\ENQ\STX\n\
+    \\ENQ\EOT\f\STX\b\EOT\DC2\EOT\201\ENQ\STX\n\
     \\n\
-    \\183\SO\n\
-    \\EOT\EOT\n\
-    \\STX\ACK\DC2\EOT\231\ENQ\STX%\SUB\168\SO (optional) Using the same encoding as the sibling `range` field, half-open\n\
-    \ source range of the nearest non-trivial enclosing AST node. This range must\n\
-    \ enclose the `range` field. Example applications that make use of the\n\
-    \ enclosing_range field:\n\
+    \@\n\
+    \\EOT\EOT\f\STX\b\DC2\EOT\201\ENQ\STX9\SUB2 Deprecated: Use `typed_enclosing_range` instead.\n\
     \\n\
-    \ - Call hierarchies: to determine what symbols are references from the body\n\
+    \\r\n\
+    \\ENQ\EOT\f\STX\b\ENQ\DC2\EOT\201\ENQ\v\DLE\n\
+    \\r\n\
+    \\ENQ\EOT\f\STX\b\SOH\DC2\EOT\201\ENQ\DC1 \n\
+    \\r\n\
+    \\ENQ\EOT\f\STX\b\ETX\DC2\EOT\201\ENQ#$\n\
+    \\r\n\
+    \\ENQ\EOT\f\STX\b\b\DC2\EOT\201\ENQ%8\n\
+    \\SO\n\
+    \\ACK\EOT\f\STX\b\b\ETX\DC2\EOT\201\ENQ&7\n\
+    \\217\r\n\
+    \\EOT\EOT\f\b\SOH\DC2\ACK\253\ENQ\STX\128\ACK\ETX\SUB\200\r (optional) Half-open source range of the nearest non-trivial enclosing AST\n\
+    \ node. This range must enclose the occurrence range. Example applications:\n\
+    \\n\
+    \ - Call hierarchies: to determine what symbols are referenced from the body\n\
     \   of a function\n\
     \ - Symbol outline: to display breadcrumbs from the cursor position to the\n\
     \   root of the file\n\
@@ -8659,129 +9544,142 @@ packedFileDescriptor
     \ ```\n\
     \\n\
     \\r\n\
-    \\ENQ\EOT\n\
-    \\STX\ACK\ENQ\DC2\EOT\231\ENQ\v\DLE\n\
+    \\ENQ\EOT\f\b\SOH\SOH\DC2\EOT\253\ENQ\b\GS\n\
     \\r\n\
-    \\ENQ\EOT\n\
-    \\STX\ACK\SOH\DC2\EOT\231\ENQ\DC1 \n\
+    \\ENQ\EOT\f\STX\t\ACK\DC2\EOT\254\ENQ\EOT\DC3\n\
+    \\f\n\
+    \\EOT\EOT\f\STX\t\DC2\EOT\254\ENQ\EOT5\n\
     \\r\n\
-    \\ENQ\EOT\n\
-    \\STX\ACK\ETX\DC2\EOT\231\ENQ#$\n\
+    \\ENQ\EOT\f\STX\t\SOH\DC2\EOT\254\ENQ\DC4/\n\
+    \\r\n\
+    \\ENQ\EOT\f\STX\t\ETX\DC2\EOT\254\ENQ24\n\
+    \\r\n\
+    \\ENQ\EOT\f\STX\n\
+    \\ACK\DC2\EOT\255\ENQ\EOT\DC2\n\
+    \\f\n\
+    \\EOT\EOT\f\STX\n\
+    \\DC2\EOT\255\ENQ\EOT3\n\
+    \\r\n\
+    \\ENQ\EOT\f\STX\n\
+    \\SOH\DC2\EOT\255\ENQ\DC3-\n\
+    \\r\n\
+    \\ENQ\EOT\f\STX\n\
+    \\ETX\DC2\EOT\255\ENQ02\n\
     \w\n\
-    \\STX\EOT\v\DC2\ACK\236\ENQ\NUL\247\ENQ\SOH\SUBi Represents a diagnostic, such as a compiler error or warning, which should be\n\
+    \\STX\EOT\r\DC2\ACK\133\ACK\NUL\144\ACK\SOH\SUBi Represents a diagnostic, such as a compiler error or warning, which should be\n\
     \ reported for a document.\n\
     \\n\
     \\v\n\
-    \\ETX\EOT\v\SOH\DC2\EOT\236\ENQ\b\DC2\n\
+    \\ETX\EOT\r\SOH\DC2\EOT\133\ACK\b\DC2\n\
     \\r\n\
-    \\ENQ\EOT\v\STX\NUL\ACK\DC2\EOT\238\ENQ\STX\n\
+    \\ENQ\EOT\r\STX\NUL\ACK\DC2\EOT\135\ACK\STX\n\
     \\n\
     \W\n\
-    \\EOT\EOT\v\STX\NUL\DC2\EOT\238\ENQ\STX\CAN\SUBI Should this diagnostic be reported as an error, warning, info, or hint?\n\
+    \\EOT\EOT\r\STX\NUL\DC2\EOT\135\ACK\STX\CAN\SUBI Should this diagnostic be reported as an error, warning, info, or hint?\n\
     \\n\
     \\r\n\
-    \\ENQ\EOT\v\STX\NUL\SOH\DC2\EOT\238\ENQ\v\DC3\n\
+    \\ENQ\EOT\r\STX\NUL\SOH\DC2\EOT\135\ACK\v\DC3\n\
     \\r\n\
-    \\ENQ\EOT\v\STX\NUL\ETX\DC2\EOT\238\ENQ\SYN\ETB\n\
+    \\ENQ\EOT\r\STX\NUL\ETX\DC2\EOT\135\ACK\SYN\ETB\n\
     \\r\n\
-    \\ENQ\EOT\v\STX\SOH\ENQ\DC2\EOT\240\ENQ\STX\b\n\
+    \\ENQ\EOT\r\STX\SOH\ENQ\DC2\EOT\137\ACK\STX\b\n\
     \]\n\
-    \\EOT\EOT\v\STX\SOH\DC2\EOT\240\ENQ\STX\DC2\SUBO (optional) Code of this diagnostic, which might appear in the user interface.\n\
+    \\EOT\EOT\r\STX\SOH\DC2\EOT\137\ACK\STX\DC2\SUBO (optional) Code of this diagnostic, which might appear in the user interface.\n\
     \\n\
     \\r\n\
-    \\ENQ\EOT\v\STX\SOH\SOH\DC2\EOT\240\ENQ\t\r\n\
+    \\ENQ\EOT\r\STX\SOH\SOH\DC2\EOT\137\ACK\t\r\n\
     \\r\n\
-    \\ENQ\EOT\v\STX\SOH\ETX\DC2\EOT\240\ENQ\DLE\DC1\n\
+    \\ENQ\EOT\r\STX\SOH\ETX\DC2\EOT\137\ACK\DLE\DC1\n\
     \\r\n\
-    \\ENQ\EOT\v\STX\STX\ENQ\DC2\EOT\242\ENQ\STX\b\n\
+    \\ENQ\EOT\r\STX\STX\ENQ\DC2\EOT\139\ACK\STX\b\n\
     \+\n\
-    \\EOT\EOT\v\STX\STX\DC2\EOT\242\ENQ\STX\NAK\SUB\GS Message of this diagnostic.\n\
+    \\EOT\EOT\r\STX\STX\DC2\EOT\139\ACK\STX\NAK\SUB\GS Message of this diagnostic.\n\
     \\n\
     \\r\n\
-    \\ENQ\EOT\v\STX\STX\SOH\DC2\EOT\242\ENQ\t\DLE\n\
+    \\ENQ\EOT\r\STX\STX\SOH\DC2\EOT\139\ACK\t\DLE\n\
     \\r\n\
-    \\ENQ\EOT\v\STX\STX\ETX\DC2\EOT\242\ENQ\DC3\DC4\n\
+    \\ENQ\EOT\r\STX\STX\ETX\DC2\EOT\139\ACK\DC3\DC4\n\
     \\r\n\
-    \\ENQ\EOT\v\STX\ETX\ENQ\DC2\EOT\245\ENQ\STX\b\n\
+    \\ENQ\EOT\r\STX\ETX\ENQ\DC2\EOT\142\ACK\STX\b\n\
     \~\n\
-    \\EOT\EOT\v\STX\ETX\DC2\EOT\245\ENQ\STX\DC4\SUBp (optional) Human-readable string describing the source of this diagnostic, e.g.\n\
+    \\EOT\EOT\r\STX\ETX\DC2\EOT\142\ACK\STX\DC4\SUBp (optional) Human-readable string describing the source of this diagnostic, e.g.\n\
     \ 'typescript' or 'super lint'.\n\
     \\n\
     \\r\n\
-    \\ENQ\EOT\v\STX\ETX\SOH\DC2\EOT\245\ENQ\t\SI\n\
+    \\ENQ\EOT\r\STX\ETX\SOH\DC2\EOT\142\ACK\t\SI\n\
     \\r\n\
-    \\ENQ\EOT\v\STX\ETX\ETX\DC2\EOT\245\ENQ\DC2\DC3\n\
+    \\ENQ\EOT\r\STX\ETX\ETX\DC2\EOT\142\ACK\DC2\DC3\n\
     \\r\n\
-    \\ENQ\EOT\v\STX\EOT\EOT\DC2\EOT\246\ENQ\STX\n\
+    \\ENQ\EOT\r\STX\EOT\EOT\DC2\EOT\143\ACK\STX\n\
     \\n\
     \\f\n\
-    \\EOT\EOT\v\STX\EOT\DC2\EOT\246\ENQ\STX\"\n\
+    \\EOT\EOT\r\STX\EOT\DC2\EOT\143\ACK\STX\"\n\
     \\r\n\
-    \\ENQ\EOT\v\STX\EOT\ACK\DC2\EOT\246\ENQ\v\CAN\n\
+    \\ENQ\EOT\r\STX\EOT\ACK\DC2\EOT\143\ACK\v\CAN\n\
     \\r\n\
-    \\ENQ\EOT\v\STX\EOT\SOH\DC2\EOT\246\ENQ\EM\GS\n\
+    \\ENQ\EOT\r\STX\EOT\SOH\DC2\EOT\143\ACK\EM\GS\n\
     \\r\n\
-    \\ENQ\EOT\v\STX\EOT\ETX\DC2\EOT\246\ENQ !\n\
+    \\ENQ\EOT\r\STX\EOT\ETX\DC2\EOT\143\ACK !\n\
     \\f\n\
-    \\STX\ENQ\ENQ\DC2\ACK\249\ENQ\NUL\255\ENQ\SOH\n\
+    \\STX\ENQ\ENQ\DC2\ACK\146\ACK\NUL\152\ACK\SOH\n\
     \\v\n\
-    \\ETX\ENQ\ENQ\SOH\DC2\EOT\249\ENQ\ENQ\r\n\
+    \\ETX\ENQ\ENQ\SOH\DC2\EOT\146\ACK\ENQ\r\n\
     \\r\n\
-    \\ENQ\ENQ\ENQ\STX\NUL\SOH\DC2\EOT\250\ENQ\STX\NAK\n\
+    \\ENQ\ENQ\ENQ\STX\NUL\SOH\DC2\EOT\147\ACK\STX\NAK\n\
     \\f\n\
-    \\EOT\ENQ\ENQ\STX\NUL\DC2\EOT\250\ENQ\STX\SUB\n\
+    \\EOT\ENQ\ENQ\STX\NUL\DC2\EOT\147\ACK\STX\SUB\n\
     \\r\n\
-    \\ENQ\ENQ\ENQ\STX\NUL\STX\DC2\EOT\250\ENQ\CAN\EM\n\
+    \\ENQ\ENQ\ENQ\STX\NUL\STX\DC2\EOT\147\ACK\CAN\EM\n\
     \\r\n\
-    \\ENQ\ENQ\ENQ\STX\SOH\SOH\DC2\EOT\251\ENQ\STX\a\n\
+    \\ENQ\ENQ\ENQ\STX\SOH\SOH\DC2\EOT\148\ACK\STX\a\n\
     \\f\n\
-    \\EOT\ENQ\ENQ\STX\SOH\DC2\EOT\251\ENQ\STX\f\n\
+    \\EOT\ENQ\ENQ\STX\SOH\DC2\EOT\148\ACK\STX\f\n\
     \\r\n\
-    \\ENQ\ENQ\ENQ\STX\SOH\STX\DC2\EOT\251\ENQ\n\
+    \\ENQ\ENQ\ENQ\STX\SOH\STX\DC2\EOT\148\ACK\n\
     \\v\n\
     \\r\n\
-    \\ENQ\ENQ\ENQ\STX\STX\SOH\DC2\EOT\252\ENQ\STX\t\n\
+    \\ENQ\ENQ\ENQ\STX\STX\SOH\DC2\EOT\149\ACK\STX\t\n\
     \\f\n\
-    \\EOT\ENQ\ENQ\STX\STX\DC2\EOT\252\ENQ\STX\SO\n\
+    \\EOT\ENQ\ENQ\STX\STX\DC2\EOT\149\ACK\STX\SO\n\
     \\r\n\
-    \\ENQ\ENQ\ENQ\STX\STX\STX\DC2\EOT\252\ENQ\f\r\n\
+    \\ENQ\ENQ\ENQ\STX\STX\STX\DC2\EOT\149\ACK\f\r\n\
     \\r\n\
-    \\ENQ\ENQ\ENQ\STX\ETX\SOH\DC2\EOT\253\ENQ\STX\r\n\
+    \\ENQ\ENQ\ENQ\STX\ETX\SOH\DC2\EOT\150\ACK\STX\r\n\
     \\f\n\
-    \\EOT\ENQ\ENQ\STX\ETX\DC2\EOT\253\ENQ\STX\DC2\n\
+    \\EOT\ENQ\ENQ\STX\ETX\DC2\EOT\150\ACK\STX\DC2\n\
     \\r\n\
-    \\ENQ\ENQ\ENQ\STX\ETX\STX\DC2\EOT\253\ENQ\DLE\DC1\n\
+    \\ENQ\ENQ\ENQ\STX\ETX\STX\DC2\EOT\150\ACK\DLE\DC1\n\
     \\r\n\
-    \\ENQ\ENQ\ENQ\STX\EOT\SOH\DC2\EOT\254\ENQ\STX\ACK\n\
+    \\ENQ\ENQ\ENQ\STX\EOT\SOH\DC2\EOT\151\ACK\STX\ACK\n\
     \\f\n\
-    \\EOT\ENQ\ENQ\STX\EOT\DC2\EOT\254\ENQ\STX\v\n\
+    \\EOT\ENQ\ENQ\STX\EOT\DC2\EOT\151\ACK\STX\v\n\
     \\r\n\
-    \\ENQ\ENQ\ENQ\STX\EOT\STX\DC2\EOT\254\ENQ\t\n\
+    \\ENQ\ENQ\ENQ\STX\EOT\STX\DC2\EOT\151\ACK\t\n\
     \\n\
     \\f\n\
-    \\STX\ENQ\ACK\DC2\ACK\129\ACK\NUL\133\ACK\SOH\n\
+    \\STX\ENQ\ACK\DC2\ACK\154\ACK\NUL\158\ACK\SOH\n\
     \\v\n\
-    \\ETX\ENQ\ACK\SOH\DC2\EOT\129\ACK\ENQ\DC2\n\
+    \\ETX\ENQ\ACK\SOH\DC2\EOT\154\ACK\ENQ\DC2\n\
     \\r\n\
-    \\ENQ\ENQ\ACK\STX\NUL\SOH\DC2\EOT\130\ACK\STX\SUB\n\
+    \\ENQ\ENQ\ACK\STX\NUL\SOH\DC2\EOT\155\ACK\STX\SUB\n\
     \\f\n\
-    \\EOT\ENQ\ACK\STX\NUL\DC2\EOT\130\ACK\STX\US\n\
+    \\EOT\ENQ\ACK\STX\NUL\DC2\EOT\155\ACK\STX\US\n\
     \\r\n\
-    \\ENQ\ENQ\ACK\STX\NUL\STX\DC2\EOT\130\ACK\GS\RS\n\
+    \\ENQ\ENQ\ACK\STX\NUL\STX\DC2\EOT\155\ACK\GS\RS\n\
     \\r\n\
-    \\ENQ\ENQ\ACK\STX\SOH\SOH\DC2\EOT\131\ACK\STX\r\n\
+    \\ENQ\ENQ\ACK\STX\SOH\SOH\DC2\EOT\156\ACK\STX\r\n\
     \\f\n\
-    \\EOT\ENQ\ACK\STX\SOH\DC2\EOT\131\ACK\STX\DC2\n\
+    \\EOT\ENQ\ACK\STX\SOH\DC2\EOT\156\ACK\STX\DC2\n\
     \\r\n\
-    \\ENQ\ENQ\ACK\STX\SOH\STX\DC2\EOT\131\ACK\DLE\DC1\n\
+    \\ENQ\ENQ\ACK\STX\SOH\STX\DC2\EOT\156\ACK\DLE\DC1\n\
     \\r\n\
-    \\ENQ\ENQ\ACK\STX\STX\SOH\DC2\EOT\132\ACK\STX\f\n\
+    \\ENQ\ENQ\ACK\STX\STX\SOH\DC2\EOT\157\ACK\STX\f\n\
     \\f\n\
-    \\EOT\ENQ\ACK\STX\STX\DC2\EOT\132\ACK\STX\DC1\n\
+    \\EOT\ENQ\ACK\STX\STX\DC2\EOT\157\ACK\STX\DC1\n\
     \\r\n\
-    \\ENQ\ENQ\ACK\STX\STX\STX\DC2\EOT\132\ACK\SI\DLE\n\
+    \\ENQ\ENQ\ACK\STX\STX\STX\DC2\EOT\157\ACK\SI\DLE\n\
     \\208\ETX\n\
-    \\STX\ENQ\a\DC2\ACK\141\ACK\NUL\131\a\SOH\SUB\193\ETX Language standardises names of common programming languages that can be used\n\
+    \\STX\ENQ\a\DC2\ACK\166\ACK\NUL\156\a\SOH\SUB\193\ETX Language standardises names of common programming languages that can be used\n\
     \ for the `Document.language` field. The primary purpose of this enum is to\n\
     \ prevent a situation where we have a single programming language ends up with\n\
     \ multiple string representations. For example, the C++ language uses the name\n\
@@ -8789,707 +9687,707 @@ packedFileDescriptor
     \ Feel free to send a pull-request to add missing programming languages.\n\
     \\n\
     \\v\n\
-    \\ETX\ENQ\a\SOH\DC2\EOT\141\ACK\ENQ\r\n\
+    \\ETX\ENQ\a\SOH\DC2\EOT\166\ACK\ENQ\r\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX\NUL\SOH\DC2\EOT\142\ACK\STX\NAK\n\
+    \\ENQ\ENQ\a\STX\NUL\SOH\DC2\EOT\167\ACK\STX\NAK\n\
     \\f\n\
-    \\EOT\ENQ\a\STX\NUL\DC2\EOT\142\ACK\STX\SUB\n\
+    \\EOT\ENQ\a\STX\NUL\DC2\EOT\167\ACK\STX\SUB\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX\NUL\STX\DC2\EOT\142\ACK\CAN\EM\n\
+    \\ENQ\ENQ\a\STX\NUL\STX\DC2\EOT\167\ACK\CAN\EM\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX\SOH\SOH\DC2\EOT\143\ACK\STX\ACK\n\
+    \\ENQ\ENQ\a\STX\SOH\SOH\DC2\EOT\168\ACK\STX\ACK\n\
     \\f\n\
-    \\EOT\ENQ\a\STX\SOH\DC2\EOT\143\ACK\STX\f\n\
+    \\EOT\ENQ\a\STX\SOH\DC2\EOT\168\ACK\STX\f\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX\SOH\STX\DC2\EOT\143\ACK\t\v\n\
+    \\ENQ\ENQ\a\STX\SOH\STX\DC2\EOT\168\ACK\t\v\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX\STX\SOH\DC2\EOT\144\ACK\STX\ACK\n\
+    \\ENQ\ENQ\a\STX\STX\SOH\DC2\EOT\169\ACK\STX\ACK\n\
     \\f\n\
-    \\EOT\ENQ\a\STX\STX\DC2\EOT\144\ACK\STX\f\n\
+    \\EOT\ENQ\a\STX\STX\DC2\EOT\169\ACK\STX\f\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX\STX\STX\DC2\EOT\144\ACK\t\v\n\
+    \\ENQ\ENQ\a\STX\STX\STX\DC2\EOT\169\ACK\t\v\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX\ETX\SOH\DC2\EOT\145\ACK\STX\ENQ\n\
+    \\ENQ\ENQ\a\STX\ETX\SOH\DC2\EOT\170\ACK\STX\ENQ\n\
     \\f\n\
-    \\EOT\ENQ\a\STX\ETX\DC2\EOT\145\ACK\STX\v\n\
+    \\EOT\ENQ\a\STX\ETX\DC2\EOT\170\ACK\STX\v\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX\ETX\STX\DC2\EOT\145\ACK\b\n\
+    \\ENQ\ENQ\a\STX\ETX\STX\DC2\EOT\170\ACK\b\n\
     \\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX\EOT\SOH\DC2\EOT\146\ACK\STX\ENQ\n\
+    \\ENQ\ENQ\a\STX\EOT\SOH\DC2\EOT\171\ACK\STX\ENQ\n\
     \\f\n\
-    \\EOT\ENQ\a\STX\EOT\DC2\EOT\146\ACK\STX\v\n\
+    \\EOT\ENQ\a\STX\EOT\DC2\EOT\171\ACK\STX\v\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX\EOT\STX\DC2\EOT\146\ACK\b\n\
+    \\ENQ\ENQ\a\STX\EOT\STX\DC2\EOT\171\ACK\b\n\
     \\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX\ENQ\SOH\DC2\EOT\147\ACK\STX\ACK\n\
+    \\ENQ\ENQ\a\STX\ENQ\SOH\DC2\EOT\172\ACK\STX\ACK\n\
     \\f\n\
-    \\EOT\ENQ\a\STX\ENQ\DC2\EOT\147\ACK\STX\f\n\
+    \\EOT\ENQ\a\STX\ENQ\DC2\EOT\172\ACK\STX\f\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX\ENQ\STX\DC2\EOT\147\ACK\t\v\n\
+    \\ENQ\ENQ\a\STX\ENQ\STX\DC2\EOT\172\ACK\t\v\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX\ACK\SOH\DC2\EOT\148\ACK\STX\n\
+    \\ENQ\ENQ\a\STX\ACK\SOH\DC2\EOT\173\ACK\STX\n\
     \\n\
     \\f\n\
-    \\EOT\ENQ\a\STX\ACK\DC2\EOT\148\ACK\STX\DLE\n\
+    \\EOT\ENQ\a\STX\ACK\DC2\EOT\173\ACK\STX\DLE\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX\ACK\STX\DC2\EOT\148\ACK\r\SI\n\
+    \\ENQ\ENQ\a\STX\ACK\STX\DC2\EOT\173\ACK\r\SI\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX\a\SOH\DC2\EOT\149\ACK\STX\n\
+    \\ENQ\ENQ\a\STX\a\SOH\DC2\EOT\174\ACK\STX\n\
     \\n\
     \\f\n\
-    \\EOT\ENQ\a\STX\a\DC2\EOT\149\ACK\STX\DLE\n\
+    \\EOT\ENQ\a\STX\a\DC2\EOT\174\ACK\STX\DLE\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX\a\STX\DC2\EOT\149\ACK\r\SI\n\
+    \\ENQ\ENQ\a\STX\a\STX\DC2\EOT\174\ACK\r\SI\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX\b\SOH\DC2\EOT\150\ACK\STX\ENQ\n\
+    \\ENQ\ENQ\a\STX\b\SOH\DC2\EOT\175\ACK\STX\ENQ\n\
     \\f\n\
-    \\EOT\ENQ\a\STX\b\DC2\EOT\150\ACK\STX\v\n\
+    \\EOT\ENQ\a\STX\b\DC2\EOT\175\ACK\STX\v\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX\b\STX\DC2\EOT\150\ACK\b\n\
+    \\ENQ\ENQ\a\STX\b\STX\DC2\EOT\175\ACK\b\n\
     \\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX\t\SOH\DC2\EOT\151\ACK\STX\ENQ\n\
+    \\ENQ\ENQ\a\STX\t\SOH\DC2\EOT\176\ACK\STX\ENQ\n\
     \\f\n\
-    \\EOT\ENQ\a\STX\t\DC2\EOT\151\ACK\STX\v\n\
+    \\EOT\ENQ\a\STX\t\DC2\EOT\176\ACK\STX\v\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX\t\STX\DC2\EOT\151\ACK\b\n\
+    \\ENQ\ENQ\a\STX\t\STX\DC2\EOT\176\ACK\b\n\
     \\n\
     \\r\n\
     \\ENQ\ENQ\a\STX\n\
-    \\SOH\DC2\EOT\152\ACK\STX\b\n\
+    \\SOH\DC2\EOT\177\ACK\STX\b\n\
     \\f\n\
     \\EOT\ENQ\a\STX\n\
-    \\DC2\EOT\152\ACK\STX\SO\n\
+    \\DC2\EOT\177\ACK\STX\SO\n\
     \\r\n\
     \\ENQ\ENQ\a\STX\n\
-    \\STX\DC2\EOT\152\ACK\v\r\n\
+    \\STX\DC2\EOT\177\ACK\v\r\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX\v\SOH\DC2\EOT\153\ACK\STX\ETX\n\
+    \\ENQ\ENQ\a\STX\v\SOH\DC2\EOT\178\ACK\STX\ETX\n\
     \\f\n\
-    \\EOT\ENQ\a\STX\v\DC2\EOT\153\ACK\STX\t\n\
+    \\EOT\ENQ\a\STX\v\DC2\EOT\178\ACK\STX\t\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX\v\STX\DC2\EOT\153\ACK\ACK\b\n\
+    \\ENQ\ENQ\a\STX\v\STX\DC2\EOT\178\ACK\ACK\b\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX\f\SOH\DC2\EOT\154\ACK\STX\a\n\
+    \\ENQ\ENQ\a\STX\f\SOH\DC2\EOT\179\ACK\STX\a\n\
     \\f\n\
-    \\EOT\ENQ\a\STX\f\DC2\EOT\154\ACK\STX\r\n\
+    \\EOT\ENQ\a\STX\f\DC2\EOT\179\ACK\STX\r\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX\f\STX\DC2\EOT\154\ACK\n\
+    \\ENQ\ENQ\a\STX\f\STX\DC2\EOT\179\ACK\n\
     \\f\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX\r\SOH\DC2\EOT\155\ACK\STX\ENQ\n\
+    \\ENQ\ENQ\a\STX\r\SOH\DC2\EOT\180\ACK\STX\ENQ\n\
     \G\n\
-    \\EOT\ENQ\a\STX\r\DC2\EOT\155\ACK\STX\v\"9 C++ (the name \"CPP\" was chosen for consistency with LSP)\n\
+    \\EOT\ENQ\a\STX\r\DC2\EOT\180\ACK\STX\v\"9 C++ (the name \"CPP\" was chosen for consistency with LSP)\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX\r\STX\DC2\EOT\155\ACK\b\n\
+    \\ENQ\ENQ\a\STX\r\STX\DC2\EOT\180\ACK\b\n\
     \\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX\SO\SOH\DC2\EOT\156\ACK\STX\ENQ\n\
+    \\ENQ\ENQ\a\STX\SO\SOH\DC2\EOT\181\ACK\STX\ENQ\n\
     \\f\n\
-    \\EOT\ENQ\a\STX\SO\DC2\EOT\156\ACK\STX\v\n\
+    \\EOT\ENQ\a\STX\SO\DC2\EOT\181\ACK\STX\v\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX\SO\STX\DC2\EOT\156\ACK\b\n\
+    \\ENQ\ENQ\a\STX\SO\STX\DC2\EOT\181\ACK\b\n\
     \\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX\SI\SOH\DC2\EOT\157\ACK\STX\b\n\
+    \\ENQ\ENQ\a\STX\SI\SOH\DC2\EOT\182\ACK\STX\b\n\
     \\f\n\
-    \\EOT\ENQ\a\STX\SI\DC2\EOT\157\ACK\STX\r\n\
+    \\EOT\ENQ\a\STX\SI\DC2\EOT\182\ACK\STX\r\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX\SI\STX\DC2\EOT\157\ACK\v\f\n\
+    \\ENQ\ENQ\a\STX\SI\STX\DC2\EOT\182\ACK\v\f\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX\DLE\SOH\DC2\EOT\158\ACK\STX\t\n\
+    \\ENQ\ENQ\a\STX\DLE\SOH\DC2\EOT\183\ACK\STX\t\n\
     \\f\n\
-    \\EOT\ENQ\a\STX\DLE\DC2\EOT\158\ACK\STX\SO\n\
+    \\EOT\ENQ\a\STX\DLE\DC2\EOT\183\ACK\STX\SO\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX\DLE\STX\DC2\EOT\158\ACK\f\r\n\
+    \\ENQ\ENQ\a\STX\DLE\STX\DC2\EOT\183\ACK\f\r\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX\DC1\SOH\DC2\EOT\159\ACK\STX\SO\n\
+    \\ENQ\ENQ\a\STX\DC1\SOH\DC2\EOT\184\ACK\STX\SO\n\
     \\f\n\
-    \\EOT\ENQ\a\STX\DC1\DC2\EOT\159\ACK\STX\DC4\n\
+    \\EOT\ENQ\a\STX\DC1\DC2\EOT\184\ACK\STX\DC4\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX\DC1\STX\DC2\EOT\159\ACK\DC1\DC3\n\
+    \\ENQ\ENQ\a\STX\DC1\STX\DC2\EOT\184\ACK\DC1\DC3\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX\DC2\SOH\DC2\EOT\160\ACK\STX\f\n\
+    \\ENQ\ENQ\a\STX\DC2\SOH\DC2\EOT\185\ACK\STX\f\n\
     \\f\n\
-    \\EOT\ENQ\a\STX\DC2\DC2\EOT\160\ACK\STX\DC1\n\
+    \\EOT\ENQ\a\STX\DC2\DC2\EOT\185\ACK\STX\DC1\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX\DC2\STX\DC2\EOT\160\ACK\SI\DLE\n\
+    \\ENQ\ENQ\a\STX\DC2\STX\DC2\EOT\185\ACK\SI\DLE\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX\DC3\SOH\DC2\EOT\161\ACK\STX\ENQ\n\
+    \\ENQ\ENQ\a\STX\DC3\SOH\DC2\EOT\186\ACK\STX\ENQ\n\
     \\f\n\
-    \\EOT\ENQ\a\STX\DC3\DC2\EOT\161\ACK\STX\v\n\
+    \\EOT\ENQ\a\STX\DC3\DC2\EOT\186\ACK\STX\v\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX\DC3\STX\DC2\EOT\161\ACK\b\n\
+    \\ENQ\ENQ\a\STX\DC3\STX\DC2\EOT\186\ACK\b\n\
     \\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX\DC4\SOH\DC2\EOT\162\ACK\STX\ACK\n\
+    \\ENQ\ENQ\a\STX\DC4\SOH\DC2\EOT\187\ACK\STX\ACK\n\
     \\f\n\
-    \\EOT\ENQ\a\STX\DC4\DC2\EOT\162\ACK\STX\f\n\
+    \\EOT\ENQ\a\STX\DC4\DC2\EOT\187\ACK\STX\f\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX\DC4\STX\DC2\EOT\162\ACK\t\v\n\
+    \\ENQ\ENQ\a\STX\DC4\STX\DC2\EOT\187\ACK\t\v\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX\NAK\SOH\DC2\EOT\163\ACK\STX\ACK\n\
+    \\ENQ\ENQ\a\STX\NAK\SOH\DC2\EOT\188\ACK\STX\ACK\n\
     \\f\n\
-    \\EOT\ENQ\a\STX\NAK\DC2\EOT\163\ACK\STX\v\n\
+    \\EOT\ENQ\a\STX\NAK\DC2\EOT\188\ACK\STX\v\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX\NAK\STX\DC2\EOT\163\ACK\t\n\
+    \\ENQ\ENQ\a\STX\NAK\STX\DC2\EOT\188\ACK\t\n\
     \\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX\SYN\SOH\DC2\EOT\164\ACK\STX\b\n\
+    \\ENQ\ENQ\a\STX\SYN\SOH\DC2\EOT\189\ACK\STX\b\n\
     \\f\n\
-    \\EOT\ENQ\a\STX\SYN\DC2\EOT\164\ACK\STX\SO\n\
+    \\EOT\ENQ\a\STX\SYN\DC2\EOT\189\ACK\STX\SO\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX\SYN\STX\DC2\EOT\164\ACK\v\r\n\
+    \\ENQ\ENQ\a\STX\SYN\STX\DC2\EOT\189\ACK\v\r\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX\ETB\SOH\DC2\EOT\165\ACK\STX\ACK\n\
+    \\ENQ\ENQ\a\STX\ETB\SOH\DC2\EOT\190\ACK\STX\ACK\n\
     \\f\n\
-    \\EOT\ENQ\a\STX\ETB\DC2\EOT\165\ACK\STX\f\n\
+    \\EOT\ENQ\a\STX\ETB\DC2\EOT\190\ACK\STX\f\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX\ETB\STX\DC2\EOT\165\ACK\t\v\n\
+    \\ENQ\ENQ\a\STX\ETB\STX\DC2\EOT\190\ACK\t\v\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX\CAN\SOH\DC2\EOT\166\ACK\STX\f\n\
+    \\ENQ\ENQ\a\STX\CAN\SOH\DC2\EOT\191\ACK\STX\f\n\
     \\f\n\
-    \\EOT\ENQ\a\STX\CAN\DC2\EOT\166\ACK\STX\DC2\n\
+    \\EOT\ENQ\a\STX\CAN\DC2\EOT\191\ACK\STX\DC2\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX\CAN\STX\DC2\EOT\166\ACK\SI\DC1\n\
+    \\ENQ\ENQ\a\STX\CAN\STX\DC2\EOT\191\ACK\SI\DC1\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX\EM\SOH\DC2\EOT\167\ACK\STX\b\n\
+    \\ENQ\ENQ\a\STX\EM\SOH\DC2\EOT\192\ACK\STX\b\n\
     \\f\n\
-    \\EOT\ENQ\a\STX\EM\DC2\EOT\167\ACK\STX\SO\n\
+    \\EOT\ENQ\a\STX\EM\DC2\EOT\192\ACK\STX\SO\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX\EM\STX\DC2\EOT\167\ACK\v\r\n\
+    \\ENQ\ENQ\a\STX\EM\STX\DC2\EOT\192\ACK\v\r\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX\SUB\SOH\DC2\EOT\168\ACK\STX\b\n\
+    \\ENQ\ENQ\a\STX\SUB\SOH\DC2\EOT\193\ACK\STX\b\n\
     \\f\n\
-    \\EOT\ENQ\a\STX\SUB\DC2\EOT\168\ACK\STX\SO\n\
+    \\EOT\ENQ\a\STX\SUB\DC2\EOT\193\ACK\STX\SO\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX\SUB\STX\DC2\EOT\168\ACK\v\r\n\
+    \\ENQ\ENQ\a\STX\SUB\STX\DC2\EOT\193\ACK\v\r\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX\ESC\SOH\DC2\EOT\169\ACK\STX\b\n\
+    \\ENQ\ENQ\a\STX\ESC\SOH\DC2\EOT\194\ACK\STX\b\n\
     \\f\n\
-    \\EOT\ENQ\a\STX\ESC\DC2\EOT\169\ACK\STX\SO\n\
+    \\EOT\ENQ\a\STX\ESC\DC2\EOT\194\ACK\STX\SO\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX\ESC\STX\DC2\EOT\169\ACK\v\r\n\
+    \\ENQ\ENQ\a\STX\ESC\STX\DC2\EOT\194\ACK\v\r\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX\FS\SOH\DC2\EOT\170\ACK\STX\b\n\
+    \\ENQ\ENQ\a\STX\FS\SOH\DC2\EOT\195\ACK\STX\b\n\
     \\f\n\
-    \\EOT\ENQ\a\STX\FS\DC2\EOT\170\ACK\STX\SO\n\
+    \\EOT\ENQ\a\STX\FS\DC2\EOT\195\ACK\STX\SO\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX\FS\STX\DC2\EOT\170\ACK\v\r\n\
+    \\ENQ\ENQ\a\STX\FS\STX\DC2\EOT\195\ACK\v\r\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX\GS\SOH\DC2\EOT\171\ACK\STX\ACK\n\
+    \\ENQ\ENQ\a\STX\GS\SOH\DC2\EOT\196\ACK\STX\ACK\n\
     \\f\n\
-    \\EOT\ENQ\a\STX\GS\DC2\EOT\171\ACK\STX\f\n\
+    \\EOT\ENQ\a\STX\GS\DC2\EOT\196\ACK\STX\f\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX\GS\STX\DC2\EOT\171\ACK\t\v\n\
+    \\ENQ\ENQ\a\STX\GS\STX\DC2\EOT\196\ACK\t\v\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX\RS\SOH\DC2\EOT\172\ACK\STX\ACK\n\
+    \\ENQ\ENQ\a\STX\RS\SOH\DC2\EOT\197\ACK\STX\ACK\n\
     \\f\n\
-    \\EOT\ENQ\a\STX\RS\DC2\EOT\172\ACK\STX\f\n\
+    \\EOT\ENQ\a\STX\RS\DC2\EOT\197\ACK\STX\f\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX\RS\STX\DC2\EOT\172\ACK\t\v\n\
+    \\ENQ\ENQ\a\STX\RS\STX\DC2\EOT\197\ACK\t\v\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX\US\SOH\DC2\EOT\173\ACK\STX\t\n\
+    \\ENQ\ENQ\a\STX\US\SOH\DC2\EOT\198\ACK\STX\t\n\
     \\f\n\
-    \\EOT\ENQ\a\STX\US\DC2\EOT\173\ACK\STX\SI\n\
+    \\EOT\ENQ\a\STX\US\DC2\EOT\198\ACK\STX\SI\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX\US\STX\DC2\EOT\173\ACK\f\SO\n\
+    \\ENQ\ENQ\a\STX\US\STX\DC2\EOT\198\ACK\f\SO\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX \SOH\DC2\EOT\174\ACK\STX\f\n\
+    \\ENQ\ENQ\a\STX \SOH\DC2\EOT\199\ACK\STX\f\n\
     \\f\n\
-    \\EOT\ENQ\a\STX \DC2\EOT\174\ACK\STX\DC2\n\
+    \\EOT\ENQ\a\STX \DC2\EOT\199\ACK\STX\DC2\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX \STX\DC2\EOT\174\ACK\SI\DC1\n\
+    \\ENQ\ENQ\a\STX \STX\DC2\EOT\199\ACK\SI\DC1\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX!\SOH\DC2\EOT\175\ACK\STX\f\n\
+    \\ENQ\ENQ\a\STX!\SOH\DC2\EOT\200\ACK\STX\f\n\
     \\f\n\
-    \\EOT\ENQ\a\STX!\DC2\EOT\175\ACK\STX\DC2\n\
+    \\EOT\ENQ\a\STX!\DC2\EOT\200\ACK\STX\DC2\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX!\STX\DC2\EOT\175\ACK\SI\DC1\n\
+    \\ENQ\ENQ\a\STX!\STX\DC2\EOT\200\ACK\SI\DC1\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX\"\SOH\DC2\EOT\176\ACK\STX\f\n\
+    \\ENQ\ENQ\a\STX\"\SOH\DC2\EOT\201\ACK\STX\f\n\
     \\f\n\
-    \\EOT\ENQ\a\STX\"\DC2\EOT\176\ACK\STX\DC2\n\
+    \\EOT\ENQ\a\STX\"\DC2\EOT\201\ACK\STX\DC2\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX\"\STX\DC2\EOT\176\ACK\SI\DC1\n\
+    \\ENQ\ENQ\a\STX\"\STX\DC2\EOT\201\ACK\SI\DC1\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX#\SOH\DC2\EOT\177\ACK\STX\EOT\n\
+    \\ENQ\ENQ\a\STX#\SOH\DC2\EOT\202\ACK\STX\EOT\n\
     \\f\n\
-    \\EOT\ENQ\a\STX#\DC2\EOT\177\ACK\STX\n\
+    \\EOT\ENQ\a\STX#\DC2\EOT\202\ACK\STX\n\
     \\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX#\STX\DC2\EOT\177\ACK\a\t\n\
+    \\ENQ\ENQ\a\STX#\STX\DC2\EOT\202\ACK\a\t\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX$\SOH\DC2\EOT\178\ACK\STX\t\n\
+    \\ENQ\ENQ\a\STX$\SOH\DC2\EOT\203\ACK\STX\t\n\
     \\f\n\
-    \\EOT\ENQ\a\STX$\DC2\EOT\178\ACK\STX\SI\n\
+    \\EOT\ENQ\a\STX$\DC2\EOT\203\ACK\STX\SI\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX$\STX\DC2\EOT\178\ACK\f\SO\n\
+    \\ENQ\ENQ\a\STX$\STX\DC2\EOT\203\ACK\f\SO\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX%\SOH\DC2\EOT\179\ACK\STX\b\n\
+    \\ENQ\ENQ\a\STX%\SOH\DC2\EOT\204\ACK\STX\b\n\
     \\f\n\
-    \\EOT\ENQ\a\STX%\DC2\EOT\179\ACK\STX\r\n\
+    \\EOT\ENQ\a\STX%\DC2\EOT\204\ACK\STX\r\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX%\STX\DC2\EOT\179\ACK\v\f\n\
+    \\ENQ\ENQ\a\STX%\STX\DC2\EOT\204\ACK\v\f\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX&\SOH\DC2\EOT\180\ACK\STX\ACK\n\
+    \\ENQ\ENQ\a\STX&\SOH\DC2\EOT\205\ACK\STX\ACK\n\
     \\f\n\
-    \\EOT\ENQ\a\STX&\DC2\EOT\180\ACK\STX\f\n\
+    \\EOT\ENQ\a\STX&\DC2\EOT\205\ACK\STX\f\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX&\STX\DC2\EOT\180\ACK\t\v\n\
+    \\ENQ\ENQ\a\STX&\STX\DC2\EOT\205\ACK\t\v\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX'\SOH\DC2\EOT\181\ACK\STX\ACK\n\
+    \\ENQ\ENQ\a\STX'\SOH\DC2\EOT\206\ACK\STX\ACK\n\
     \\f\n\
-    \\EOT\ENQ\a\STX'\DC2\EOT\181\ACK\STX\f\n\
+    \\EOT\ENQ\a\STX'\DC2\EOT\206\ACK\STX\f\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX'\STX\DC2\EOT\181\ACK\t\v\n\
+    \\ENQ\ENQ\a\STX'\STX\DC2\EOT\206\ACK\t\v\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX(\SOH\DC2\EOT\182\ACK\STX\f\n\
+    \\ENQ\ENQ\a\STX(\SOH\DC2\EOT\207\ACK\STX\f\n\
     \\f\n\
-    \\EOT\ENQ\a\STX(\DC2\EOT\182\ACK\STX\DC2\n\
+    \\EOT\ENQ\a\STX(\DC2\EOT\207\ACK\STX\DC2\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX(\STX\DC2\EOT\182\ACK\SI\DC1\n\
+    \\ENQ\ENQ\a\STX(\STX\DC2\EOT\207\ACK\SI\DC1\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX)\SOH\DC2\EOT\183\ACK\STX\t\n\
+    \\ENQ\ENQ\a\STX)\SOH\DC2\EOT\208\ACK\STX\t\n\
     \\f\n\
-    \\EOT\ENQ\a\STX)\DC2\EOT\183\ACK\STX\SI\n\
+    \\EOT\ENQ\a\STX)\DC2\EOT\208\ACK\STX\SI\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX)\STX\DC2\EOT\183\ACK\f\SO\n\
+    \\ENQ\ENQ\a\STX)\STX\DC2\EOT\208\ACK\f\SO\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX*\SOH\DC2\EOT\184\ACK\STX\a\n\
+    \\ENQ\ENQ\a\STX*\SOH\DC2\EOT\209\ACK\STX\a\n\
     \\f\n\
-    \\EOT\ENQ\a\STX*\DC2\EOT\184\ACK\STX\r\n\
+    \\EOT\ENQ\a\STX*\DC2\EOT\209\ACK\STX\r\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX*\STX\DC2\EOT\184\ACK\n\
+    \\ENQ\ENQ\a\STX*\STX\DC2\EOT\209\ACK\n\
     \\f\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX+\SOH\DC2\EOT\185\ACK\STX\ENQ\n\
+    \\ENQ\ENQ\a\STX+\SOH\DC2\EOT\210\ACK\STX\ENQ\n\
     \\f\n\
-    \\EOT\ENQ\a\STX+\DC2\EOT\185\ACK\STX\v\n\
+    \\EOT\ENQ\a\STX+\DC2\EOT\210\ACK\STX\v\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX+\STX\DC2\EOT\185\ACK\b\n\
+    \\ENQ\ENQ\a\STX+\STX\DC2\EOT\210\ACK\b\n\
     \\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX,\SOH\DC2\EOT\186\ACK\STX\ETX\n\
+    \\ENQ\ENQ\a\STX,\SOH\DC2\EOT\211\ACK\STX\ETX\n\
     \\f\n\
-    \\EOT\ENQ\a\STX,\DC2\EOT\186\ACK\STX\t\n\
+    \\EOT\ENQ\a\STX,\DC2\EOT\211\ACK\STX\t\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX,\STX\DC2\EOT\186\ACK\ACK\b\n\
+    \\ENQ\ENQ\a\STX,\STX\DC2\EOT\211\ACK\ACK\b\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX-\SOH\DC2\EOT\187\ACK\STX\ACK\n\
+    \\ENQ\ENQ\a\STX-\SOH\DC2\EOT\212\ACK\STX\ACK\n\
     \\f\n\
-    \\EOT\ENQ\a\STX-\DC2\EOT\187\ACK\STX\f\n\
+    \\EOT\ENQ\a\STX-\DC2\EOT\212\ACK\STX\f\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX-\STX\DC2\EOT\187\ACK\t\v\n\
+    \\ENQ\ENQ\a\STX-\STX\DC2\EOT\212\ACK\t\v\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX.\SOH\DC2\EOT\188\ACK\STX\ACK\n\
+    \\ENQ\ENQ\a\STX.\SOH\DC2\EOT\213\ACK\STX\ACK\n\
     \\f\n\
-    \\EOT\ENQ\a\STX.\DC2\EOT\188\ACK\STX\v\n\
+    \\EOT\ENQ\a\STX.\DC2\EOT\213\ACK\STX\v\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX.\STX\DC2\EOT\188\ACK\t\n\
+    \\ENQ\ENQ\a\STX.\STX\DC2\EOT\213\ACK\t\n\
     \\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX/\SOH\DC2\EOT\189\ACK\STX\f\n\
+    \\ENQ\ENQ\a\STX/\SOH\DC2\EOT\214\ACK\STX\f\n\
     \\f\n\
-    \\EOT\ENQ\a\STX/\DC2\EOT\189\ACK\STX\DC2\n\
+    \\EOT\ENQ\a\STX/\DC2\EOT\214\ACK\STX\DC2\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX/\STX\DC2\EOT\189\ACK\SI\DC1\n\
+    \\ENQ\ENQ\a\STX/\STX\DC2\EOT\214\ACK\SI\DC1\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX0\SOH\DC2\EOT\190\ACK\STX\DC1\n\
+    \\ENQ\ENQ\a\STX0\SOH\DC2\EOT\215\ACK\STX\DC1\n\
     \\f\n\
-    \\EOT\ENQ\a\STX0\DC2\EOT\190\ACK\STX\ETB\n\
+    \\EOT\ENQ\a\STX0\DC2\EOT\215\ACK\STX\ETB\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX0\STX\DC2\EOT\190\ACK\DC4\SYN\n\
+    \\ENQ\ENQ\a\STX0\STX\DC2\EOT\215\ACK\DC4\SYN\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX1\SOH\DC2\EOT\191\ACK\STX\t\n\
+    \\ENQ\ENQ\a\STX1\SOH\DC2\EOT\216\ACK\STX\t\n\
     \\f\n\
-    \\EOT\ENQ\a\STX1\DC2\EOT\191\ACK\STX\SI\n\
+    \\EOT\ENQ\a\STX1\DC2\EOT\216\ACK\STX\SI\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX1\STX\DC2\EOT\191\ACK\f\SO\n\
+    \\ENQ\ENQ\a\STX1\STX\DC2\EOT\216\ACK\f\SO\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX2\SOH\DC2\EOT\192\ACK\STX\a\n\
+    \\ENQ\ENQ\a\STX2\SOH\DC2\EOT\217\ACK\STX\a\n\
     \\f\n\
-    \\EOT\ENQ\a\STX2\DC2\EOT\192\ACK\STX\r\n\
+    \\EOT\ENQ\a\STX2\DC2\EOT\217\ACK\STX\r\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX2\STX\DC2\EOT\192\ACK\n\
+    \\ENQ\ENQ\a\STX2\STX\DC2\EOT\217\ACK\n\
     \\f\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX3\SOH\DC2\EOT\193\ACK\STX\n\
+    \\ENQ\ENQ\a\STX3\SOH\DC2\EOT\218\ACK\STX\n\
     \\n\
     \\f\n\
-    \\EOT\ENQ\a\STX3\DC2\EOT\193\ACK\STX\DC1\n\
+    \\EOT\ENQ\a\STX3\DC2\EOT\218\ACK\STX\DC1\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX3\STX\DC2\EOT\193\ACK\r\DLE\n\
+    \\ENQ\ENQ\a\STX3\STX\DC2\EOT\218\ACK\r\DLE\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX4\SOH\DC2\EOT\194\ACK\STX\b\n\
+    \\ENQ\ENQ\a\STX4\SOH\DC2\EOT\219\ACK\STX\b\n\
     \\f\n\
-    \\EOT\ENQ\a\STX4\DC2\EOT\194\ACK\STX\r\n\
+    \\EOT\ENQ\a\STX4\DC2\EOT\219\ACK\STX\r\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX4\STX\DC2\EOT\194\ACK\v\f\n\
+    \\ENQ\ENQ\a\STX4\STX\DC2\EOT\219\ACK\v\f\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX5\SOH\DC2\EOT\195\ACK\STX\a\n\
+    \\ENQ\ENQ\a\STX5\SOH\DC2\EOT\220\ACK\STX\a\n\
     \\f\n\
-    \\EOT\ENQ\a\STX5\DC2\EOT\195\ACK\STX\r\n\
+    \\EOT\ENQ\a\STX5\DC2\EOT\220\ACK\STX\r\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX5\STX\DC2\EOT\195\ACK\n\
+    \\ENQ\ENQ\a\STX5\STX\DC2\EOT\220\ACK\n\
     \\f\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX6\SOH\DC2\EOT\196\ACK\STX\ACK\n\
+    \\ENQ\ENQ\a\STX6\SOH\DC2\EOT\221\ACK\STX\ACK\n\
     \\f\n\
-    \\EOT\ENQ\a\STX6\DC2\EOT\196\ACK\STX\f\n\
+    \\EOT\ENQ\a\STX6\DC2\EOT\221\ACK\STX\f\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX6\STX\DC2\EOT\196\ACK\t\v\n\
+    \\ENQ\ENQ\a\STX6\STX\DC2\EOT\221\ACK\t\v\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX7\SOH\DC2\EOT\197\ACK\STX\ACK\n\
+    \\ENQ\ENQ\a\STX7\SOH\DC2\EOT\222\ACK\STX\ACK\n\
     \\f\n\
-    \\EOT\ENQ\a\STX7\DC2\EOT\197\ACK\STX\f\n\
+    \\EOT\ENQ\a\STX7\DC2\EOT\222\ACK\STX\f\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX7\STX\DC2\EOT\197\ACK\t\v\n\
+    \\ENQ\ENQ\a\STX7\STX\DC2\EOT\222\ACK\t\v\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX8\SOH\DC2\EOT\198\ACK\STX\ENQ\n\
+    \\ENQ\ENQ\a\STX8\SOH\DC2\EOT\223\ACK\STX\ENQ\n\
     \\f\n\
-    \\EOT\ENQ\a\STX8\DC2\EOT\198\ACK\STX\v\n\
+    \\EOT\ENQ\a\STX8\DC2\EOT\223\ACK\STX\v\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX8\STX\DC2\EOT\198\ACK\b\n\
+    \\ENQ\ENQ\a\STX8\STX\DC2\EOT\223\ACK\b\n\
     \\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX9\SOH\DC2\EOT\199\ACK\STX\ACK\n\
+    \\ENQ\ENQ\a\STX9\SOH\DC2\EOT\224\ACK\STX\ACK\n\
     \\f\n\
-    \\EOT\ENQ\a\STX9\DC2\EOT\199\ACK\STX\r\n\
+    \\EOT\ENQ\a\STX9\DC2\EOT\224\ACK\STX\r\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX9\STX\DC2\EOT\199\ACK\t\f\n\
+    \\ENQ\ENQ\a\STX9\STX\DC2\EOT\224\ACK\t\f\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX:\SOH\DC2\EOT\200\ACK\STX\n\
+    \\ENQ\ENQ\a\STX:\SOH\DC2\EOT\225\ACK\STX\n\
     \\n\
     \\f\n\
-    \\EOT\ENQ\a\STX:\DC2\EOT\200\ACK\STX\DLE\n\
+    \\EOT\ENQ\a\STX:\DC2\EOT\225\ACK\STX\DLE\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX:\STX\DC2\EOT\200\ACK\r\SI\n\
+    \\ENQ\ENQ\a\STX:\STX\DC2\EOT\225\ACK\r\SI\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX;\SOH\DC2\EOT\201\ACK\STX\n\
+    \\ENQ\ENQ\a\STX;\SOH\DC2\EOT\226\ACK\STX\n\
     \\n\
     \\f\n\
-    \\EOT\ENQ\a\STX;\DC2\EOT\201\ACK\STX\DLE\n\
+    \\EOT\ENQ\a\STX;\DC2\EOT\226\ACK\STX\DLE\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX;\STX\DC2\EOT\201\ACK\r\SI\n\
+    \\ENQ\ENQ\a\STX;\STX\DC2\EOT\226\ACK\r\SI\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX<\SOH\DC2\EOT\202\ACK\STX\b\n\
+    \\ENQ\ENQ\a\STX<\SOH\DC2\EOT\227\ACK\STX\b\n\
     \\f\n\
-    \\EOT\ENQ\a\STX<\DC2\EOT\202\ACK\STX\SO\n\
+    \\EOT\ENQ\a\STX<\DC2\EOT\227\ACK\STX\SO\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX<\STX\DC2\EOT\202\ACK\v\r\n\
+    \\ENQ\ENQ\a\STX<\STX\DC2\EOT\227\ACK\v\r\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX=\SOH\DC2\EOT\203\ACK\STX\b\n\
+    \\ENQ\ENQ\a\STX=\SOH\DC2\EOT\228\ACK\STX\b\n\
     \'\n\
-    \\EOT\ENQ\a\STX=\DC2\EOT\203\ACK\STX\SI\"\EM https://nickel-lang.org/\n\
+    \\EOT\ENQ\a\STX=\DC2\EOT\228\ACK\STX\SI\"\EM https://nickel-lang.org/\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX=\STX\DC2\EOT\203\ACK\v\SO\n\
+    \\ENQ\ENQ\a\STX=\STX\DC2\EOT\228\ACK\v\SO\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX>\SOH\DC2\EOT\204\ACK\STX\ENQ\n\
+    \\ENQ\ENQ\a\STX>\SOH\DC2\EOT\229\ACK\STX\ENQ\n\
     \\f\n\
-    \\EOT\ENQ\a\STX>\DC2\EOT\204\ACK\STX\v\n\
+    \\EOT\ENQ\a\STX>\DC2\EOT\229\ACK\STX\v\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX>\STX\DC2\EOT\204\ACK\b\n\
+    \\ENQ\ENQ\a\STX>\STX\DC2\EOT\229\ACK\b\n\
     \\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX?\SOH\DC2\EOT\205\ACK\STX\a\n\
+    \\ENQ\ENQ\a\STX?\SOH\DC2\EOT\230\ACK\STX\a\n\
     \\f\n\
-    \\EOT\ENQ\a\STX?\DC2\EOT\205\ACK\STX\r\n\
+    \\EOT\ENQ\a\STX?\DC2\EOT\230\ACK\STX\r\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX?\STX\DC2\EOT\205\ACK\n\
+    \\ENQ\ENQ\a\STX?\STX\DC2\EOT\230\ACK\n\
     \\f\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX@\SOH\DC2\EOT\206\ACK\STX\r\n\
+    \\ENQ\ENQ\a\STX@\SOH\DC2\EOT\231\ACK\STX\r\n\
     \\f\n\
-    \\EOT\ENQ\a\STX@\DC2\EOT\206\ACK\STX\DC3\n\
+    \\EOT\ENQ\a\STX@\DC2\EOT\231\ACK\STX\DC3\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX@\STX\DC2\EOT\206\ACK\DLE\DC2\n\
+    \\ENQ\ENQ\a\STX@\STX\DC2\EOT\231\ACK\DLE\DC2\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXA\SOH\DC2\EOT\207\ACK\STX\SI\n\
+    \\ENQ\ENQ\a\STXA\SOH\DC2\EOT\232\ACK\STX\SI\n\
     \\f\n\
-    \\EOT\ENQ\a\STXA\DC2\EOT\207\ACK\STX\NAK\n\
+    \\EOT\ENQ\a\STXA\DC2\EOT\232\ACK\STX\NAK\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXA\STX\DC2\EOT\207\ACK\DC2\DC4\n\
+    \\ENQ\ENQ\a\STXA\STX\DC2\EOT\232\ACK\DC2\DC4\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXB\SOH\DC2\EOT\208\ACK\STX\b\n\
+    \\ENQ\ENQ\a\STXB\SOH\DC2\EOT\233\ACK\STX\b\n\
     \\f\n\
-    \\EOT\ENQ\a\STXB\DC2\EOT\208\ACK\STX\SO\n\
+    \\EOT\ENQ\a\STXB\DC2\EOT\233\ACK\STX\SO\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXB\STX\DC2\EOT\208\ACK\v\r\n\
+    \\ENQ\ENQ\a\STXB\STX\DC2\EOT\233\ACK\v\r\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXC\SOH\DC2\EOT\209\ACK\STX\ENQ\n\
+    \\ENQ\ENQ\a\STXC\SOH\DC2\EOT\234\ACK\STX\ENQ\n\
     \\f\n\
-    \\EOT\ENQ\a\STXC\DC2\EOT\209\ACK\STX\v\n\
+    \\EOT\ENQ\a\STXC\DC2\EOT\234\ACK\STX\v\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXC\STX\DC2\EOT\209\ACK\b\n\
+    \\ENQ\ENQ\a\STXC\STX\DC2\EOT\234\ACK\b\n\
     \\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXD\SOH\DC2\EOT\210\ACK\STX\a\n\
+    \\ENQ\ENQ\a\STXD\SOH\DC2\EOT\235\ACK\STX\a\n\
     \\f\n\
-    \\EOT\ENQ\a\STXD\DC2\EOT\210\ACK\STX\r\n\
+    \\EOT\ENQ\a\STXD\DC2\EOT\235\ACK\STX\r\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXD\STX\DC2\EOT\210\ACK\n\
+    \\ENQ\ENQ\a\STXD\STX\DC2\EOT\235\ACK\n\
     \\f\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXE\SOH\DC2\EOT\211\ACK\STX\ACK\n\
+    \\ENQ\ENQ\a\STXE\SOH\DC2\EOT\236\ACK\STX\ACK\n\
     \\f\n\
-    \\EOT\ENQ\a\STXE\DC2\EOT\211\ACK\STX\f\n\
+    \\EOT\ENQ\a\STXE\DC2\EOT\236\ACK\STX\f\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXE\STX\DC2\EOT\211\ACK\t\v\n\
+    \\ENQ\ENQ\a\STXE\STX\DC2\EOT\236\ACK\t\v\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXF\SOH\DC2\EOT\212\ACK\STX\f\n\
+    \\ENQ\ENQ\a\STXF\SOH\DC2\EOT\237\ACK\STX\f\n\
     \\f\n\
-    \\EOT\ENQ\a\STXF\DC2\EOT\212\ACK\STX\DC2\n\
+    \\EOT\ENQ\a\STXF\DC2\EOT\237\ACK\STX\DC2\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXF\STX\DC2\EOT\212\ACK\SI\DC1\n\
+    \\ENQ\ENQ\a\STXF\STX\DC2\EOT\237\ACK\SI\DC1\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXG\SOH\DC2\EOT\213\ACK\STX\b\n\
+    \\ENQ\ENQ\a\STXG\SOH\DC2\EOT\238\ACK\STX\b\n\
     \\f\n\
-    \\EOT\ENQ\a\STXG\DC2\EOT\213\ACK\STX\SO\n\
+    \\EOT\ENQ\a\STXG\DC2\EOT\238\ACK\STX\SO\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXG\STX\DC2\EOT\213\ACK\v\r\n\
+    \\ENQ\ENQ\a\STXG\STX\DC2\EOT\238\ACK\v\r\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXH\SOH\DC2\EOT\214\ACK\STX\n\
+    \\ENQ\ENQ\a\STXH\SOH\DC2\EOT\239\ACK\STX\n\
     \\n\
     \\f\n\
-    \\EOT\ENQ\a\STXH\DC2\EOT\214\ACK\STX\DC1\n\
+    \\EOT\ENQ\a\STXH\DC2\EOT\239\ACK\STX\DC1\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXH\STX\DC2\EOT\214\ACK\r\DLE\n\
+    \\ENQ\ENQ\a\STXH\STX\DC2\EOT\239\ACK\r\DLE\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXI\SOH\DC2\EOT\215\ACK\STX\b\n\
+    \\ENQ\ENQ\a\STXI\SOH\DC2\EOT\240\ACK\STX\b\n\
     \\f\n\
-    \\EOT\ENQ\a\STXI\DC2\EOT\215\ACK\STX\SO\n\
+    \\EOT\ENQ\a\STXI\DC2\EOT\240\ACK\STX\SO\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXI\STX\DC2\EOT\215\ACK\v\r\n\
+    \\ENQ\ENQ\a\STXI\STX\DC2\EOT\240\ACK\v\r\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXJ\SOH\DC2\EOT\216\ACK\STX\ETX\n\
+    \\ENQ\ENQ\a\STXJ\SOH\DC2\EOT\241\ACK\STX\ETX\n\
     \\f\n\
-    \\EOT\ENQ\a\STXJ\DC2\EOT\216\ACK\STX\t\n\
+    \\EOT\ENQ\a\STXJ\DC2\EOT\241\ACK\STX\t\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXJ\STX\DC2\EOT\216\ACK\ACK\b\n\
+    \\ENQ\ENQ\a\STXJ\STX\DC2\EOT\241\ACK\ACK\b\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXK\SOH\DC2\EOT\217\ACK\STX\b\n\
+    \\ENQ\ENQ\a\STXK\SOH\DC2\EOT\242\ACK\STX\b\n\
     \\f\n\
-    \\EOT\ENQ\a\STXK\DC2\EOT\217\ACK\STX\SO\n\
+    \\EOT\ENQ\a\STXK\DC2\EOT\242\ACK\STX\SO\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXK\STX\DC2\EOT\217\ACK\v\r\n\
+    \\ENQ\ENQ\a\STXK\STX\DC2\EOT\242\ACK\v\r\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXL\SOH\DC2\EOT\218\ACK\STX\ACK\n\
+    \\ENQ\ENQ\a\STXL\SOH\DC2\EOT\243\ACK\STX\ACK\n\
     \\f\n\
-    \\EOT\ENQ\a\STXL\DC2\EOT\218\ACK\STX\f\n\
+    \\EOT\ENQ\a\STXL\DC2\EOT\243\ACK\STX\f\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXL\STX\DC2\EOT\218\ACK\t\v\n\
+    \\ENQ\ENQ\a\STXL\STX\DC2\EOT\243\ACK\t\v\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXM\SOH\DC2\EOT\219\ACK\STX\a\n\
+    \\ENQ\ENQ\a\STXM\SOH\DC2\EOT\244\ACK\STX\a\n\
     \\f\n\
-    \\EOT\ENQ\a\STXM\DC2\EOT\219\ACK\STX\r\n\
+    \\EOT\ENQ\a\STXM\DC2\EOT\244\ACK\STX\r\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXM\STX\DC2\EOT\219\ACK\n\
+    \\ENQ\ENQ\a\STXM\STX\DC2\EOT\244\ACK\n\
     \\f\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXN\SOH\DC2\EOT\220\ACK\STX\a\n\
+    \\ENQ\ENQ\a\STXN\SOH\DC2\EOT\245\ACK\STX\a\n\
     \1\n\
-    \\EOT\ENQ\a\STXN\DC2\EOT\220\ACK\STX\SO\"# Internal language for testing SCIP\n\
+    \\EOT\ENQ\a\STXN\DC2\EOT\245\ACK\STX\SO\"# Internal language for testing SCIP\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXN\STX\DC2\EOT\220\ACK\n\
+    \\ENQ\ENQ\a\STXN\STX\DC2\EOT\245\ACK\n\
     \\r\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXO\SOH\DC2\EOT\221\ACK\STX\ACK\n\
+    \\ENQ\ENQ\a\STXO\SOH\DC2\EOT\246\ACK\STX\ACK\n\
     \\f\n\
-    \\EOT\ENQ\a\STXO\DC2\EOT\221\ACK\STX\f\n\
+    \\EOT\ENQ\a\STXO\DC2\EOT\246\ACK\STX\f\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXO\STX\DC2\EOT\221\ACK\t\v\n\
+    \\ENQ\ENQ\a\STXO\STX\DC2\EOT\246\ACK\t\v\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXP\SOH\DC2\EOT\222\ACK\STX\ACK\n\
+    \\ENQ\ENQ\a\STXP\SOH\DC2\EOT\247\ACK\STX\ACK\n\
     \\f\n\
-    \\EOT\ENQ\a\STXP\DC2\EOT\222\ACK\STX\f\n\
+    \\EOT\ENQ\a\STXP\DC2\EOT\247\ACK\STX\f\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXP\STX\DC2\EOT\222\ACK\t\v\n\
+    \\ENQ\ENQ\a\STXP\STX\DC2\EOT\247\ACK\t\v\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXQ\SOH\DC2\EOT\223\ACK\STX\ACK\n\
+    \\ENQ\ENQ\a\STXQ\SOH\DC2\EOT\248\ACK\STX\ACK\n\
     \\f\n\
-    \\EOT\ENQ\a\STXQ\DC2\EOT\223\ACK\STX\f\n\
+    \\EOT\ENQ\a\STXQ\DC2\EOT\248\ACK\STX\f\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXQ\STX\DC2\EOT\223\ACK\t\v\n\
+    \\ENQ\ENQ\a\STXQ\STX\DC2\EOT\248\ACK\t\v\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXR\SOH\DC2\EOT\224\ACK\STX\ENQ\n\
+    \\ENQ\ENQ\a\STXR\SOH\DC2\EOT\249\ACK\STX\ENQ\n\
     \\f\n\
-    \\EOT\ENQ\a\STXR\DC2\EOT\224\ACK\STX\v\n\
+    \\EOT\ENQ\a\STXR\DC2\EOT\249\ACK\STX\v\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXR\STX\DC2\EOT\224\ACK\b\n\
+    \\ENQ\ENQ\a\STXR\STX\DC2\EOT\249\ACK\b\n\
     \\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXS\SOH\DC2\EOT\225\ACK\STX\ACK\n\
+    \\ENQ\ENQ\a\STXS\SOH\DC2\EOT\250\ACK\STX\ACK\n\
     \\f\n\
-    \\EOT\ENQ\a\STXS\DC2\EOT\225\ACK\STX\f\n\
+    \\EOT\ENQ\a\STXS\DC2\EOT\250\ACK\STX\f\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXS\STX\DC2\EOT\225\ACK\t\v\n\
+    \\ENQ\ENQ\a\STXS\STX\DC2\EOT\250\ACK\t\v\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXT\SOH\DC2\EOT\226\ACK\STX\ENQ\n\
+    \\ENQ\ENQ\a\STXT\SOH\DC2\EOT\251\ACK\STX\ENQ\n\
     \\f\n\
-    \\EOT\ENQ\a\STXT\DC2\EOT\226\ACK\STX\v\n\
+    \\EOT\ENQ\a\STXT\DC2\EOT\251\ACK\STX\v\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXT\STX\DC2\EOT\226\ACK\b\n\
+    \\ENQ\ENQ\a\STXT\STX\DC2\EOT\251\ACK\b\n\
     \\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXU\SOH\DC2\EOT\227\ACK\STX\ENQ\n\
+    \\ENQ\ENQ\a\STXU\SOH\DC2\EOT\252\ACK\STX\ENQ\n\
     \\f\n\
-    \\EOT\ENQ\a\STXU\DC2\EOT\227\ACK\STX\v\n\
+    \\EOT\ENQ\a\STXU\DC2\EOT\252\ACK\STX\v\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXU\STX\DC2\EOT\227\ACK\b\n\
+    \\ENQ\ENQ\a\STXU\STX\DC2\EOT\252\ACK\b\n\
     \\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXV\SOH\DC2\EOT\228\ACK\STX\ACK\n\
+    \\ENQ\ENQ\a\STXV\SOH\DC2\EOT\253\ACK\STX\ACK\n\
     \\f\n\
-    \\EOT\ENQ\a\STXV\DC2\EOT\228\ACK\STX\f\n\
+    \\EOT\ENQ\a\STXV\DC2\EOT\253\ACK\STX\f\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXV\STX\DC2\EOT\228\ACK\t\v\n\
+    \\ENQ\ENQ\a\STXV\STX\DC2\EOT\253\ACK\t\v\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXW\SOH\DC2\EOT\229\ACK\STX\a\n\
+    \\ENQ\ENQ\a\STXW\SOH\DC2\EOT\254\ACK\STX\a\n\
     \\f\n\
-    \\EOT\ENQ\a\STXW\DC2\EOT\229\ACK\STX\f\n\
+    \\EOT\ENQ\a\STXW\DC2\EOT\254\ACK\STX\f\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXW\STX\DC2\EOT\229\ACK\n\
+    \\ENQ\ENQ\a\STXW\STX\DC2\EOT\254\ACK\n\
     \\v\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXX\SOH\DC2\EOT\230\ACK\STX\b\n\
+    \\ENQ\ENQ\a\STXX\SOH\DC2\EOT\255\ACK\STX\b\n\
     \\f\n\
-    \\EOT\ENQ\a\STXX\DC2\EOT\230\ACK\STX\SO\n\
+    \\EOT\ENQ\a\STXX\DC2\EOT\255\ACK\STX\SO\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXX\STX\DC2\EOT\230\ACK\v\r\n\
+    \\ENQ\ENQ\a\STXX\STX\DC2\EOT\255\ACK\v\r\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXY\SOH\DC2\EOT\231\ACK\STX\r\n\
+    \\ENQ\ENQ\a\STXY\SOH\DC2\EOT\128\a\STX\r\n\
     \\DC3\n\
-    \\EOT\ENQ\a\STXY\DC2\EOT\231\ACK\STX\DC3\"\ENQ Bash\n\
+    \\EOT\ENQ\a\STXY\DC2\EOT\128\a\STX\DC3\"\ENQ Bash\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXY\STX\DC2\EOT\231\ACK\DLE\DC2\n\
+    \\ENQ\ENQ\a\STXY\STX\DC2\EOT\128\a\DLE\DC2\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXZ\SOH\DC2\EOT\232\ACK\STX\t\n\
+    \\ENQ\ENQ\a\STXZ\SOH\DC2\EOT\129\a\STX\t\n\
     \\f\n\
-    \\EOT\ENQ\a\STXZ\DC2\EOT\232\ACK\STX\SI\n\
+    \\EOT\ENQ\a\STXZ\DC2\EOT\129\a\STX\SI\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXZ\STX\DC2\EOT\232\ACK\f\SO\n\
+    \\ENQ\ENQ\a\STXZ\STX\DC2\EOT\129\a\f\SO\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX[\SOH\DC2\EOT\233\ACK\STX\a\n\
+    \\ENQ\ENQ\a\STX[\SOH\DC2\EOT\130\a\STX\a\n\
     \\f\n\
-    \\EOT\ENQ\a\STX[\DC2\EOT\233\ACK\STX\SO\n\
+    \\EOT\ENQ\a\STX[\DC2\EOT\130\a\STX\SO\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX[\STX\DC2\EOT\233\ACK\n\
+    \\ENQ\ENQ\a\STX[\STX\DC2\EOT\130\a\n\
     \\r\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX\\\SOH\DC2\EOT\234\ACK\STX\n\
+    \\ENQ\ENQ\a\STX\\\SOH\DC2\EOT\131\a\STX\n\
     \\n\
     \\f\n\
-    \\EOT\ENQ\a\STX\\\DC2\EOT\234\ACK\STX\DLE\n\
+    \\EOT\ENQ\a\STX\\\DC2\EOT\131\a\STX\DLE\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX\\\STX\DC2\EOT\234\ACK\r\SI\n\
+    \\ENQ\ENQ\a\STX\\\STX\DC2\EOT\131\a\r\SI\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX]\SOH\DC2\EOT\235\ACK\STX\b\n\
+    \\ENQ\ENQ\a\STX]\SOH\DC2\EOT\132\a\STX\b\n\
     \\f\n\
-    \\EOT\ENQ\a\STX]\DC2\EOT\235\ACK\STX\SI\n\
+    \\EOT\ENQ\a\STX]\DC2\EOT\132\a\STX\SI\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX]\STX\DC2\EOT\235\ACK\v\SO\n\
+    \\ENQ\ENQ\a\STX]\STX\DC2\EOT\132\a\v\SO\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX^\SOH\DC2\EOT\236\ACK\STX\a\n\
+    \\ENQ\ENQ\a\STX^\SOH\DC2\EOT\133\a\STX\a\n\
     \\f\n\
-    \\EOT\ENQ\a\STX^\DC2\EOT\236\ACK\STX\f\n\
+    \\EOT\ENQ\a\STX^\DC2\EOT\133\a\STX\f\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX^\STX\DC2\EOT\236\ACK\n\
+    \\ENQ\ENQ\a\STX^\STX\DC2\EOT\133\a\n\
     \\v\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX_\SOH\DC2\EOT\237\ACK\STX\ENQ\n\
+    \\ENQ\ENQ\a\STX_\SOH\DC2\EOT\134\a\STX\ENQ\n\
     \\f\n\
-    \\EOT\ENQ\a\STX_\DC2\EOT\237\ACK\STX\f\n\
+    \\EOT\ENQ\a\STX_\DC2\EOT\134\a\STX\f\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX_\STX\DC2\EOT\237\ACK\b\v\n\
+    \\ENQ\ENQ\a\STX_\STX\DC2\EOT\134\a\b\v\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX`\SOH\DC2\EOT\238\ACK\STX\ACK\n\
+    \\ENQ\ENQ\a\STX`\SOH\DC2\EOT\135\a\STX\ACK\n\
     \\f\n\
-    \\EOT\ENQ\a\STX`\DC2\EOT\238\ACK\STX\f\n\
+    \\EOT\ENQ\a\STX`\DC2\EOT\135\a\STX\f\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX`\STX\DC2\EOT\238\ACK\t\v\n\
+    \\ENQ\ENQ\a\STX`\STX\DC2\EOT\135\a\t\v\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXa\SOH\DC2\EOT\239\ACK\STX\ENQ\n\
+    \\ENQ\ENQ\a\STXa\SOH\DC2\EOT\136\a\STX\ENQ\n\
     \\f\n\
-    \\EOT\ENQ\a\STXa\DC2\EOT\239\ACK\STX\v\n\
+    \\EOT\ENQ\a\STXa\DC2\EOT\136\a\STX\v\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXa\STX\DC2\EOT\239\ACK\b\n\
+    \\ENQ\ENQ\a\STXa\STX\DC2\EOT\136\a\b\n\
     \\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXb\SOH\DC2\EOT\240\ACK\STX\b\n\
+    \\ENQ\ENQ\a\STXb\SOH\DC2\EOT\137\a\STX\b\n\
     \\f\n\
-    \\EOT\ENQ\a\STXb\DC2\EOT\240\ACK\STX\SI\n\
+    \\EOT\ENQ\a\STXb\DC2\EOT\137\a\STX\SI\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXb\STX\DC2\EOT\240\ACK\v\SO\n\
+    \\ENQ\ENQ\a\STXb\STX\DC2\EOT\137\a\v\SO\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXc\SOH\DC2\EOT\241\ACK\STX\f\n\
+    \\ENQ\ENQ\a\STXc\SOH\DC2\EOT\138\a\STX\f\n\
     \\f\n\
-    \\EOT\ENQ\a\STXc\DC2\EOT\241\ACK\STX\DC2\n\
+    \\EOT\ENQ\a\STXc\DC2\EOT\138\a\STX\DC2\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXc\STX\DC2\EOT\241\ACK\SI\DC1\n\
+    \\ENQ\ENQ\a\STXc\STX\DC2\EOT\138\a\SI\DC1\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXd\SOH\DC2\EOT\242\ACK\STX\DC1\n\
+    \\ENQ\ENQ\a\STXd\SOH\DC2\EOT\139\a\STX\DC1\n\
     \\f\n\
-    \\EOT\ENQ\a\STXd\DC2\EOT\242\ACK\STX\ETB\n\
+    \\EOT\ENQ\a\STXd\DC2\EOT\139\a\STX\ETB\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXd\STX\DC2\EOT\242\ACK\DC4\SYN\n\
+    \\ENQ\ENQ\a\STXd\STX\DC2\EOT\139\a\DC4\SYN\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXe\SOH\DC2\EOT\243\ACK\STX\t\n\
+    \\ENQ\ENQ\a\STXe\SOH\DC2\EOT\140\a\STX\t\n\
     \\f\n\
-    \\EOT\ENQ\a\STXe\DC2\EOT\243\ACK\STX\DLE\n\
+    \\EOT\ENQ\a\STXe\DC2\EOT\140\a\STX\DLE\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXe\STX\DC2\EOT\243\ACK\f\SI\n\
+    \\ENQ\ENQ\a\STXe\STX\DC2\EOT\140\a\f\SI\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXf\SOH\DC2\EOT\244\ACK\STX\ACK\n\
+    \\ENQ\ENQ\a\STXf\SOH\DC2\EOT\141\a\STX\ACK\n\
     \\f\n\
-    \\EOT\ENQ\a\STXf\DC2\EOT\244\ACK\STX\r\n\
+    \\EOT\ENQ\a\STXf\DC2\EOT\141\a\STX\r\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXf\STX\DC2\EOT\244\ACK\t\f\n\
+    \\ENQ\ENQ\a\STXf\STX\DC2\EOT\141\a\t\f\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXg\SOH\DC2\EOT\245\ACK\STX\r\n\
+    \\ENQ\ENQ\a\STXg\SOH\DC2\EOT\142\a\STX\r\n\
     \\f\n\
-    \\EOT\ENQ\a\STXg\DC2\EOT\245\ACK\STX\DC3\n\
+    \\EOT\ENQ\a\STXg\DC2\EOT\142\a\STX\DC3\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXg\STX\DC2\EOT\245\ACK\DLE\DC2\n\
+    \\ENQ\ENQ\a\STXg\STX\DC2\EOT\142\a\DLE\DC2\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXh\SOH\DC2\EOT\246\ACK\STX\ENQ\n\
+    \\ENQ\ENQ\a\STXh\SOH\DC2\EOT\143\a\STX\ENQ\n\
     \\f\n\
-    \\EOT\ENQ\a\STXh\DC2\EOT\246\ACK\STX\v\n\
+    \\EOT\ENQ\a\STXh\DC2\EOT\143\a\STX\v\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXh\STX\DC2\EOT\246\ACK\b\n\
+    \\ENQ\ENQ\a\STXh\STX\DC2\EOT\143\a\b\n\
     \\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXi\SOH\DC2\EOT\247\ACK\STX\t\n\
+    \\ENQ\ENQ\a\STXi\SOH\DC2\EOT\144\a\STX\t\n\
     \\f\n\
-    \\EOT\ENQ\a\STXi\DC2\EOT\247\ACK\STX\SI\n\
+    \\EOT\ENQ\a\STXi\DC2\EOT\144\a\STX\SI\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXi\STX\DC2\EOT\247\ACK\f\SO\n\
+    \\ENQ\ENQ\a\STXi\STX\DC2\EOT\144\a\f\SO\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXj\SOH\DC2\EOT\248\ACK\STX\ENQ\n\
+    \\ENQ\ENQ\a\STXj\SOH\DC2\EOT\145\a\STX\ENQ\n\
     \\f\n\
-    \\EOT\ENQ\a\STXj\DC2\EOT\248\ACK\STX\v\n\
+    \\EOT\ENQ\a\STXj\DC2\EOT\145\a\STX\v\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXj\STX\DC2\EOT\248\ACK\b\n\
+    \\ENQ\ENQ\a\STXj\STX\DC2\EOT\145\a\b\n\
     \\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXk\SOH\DC2\EOT\249\ACK\STX\ENQ\n\
+    \\ENQ\ENQ\a\STXk\SOH\DC2\EOT\146\a\STX\ENQ\n\
     \\f\n\
-    \\EOT\ENQ\a\STXk\DC2\EOT\249\ACK\STX\v\n\
+    \\EOT\ENQ\a\STXk\DC2\EOT\146\a\STX\v\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXk\STX\DC2\EOT\249\ACK\b\n\
+    \\ENQ\ENQ\a\STXk\STX\DC2\EOT\146\a\b\n\
     \\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXl\SOH\DC2\EOT\250\ACK\STX\ACK\n\
+    \\ENQ\ENQ\a\STXl\SOH\DC2\EOT\147\a\STX\ACK\n\
     \\f\n\
-    \\EOT\ENQ\a\STXl\DC2\EOT\250\ACK\STX\f\n\
+    \\EOT\ENQ\a\STXl\DC2\EOT\147\a\STX\f\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXl\STX\DC2\EOT\250\ACK\t\v\n\
+    \\ENQ\ENQ\a\STXl\STX\DC2\EOT\147\a\t\v\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXm\SOH\DC2\EOT\251\ACK\STX\ENQ\n\
+    \\ENQ\ENQ\a\STXm\SOH\DC2\EOT\148\a\STX\ENQ\n\
     \\147\ETX\n\
-    \\EOT\ENQ\a\STXm\DC2\EOT\251\ACK\STX\v\"\132\ETX NextLanguage = 111;\n\
+    \\EOT\ENQ\a\STXm\DC2\EOT\148\a\STX\v\"\132\ETX NextLanguage = 111;\n\
     \ Steps add a new language:\n\
     \ 1. Copy-paste the \"NextLanguage = N\" line above\n\
     \ 2. Increment \"NextLanguage = N\" to \"NextLanguage = N+1\"\n\
@@ -9498,5 +10396,5 @@ packedFileDescriptor
     \ 5. (optional) Add a brief comment behind the language if the name is not self-explanatory\n\
     \\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXm\STX\DC2\EOT\251\ACK\b\n\
+    \\ENQ\ENQ\a\STXm\STX\DC2\EOT\148\a\b\n\
     \b\ACKproto3"

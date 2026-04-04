@@ -45,66 +45,44 @@ public object OccurrenceKt {
     public class RangeProxy private constructor() : com.google.protobuf.kotlin.DslProxy()
     /**
      * ```
-     * Half-open [start, end) range of this occurrence. Must be exactly three or four
-     * elements:
+     * Deprecated: Use `single_line_range` or `multi_line_range` instead.
      *
+     * Half-open [start, end) range. Must be exactly three or four elements:
+     * - Three elements: `[startLine, startCharacter, endCharacter]` (single-line)
      * - Four elements: `[startLine, startCharacter, endLine, endCharacter]`
-     * - Three elements: `[startLine, startCharacter, endCharacter]`. The end line
-     * is inferred to have the same value as the start line.
-     *
-     * It is allowed for the range to be empty (i.e. start==end).
-     *
-     * Line numbers and characters are always 0-based. Make sure to increment the
-     * line/character values before displaying them in an editor-like UI because
-     * editors conventionally use 1-based numbers.
-     *
-     * The 'character' value is interpreted based on the PositionEncoding for
-     * the Document.
      *
      * Historical note: the original draft of this schema had a `Range` message
      * type with `start` and `end` fields of type `Position`, mirroring LSP.
      * Benchmarks revealed that this encoding was inefficient and that we could
      * reduce the total payload size of an index by 50% by using `repeated int32`
-     * instead. The `repeated int32` encoding is admittedly more embarrassing to
-     * work with in some programming languages but we hope the performance
-     * improvements make up for it.
+     * instead. However, the lack of type safety led to the introduction of
+     * `single_line_range` and `multi_line_range` as typed alternatives.
      * ```
      *
-     * `repeated int32 range = 1 [json_name = "range"];`
+     * `repeated int32 range = 1 [json_name = "range", deprecated = true];`
      */
-     public val range: com.google.protobuf.kotlin.DslList<kotlin.Int, RangeProxy>
+    @kotlin.Deprecated(message = "Field range is deprecated")  public val range: com.google.protobuf.kotlin.DslList<kotlin.Int, RangeProxy>
       @kotlin.jvm.JvmSynthetic
   get() = com.google.protobuf.kotlin.DslList(
         _builder.rangeList
       )
     /**
      * ```
-     * Half-open [start, end) range of this occurrence. Must be exactly three or four
-     * elements:
+     * Deprecated: Use `single_line_range` or `multi_line_range` instead.
      *
+     * Half-open [start, end) range. Must be exactly three or four elements:
+     * - Three elements: `[startLine, startCharacter, endCharacter]` (single-line)
      * - Four elements: `[startLine, startCharacter, endLine, endCharacter]`
-     * - Three elements: `[startLine, startCharacter, endCharacter]`. The end line
-     * is inferred to have the same value as the start line.
-     *
-     * It is allowed for the range to be empty (i.e. start==end).
-     *
-     * Line numbers and characters are always 0-based. Make sure to increment the
-     * line/character values before displaying them in an editor-like UI because
-     * editors conventionally use 1-based numbers.
-     *
-     * The 'character' value is interpreted based on the PositionEncoding for
-     * the Document.
      *
      * Historical note: the original draft of this schema had a `Range` message
      * type with `start` and `end` fields of type `Position`, mirroring LSP.
      * Benchmarks revealed that this encoding was inefficient and that we could
      * reduce the total payload size of an index by 50% by using `repeated int32`
-     * instead. The `repeated int32` encoding is admittedly more embarrassing to
-     * work with in some programming languages but we hope the performance
-     * improvements make up for it.
+     * instead. However, the lack of type safety led to the introduction of
+     * `single_line_range` and `multi_line_range` as typed alternatives.
      * ```
      *
-     * `repeated int32 range = 1 [json_name = "range"];`
+     * `repeated int32 range = 1 [json_name = "range", deprecated = true];`
      * @param value The range to add.
      */
     @kotlin.jvm.JvmSynthetic
@@ -113,32 +91,21 @@ public object OccurrenceKt {
       _builder.addRange(value)
     }/**
      * ```
-     * Half-open [start, end) range of this occurrence. Must be exactly three or four
-     * elements:
+     * Deprecated: Use `single_line_range` or `multi_line_range` instead.
      *
+     * Half-open [start, end) range. Must be exactly three or four elements:
+     * - Three elements: `[startLine, startCharacter, endCharacter]` (single-line)
      * - Four elements: `[startLine, startCharacter, endLine, endCharacter]`
-     * - Three elements: `[startLine, startCharacter, endCharacter]`. The end line
-     * is inferred to have the same value as the start line.
-     *
-     * It is allowed for the range to be empty (i.e. start==end).
-     *
-     * Line numbers and characters are always 0-based. Make sure to increment the
-     * line/character values before displaying them in an editor-like UI because
-     * editors conventionally use 1-based numbers.
-     *
-     * The 'character' value is interpreted based on the PositionEncoding for
-     * the Document.
      *
      * Historical note: the original draft of this schema had a `Range` message
      * type with `start` and `end` fields of type `Position`, mirroring LSP.
      * Benchmarks revealed that this encoding was inefficient and that we could
      * reduce the total payload size of an index by 50% by using `repeated int32`
-     * instead. The `repeated int32` encoding is admittedly more embarrassing to
-     * work with in some programming languages but we hope the performance
-     * improvements make up for it.
+     * instead. However, the lack of type safety led to the introduction of
+     * `single_line_range` and `multi_line_range` as typed alternatives.
      * ```
      *
-     * `repeated int32 range = 1 [json_name = "range"];`
+     * `repeated int32 range = 1 [json_name = "range", deprecated = true];`
      * @param value The range to add.
      */
     @kotlin.jvm.JvmSynthetic
@@ -148,32 +115,21 @@ public object OccurrenceKt {
       add(value)
     }/**
      * ```
-     * Half-open [start, end) range of this occurrence. Must be exactly three or four
-     * elements:
+     * Deprecated: Use `single_line_range` or `multi_line_range` instead.
      *
+     * Half-open [start, end) range. Must be exactly three or four elements:
+     * - Three elements: `[startLine, startCharacter, endCharacter]` (single-line)
      * - Four elements: `[startLine, startCharacter, endLine, endCharacter]`
-     * - Three elements: `[startLine, startCharacter, endCharacter]`. The end line
-     * is inferred to have the same value as the start line.
-     *
-     * It is allowed for the range to be empty (i.e. start==end).
-     *
-     * Line numbers and characters are always 0-based. Make sure to increment the
-     * line/character values before displaying them in an editor-like UI because
-     * editors conventionally use 1-based numbers.
-     *
-     * The 'character' value is interpreted based on the PositionEncoding for
-     * the Document.
      *
      * Historical note: the original draft of this schema had a `Range` message
      * type with `start` and `end` fields of type `Position`, mirroring LSP.
      * Benchmarks revealed that this encoding was inefficient and that we could
      * reduce the total payload size of an index by 50% by using `repeated int32`
-     * instead. The `repeated int32` encoding is admittedly more embarrassing to
-     * work with in some programming languages but we hope the performance
-     * improvements make up for it.
+     * instead. However, the lack of type safety led to the introduction of
+     * `single_line_range` and `multi_line_range` as typed alternatives.
      * ```
      *
-     * `repeated int32 range = 1 [json_name = "range"];`
+     * `repeated int32 range = 1 [json_name = "range", deprecated = true];`
      * @param values The range to add.
      */
     @kotlin.jvm.JvmSynthetic
@@ -182,32 +138,21 @@ public object OccurrenceKt {
       _builder.addAllRange(values)
     }/**
      * ```
-     * Half-open [start, end) range of this occurrence. Must be exactly three or four
-     * elements:
+     * Deprecated: Use `single_line_range` or `multi_line_range` instead.
      *
+     * Half-open [start, end) range. Must be exactly three or four elements:
+     * - Three elements: `[startLine, startCharacter, endCharacter]` (single-line)
      * - Four elements: `[startLine, startCharacter, endLine, endCharacter]`
-     * - Three elements: `[startLine, startCharacter, endCharacter]`. The end line
-     * is inferred to have the same value as the start line.
-     *
-     * It is allowed for the range to be empty (i.e. start==end).
-     *
-     * Line numbers and characters are always 0-based. Make sure to increment the
-     * line/character values before displaying them in an editor-like UI because
-     * editors conventionally use 1-based numbers.
-     *
-     * The 'character' value is interpreted based on the PositionEncoding for
-     * the Document.
      *
      * Historical note: the original draft of this schema had a `Range` message
      * type with `start` and `end` fields of type `Position`, mirroring LSP.
      * Benchmarks revealed that this encoding was inefficient and that we could
      * reduce the total payload size of an index by 50% by using `repeated int32`
-     * instead. The `repeated int32` encoding is admittedly more embarrassing to
-     * work with in some programming languages but we hope the performance
-     * improvements make up for it.
+     * instead. However, the lack of type safety led to the introduction of
+     * `single_line_range` and `multi_line_range` as typed alternatives.
      * ```
      *
-     * `repeated int32 range = 1 [json_name = "range"];`
+     * `repeated int32 range = 1 [json_name = "range", deprecated = true];`
      * @param values The range to add.
      */
     @kotlin.jvm.JvmSynthetic
@@ -217,32 +162,21 @@ public object OccurrenceKt {
       addAll(values)
     }/**
      * ```
-     * Half-open [start, end) range of this occurrence. Must be exactly three or four
-     * elements:
+     * Deprecated: Use `single_line_range` or `multi_line_range` instead.
      *
+     * Half-open [start, end) range. Must be exactly three or four elements:
+     * - Three elements: `[startLine, startCharacter, endCharacter]` (single-line)
      * - Four elements: `[startLine, startCharacter, endLine, endCharacter]`
-     * - Three elements: `[startLine, startCharacter, endCharacter]`. The end line
-     * is inferred to have the same value as the start line.
-     *
-     * It is allowed for the range to be empty (i.e. start==end).
-     *
-     * Line numbers and characters are always 0-based. Make sure to increment the
-     * line/character values before displaying them in an editor-like UI because
-     * editors conventionally use 1-based numbers.
-     *
-     * The 'character' value is interpreted based on the PositionEncoding for
-     * the Document.
      *
      * Historical note: the original draft of this schema had a `Range` message
      * type with `start` and `end` fields of type `Position`, mirroring LSP.
      * Benchmarks revealed that this encoding was inefficient and that we could
      * reduce the total payload size of an index by 50% by using `repeated int32`
-     * instead. The `repeated int32` encoding is admittedly more embarrassing to
-     * work with in some programming languages but we hope the performance
-     * improvements make up for it.
+     * instead. However, the lack of type safety led to the introduction of
+     * `single_line_range` and `multi_line_range` as typed alternatives.
      * ```
      *
-     * `repeated int32 range = 1 [json_name = "range"];`
+     * `repeated int32 range = 1 [json_name = "range", deprecated = true];`
      * @param index The index to set the value at.
      * @param value The range to set.
      */
@@ -252,38 +186,99 @@ public object OccurrenceKt {
       _builder.setRange(index, value)
     }/**
      * ```
-     * Half-open [start, end) range of this occurrence. Must be exactly three or four
-     * elements:
+     * Deprecated: Use `single_line_range` or `multi_line_range` instead.
      *
+     * Half-open [start, end) range. Must be exactly three or four elements:
+     * - Three elements: `[startLine, startCharacter, endCharacter]` (single-line)
      * - Four elements: `[startLine, startCharacter, endLine, endCharacter]`
-     * - Three elements: `[startLine, startCharacter, endCharacter]`. The end line
-     * is inferred to have the same value as the start line.
-     *
-     * It is allowed for the range to be empty (i.e. start==end).
-     *
-     * Line numbers and characters are always 0-based. Make sure to increment the
-     * line/character values before displaying them in an editor-like UI because
-     * editors conventionally use 1-based numbers.
-     *
-     * The 'character' value is interpreted based on the PositionEncoding for
-     * the Document.
      *
      * Historical note: the original draft of this schema had a `Range` message
      * type with `start` and `end` fields of type `Position`, mirroring LSP.
      * Benchmarks revealed that this encoding was inefficient and that we could
      * reduce the total payload size of an index by 50% by using `repeated int32`
-     * instead. The `repeated int32` encoding is admittedly more embarrassing to
-     * work with in some programming languages but we hope the performance
-     * improvements make up for it.
+     * instead. However, the lack of type safety led to the introduction of
+     * `single_line_range` and `multi_line_range` as typed alternatives.
      * ```
      *
-     * `repeated int32 range = 1 [json_name = "range"];`
+     * `repeated int32 range = 1 [json_name = "range", deprecated = true];`
      */
     @kotlin.jvm.JvmSynthetic
 @kotlin.jvm.JvmName("clearRange")
     public fun com.google.protobuf.kotlin.DslList<kotlin.Int, RangeProxy>.clear() {
       _builder.clearRange()
     }
+    /**
+     * ```
+     * Range spanning a single line.
+     * ```
+     *
+     * `.scip.SingleLineRange single_line_range = 8 [json_name = "singleLineRange"];`
+     */
+    public var singleLineRange: org.scip_code.scip.SingleLineRange
+      @kotlin.jvm.JvmName("getSingleLineRange")
+        get() = _builder.singleLineRange
+      @kotlin.jvm.JvmName("setSingleLineRange")
+        set(value) {
+        _builder.singleLineRange = value
+      }
+    /**
+     * ```
+     * Range spanning a single line.
+     * ```
+     *
+     * `.scip.SingleLineRange single_line_range = 8 [json_name = "singleLineRange"];`
+     */
+    public fun clearSingleLineRange() {
+      _builder.clearSingleLineRange()
+    }
+    /**
+     * ```
+     * Range spanning a single line.
+     * ```
+     *
+     * `.scip.SingleLineRange single_line_range = 8 [json_name = "singleLineRange"];`
+     * @return Whether the singleLineRange field is set.
+     */
+    public fun hasSingleLineRange(): kotlin.Boolean {
+      return _builder.hasSingleLineRange()
+    }
+
+    /**
+     * ```
+     * Range spanning multiple lines.
+     * ```
+     *
+     * `.scip.MultiLineRange multi_line_range = 9 [json_name = "multiLineRange"];`
+     */
+    public var multiLineRange: org.scip_code.scip.MultiLineRange
+      @kotlin.jvm.JvmName("getMultiLineRange")
+        get() = _builder.multiLineRange
+      @kotlin.jvm.JvmName("setMultiLineRange")
+        set(value) {
+        _builder.multiLineRange = value
+      }
+    /**
+     * ```
+     * Range spanning multiple lines.
+     * ```
+     *
+     * `.scip.MultiLineRange multi_line_range = 9 [json_name = "multiLineRange"];`
+     */
+    public fun clearMultiLineRange() {
+      _builder.clearMultiLineRange()
+    }
+    /**
+     * ```
+     * Range spanning multiple lines.
+     * ```
+     *
+     * `.scip.MultiLineRange multi_line_range = 9 [json_name = "multiLineRange"];`
+     * @return Whether the multiLineRange field is set.
+     */
+    public fun hasMultiLineRange(): kotlin.Boolean {
+      return _builder.hasMultiLineRange()
+    }
+
     /**
      * ```
      * (optional) The symbol that appears at this position. See
@@ -624,124 +619,22 @@ public object OccurrenceKt {
     public class EnclosingRangeProxy private constructor() : com.google.protobuf.kotlin.DslProxy()
     /**
      * ```
-     * (optional) Using the same encoding as the sibling `range` field, half-open
-     * source range of the nearest non-trivial enclosing AST node. This range must
-     * enclose the `range` field. Example applications that make use of the
-     * enclosing_range field:
-     *
-     * - Call hierarchies: to determine what symbols are references from the body
-     * of a function
-     * - Symbol outline: to display breadcrumbs from the cursor position to the
-     * root of the file
-     * - Expand selection: to select the nearest enclosing AST node.
-     * - Highlight range: to indicate the AST expression that is associated with a
-     * hover popover
-     *
-     * For definition occurrences, the enclosing range should indicate the
-     * start/end bounds of the entire definition AST node, including
-     * documentation.
-     * ```
-     * const n = 3
-     * ^ range
-     * ^^^^^^^^^^^ enclosing_range
-     *
-     * /&#42;* Parses the string into something *&#47;
-     * ^ enclosing_range start --------------------------------------|
-     * function parse(input string): string {                        |
-     * ^^^^^ range                                          |
-     * return input.slice(n)                                     |
-     * }                                                             |
-     * ^ enclosing_range end <---------------------------------------|
+     * Deprecated: Use `typed_enclosing_range` instead.
      * ```
      *
-     * Any attributes/decorators/attached macros should also be part of the
-     * enclosing range.
-     *
-     * ```python
-     * @cache
-     * ^ enclosing_range start---------------------|
-     * def factorial(n):                           |
-     * return n * factorial(n-1) if n else 1   |
-     * < enclosing_range end-----------------------|
-     *
-     * ```
-     *
-     * For reference occurrences, the enclosing range should indicate the start/end
-     * bounds of the parent expression.
-     * ```
-     * const a = a.b
-     * ^ range
-     * ^^^ enclosing_range
-     * const b = a.b(41).f(42).g(43)
-     * ^ range
-     * ^^^^^^^^^^^^^ enclosing_range
-     * ```
-     * ```
-     *
-     * `repeated int32 enclosing_range = 7 [json_name = "enclosingRange"];`
+     * `repeated int32 enclosing_range = 7 [json_name = "enclosingRange", deprecated = true];`
      */
-     public val enclosingRange: com.google.protobuf.kotlin.DslList<kotlin.Int, EnclosingRangeProxy>
+    @kotlin.Deprecated(message = "Field enclosingRange is deprecated")  public val enclosingRange: com.google.protobuf.kotlin.DslList<kotlin.Int, EnclosingRangeProxy>
       @kotlin.jvm.JvmSynthetic
   get() = com.google.protobuf.kotlin.DslList(
         _builder.enclosingRangeList
       )
     /**
      * ```
-     * (optional) Using the same encoding as the sibling `range` field, half-open
-     * source range of the nearest non-trivial enclosing AST node. This range must
-     * enclose the `range` field. Example applications that make use of the
-     * enclosing_range field:
-     *
-     * - Call hierarchies: to determine what symbols are references from the body
-     * of a function
-     * - Symbol outline: to display breadcrumbs from the cursor position to the
-     * root of the file
-     * - Expand selection: to select the nearest enclosing AST node.
-     * - Highlight range: to indicate the AST expression that is associated with a
-     * hover popover
-     *
-     * For definition occurrences, the enclosing range should indicate the
-     * start/end bounds of the entire definition AST node, including
-     * documentation.
-     * ```
-     * const n = 3
-     * ^ range
-     * ^^^^^^^^^^^ enclosing_range
-     *
-     * /&#42;* Parses the string into something *&#47;
-     * ^ enclosing_range start --------------------------------------|
-     * function parse(input string): string {                        |
-     * ^^^^^ range                                          |
-     * return input.slice(n)                                     |
-     * }                                                             |
-     * ^ enclosing_range end <---------------------------------------|
+     * Deprecated: Use `typed_enclosing_range` instead.
      * ```
      *
-     * Any attributes/decorators/attached macros should also be part of the
-     * enclosing range.
-     *
-     * ```python
-     * @cache
-     * ^ enclosing_range start---------------------|
-     * def factorial(n):                           |
-     * return n * factorial(n-1) if n else 1   |
-     * < enclosing_range end-----------------------|
-     *
-     * ```
-     *
-     * For reference occurrences, the enclosing range should indicate the start/end
-     * bounds of the parent expression.
-     * ```
-     * const a = a.b
-     * ^ range
-     * ^^^ enclosing_range
-     * const b = a.b(41).f(42).g(43)
-     * ^ range
-     * ^^^^^^^^^^^^^ enclosing_range
-     * ```
-     * ```
-     *
-     * `repeated int32 enclosing_range = 7 [json_name = "enclosingRange"];`
+     * `repeated int32 enclosing_range = 7 [json_name = "enclosingRange", deprecated = true];`
      * @param value The enclosingRange to add.
      */
     @kotlin.jvm.JvmSynthetic
@@ -750,61 +643,10 @@ public object OccurrenceKt {
       _builder.addEnclosingRange(value)
     }/**
      * ```
-     * (optional) Using the same encoding as the sibling `range` field, half-open
-     * source range of the nearest non-trivial enclosing AST node. This range must
-     * enclose the `range` field. Example applications that make use of the
-     * enclosing_range field:
-     *
-     * - Call hierarchies: to determine what symbols are references from the body
-     * of a function
-     * - Symbol outline: to display breadcrumbs from the cursor position to the
-     * root of the file
-     * - Expand selection: to select the nearest enclosing AST node.
-     * - Highlight range: to indicate the AST expression that is associated with a
-     * hover popover
-     *
-     * For definition occurrences, the enclosing range should indicate the
-     * start/end bounds of the entire definition AST node, including
-     * documentation.
-     * ```
-     * const n = 3
-     * ^ range
-     * ^^^^^^^^^^^ enclosing_range
-     *
-     * /&#42;* Parses the string into something *&#47;
-     * ^ enclosing_range start --------------------------------------|
-     * function parse(input string): string {                        |
-     * ^^^^^ range                                          |
-     * return input.slice(n)                                     |
-     * }                                                             |
-     * ^ enclosing_range end <---------------------------------------|
+     * Deprecated: Use `typed_enclosing_range` instead.
      * ```
      *
-     * Any attributes/decorators/attached macros should also be part of the
-     * enclosing range.
-     *
-     * ```python
-     * @cache
-     * ^ enclosing_range start---------------------|
-     * def factorial(n):                           |
-     * return n * factorial(n-1) if n else 1   |
-     * < enclosing_range end-----------------------|
-     *
-     * ```
-     *
-     * For reference occurrences, the enclosing range should indicate the start/end
-     * bounds of the parent expression.
-     * ```
-     * const a = a.b
-     * ^ range
-     * ^^^ enclosing_range
-     * const b = a.b(41).f(42).g(43)
-     * ^ range
-     * ^^^^^^^^^^^^^ enclosing_range
-     * ```
-     * ```
-     *
-     * `repeated int32 enclosing_range = 7 [json_name = "enclosingRange"];`
+     * `repeated int32 enclosing_range = 7 [json_name = "enclosingRange", deprecated = true];`
      * @param value The enclosingRange to add.
      */
     @kotlin.jvm.JvmSynthetic
@@ -814,61 +656,10 @@ public object OccurrenceKt {
       add(value)
     }/**
      * ```
-     * (optional) Using the same encoding as the sibling `range` field, half-open
-     * source range of the nearest non-trivial enclosing AST node. This range must
-     * enclose the `range` field. Example applications that make use of the
-     * enclosing_range field:
-     *
-     * - Call hierarchies: to determine what symbols are references from the body
-     * of a function
-     * - Symbol outline: to display breadcrumbs from the cursor position to the
-     * root of the file
-     * - Expand selection: to select the nearest enclosing AST node.
-     * - Highlight range: to indicate the AST expression that is associated with a
-     * hover popover
-     *
-     * For definition occurrences, the enclosing range should indicate the
-     * start/end bounds of the entire definition AST node, including
-     * documentation.
-     * ```
-     * const n = 3
-     * ^ range
-     * ^^^^^^^^^^^ enclosing_range
-     *
-     * /&#42;* Parses the string into something *&#47;
-     * ^ enclosing_range start --------------------------------------|
-     * function parse(input string): string {                        |
-     * ^^^^^ range                                          |
-     * return input.slice(n)                                     |
-     * }                                                             |
-     * ^ enclosing_range end <---------------------------------------|
+     * Deprecated: Use `typed_enclosing_range` instead.
      * ```
      *
-     * Any attributes/decorators/attached macros should also be part of the
-     * enclosing range.
-     *
-     * ```python
-     * @cache
-     * ^ enclosing_range start---------------------|
-     * def factorial(n):                           |
-     * return n * factorial(n-1) if n else 1   |
-     * < enclosing_range end-----------------------|
-     *
-     * ```
-     *
-     * For reference occurrences, the enclosing range should indicate the start/end
-     * bounds of the parent expression.
-     * ```
-     * const a = a.b
-     * ^ range
-     * ^^^ enclosing_range
-     * const b = a.b(41).f(42).g(43)
-     * ^ range
-     * ^^^^^^^^^^^^^ enclosing_range
-     * ```
-     * ```
-     *
-     * `repeated int32 enclosing_range = 7 [json_name = "enclosingRange"];`
+     * `repeated int32 enclosing_range = 7 [json_name = "enclosingRange", deprecated = true];`
      * @param values The enclosingRange to add.
      */
     @kotlin.jvm.JvmSynthetic
@@ -877,61 +668,10 @@ public object OccurrenceKt {
       _builder.addAllEnclosingRange(values)
     }/**
      * ```
-     * (optional) Using the same encoding as the sibling `range` field, half-open
-     * source range of the nearest non-trivial enclosing AST node. This range must
-     * enclose the `range` field. Example applications that make use of the
-     * enclosing_range field:
-     *
-     * - Call hierarchies: to determine what symbols are references from the body
-     * of a function
-     * - Symbol outline: to display breadcrumbs from the cursor position to the
-     * root of the file
-     * - Expand selection: to select the nearest enclosing AST node.
-     * - Highlight range: to indicate the AST expression that is associated with a
-     * hover popover
-     *
-     * For definition occurrences, the enclosing range should indicate the
-     * start/end bounds of the entire definition AST node, including
-     * documentation.
-     * ```
-     * const n = 3
-     * ^ range
-     * ^^^^^^^^^^^ enclosing_range
-     *
-     * /&#42;* Parses the string into something *&#47;
-     * ^ enclosing_range start --------------------------------------|
-     * function parse(input string): string {                        |
-     * ^^^^^ range                                          |
-     * return input.slice(n)                                     |
-     * }                                                             |
-     * ^ enclosing_range end <---------------------------------------|
+     * Deprecated: Use `typed_enclosing_range` instead.
      * ```
      *
-     * Any attributes/decorators/attached macros should also be part of the
-     * enclosing range.
-     *
-     * ```python
-     * @cache
-     * ^ enclosing_range start---------------------|
-     * def factorial(n):                           |
-     * return n * factorial(n-1) if n else 1   |
-     * < enclosing_range end-----------------------|
-     *
-     * ```
-     *
-     * For reference occurrences, the enclosing range should indicate the start/end
-     * bounds of the parent expression.
-     * ```
-     * const a = a.b
-     * ^ range
-     * ^^^ enclosing_range
-     * const b = a.b(41).f(42).g(43)
-     * ^ range
-     * ^^^^^^^^^^^^^ enclosing_range
-     * ```
-     * ```
-     *
-     * `repeated int32 enclosing_range = 7 [json_name = "enclosingRange"];`
+     * `repeated int32 enclosing_range = 7 [json_name = "enclosingRange", deprecated = true];`
      * @param values The enclosingRange to add.
      */
     @kotlin.jvm.JvmSynthetic
@@ -941,61 +681,10 @@ public object OccurrenceKt {
       addAll(values)
     }/**
      * ```
-     * (optional) Using the same encoding as the sibling `range` field, half-open
-     * source range of the nearest non-trivial enclosing AST node. This range must
-     * enclose the `range` field. Example applications that make use of the
-     * enclosing_range field:
-     *
-     * - Call hierarchies: to determine what symbols are references from the body
-     * of a function
-     * - Symbol outline: to display breadcrumbs from the cursor position to the
-     * root of the file
-     * - Expand selection: to select the nearest enclosing AST node.
-     * - Highlight range: to indicate the AST expression that is associated with a
-     * hover popover
-     *
-     * For definition occurrences, the enclosing range should indicate the
-     * start/end bounds of the entire definition AST node, including
-     * documentation.
-     * ```
-     * const n = 3
-     * ^ range
-     * ^^^^^^^^^^^ enclosing_range
-     *
-     * /&#42;* Parses the string into something *&#47;
-     * ^ enclosing_range start --------------------------------------|
-     * function parse(input string): string {                        |
-     * ^^^^^ range                                          |
-     * return input.slice(n)                                     |
-     * }                                                             |
-     * ^ enclosing_range end <---------------------------------------|
+     * Deprecated: Use `typed_enclosing_range` instead.
      * ```
      *
-     * Any attributes/decorators/attached macros should also be part of the
-     * enclosing range.
-     *
-     * ```python
-     * @cache
-     * ^ enclosing_range start---------------------|
-     * def factorial(n):                           |
-     * return n * factorial(n-1) if n else 1   |
-     * < enclosing_range end-----------------------|
-     *
-     * ```
-     *
-     * For reference occurrences, the enclosing range should indicate the start/end
-     * bounds of the parent expression.
-     * ```
-     * const a = a.b
-     * ^ range
-     * ^^^ enclosing_range
-     * const b = a.b(41).f(42).g(43)
-     * ^ range
-     * ^^^^^^^^^^^^^ enclosing_range
-     * ```
-     * ```
-     *
-     * `repeated int32 enclosing_range = 7 [json_name = "enclosingRange"];`
+     * `repeated int32 enclosing_range = 7 [json_name = "enclosingRange", deprecated = true];`
      * @param index The index to set the value at.
      * @param value The enclosingRange to set.
      */
@@ -1005,69 +694,92 @@ public object OccurrenceKt {
       _builder.setEnclosingRange(index, value)
     }/**
      * ```
-     * (optional) Using the same encoding as the sibling `range` field, half-open
-     * source range of the nearest non-trivial enclosing AST node. This range must
-     * enclose the `range` field. Example applications that make use of the
-     * enclosing_range field:
-     *
-     * - Call hierarchies: to determine what symbols are references from the body
-     * of a function
-     * - Symbol outline: to display breadcrumbs from the cursor position to the
-     * root of the file
-     * - Expand selection: to select the nearest enclosing AST node.
-     * - Highlight range: to indicate the AST expression that is associated with a
-     * hover popover
-     *
-     * For definition occurrences, the enclosing range should indicate the
-     * start/end bounds of the entire definition AST node, including
-     * documentation.
-     * ```
-     * const n = 3
-     * ^ range
-     * ^^^^^^^^^^^ enclosing_range
-     *
-     * /&#42;* Parses the string into something *&#47;
-     * ^ enclosing_range start --------------------------------------|
-     * function parse(input string): string {                        |
-     * ^^^^^ range                                          |
-     * return input.slice(n)                                     |
-     * }                                                             |
-     * ^ enclosing_range end <---------------------------------------|
+     * Deprecated: Use `typed_enclosing_range` instead.
      * ```
      *
-     * Any attributes/decorators/attached macros should also be part of the
-     * enclosing range.
-     *
-     * ```python
-     * @cache
-     * ^ enclosing_range start---------------------|
-     * def factorial(n):                           |
-     * return n * factorial(n-1) if n else 1   |
-     * < enclosing_range end-----------------------|
-     *
-     * ```
-     *
-     * For reference occurrences, the enclosing range should indicate the start/end
-     * bounds of the parent expression.
-     * ```
-     * const a = a.b
-     * ^ range
-     * ^^^ enclosing_range
-     * const b = a.b(41).f(42).g(43)
-     * ^ range
-     * ^^^^^^^^^^^^^ enclosing_range
-     * ```
-     * ```
-     *
-     * `repeated int32 enclosing_range = 7 [json_name = "enclosingRange"];`
+     * `repeated int32 enclosing_range = 7 [json_name = "enclosingRange", deprecated = true];`
      */
     @kotlin.jvm.JvmSynthetic
 @kotlin.jvm.JvmName("clearEnclosingRange")
     public fun com.google.protobuf.kotlin.DslList<kotlin.Int, EnclosingRangeProxy>.clear() {
       _builder.clearEnclosingRange()
-    }}
+    }
+    /**
+     * `.scip.SingleLineRange single_line_enclosing_range = 10 [json_name = "singleLineEnclosingRange"];`
+     */
+    public var singleLineEnclosingRange: org.scip_code.scip.SingleLineRange
+      @kotlin.jvm.JvmName("getSingleLineEnclosingRange")
+        get() = _builder.singleLineEnclosingRange
+      @kotlin.jvm.JvmName("setSingleLineEnclosingRange")
+        set(value) {
+        _builder.singleLineEnclosingRange = value
+      }
+    /**
+     * `.scip.SingleLineRange single_line_enclosing_range = 10 [json_name = "singleLineEnclosingRange"];`
+     */
+    public fun clearSingleLineEnclosingRange() {
+      _builder.clearSingleLineEnclosingRange()
+    }
+    /**
+     * `.scip.SingleLineRange single_line_enclosing_range = 10 [json_name = "singleLineEnclosingRange"];`
+     * @return Whether the singleLineEnclosingRange field is set.
+     */
+    public fun hasSingleLineEnclosingRange(): kotlin.Boolean {
+      return _builder.hasSingleLineEnclosingRange()
+    }
+
+    /**
+     * `.scip.MultiLineRange multi_line_enclosing_range = 11 [json_name = "multiLineEnclosingRange"];`
+     */
+    public var multiLineEnclosingRange: org.scip_code.scip.MultiLineRange
+      @kotlin.jvm.JvmName("getMultiLineEnclosingRange")
+        get() = _builder.multiLineEnclosingRange
+      @kotlin.jvm.JvmName("setMultiLineEnclosingRange")
+        set(value) {
+        _builder.multiLineEnclosingRange = value
+      }
+    /**
+     * `.scip.MultiLineRange multi_line_enclosing_range = 11 [json_name = "multiLineEnclosingRange"];`
+     */
+    public fun clearMultiLineEnclosingRange() {
+      _builder.clearMultiLineEnclosingRange()
+    }
+    /**
+     * `.scip.MultiLineRange multi_line_enclosing_range = 11 [json_name = "multiLineEnclosingRange"];`
+     * @return Whether the multiLineEnclosingRange field is set.
+     */
+    public fun hasMultiLineEnclosingRange(): kotlin.Boolean {
+      return _builder.hasMultiLineEnclosingRange()
+    }
+    public val typedRangeCase: org.scip_code.scip.Occurrence.TypedRangeCase
+    @kotlin.jvm.JvmName("getTypedRangeCase")
+      get() = _builder.getTypedRangeCase()
+
+    public fun clearTypedRange() {
+      _builder.clearTypedRange()
+    }
+    public val typedEnclosingRangeCase: org.scip_code.scip.Occurrence.TypedEnclosingRangeCase
+    @kotlin.jvm.JvmName("getTypedEnclosingRangeCase")
+      get() = _builder.getTypedEnclosingRangeCase()
+
+    public fun clearTypedEnclosingRange() {
+      _builder.clearTypedEnclosingRange()
+    }
+  }
 }
 @kotlin.jvm.JvmSynthetic
 public inline fun org.scip_code.scip.Occurrence.copy(block: `org.scip_code.scip`.OccurrenceKt.Dsl.() -> kotlin.Unit): org.scip_code.scip.Occurrence =
   `org.scip_code.scip`.OccurrenceKt.Dsl._create(this.toBuilder()).apply { block() }._build()
+
+public val org.scip_code.scip.OccurrenceOrBuilder.singleLineRangeOrNull: org.scip_code.scip.SingleLineRange?
+  get() = if (hasSingleLineRange()) getSingleLineRange() else null
+
+public val org.scip_code.scip.OccurrenceOrBuilder.multiLineRangeOrNull: org.scip_code.scip.MultiLineRange?
+  get() = if (hasMultiLineRange()) getMultiLineRange() else null
+
+public val org.scip_code.scip.OccurrenceOrBuilder.singleLineEnclosingRangeOrNull: org.scip_code.scip.SingleLineRange?
+  get() = if (hasSingleLineEnclosingRange()) getSingleLineEnclosingRange() else null
+
+public val org.scip_code.scip.OccurrenceOrBuilder.multiLineEnclosingRangeOrNull: org.scip_code.scip.MultiLineRange?
+  get() = if (hasMultiLineEnclosingRange()) getMultiLineEnclosingRange() else null
 

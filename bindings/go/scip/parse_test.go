@@ -22,7 +22,7 @@ func TestEmpty(t *testing.T) {
 }
 
 func TestFuzz(t *testing.T) {
-	pat := regexp.MustCompile("^(state|sizeCache|unknownFields|SignatureDocumentation)$")
+	pat := regexp.MustCompile("^(state|sizeCache|unknownFields|SignatureDocumentation|TypedRange|TypedEnclosingRange)$")
 	f := fuzz.New().NumElements(0, 2).SkipFieldsWithPattern(pat)
 	for i := 0; i < 100; i++ {
 		index := Index{}
@@ -72,7 +72,7 @@ func TestLargeDocuments(t *testing.T) {
 }
 
 func TestDocumentsOnly(t *testing.T) {
-	pat := regexp.MustCompile("^(state|sizeCache|unknownFields|SignatureDocumentation)$")
+	pat := regexp.MustCompile("^(state|sizeCache|unknownFields|SignatureDocumentation|TypedRange|TypedEnclosingRange)$")
 	f := fuzz.New().NumElements(0, 2).SkipFieldsWithPattern(pat)
 	for i := 0; i < 100; i++ {
 		index := Index{}

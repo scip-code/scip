@@ -86,6 +86,17 @@ enclosingSymbol ::
    Data.ProtoLens.Field.HasField s "enclosingSymbol" a) =>
   Lens.Family2.LensLike' f s a
 enclosingSymbol = Data.ProtoLens.Field.field @"enclosingSymbol"
+endCharacter ::
+  forall f s a.
+  (Prelude.Functor f,
+   Data.ProtoLens.Field.HasField s "endCharacter" a) =>
+  Lens.Family2.LensLike' f s a
+endCharacter = Data.ProtoLens.Field.field @"endCharacter"
+endLine ::
+  forall f s a.
+  (Prelude.Functor f, Data.ProtoLens.Field.HasField s "endLine" a) =>
+  Lens.Family2.LensLike' f s a
+endLine = Data.ProtoLens.Field.field @"endLine"
 externalSymbols ::
   forall f s a.
   (Prelude.Functor f,
@@ -127,6 +138,11 @@ language ::
    Data.ProtoLens.Field.HasField s "language" a) =>
   Lens.Family2.LensLike' f s a
 language = Data.ProtoLens.Field.field @"language"
+line ::
+  forall f s a.
+  (Prelude.Functor f, Data.ProtoLens.Field.HasField s "line" a) =>
+  Lens.Family2.LensLike' f s a
+line = Data.ProtoLens.Field.field @"line"
 manager ::
   forall f s a.
   (Prelude.Functor f, Data.ProtoLens.Field.HasField s "manager" a) =>
@@ -138,6 +154,20 @@ maybe'metadata ::
    Data.ProtoLens.Field.HasField s "maybe'metadata" a) =>
   Lens.Family2.LensLike' f s a
 maybe'metadata = Data.ProtoLens.Field.field @"maybe'metadata"
+maybe'multiLineEnclosingRange ::
+  forall f s a.
+  (Prelude.Functor f,
+   Data.ProtoLens.Field.HasField s "maybe'multiLineEnclosingRange" a) =>
+  Lens.Family2.LensLike' f s a
+maybe'multiLineEnclosingRange
+  = Data.ProtoLens.Field.field @"maybe'multiLineEnclosingRange"
+maybe'multiLineRange ::
+  forall f s a.
+  (Prelude.Functor f,
+   Data.ProtoLens.Field.HasField s "maybe'multiLineRange" a) =>
+  Lens.Family2.LensLike' f s a
+maybe'multiLineRange
+  = Data.ProtoLens.Field.field @"maybe'multiLineRange"
 maybe'package ::
   forall f s a.
   (Prelude.Functor f,
@@ -151,12 +181,39 @@ maybe'signatureDocumentation ::
   Lens.Family2.LensLike' f s a
 maybe'signatureDocumentation
   = Data.ProtoLens.Field.field @"maybe'signatureDocumentation"
+maybe'singleLineEnclosingRange ::
+  forall f s a.
+  (Prelude.Functor f,
+   Data.ProtoLens.Field.HasField s "maybe'singleLineEnclosingRange" a) =>
+  Lens.Family2.LensLike' f s a
+maybe'singleLineEnclosingRange
+  = Data.ProtoLens.Field.field @"maybe'singleLineEnclosingRange"
+maybe'singleLineRange ::
+  forall f s a.
+  (Prelude.Functor f,
+   Data.ProtoLens.Field.HasField s "maybe'singleLineRange" a) =>
+  Lens.Family2.LensLike' f s a
+maybe'singleLineRange
+  = Data.ProtoLens.Field.field @"maybe'singleLineRange"
 maybe'toolInfo ::
   forall f s a.
   (Prelude.Functor f,
    Data.ProtoLens.Field.HasField s "maybe'toolInfo" a) =>
   Lens.Family2.LensLike' f s a
 maybe'toolInfo = Data.ProtoLens.Field.field @"maybe'toolInfo"
+maybe'typedEnclosingRange ::
+  forall f s a.
+  (Prelude.Functor f,
+   Data.ProtoLens.Field.HasField s "maybe'typedEnclosingRange" a) =>
+  Lens.Family2.LensLike' f s a
+maybe'typedEnclosingRange
+  = Data.ProtoLens.Field.field @"maybe'typedEnclosingRange"
+maybe'typedRange ::
+  forall f s a.
+  (Prelude.Functor f,
+   Data.ProtoLens.Field.HasField s "maybe'typedRange" a) =>
+  Lens.Family2.LensLike' f s a
+maybe'typedRange = Data.ProtoLens.Field.field @"maybe'typedRange"
 message ::
   forall f s a.
   (Prelude.Functor f, Data.ProtoLens.Field.HasField s "message" a) =>
@@ -168,6 +225,19 @@ metadata ::
    Data.ProtoLens.Field.HasField s "metadata" a) =>
   Lens.Family2.LensLike' f s a
 metadata = Data.ProtoLens.Field.field @"metadata"
+multiLineEnclosingRange ::
+  forall f s a.
+  (Prelude.Functor f,
+   Data.ProtoLens.Field.HasField s "multiLineEnclosingRange" a) =>
+  Lens.Family2.LensLike' f s a
+multiLineEnclosingRange
+  = Data.ProtoLens.Field.field @"multiLineEnclosingRange"
+multiLineRange ::
+  forall f s a.
+  (Prelude.Functor f,
+   Data.ProtoLens.Field.HasField s "multiLineRange" a) =>
+  Lens.Family2.LensLike' f s a
+multiLineRange = Data.ProtoLens.Field.field @"multiLineRange"
 name ::
   forall f s a.
   (Prelude.Functor f, Data.ProtoLens.Field.HasField s "name" a) =>
@@ -238,11 +308,36 @@ signatureDocumentation ::
   Lens.Family2.LensLike' f s a
 signatureDocumentation
   = Data.ProtoLens.Field.field @"signatureDocumentation"
+singleLineEnclosingRange ::
+  forall f s a.
+  (Prelude.Functor f,
+   Data.ProtoLens.Field.HasField s "singleLineEnclosingRange" a) =>
+  Lens.Family2.LensLike' f s a
+singleLineEnclosingRange
+  = Data.ProtoLens.Field.field @"singleLineEnclosingRange"
+singleLineRange ::
+  forall f s a.
+  (Prelude.Functor f,
+   Data.ProtoLens.Field.HasField s "singleLineRange" a) =>
+  Lens.Family2.LensLike' f s a
+singleLineRange = Data.ProtoLens.Field.field @"singleLineRange"
 source ::
   forall f s a.
   (Prelude.Functor f, Data.ProtoLens.Field.HasField s "source" a) =>
   Lens.Family2.LensLike' f s a
 source = Data.ProtoLens.Field.field @"source"
+startCharacter ::
+  forall f s a.
+  (Prelude.Functor f,
+   Data.ProtoLens.Field.HasField s "startCharacter" a) =>
+  Lens.Family2.LensLike' f s a
+startCharacter = Data.ProtoLens.Field.field @"startCharacter"
+startLine ::
+  forall f s a.
+  (Prelude.Functor f,
+   Data.ProtoLens.Field.HasField s "startLine" a) =>
+  Lens.Family2.LensLike' f s a
+startLine = Data.ProtoLens.Field.field @"startLine"
 suffix ::
   forall f s a.
   (Prelude.Functor f, Data.ProtoLens.Field.HasField s "suffix" a) =>

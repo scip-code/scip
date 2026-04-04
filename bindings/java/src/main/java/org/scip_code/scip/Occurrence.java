@@ -63,113 +63,256 @@ private static final long serialVersionUID = 0L;
             org.scip_code.scip.Occurrence.class, org.scip_code.scip.Occurrence.Builder.class);
   }
 
+  private int typedRangeCase_ = 0;
+  @SuppressWarnings("serial")
+  private java.lang.Object typedRange_;
+  public enum TypedRangeCase
+      implements com.google.protobuf.Internal.EnumLite,
+          com.google.protobuf.AbstractMessage.InternalOneOfEnum {
+    SINGLE_LINE_RANGE(8),
+    MULTI_LINE_RANGE(9),
+    TYPEDRANGE_NOT_SET(0);
+    private final int value;
+    private TypedRangeCase(int value) {
+      this.value = value;
+    }
+    /**
+     * @param value The number of the enum to look for.
+     * @return The enum associated with the given number.
+     * @deprecated Use {@link #forNumber(int)} instead.
+     */
+    @java.lang.Deprecated
+    public static TypedRangeCase valueOf(int value) {
+      return forNumber(value);
+    }
+
+    public static TypedRangeCase forNumber(int value) {
+      switch (value) {
+        case 8: return SINGLE_LINE_RANGE;
+        case 9: return MULTI_LINE_RANGE;
+        case 0: return TYPEDRANGE_NOT_SET;
+        default: return null;
+      }
+    }
+    public int getNumber() {
+      return this.value;
+    }
+  };
+
+  public TypedRangeCase
+  getTypedRangeCase() {
+    return TypedRangeCase.forNumber(
+        typedRangeCase_);
+  }
+
+  private int typedEnclosingRangeCase_ = 0;
+  @SuppressWarnings("serial")
+  private java.lang.Object typedEnclosingRange_;
+  public enum TypedEnclosingRangeCase
+      implements com.google.protobuf.Internal.EnumLite,
+          com.google.protobuf.AbstractMessage.InternalOneOfEnum {
+    SINGLE_LINE_ENCLOSING_RANGE(10),
+    MULTI_LINE_ENCLOSING_RANGE(11),
+    TYPEDENCLOSINGRANGE_NOT_SET(0);
+    private final int value;
+    private TypedEnclosingRangeCase(int value) {
+      this.value = value;
+    }
+    /**
+     * @param value The number of the enum to look for.
+     * @return The enum associated with the given number.
+     * @deprecated Use {@link #forNumber(int)} instead.
+     */
+    @java.lang.Deprecated
+    public static TypedEnclosingRangeCase valueOf(int value) {
+      return forNumber(value);
+    }
+
+    public static TypedEnclosingRangeCase forNumber(int value) {
+      switch (value) {
+        case 10: return SINGLE_LINE_ENCLOSING_RANGE;
+        case 11: return MULTI_LINE_ENCLOSING_RANGE;
+        case 0: return TYPEDENCLOSINGRANGE_NOT_SET;
+        default: return null;
+      }
+    }
+    public int getNumber() {
+      return this.value;
+    }
+  };
+
+  public TypedEnclosingRangeCase
+  getTypedEnclosingRangeCase() {
+    return TypedEnclosingRangeCase.forNumber(
+        typedEnclosingRangeCase_);
+  }
+
   public static final int RANGE_FIELD_NUMBER = 1;
   @SuppressWarnings("serial")
   private com.google.protobuf.Internal.IntList range_ =
       emptyIntList();
   /**
    * <pre>
-   * Half-open [start, end) range of this occurrence. Must be exactly three or four
-   * elements:
+   * Deprecated: Use `single_line_range` or `multi_line_range` instead.
    *
+   * Half-open [start, end) range. Must be exactly three or four elements:
+   * - Three elements: `[startLine, startCharacter, endCharacter]` (single-line)
    * - Four elements: `[startLine, startCharacter, endLine, endCharacter]`
-   * - Three elements: `[startLine, startCharacter, endCharacter]`. The end line
-   * is inferred to have the same value as the start line.
-   *
-   * It is allowed for the range to be empty (i.e. start==end).
-   *
-   * Line numbers and characters are always 0-based. Make sure to increment the
-   * line/character values before displaying them in an editor-like UI because
-   * editors conventionally use 1-based numbers.
-   *
-   * The 'character' value is interpreted based on the PositionEncoding for
-   * the Document.
    *
    * Historical note: the original draft of this schema had a `Range` message
    * type with `start` and `end` fields of type `Position`, mirroring LSP.
    * Benchmarks revealed that this encoding was inefficient and that we could
    * reduce the total payload size of an index by 50% by using `repeated int32`
-   * instead. The `repeated int32` encoding is admittedly more embarrassing to
-   * work with in some programming languages but we hope the performance
-   * improvements make up for it.
+   * instead. However, the lack of type safety led to the introduction of
+   * `single_line_range` and `multi_line_range` as typed alternatives.
    * </pre>
    *
-   * <code>repeated int32 range = 1 [json_name = "range"];</code>
+   * <code>repeated int32 range = 1 [json_name = "range", deprecated = true];</code>
+   * @deprecated scip.Occurrence.range is deprecated.
+   *     See scip.proto;l=675
    * @return A list containing the range.
    */
   @java.lang.Override
-  public java.util.List<java.lang.Integer>
+  @java.lang.Deprecated public java.util.List<java.lang.Integer>
       getRangeList() {
     return range_;
   }
   /**
    * <pre>
-   * Half-open [start, end) range of this occurrence. Must be exactly three or four
-   * elements:
+   * Deprecated: Use `single_line_range` or `multi_line_range` instead.
    *
+   * Half-open [start, end) range. Must be exactly three or four elements:
+   * - Three elements: `[startLine, startCharacter, endCharacter]` (single-line)
    * - Four elements: `[startLine, startCharacter, endLine, endCharacter]`
-   * - Three elements: `[startLine, startCharacter, endCharacter]`. The end line
-   * is inferred to have the same value as the start line.
-   *
-   * It is allowed for the range to be empty (i.e. start==end).
-   *
-   * Line numbers and characters are always 0-based. Make sure to increment the
-   * line/character values before displaying them in an editor-like UI because
-   * editors conventionally use 1-based numbers.
-   *
-   * The 'character' value is interpreted based on the PositionEncoding for
-   * the Document.
    *
    * Historical note: the original draft of this schema had a `Range` message
    * type with `start` and `end` fields of type `Position`, mirroring LSP.
    * Benchmarks revealed that this encoding was inefficient and that we could
    * reduce the total payload size of an index by 50% by using `repeated int32`
-   * instead. The `repeated int32` encoding is admittedly more embarrassing to
-   * work with in some programming languages but we hope the performance
-   * improvements make up for it.
+   * instead. However, the lack of type safety led to the introduction of
+   * `single_line_range` and `multi_line_range` as typed alternatives.
    * </pre>
    *
-   * <code>repeated int32 range = 1 [json_name = "range"];</code>
+   * <code>repeated int32 range = 1 [json_name = "range", deprecated = true];</code>
+   * @deprecated scip.Occurrence.range is deprecated.
+   *     See scip.proto;l=675
    * @return The count of range.
    */
-  public int getRangeCount() {
+  @java.lang.Deprecated public int getRangeCount() {
     return range_.size();
   }
   /**
    * <pre>
-   * Half-open [start, end) range of this occurrence. Must be exactly three or four
-   * elements:
+   * Deprecated: Use `single_line_range` or `multi_line_range` instead.
    *
+   * Half-open [start, end) range. Must be exactly three or four elements:
+   * - Three elements: `[startLine, startCharacter, endCharacter]` (single-line)
    * - Four elements: `[startLine, startCharacter, endLine, endCharacter]`
-   * - Three elements: `[startLine, startCharacter, endCharacter]`. The end line
-   * is inferred to have the same value as the start line.
-   *
-   * It is allowed for the range to be empty (i.e. start==end).
-   *
-   * Line numbers and characters are always 0-based. Make sure to increment the
-   * line/character values before displaying them in an editor-like UI because
-   * editors conventionally use 1-based numbers.
-   *
-   * The 'character' value is interpreted based on the PositionEncoding for
-   * the Document.
    *
    * Historical note: the original draft of this schema had a `Range` message
    * type with `start` and `end` fields of type `Position`, mirroring LSP.
    * Benchmarks revealed that this encoding was inefficient and that we could
    * reduce the total payload size of an index by 50% by using `repeated int32`
-   * instead. The `repeated int32` encoding is admittedly more embarrassing to
-   * work with in some programming languages but we hope the performance
-   * improvements make up for it.
+   * instead. However, the lack of type safety led to the introduction of
+   * `single_line_range` and `multi_line_range` as typed alternatives.
    * </pre>
    *
-   * <code>repeated int32 range = 1 [json_name = "range"];</code>
+   * <code>repeated int32 range = 1 [json_name = "range", deprecated = true];</code>
+   * @deprecated scip.Occurrence.range is deprecated.
+   *     See scip.proto;l=675
    * @param index The index of the element to return.
    * @return The range at the given index.
    */
-  public int getRange(int index) {
+  @java.lang.Deprecated public int getRange(int index) {
     return range_.getInt(index);
   }
   private int rangeMemoizedSerializedSize = -1;
+
+  public static final int SINGLE_LINE_RANGE_FIELD_NUMBER = 8;
+  /**
+   * <pre>
+   * Range spanning a single line.
+   * </pre>
+   *
+   * <code>.scip.SingleLineRange single_line_range = 8 [json_name = "singleLineRange"];</code>
+   * @return Whether the singleLineRange field is set.
+   */
+  @java.lang.Override
+  public boolean hasSingleLineRange() {
+    return typedRangeCase_ == 8;
+  }
+  /**
+   * <pre>
+   * Range spanning a single line.
+   * </pre>
+   *
+   * <code>.scip.SingleLineRange single_line_range = 8 [json_name = "singleLineRange"];</code>
+   * @return The singleLineRange.
+   */
+  @java.lang.Override
+  public org.scip_code.scip.SingleLineRange getSingleLineRange() {
+    if (typedRangeCase_ == 8) {
+       return (org.scip_code.scip.SingleLineRange) typedRange_;
+    }
+    return org.scip_code.scip.SingleLineRange.getDefaultInstance();
+  }
+  /**
+   * <pre>
+   * Range spanning a single line.
+   * </pre>
+   *
+   * <code>.scip.SingleLineRange single_line_range = 8 [json_name = "singleLineRange"];</code>
+   */
+  @java.lang.Override
+  public org.scip_code.scip.SingleLineRangeOrBuilder getSingleLineRangeOrBuilder() {
+    if (typedRangeCase_ == 8) {
+       return (org.scip_code.scip.SingleLineRange) typedRange_;
+    }
+    return org.scip_code.scip.SingleLineRange.getDefaultInstance();
+  }
+
+  public static final int MULTI_LINE_RANGE_FIELD_NUMBER = 9;
+  /**
+   * <pre>
+   * Range spanning multiple lines.
+   * </pre>
+   *
+   * <code>.scip.MultiLineRange multi_line_range = 9 [json_name = "multiLineRange"];</code>
+   * @return Whether the multiLineRange field is set.
+   */
+  @java.lang.Override
+  public boolean hasMultiLineRange() {
+    return typedRangeCase_ == 9;
+  }
+  /**
+   * <pre>
+   * Range spanning multiple lines.
+   * </pre>
+   *
+   * <code>.scip.MultiLineRange multi_line_range = 9 [json_name = "multiLineRange"];</code>
+   * @return The multiLineRange.
+   */
+  @java.lang.Override
+  public org.scip_code.scip.MultiLineRange getMultiLineRange() {
+    if (typedRangeCase_ == 9) {
+       return (org.scip_code.scip.MultiLineRange) typedRange_;
+    }
+    return org.scip_code.scip.MultiLineRange.getDefaultInstance();
+  }
+  /**
+   * <pre>
+   * Range spanning multiple lines.
+   * </pre>
+   *
+   * <code>.scip.MultiLineRange multi_line_range = 9 [json_name = "multiLineRange"];</code>
+   */
+  @java.lang.Override
+  public org.scip_code.scip.MultiLineRangeOrBuilder getMultiLineRangeOrBuilder() {
+    if (typedRangeCase_ == 9) {
+       return (org.scip_code.scip.MultiLineRange) typedRange_;
+    }
+    return org.scip_code.scip.MultiLineRange.getDefaultInstance();
+  }
 
   public static final int SYMBOL_FIELD_NUMBER = 2;
   @SuppressWarnings("serial")
@@ -410,194 +553,109 @@ private static final long serialVersionUID = 0L;
       emptyIntList();
   /**
    * <pre>
-   * (optional) Using the same encoding as the sibling `range` field, half-open
-   * source range of the nearest non-trivial enclosing AST node. This range must
-   * enclose the `range` field. Example applications that make use of the
-   * enclosing_range field:
-   *
-   * - Call hierarchies: to determine what symbols are references from the body
-   * of a function
-   * - Symbol outline: to display breadcrumbs from the cursor position to the
-   * root of the file
-   * - Expand selection: to select the nearest enclosing AST node.
-   * - Highlight range: to indicate the AST expression that is associated with a
-   * hover popover
-   *
-   * For definition occurrences, the enclosing range should indicate the
-   * start/end bounds of the entire definition AST node, including
-   * documentation.
-   * ```
-   * const n = 3
-   * ^ range
-   * ^^^^^^^^^^^ enclosing_range
-   *
-   * /&#42;* Parses the string into something *&#47;
-   * ^ enclosing_range start --------------------------------------|
-   * function parse(input string): string {                        |
-   * ^^^^^ range                                          |
-   * return input.slice(n)                                     |
-   * }                                                             |
-   * ^ enclosing_range end &lt;---------------------------------------|
-   * ```
-   *
-   * Any attributes/decorators/attached macros should also be part of the
-   * enclosing range.
-   *
-   * ```python
-   * &#64;cache
-   * ^ enclosing_range start---------------------|
-   * def factorial(n):                           |
-   * return n * factorial(n-1) if n else 1   |
-   * &lt; enclosing_range end-----------------------|
-   *
-   * ```
-   *
-   * For reference occurrences, the enclosing range should indicate the start/end
-   * bounds of the parent expression.
-   * ```
-   * const a = a.b
-   * ^ range
-   * ^^^ enclosing_range
-   * const b = a.b(41).f(42).g(43)
-   * ^ range
-   * ^^^^^^^^^^^^^ enclosing_range
-   * ```
+   * Deprecated: Use `typed_enclosing_range` instead.
    * </pre>
    *
-   * <code>repeated int32 enclosing_range = 7 [json_name = "enclosingRange"];</code>
+   * <code>repeated int32 enclosing_range = 7 [json_name = "enclosingRange", deprecated = true];</code>
+   * @deprecated scip.Occurrence.enclosing_range is deprecated.
+   *     See scip.proto;l=713
    * @return A list containing the enclosingRange.
    */
   @java.lang.Override
-  public java.util.List<java.lang.Integer>
+  @java.lang.Deprecated public java.util.List<java.lang.Integer>
       getEnclosingRangeList() {
     return enclosingRange_;
   }
   /**
    * <pre>
-   * (optional) Using the same encoding as the sibling `range` field, half-open
-   * source range of the nearest non-trivial enclosing AST node. This range must
-   * enclose the `range` field. Example applications that make use of the
-   * enclosing_range field:
-   *
-   * - Call hierarchies: to determine what symbols are references from the body
-   * of a function
-   * - Symbol outline: to display breadcrumbs from the cursor position to the
-   * root of the file
-   * - Expand selection: to select the nearest enclosing AST node.
-   * - Highlight range: to indicate the AST expression that is associated with a
-   * hover popover
-   *
-   * For definition occurrences, the enclosing range should indicate the
-   * start/end bounds of the entire definition AST node, including
-   * documentation.
-   * ```
-   * const n = 3
-   * ^ range
-   * ^^^^^^^^^^^ enclosing_range
-   *
-   * /&#42;* Parses the string into something *&#47;
-   * ^ enclosing_range start --------------------------------------|
-   * function parse(input string): string {                        |
-   * ^^^^^ range                                          |
-   * return input.slice(n)                                     |
-   * }                                                             |
-   * ^ enclosing_range end &lt;---------------------------------------|
-   * ```
-   *
-   * Any attributes/decorators/attached macros should also be part of the
-   * enclosing range.
-   *
-   * ```python
-   * &#64;cache
-   * ^ enclosing_range start---------------------|
-   * def factorial(n):                           |
-   * return n * factorial(n-1) if n else 1   |
-   * &lt; enclosing_range end-----------------------|
-   *
-   * ```
-   *
-   * For reference occurrences, the enclosing range should indicate the start/end
-   * bounds of the parent expression.
-   * ```
-   * const a = a.b
-   * ^ range
-   * ^^^ enclosing_range
-   * const b = a.b(41).f(42).g(43)
-   * ^ range
-   * ^^^^^^^^^^^^^ enclosing_range
-   * ```
+   * Deprecated: Use `typed_enclosing_range` instead.
    * </pre>
    *
-   * <code>repeated int32 enclosing_range = 7 [json_name = "enclosingRange"];</code>
+   * <code>repeated int32 enclosing_range = 7 [json_name = "enclosingRange", deprecated = true];</code>
+   * @deprecated scip.Occurrence.enclosing_range is deprecated.
+   *     See scip.proto;l=713
    * @return The count of enclosingRange.
    */
-  public int getEnclosingRangeCount() {
+  @java.lang.Deprecated public int getEnclosingRangeCount() {
     return enclosingRange_.size();
   }
   /**
    * <pre>
-   * (optional) Using the same encoding as the sibling `range` field, half-open
-   * source range of the nearest non-trivial enclosing AST node. This range must
-   * enclose the `range` field. Example applications that make use of the
-   * enclosing_range field:
-   *
-   * - Call hierarchies: to determine what symbols are references from the body
-   * of a function
-   * - Symbol outline: to display breadcrumbs from the cursor position to the
-   * root of the file
-   * - Expand selection: to select the nearest enclosing AST node.
-   * - Highlight range: to indicate the AST expression that is associated with a
-   * hover popover
-   *
-   * For definition occurrences, the enclosing range should indicate the
-   * start/end bounds of the entire definition AST node, including
-   * documentation.
-   * ```
-   * const n = 3
-   * ^ range
-   * ^^^^^^^^^^^ enclosing_range
-   *
-   * /&#42;* Parses the string into something *&#47;
-   * ^ enclosing_range start --------------------------------------|
-   * function parse(input string): string {                        |
-   * ^^^^^ range                                          |
-   * return input.slice(n)                                     |
-   * }                                                             |
-   * ^ enclosing_range end &lt;---------------------------------------|
-   * ```
-   *
-   * Any attributes/decorators/attached macros should also be part of the
-   * enclosing range.
-   *
-   * ```python
-   * &#64;cache
-   * ^ enclosing_range start---------------------|
-   * def factorial(n):                           |
-   * return n * factorial(n-1) if n else 1   |
-   * &lt; enclosing_range end-----------------------|
-   *
-   * ```
-   *
-   * For reference occurrences, the enclosing range should indicate the start/end
-   * bounds of the parent expression.
-   * ```
-   * const a = a.b
-   * ^ range
-   * ^^^ enclosing_range
-   * const b = a.b(41).f(42).g(43)
-   * ^ range
-   * ^^^^^^^^^^^^^ enclosing_range
-   * ```
+   * Deprecated: Use `typed_enclosing_range` instead.
    * </pre>
    *
-   * <code>repeated int32 enclosing_range = 7 [json_name = "enclosingRange"];</code>
+   * <code>repeated int32 enclosing_range = 7 [json_name = "enclosingRange", deprecated = true];</code>
+   * @deprecated scip.Occurrence.enclosing_range is deprecated.
+   *     See scip.proto;l=713
    * @param index The index of the element to return.
    * @return The enclosingRange at the given index.
    */
-  public int getEnclosingRange(int index) {
+  @java.lang.Deprecated public int getEnclosingRange(int index) {
     return enclosingRange_.getInt(index);
   }
   private int enclosingRangeMemoizedSerializedSize = -1;
+
+  public static final int SINGLE_LINE_ENCLOSING_RANGE_FIELD_NUMBER = 10;
+  /**
+   * <code>.scip.SingleLineRange single_line_enclosing_range = 10 [json_name = "singleLineEnclosingRange"];</code>
+   * @return Whether the singleLineEnclosingRange field is set.
+   */
+  @java.lang.Override
+  public boolean hasSingleLineEnclosingRange() {
+    return typedEnclosingRangeCase_ == 10;
+  }
+  /**
+   * <code>.scip.SingleLineRange single_line_enclosing_range = 10 [json_name = "singleLineEnclosingRange"];</code>
+   * @return The singleLineEnclosingRange.
+   */
+  @java.lang.Override
+  public org.scip_code.scip.SingleLineRange getSingleLineEnclosingRange() {
+    if (typedEnclosingRangeCase_ == 10) {
+       return (org.scip_code.scip.SingleLineRange) typedEnclosingRange_;
+    }
+    return org.scip_code.scip.SingleLineRange.getDefaultInstance();
+  }
+  /**
+   * <code>.scip.SingleLineRange single_line_enclosing_range = 10 [json_name = "singleLineEnclosingRange"];</code>
+   */
+  @java.lang.Override
+  public org.scip_code.scip.SingleLineRangeOrBuilder getSingleLineEnclosingRangeOrBuilder() {
+    if (typedEnclosingRangeCase_ == 10) {
+       return (org.scip_code.scip.SingleLineRange) typedEnclosingRange_;
+    }
+    return org.scip_code.scip.SingleLineRange.getDefaultInstance();
+  }
+
+  public static final int MULTI_LINE_ENCLOSING_RANGE_FIELD_NUMBER = 11;
+  /**
+   * <code>.scip.MultiLineRange multi_line_enclosing_range = 11 [json_name = "multiLineEnclosingRange"];</code>
+   * @return Whether the multiLineEnclosingRange field is set.
+   */
+  @java.lang.Override
+  public boolean hasMultiLineEnclosingRange() {
+    return typedEnclosingRangeCase_ == 11;
+  }
+  /**
+   * <code>.scip.MultiLineRange multi_line_enclosing_range = 11 [json_name = "multiLineEnclosingRange"];</code>
+   * @return The multiLineEnclosingRange.
+   */
+  @java.lang.Override
+  public org.scip_code.scip.MultiLineRange getMultiLineEnclosingRange() {
+    if (typedEnclosingRangeCase_ == 11) {
+       return (org.scip_code.scip.MultiLineRange) typedEnclosingRange_;
+    }
+    return org.scip_code.scip.MultiLineRange.getDefaultInstance();
+  }
+  /**
+   * <code>.scip.MultiLineRange multi_line_enclosing_range = 11 [json_name = "multiLineEnclosingRange"];</code>
+   */
+  @java.lang.Override
+  public org.scip_code.scip.MultiLineRangeOrBuilder getMultiLineEnclosingRangeOrBuilder() {
+    if (typedEnclosingRangeCase_ == 11) {
+       return (org.scip_code.scip.MultiLineRange) typedEnclosingRange_;
+    }
+    return org.scip_code.scip.MultiLineRange.getDefaultInstance();
+  }
 
   private byte memoizedIsInitialized = -1;
   @java.lang.Override
@@ -642,6 +700,18 @@ private static final long serialVersionUID = 0L;
     }
     for (int i = 0; i < enclosingRange_.size(); i++) {
       output.writeInt32NoTag(enclosingRange_.getInt(i));
+    }
+    if (typedRangeCase_ == 8) {
+      output.writeMessage(8, (org.scip_code.scip.SingleLineRange) typedRange_);
+    }
+    if (typedRangeCase_ == 9) {
+      output.writeMessage(9, (org.scip_code.scip.MultiLineRange) typedRange_);
+    }
+    if (typedEnclosingRangeCase_ == 10) {
+      output.writeMessage(10, (org.scip_code.scip.SingleLineRange) typedEnclosingRange_);
+    }
+    if (typedEnclosingRangeCase_ == 11) {
+      output.writeMessage(11, (org.scip_code.scip.MultiLineRange) typedEnclosingRange_);
     }
     getUnknownFields().writeTo(output);
   }
@@ -708,6 +778,22 @@ private static final long serialVersionUID = 0L;
       }
       enclosingRangeMemoizedSerializedSize = dataSize;
     }
+    if (typedRangeCase_ == 8) {
+      size += com.google.protobuf.CodedOutputStream
+        .computeMessageSize(8, (org.scip_code.scip.SingleLineRange) typedRange_);
+    }
+    if (typedRangeCase_ == 9) {
+      size += com.google.protobuf.CodedOutputStream
+        .computeMessageSize(9, (org.scip_code.scip.MultiLineRange) typedRange_);
+    }
+    if (typedEnclosingRangeCase_ == 10) {
+      size += com.google.protobuf.CodedOutputStream
+        .computeMessageSize(10, (org.scip_code.scip.SingleLineRange) typedEnclosingRange_);
+    }
+    if (typedEnclosingRangeCase_ == 11) {
+      size += com.google.protobuf.CodedOutputStream
+        .computeMessageSize(11, (org.scip_code.scip.MultiLineRange) typedEnclosingRange_);
+    }
     size += getUnknownFields().getSerializedSize();
     memoizedSize = size;
     return size;
@@ -736,6 +822,32 @@ private static final long serialVersionUID = 0L;
         .equals(other.getDiagnosticsList())) return false;
     if (!getEnclosingRangeList()
         .equals(other.getEnclosingRangeList())) return false;
+    if (!getTypedRangeCase().equals(other.getTypedRangeCase())) return false;
+    switch (typedRangeCase_) {
+      case 8:
+        if (!getSingleLineRange()
+            .equals(other.getSingleLineRange())) return false;
+        break;
+      case 9:
+        if (!getMultiLineRange()
+            .equals(other.getMultiLineRange())) return false;
+        break;
+      case 0:
+      default:
+    }
+    if (!getTypedEnclosingRangeCase().equals(other.getTypedEnclosingRangeCase())) return false;
+    switch (typedEnclosingRangeCase_) {
+      case 10:
+        if (!getSingleLineEnclosingRange()
+            .equals(other.getSingleLineEnclosingRange())) return false;
+        break;
+      case 11:
+        if (!getMultiLineEnclosingRange()
+            .equals(other.getMultiLineEnclosingRange())) return false;
+        break;
+      case 0:
+      default:
+    }
     if (!getUnknownFields().equals(other.getUnknownFields())) return false;
     return true;
   }
@@ -768,6 +880,30 @@ private static final long serialVersionUID = 0L;
     if (getEnclosingRangeCount() > 0) {
       hash = (37 * hash) + ENCLOSING_RANGE_FIELD_NUMBER;
       hash = (53 * hash) + getEnclosingRangeList().hashCode();
+    }
+    switch (typedRangeCase_) {
+      case 8:
+        hash = (37 * hash) + SINGLE_LINE_RANGE_FIELD_NUMBER;
+        hash = (53 * hash) + getSingleLineRange().hashCode();
+        break;
+      case 9:
+        hash = (37 * hash) + MULTI_LINE_RANGE_FIELD_NUMBER;
+        hash = (53 * hash) + getMultiLineRange().hashCode();
+        break;
+      case 0:
+      default:
+    }
+    switch (typedEnclosingRangeCase_) {
+      case 10:
+        hash = (37 * hash) + SINGLE_LINE_ENCLOSING_RANGE_FIELD_NUMBER;
+        hash = (53 * hash) + getSingleLineEnclosingRange().hashCode();
+        break;
+      case 11:
+        hash = (37 * hash) + MULTI_LINE_ENCLOSING_RANGE_FIELD_NUMBER;
+        hash = (53 * hash) + getMultiLineEnclosingRange().hashCode();
+        break;
+      case 0:
+      default:
     }
     hash = (29 * hash) + getUnknownFields().hashCode();
     memoizedHashCode = hash;
@@ -909,6 +1045,12 @@ private static final long serialVersionUID = 0L;
       super.clear();
       bitField0_ = 0;
       range_ = emptyIntList();
+      if (singleLineRangeBuilder_ != null) {
+        singleLineRangeBuilder_.clear();
+      }
+      if (multiLineRangeBuilder_ != null) {
+        multiLineRangeBuilder_.clear();
+      }
       symbol_ = "";
       symbolRoles_ = 0;
       overrideDocumentation_ =
@@ -920,8 +1062,18 @@ private static final long serialVersionUID = 0L;
         diagnostics_ = null;
         diagnosticsBuilder_.clear();
       }
-      bitField0_ = (bitField0_ & ~0x00000020);
+      bitField0_ = (bitField0_ & ~0x00000080);
       enclosingRange_ = emptyIntList();
+      if (singleLineEnclosingRangeBuilder_ != null) {
+        singleLineEnclosingRangeBuilder_.clear();
+      }
+      if (multiLineEnclosingRangeBuilder_ != null) {
+        multiLineEnclosingRangeBuilder_.clear();
+      }
+      typedRangeCase_ = 0;
+      typedRange_ = null;
+      typedEnclosingRangeCase_ = 0;
+      typedEnclosingRange_ = null;
       return this;
     }
 
@@ -950,15 +1102,16 @@ private static final long serialVersionUID = 0L;
       org.scip_code.scip.Occurrence result = new org.scip_code.scip.Occurrence(this);
       buildPartialRepeatedFields(result);
       if (bitField0_ != 0) { buildPartial0(result); }
+      buildPartialOneofs(result);
       onBuilt();
       return result;
     }
 
     private void buildPartialRepeatedFields(org.scip_code.scip.Occurrence result) {
       if (diagnosticsBuilder_ == null) {
-        if (((bitField0_ & 0x00000020) != 0)) {
+        if (((bitField0_ & 0x00000080) != 0)) {
           diagnostics_ = java.util.Collections.unmodifiableList(diagnostics_);
-          bitField0_ = (bitField0_ & ~0x00000020);
+          bitField0_ = (bitField0_ & ~0x00000080);
         }
         result.diagnostics_ = diagnostics_;
       } else {
@@ -972,22 +1125,45 @@ private static final long serialVersionUID = 0L;
         range_.makeImmutable();
         result.range_ = range_;
       }
-      if (((from_bitField0_ & 0x00000002) != 0)) {
+      if (((from_bitField0_ & 0x00000008) != 0)) {
         result.symbol_ = symbol_;
       }
-      if (((from_bitField0_ & 0x00000004) != 0)) {
+      if (((from_bitField0_ & 0x00000010) != 0)) {
         result.symbolRoles_ = symbolRoles_;
       }
-      if (((from_bitField0_ & 0x00000008) != 0)) {
+      if (((from_bitField0_ & 0x00000020) != 0)) {
         overrideDocumentation_.makeImmutable();
         result.overrideDocumentation_ = overrideDocumentation_;
       }
-      if (((from_bitField0_ & 0x00000010) != 0)) {
+      if (((from_bitField0_ & 0x00000040) != 0)) {
         result.syntaxKind_ = syntaxKind_;
       }
-      if (((from_bitField0_ & 0x00000040) != 0)) {
+      if (((from_bitField0_ & 0x00000100) != 0)) {
         enclosingRange_.makeImmutable();
         result.enclosingRange_ = enclosingRange_;
+      }
+    }
+
+    private void buildPartialOneofs(org.scip_code.scip.Occurrence result) {
+      result.typedRangeCase_ = typedRangeCase_;
+      result.typedRange_ = this.typedRange_;
+      if (typedRangeCase_ == 8 &&
+          singleLineRangeBuilder_ != null) {
+        result.typedRange_ = singleLineRangeBuilder_.build();
+      }
+      if (typedRangeCase_ == 9 &&
+          multiLineRangeBuilder_ != null) {
+        result.typedRange_ = multiLineRangeBuilder_.build();
+      }
+      result.typedEnclosingRangeCase_ = typedEnclosingRangeCase_;
+      result.typedEnclosingRange_ = this.typedEnclosingRange_;
+      if (typedEnclosingRangeCase_ == 10 &&
+          singleLineEnclosingRangeBuilder_ != null) {
+        result.typedEnclosingRange_ = singleLineEnclosingRangeBuilder_.build();
+      }
+      if (typedEnclosingRangeCase_ == 11 &&
+          multiLineEnclosingRangeBuilder_ != null) {
+        result.typedEnclosingRange_ = multiLineEnclosingRangeBuilder_.build();
       }
     }
 
@@ -1016,7 +1192,7 @@ private static final long serialVersionUID = 0L;
       }
       if (!other.getSymbol().isEmpty()) {
         symbol_ = other.symbol_;
-        bitField0_ |= 0x00000002;
+        bitField0_ |= 0x00000008;
         onChanged();
       }
       if (other.getSymbolRoles() != 0) {
@@ -1025,7 +1201,7 @@ private static final long serialVersionUID = 0L;
       if (!other.overrideDocumentation_.isEmpty()) {
         if (overrideDocumentation_.isEmpty()) {
           overrideDocumentation_ = other.overrideDocumentation_;
-          bitField0_ |= 0x00000008;
+          bitField0_ |= 0x00000020;
         } else {
           ensureOverrideDocumentationIsMutable();
           overrideDocumentation_.addAll(other.overrideDocumentation_);
@@ -1039,7 +1215,7 @@ private static final long serialVersionUID = 0L;
         if (!other.diagnostics_.isEmpty()) {
           if (diagnostics_.isEmpty()) {
             diagnostics_ = other.diagnostics_;
-            bitField0_ = (bitField0_ & ~0x00000020);
+            bitField0_ = (bitField0_ & ~0x00000080);
           } else {
             ensureDiagnosticsIsMutable();
             diagnostics_.addAll(other.diagnostics_);
@@ -1052,7 +1228,7 @@ private static final long serialVersionUID = 0L;
             diagnosticsBuilder_.dispose();
             diagnosticsBuilder_ = null;
             diagnostics_ = other.diagnostics_;
-            bitField0_ = (bitField0_ & ~0x00000020);
+            bitField0_ = (bitField0_ & ~0x00000080);
             diagnosticsBuilder_ = 
               com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders ?
                  internalGetDiagnosticsFieldBuilder() : null;
@@ -1065,12 +1241,38 @@ private static final long serialVersionUID = 0L;
         if (enclosingRange_.isEmpty()) {
           enclosingRange_ = other.enclosingRange_;
           enclosingRange_.makeImmutable();
-          bitField0_ |= 0x00000040;
+          bitField0_ |= 0x00000100;
         } else {
           ensureEnclosingRangeIsMutable();
           enclosingRange_.addAll(other.enclosingRange_);
         }
         onChanged();
+      }
+      switch (other.getTypedRangeCase()) {
+        case SINGLE_LINE_RANGE: {
+          mergeSingleLineRange(other.getSingleLineRange());
+          break;
+        }
+        case MULTI_LINE_RANGE: {
+          mergeMultiLineRange(other.getMultiLineRange());
+          break;
+        }
+        case TYPEDRANGE_NOT_SET: {
+          break;
+        }
+      }
+      switch (other.getTypedEnclosingRangeCase()) {
+        case SINGLE_LINE_ENCLOSING_RANGE: {
+          mergeSingleLineEnclosingRange(other.getSingleLineEnclosingRange());
+          break;
+        }
+        case MULTI_LINE_ENCLOSING_RANGE: {
+          mergeMultiLineEnclosingRange(other.getMultiLineEnclosingRange());
+          break;
+        }
+        case TYPEDENCLOSINGRANGE_NOT_SET: {
+          break;
+        }
       }
       this.mergeUnknownFields(other.getUnknownFields());
       onChanged();
@@ -1116,12 +1318,12 @@ private static final long serialVersionUID = 0L;
             } // case 10
             case 18: {
               symbol_ = input.readStringRequireUtf8();
-              bitField0_ |= 0x00000002;
+              bitField0_ |= 0x00000008;
               break;
             } // case 18
             case 24: {
               symbolRoles_ = input.readInt32();
-              bitField0_ |= 0x00000004;
+              bitField0_ |= 0x00000010;
               break;
             } // case 24
             case 34: {
@@ -1131,7 +1333,7 @@ private static final long serialVersionUID = 0L;
             } // case 34
             case 40: {
               syntaxKind_ = input.readEnum();
-              bitField0_ |= 0x00000010;
+              bitField0_ |= 0x00000040;
               break;
             } // case 40
             case 50: {
@@ -1163,6 +1365,34 @@ private static final long serialVersionUID = 0L;
               input.popLimit(limit);
               break;
             } // case 58
+            case 66: {
+              input.readMessage(
+                  internalGetSingleLineRangeFieldBuilder().getBuilder(),
+                  extensionRegistry);
+              typedRangeCase_ = 8;
+              break;
+            } // case 66
+            case 74: {
+              input.readMessage(
+                  internalGetMultiLineRangeFieldBuilder().getBuilder(),
+                  extensionRegistry);
+              typedRangeCase_ = 9;
+              break;
+            } // case 74
+            case 82: {
+              input.readMessage(
+                  internalGetSingleLineEnclosingRangeFieldBuilder().getBuilder(),
+                  extensionRegistry);
+              typedEnclosingRangeCase_ = 10;
+              break;
+            } // case 82
+            case 90: {
+              input.readMessage(
+                  internalGetMultiLineEnclosingRangeFieldBuilder().getBuilder(),
+                  extensionRegistry);
+              typedEnclosingRangeCase_ = 11;
+              break;
+            } // case 90
             default: {
               if (!super.parseUnknownField(input, extensionRegistry, tag)) {
                 done = true; // was an endgroup tag
@@ -1178,6 +1408,36 @@ private static final long serialVersionUID = 0L;
       } // finally
       return this;
     }
+    private int typedRangeCase_ = 0;
+    private java.lang.Object typedRange_;
+    public TypedRangeCase
+        getTypedRangeCase() {
+      return TypedRangeCase.forNumber(
+          typedRangeCase_);
+    }
+
+    public Builder clearTypedRange() {
+      typedRangeCase_ = 0;
+      typedRange_ = null;
+      onChanged();
+      return this;
+    }
+
+    private int typedEnclosingRangeCase_ = 0;
+    private java.lang.Object typedEnclosingRange_;
+    public TypedEnclosingRangeCase
+        getTypedEnclosingRangeCase() {
+      return TypedEnclosingRangeCase.forNumber(
+          typedEnclosingRangeCase_);
+    }
+
+    public Builder clearTypedEnclosingRange() {
+      typedEnclosingRangeCase_ = 0;
+      typedEnclosingRange_ = null;
+      onChanged();
+      return this;
+    }
+
     private int bitField0_;
 
     private com.google.protobuf.Internal.IntList range_ = emptyIntList();
@@ -1189,139 +1449,103 @@ private static final long serialVersionUID = 0L;
     }
     /**
      * <pre>
-     * Half-open [start, end) range of this occurrence. Must be exactly three or four
-     * elements:
+     * Deprecated: Use `single_line_range` or `multi_line_range` instead.
      *
+     * Half-open [start, end) range. Must be exactly three or four elements:
+     * - Three elements: `[startLine, startCharacter, endCharacter]` (single-line)
      * - Four elements: `[startLine, startCharacter, endLine, endCharacter]`
-     * - Three elements: `[startLine, startCharacter, endCharacter]`. The end line
-     * is inferred to have the same value as the start line.
-     *
-     * It is allowed for the range to be empty (i.e. start==end).
-     *
-     * Line numbers and characters are always 0-based. Make sure to increment the
-     * line/character values before displaying them in an editor-like UI because
-     * editors conventionally use 1-based numbers.
-     *
-     * The 'character' value is interpreted based on the PositionEncoding for
-     * the Document.
      *
      * Historical note: the original draft of this schema had a `Range` message
      * type with `start` and `end` fields of type `Position`, mirroring LSP.
      * Benchmarks revealed that this encoding was inefficient and that we could
      * reduce the total payload size of an index by 50% by using `repeated int32`
-     * instead. The `repeated int32` encoding is admittedly more embarrassing to
-     * work with in some programming languages but we hope the performance
-     * improvements make up for it.
+     * instead. However, the lack of type safety led to the introduction of
+     * `single_line_range` and `multi_line_range` as typed alternatives.
      * </pre>
      *
-     * <code>repeated int32 range = 1 [json_name = "range"];</code>
+     * <code>repeated int32 range = 1 [json_name = "range", deprecated = true];</code>
+     * @deprecated scip.Occurrence.range is deprecated.
+     *     See scip.proto;l=675
      * @return A list containing the range.
      */
-    public java.util.List<java.lang.Integer>
+    @java.lang.Deprecated public java.util.List<java.lang.Integer>
         getRangeList() {
       range_.makeImmutable();
       return range_;
     }
     /**
      * <pre>
-     * Half-open [start, end) range of this occurrence. Must be exactly three or four
-     * elements:
+     * Deprecated: Use `single_line_range` or `multi_line_range` instead.
      *
+     * Half-open [start, end) range. Must be exactly three or four elements:
+     * - Three elements: `[startLine, startCharacter, endCharacter]` (single-line)
      * - Four elements: `[startLine, startCharacter, endLine, endCharacter]`
-     * - Three elements: `[startLine, startCharacter, endCharacter]`. The end line
-     * is inferred to have the same value as the start line.
-     *
-     * It is allowed for the range to be empty (i.e. start==end).
-     *
-     * Line numbers and characters are always 0-based. Make sure to increment the
-     * line/character values before displaying them in an editor-like UI because
-     * editors conventionally use 1-based numbers.
-     *
-     * The 'character' value is interpreted based on the PositionEncoding for
-     * the Document.
      *
      * Historical note: the original draft of this schema had a `Range` message
      * type with `start` and `end` fields of type `Position`, mirroring LSP.
      * Benchmarks revealed that this encoding was inefficient and that we could
      * reduce the total payload size of an index by 50% by using `repeated int32`
-     * instead. The `repeated int32` encoding is admittedly more embarrassing to
-     * work with in some programming languages but we hope the performance
-     * improvements make up for it.
+     * instead. However, the lack of type safety led to the introduction of
+     * `single_line_range` and `multi_line_range` as typed alternatives.
      * </pre>
      *
-     * <code>repeated int32 range = 1 [json_name = "range"];</code>
+     * <code>repeated int32 range = 1 [json_name = "range", deprecated = true];</code>
+     * @deprecated scip.Occurrence.range is deprecated.
+     *     See scip.proto;l=675
      * @return The count of range.
      */
-    public int getRangeCount() {
+    @java.lang.Deprecated public int getRangeCount() {
       return range_.size();
     }
     /**
      * <pre>
-     * Half-open [start, end) range of this occurrence. Must be exactly three or four
-     * elements:
+     * Deprecated: Use `single_line_range` or `multi_line_range` instead.
      *
+     * Half-open [start, end) range. Must be exactly three or four elements:
+     * - Three elements: `[startLine, startCharacter, endCharacter]` (single-line)
      * - Four elements: `[startLine, startCharacter, endLine, endCharacter]`
-     * - Three elements: `[startLine, startCharacter, endCharacter]`. The end line
-     * is inferred to have the same value as the start line.
-     *
-     * It is allowed for the range to be empty (i.e. start==end).
-     *
-     * Line numbers and characters are always 0-based. Make sure to increment the
-     * line/character values before displaying them in an editor-like UI because
-     * editors conventionally use 1-based numbers.
-     *
-     * The 'character' value is interpreted based on the PositionEncoding for
-     * the Document.
      *
      * Historical note: the original draft of this schema had a `Range` message
      * type with `start` and `end` fields of type `Position`, mirroring LSP.
      * Benchmarks revealed that this encoding was inefficient and that we could
      * reduce the total payload size of an index by 50% by using `repeated int32`
-     * instead. The `repeated int32` encoding is admittedly more embarrassing to
-     * work with in some programming languages but we hope the performance
-     * improvements make up for it.
+     * instead. However, the lack of type safety led to the introduction of
+     * `single_line_range` and `multi_line_range` as typed alternatives.
      * </pre>
      *
-     * <code>repeated int32 range = 1 [json_name = "range"];</code>
+     * <code>repeated int32 range = 1 [json_name = "range", deprecated = true];</code>
+     * @deprecated scip.Occurrence.range is deprecated.
+     *     See scip.proto;l=675
      * @param index The index of the element to return.
      * @return The range at the given index.
      */
-    public int getRange(int index) {
+    @java.lang.Deprecated public int getRange(int index) {
       return range_.getInt(index);
     }
     /**
      * <pre>
-     * Half-open [start, end) range of this occurrence. Must be exactly three or four
-     * elements:
+     * Deprecated: Use `single_line_range` or `multi_line_range` instead.
      *
+     * Half-open [start, end) range. Must be exactly three or four elements:
+     * - Three elements: `[startLine, startCharacter, endCharacter]` (single-line)
      * - Four elements: `[startLine, startCharacter, endLine, endCharacter]`
-     * - Three elements: `[startLine, startCharacter, endCharacter]`. The end line
-     * is inferred to have the same value as the start line.
-     *
-     * It is allowed for the range to be empty (i.e. start==end).
-     *
-     * Line numbers and characters are always 0-based. Make sure to increment the
-     * line/character values before displaying them in an editor-like UI because
-     * editors conventionally use 1-based numbers.
-     *
-     * The 'character' value is interpreted based on the PositionEncoding for
-     * the Document.
      *
      * Historical note: the original draft of this schema had a `Range` message
      * type with `start` and `end` fields of type `Position`, mirroring LSP.
      * Benchmarks revealed that this encoding was inefficient and that we could
      * reduce the total payload size of an index by 50% by using `repeated int32`
-     * instead. The `repeated int32` encoding is admittedly more embarrassing to
-     * work with in some programming languages but we hope the performance
-     * improvements make up for it.
+     * instead. However, the lack of type safety led to the introduction of
+     * `single_line_range` and `multi_line_range` as typed alternatives.
      * </pre>
      *
-     * <code>repeated int32 range = 1 [json_name = "range"];</code>
+     * <code>repeated int32 range = 1 [json_name = "range", deprecated = true];</code>
+     * @deprecated scip.Occurrence.range is deprecated.
+     *     See scip.proto;l=675
      * @param index The index to set the value at.
      * @param value The range to set.
      * @return This builder for chaining.
      */
-    public Builder setRange(
+    @java.lang.Deprecated public Builder setRange(
         int index, int value) {
 
       ensureRangeIsMutable();
@@ -1332,36 +1556,27 @@ private static final long serialVersionUID = 0L;
     }
     /**
      * <pre>
-     * Half-open [start, end) range of this occurrence. Must be exactly three or four
-     * elements:
+     * Deprecated: Use `single_line_range` or `multi_line_range` instead.
      *
+     * Half-open [start, end) range. Must be exactly three or four elements:
+     * - Three elements: `[startLine, startCharacter, endCharacter]` (single-line)
      * - Four elements: `[startLine, startCharacter, endLine, endCharacter]`
-     * - Three elements: `[startLine, startCharacter, endCharacter]`. The end line
-     * is inferred to have the same value as the start line.
-     *
-     * It is allowed for the range to be empty (i.e. start==end).
-     *
-     * Line numbers and characters are always 0-based. Make sure to increment the
-     * line/character values before displaying them in an editor-like UI because
-     * editors conventionally use 1-based numbers.
-     *
-     * The 'character' value is interpreted based on the PositionEncoding for
-     * the Document.
      *
      * Historical note: the original draft of this schema had a `Range` message
      * type with `start` and `end` fields of type `Position`, mirroring LSP.
      * Benchmarks revealed that this encoding was inefficient and that we could
      * reduce the total payload size of an index by 50% by using `repeated int32`
-     * instead. The `repeated int32` encoding is admittedly more embarrassing to
-     * work with in some programming languages but we hope the performance
-     * improvements make up for it.
+     * instead. However, the lack of type safety led to the introduction of
+     * `single_line_range` and `multi_line_range` as typed alternatives.
      * </pre>
      *
-     * <code>repeated int32 range = 1 [json_name = "range"];</code>
+     * <code>repeated int32 range = 1 [json_name = "range", deprecated = true];</code>
+     * @deprecated scip.Occurrence.range is deprecated.
+     *     See scip.proto;l=675
      * @param value The range to add.
      * @return This builder for chaining.
      */
-    public Builder addRange(int value) {
+    @java.lang.Deprecated public Builder addRange(int value) {
 
       ensureRangeIsMutable();
       range_.addInt(value);
@@ -1371,36 +1586,27 @@ private static final long serialVersionUID = 0L;
     }
     /**
      * <pre>
-     * Half-open [start, end) range of this occurrence. Must be exactly three or four
-     * elements:
+     * Deprecated: Use `single_line_range` or `multi_line_range` instead.
      *
+     * Half-open [start, end) range. Must be exactly three or four elements:
+     * - Three elements: `[startLine, startCharacter, endCharacter]` (single-line)
      * - Four elements: `[startLine, startCharacter, endLine, endCharacter]`
-     * - Three elements: `[startLine, startCharacter, endCharacter]`. The end line
-     * is inferred to have the same value as the start line.
-     *
-     * It is allowed for the range to be empty (i.e. start==end).
-     *
-     * Line numbers and characters are always 0-based. Make sure to increment the
-     * line/character values before displaying them in an editor-like UI because
-     * editors conventionally use 1-based numbers.
-     *
-     * The 'character' value is interpreted based on the PositionEncoding for
-     * the Document.
      *
      * Historical note: the original draft of this schema had a `Range` message
      * type with `start` and `end` fields of type `Position`, mirroring LSP.
      * Benchmarks revealed that this encoding was inefficient and that we could
      * reduce the total payload size of an index by 50% by using `repeated int32`
-     * instead. The `repeated int32` encoding is admittedly more embarrassing to
-     * work with in some programming languages but we hope the performance
-     * improvements make up for it.
+     * instead. However, the lack of type safety led to the introduction of
+     * `single_line_range` and `multi_line_range` as typed alternatives.
      * </pre>
      *
-     * <code>repeated int32 range = 1 [json_name = "range"];</code>
+     * <code>repeated int32 range = 1 [json_name = "range", deprecated = true];</code>
+     * @deprecated scip.Occurrence.range is deprecated.
+     *     See scip.proto;l=675
      * @param values The range to add.
      * @return This builder for chaining.
      */
-    public Builder addAllRange(
+    @java.lang.Deprecated public Builder addAllRange(
         java.lang.Iterable<? extends java.lang.Integer> values) {
       ensureRangeIsMutable();
       com.google.protobuf.AbstractMessageLite.Builder.addAll(
@@ -1411,39 +1617,386 @@ private static final long serialVersionUID = 0L;
     }
     /**
      * <pre>
-     * Half-open [start, end) range of this occurrence. Must be exactly three or four
-     * elements:
+     * Deprecated: Use `single_line_range` or `multi_line_range` instead.
      *
+     * Half-open [start, end) range. Must be exactly three or four elements:
+     * - Three elements: `[startLine, startCharacter, endCharacter]` (single-line)
      * - Four elements: `[startLine, startCharacter, endLine, endCharacter]`
-     * - Three elements: `[startLine, startCharacter, endCharacter]`. The end line
-     * is inferred to have the same value as the start line.
-     *
-     * It is allowed for the range to be empty (i.e. start==end).
-     *
-     * Line numbers and characters are always 0-based. Make sure to increment the
-     * line/character values before displaying them in an editor-like UI because
-     * editors conventionally use 1-based numbers.
-     *
-     * The 'character' value is interpreted based on the PositionEncoding for
-     * the Document.
      *
      * Historical note: the original draft of this schema had a `Range` message
      * type with `start` and `end` fields of type `Position`, mirroring LSP.
      * Benchmarks revealed that this encoding was inefficient and that we could
      * reduce the total payload size of an index by 50% by using `repeated int32`
-     * instead. The `repeated int32` encoding is admittedly more embarrassing to
-     * work with in some programming languages but we hope the performance
-     * improvements make up for it.
+     * instead. However, the lack of type safety led to the introduction of
+     * `single_line_range` and `multi_line_range` as typed alternatives.
      * </pre>
      *
-     * <code>repeated int32 range = 1 [json_name = "range"];</code>
+     * <code>repeated int32 range = 1 [json_name = "range", deprecated = true];</code>
+     * @deprecated scip.Occurrence.range is deprecated.
+     *     See scip.proto;l=675
      * @return This builder for chaining.
      */
-    public Builder clearRange() {
+    @java.lang.Deprecated public Builder clearRange() {
       range_ = emptyIntList();
       bitField0_ = (bitField0_ & ~0x00000001);
       onChanged();
       return this;
+    }
+
+    private com.google.protobuf.SingleFieldBuilder<
+        org.scip_code.scip.SingleLineRange, org.scip_code.scip.SingleLineRange.Builder, org.scip_code.scip.SingleLineRangeOrBuilder> singleLineRangeBuilder_;
+    /**
+     * <pre>
+     * Range spanning a single line.
+     * </pre>
+     *
+     * <code>.scip.SingleLineRange single_line_range = 8 [json_name = "singleLineRange"];</code>
+     * @return Whether the singleLineRange field is set.
+     */
+    @java.lang.Override
+    public boolean hasSingleLineRange() {
+      return typedRangeCase_ == 8;
+    }
+    /**
+     * <pre>
+     * Range spanning a single line.
+     * </pre>
+     *
+     * <code>.scip.SingleLineRange single_line_range = 8 [json_name = "singleLineRange"];</code>
+     * @return The singleLineRange.
+     */
+    @java.lang.Override
+    public org.scip_code.scip.SingleLineRange getSingleLineRange() {
+      if (singleLineRangeBuilder_ == null) {
+        if (typedRangeCase_ == 8) {
+          return (org.scip_code.scip.SingleLineRange) typedRange_;
+        }
+        return org.scip_code.scip.SingleLineRange.getDefaultInstance();
+      } else {
+        if (typedRangeCase_ == 8) {
+          return singleLineRangeBuilder_.getMessage();
+        }
+        return org.scip_code.scip.SingleLineRange.getDefaultInstance();
+      }
+    }
+    /**
+     * <pre>
+     * Range spanning a single line.
+     * </pre>
+     *
+     * <code>.scip.SingleLineRange single_line_range = 8 [json_name = "singleLineRange"];</code>
+     */
+    public Builder setSingleLineRange(org.scip_code.scip.SingleLineRange value) {
+      if (singleLineRangeBuilder_ == null) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        typedRange_ = value;
+        onChanged();
+      } else {
+        singleLineRangeBuilder_.setMessage(value);
+      }
+      typedRangeCase_ = 8;
+      return this;
+    }
+    /**
+     * <pre>
+     * Range spanning a single line.
+     * </pre>
+     *
+     * <code>.scip.SingleLineRange single_line_range = 8 [json_name = "singleLineRange"];</code>
+     */
+    public Builder setSingleLineRange(
+        org.scip_code.scip.SingleLineRange.Builder builderForValue) {
+      if (singleLineRangeBuilder_ == null) {
+        typedRange_ = builderForValue.build();
+        onChanged();
+      } else {
+        singleLineRangeBuilder_.setMessage(builderForValue.build());
+      }
+      typedRangeCase_ = 8;
+      return this;
+    }
+    /**
+     * <pre>
+     * Range spanning a single line.
+     * </pre>
+     *
+     * <code>.scip.SingleLineRange single_line_range = 8 [json_name = "singleLineRange"];</code>
+     */
+    public Builder mergeSingleLineRange(org.scip_code.scip.SingleLineRange value) {
+      if (singleLineRangeBuilder_ == null) {
+        if (typedRangeCase_ == 8 &&
+            typedRange_ != org.scip_code.scip.SingleLineRange.getDefaultInstance()) {
+          typedRange_ = org.scip_code.scip.SingleLineRange.newBuilder((org.scip_code.scip.SingleLineRange) typedRange_)
+              .mergeFrom(value).buildPartial();
+        } else {
+          typedRange_ = value;
+        }
+        onChanged();
+      } else {
+        if (typedRangeCase_ == 8) {
+          singleLineRangeBuilder_.mergeFrom(value);
+        } else {
+          singleLineRangeBuilder_.setMessage(value);
+        }
+      }
+      typedRangeCase_ = 8;
+      return this;
+    }
+    /**
+     * <pre>
+     * Range spanning a single line.
+     * </pre>
+     *
+     * <code>.scip.SingleLineRange single_line_range = 8 [json_name = "singleLineRange"];</code>
+     */
+    public Builder clearSingleLineRange() {
+      if (singleLineRangeBuilder_ == null) {
+        if (typedRangeCase_ == 8) {
+          typedRangeCase_ = 0;
+          typedRange_ = null;
+          onChanged();
+        }
+      } else {
+        if (typedRangeCase_ == 8) {
+          typedRangeCase_ = 0;
+          typedRange_ = null;
+        }
+        singleLineRangeBuilder_.clear();
+      }
+      return this;
+    }
+    /**
+     * <pre>
+     * Range spanning a single line.
+     * </pre>
+     *
+     * <code>.scip.SingleLineRange single_line_range = 8 [json_name = "singleLineRange"];</code>
+     */
+    public org.scip_code.scip.SingleLineRange.Builder getSingleLineRangeBuilder() {
+      return internalGetSingleLineRangeFieldBuilder().getBuilder();
+    }
+    /**
+     * <pre>
+     * Range spanning a single line.
+     * </pre>
+     *
+     * <code>.scip.SingleLineRange single_line_range = 8 [json_name = "singleLineRange"];</code>
+     */
+    @java.lang.Override
+    public org.scip_code.scip.SingleLineRangeOrBuilder getSingleLineRangeOrBuilder() {
+      if ((typedRangeCase_ == 8) && (singleLineRangeBuilder_ != null)) {
+        return singleLineRangeBuilder_.getMessageOrBuilder();
+      } else {
+        if (typedRangeCase_ == 8) {
+          return (org.scip_code.scip.SingleLineRange) typedRange_;
+        }
+        return org.scip_code.scip.SingleLineRange.getDefaultInstance();
+      }
+    }
+    /**
+     * <pre>
+     * Range spanning a single line.
+     * </pre>
+     *
+     * <code>.scip.SingleLineRange single_line_range = 8 [json_name = "singleLineRange"];</code>
+     */
+    private com.google.protobuf.SingleFieldBuilder<
+        org.scip_code.scip.SingleLineRange, org.scip_code.scip.SingleLineRange.Builder, org.scip_code.scip.SingleLineRangeOrBuilder> 
+        internalGetSingleLineRangeFieldBuilder() {
+      if (singleLineRangeBuilder_ == null) {
+        if (!(typedRangeCase_ == 8)) {
+          typedRange_ = org.scip_code.scip.SingleLineRange.getDefaultInstance();
+        }
+        singleLineRangeBuilder_ = new com.google.protobuf.SingleFieldBuilder<
+            org.scip_code.scip.SingleLineRange, org.scip_code.scip.SingleLineRange.Builder, org.scip_code.scip.SingleLineRangeOrBuilder>(
+                (org.scip_code.scip.SingleLineRange) typedRange_,
+                getParentForChildren(),
+                isClean());
+        typedRange_ = null;
+      }
+      typedRangeCase_ = 8;
+      onChanged();
+      return singleLineRangeBuilder_;
+    }
+
+    private com.google.protobuf.SingleFieldBuilder<
+        org.scip_code.scip.MultiLineRange, org.scip_code.scip.MultiLineRange.Builder, org.scip_code.scip.MultiLineRangeOrBuilder> multiLineRangeBuilder_;
+    /**
+     * <pre>
+     * Range spanning multiple lines.
+     * </pre>
+     *
+     * <code>.scip.MultiLineRange multi_line_range = 9 [json_name = "multiLineRange"];</code>
+     * @return Whether the multiLineRange field is set.
+     */
+    @java.lang.Override
+    public boolean hasMultiLineRange() {
+      return typedRangeCase_ == 9;
+    }
+    /**
+     * <pre>
+     * Range spanning multiple lines.
+     * </pre>
+     *
+     * <code>.scip.MultiLineRange multi_line_range = 9 [json_name = "multiLineRange"];</code>
+     * @return The multiLineRange.
+     */
+    @java.lang.Override
+    public org.scip_code.scip.MultiLineRange getMultiLineRange() {
+      if (multiLineRangeBuilder_ == null) {
+        if (typedRangeCase_ == 9) {
+          return (org.scip_code.scip.MultiLineRange) typedRange_;
+        }
+        return org.scip_code.scip.MultiLineRange.getDefaultInstance();
+      } else {
+        if (typedRangeCase_ == 9) {
+          return multiLineRangeBuilder_.getMessage();
+        }
+        return org.scip_code.scip.MultiLineRange.getDefaultInstance();
+      }
+    }
+    /**
+     * <pre>
+     * Range spanning multiple lines.
+     * </pre>
+     *
+     * <code>.scip.MultiLineRange multi_line_range = 9 [json_name = "multiLineRange"];</code>
+     */
+    public Builder setMultiLineRange(org.scip_code.scip.MultiLineRange value) {
+      if (multiLineRangeBuilder_ == null) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        typedRange_ = value;
+        onChanged();
+      } else {
+        multiLineRangeBuilder_.setMessage(value);
+      }
+      typedRangeCase_ = 9;
+      return this;
+    }
+    /**
+     * <pre>
+     * Range spanning multiple lines.
+     * </pre>
+     *
+     * <code>.scip.MultiLineRange multi_line_range = 9 [json_name = "multiLineRange"];</code>
+     */
+    public Builder setMultiLineRange(
+        org.scip_code.scip.MultiLineRange.Builder builderForValue) {
+      if (multiLineRangeBuilder_ == null) {
+        typedRange_ = builderForValue.build();
+        onChanged();
+      } else {
+        multiLineRangeBuilder_.setMessage(builderForValue.build());
+      }
+      typedRangeCase_ = 9;
+      return this;
+    }
+    /**
+     * <pre>
+     * Range spanning multiple lines.
+     * </pre>
+     *
+     * <code>.scip.MultiLineRange multi_line_range = 9 [json_name = "multiLineRange"];</code>
+     */
+    public Builder mergeMultiLineRange(org.scip_code.scip.MultiLineRange value) {
+      if (multiLineRangeBuilder_ == null) {
+        if (typedRangeCase_ == 9 &&
+            typedRange_ != org.scip_code.scip.MultiLineRange.getDefaultInstance()) {
+          typedRange_ = org.scip_code.scip.MultiLineRange.newBuilder((org.scip_code.scip.MultiLineRange) typedRange_)
+              .mergeFrom(value).buildPartial();
+        } else {
+          typedRange_ = value;
+        }
+        onChanged();
+      } else {
+        if (typedRangeCase_ == 9) {
+          multiLineRangeBuilder_.mergeFrom(value);
+        } else {
+          multiLineRangeBuilder_.setMessage(value);
+        }
+      }
+      typedRangeCase_ = 9;
+      return this;
+    }
+    /**
+     * <pre>
+     * Range spanning multiple lines.
+     * </pre>
+     *
+     * <code>.scip.MultiLineRange multi_line_range = 9 [json_name = "multiLineRange"];</code>
+     */
+    public Builder clearMultiLineRange() {
+      if (multiLineRangeBuilder_ == null) {
+        if (typedRangeCase_ == 9) {
+          typedRangeCase_ = 0;
+          typedRange_ = null;
+          onChanged();
+        }
+      } else {
+        if (typedRangeCase_ == 9) {
+          typedRangeCase_ = 0;
+          typedRange_ = null;
+        }
+        multiLineRangeBuilder_.clear();
+      }
+      return this;
+    }
+    /**
+     * <pre>
+     * Range spanning multiple lines.
+     * </pre>
+     *
+     * <code>.scip.MultiLineRange multi_line_range = 9 [json_name = "multiLineRange"];</code>
+     */
+    public org.scip_code.scip.MultiLineRange.Builder getMultiLineRangeBuilder() {
+      return internalGetMultiLineRangeFieldBuilder().getBuilder();
+    }
+    /**
+     * <pre>
+     * Range spanning multiple lines.
+     * </pre>
+     *
+     * <code>.scip.MultiLineRange multi_line_range = 9 [json_name = "multiLineRange"];</code>
+     */
+    @java.lang.Override
+    public org.scip_code.scip.MultiLineRangeOrBuilder getMultiLineRangeOrBuilder() {
+      if ((typedRangeCase_ == 9) && (multiLineRangeBuilder_ != null)) {
+        return multiLineRangeBuilder_.getMessageOrBuilder();
+      } else {
+        if (typedRangeCase_ == 9) {
+          return (org.scip_code.scip.MultiLineRange) typedRange_;
+        }
+        return org.scip_code.scip.MultiLineRange.getDefaultInstance();
+      }
+    }
+    /**
+     * <pre>
+     * Range spanning multiple lines.
+     * </pre>
+     *
+     * <code>.scip.MultiLineRange multi_line_range = 9 [json_name = "multiLineRange"];</code>
+     */
+    private com.google.protobuf.SingleFieldBuilder<
+        org.scip_code.scip.MultiLineRange, org.scip_code.scip.MultiLineRange.Builder, org.scip_code.scip.MultiLineRangeOrBuilder> 
+        internalGetMultiLineRangeFieldBuilder() {
+      if (multiLineRangeBuilder_ == null) {
+        if (!(typedRangeCase_ == 9)) {
+          typedRange_ = org.scip_code.scip.MultiLineRange.getDefaultInstance();
+        }
+        multiLineRangeBuilder_ = new com.google.protobuf.SingleFieldBuilder<
+            org.scip_code.scip.MultiLineRange, org.scip_code.scip.MultiLineRange.Builder, org.scip_code.scip.MultiLineRangeOrBuilder>(
+                (org.scip_code.scip.MultiLineRange) typedRange_,
+                getParentForChildren(),
+                isClean());
+        typedRange_ = null;
+      }
+      typedRangeCase_ = 9;
+      onChanged();
+      return multiLineRangeBuilder_;
     }
 
     private java.lang.Object symbol_ = "";
@@ -1504,7 +2057,7 @@ private static final long serialVersionUID = 0L;
         java.lang.String value) {
       if (value == null) { throw new NullPointerException(); }
       symbol_ = value;
-      bitField0_ |= 0x00000002;
+      bitField0_ |= 0x00000008;
       onChanged();
       return this;
     }
@@ -1519,7 +2072,7 @@ private static final long serialVersionUID = 0L;
      */
     public Builder clearSymbol() {
       symbol_ = getDefaultInstance().getSymbol();
-      bitField0_ = (bitField0_ & ~0x00000002);
+      bitField0_ = (bitField0_ & ~0x00000008);
       onChanged();
       return this;
     }
@@ -1538,7 +2091,7 @@ private static final long serialVersionUID = 0L;
       if (value == null) { throw new NullPointerException(); }
       checkByteStringIsUtf8(value);
       symbol_ = value;
-      bitField0_ |= 0x00000002;
+      bitField0_ |= 0x00000008;
       onChanged();
       return this;
     }
@@ -1570,7 +2123,7 @@ private static final long serialVersionUID = 0L;
     public Builder setSymbolRoles(int value) {
 
       symbolRoles_ = value;
-      bitField0_ |= 0x00000004;
+      bitField0_ |= 0x00000010;
       onChanged();
       return this;
     }
@@ -1584,7 +2137,7 @@ private static final long serialVersionUID = 0L;
      * @return This builder for chaining.
      */
     public Builder clearSymbolRoles() {
-      bitField0_ = (bitField0_ & ~0x00000004);
+      bitField0_ = (bitField0_ & ~0x00000010);
       symbolRoles_ = 0;
       onChanged();
       return this;
@@ -1596,7 +2149,7 @@ private static final long serialVersionUID = 0L;
       if (!overrideDocumentation_.isModifiable()) {
         overrideDocumentation_ = new com.google.protobuf.LazyStringArrayList(overrideDocumentation_);
       }
-      bitField0_ |= 0x00000008;
+      bitField0_ |= 0x00000020;
     }
     /**
      * <pre>
@@ -1697,7 +2250,7 @@ private static final long serialVersionUID = 0L;
       if (value == null) { throw new NullPointerException(); }
       ensureOverrideDocumentationIsMutable();
       overrideDocumentation_.set(index, value);
-      bitField0_ |= 0x00000008;
+      bitField0_ |= 0x00000020;
       onChanged();
       return this;
     }
@@ -1722,7 +2275,7 @@ private static final long serialVersionUID = 0L;
       if (value == null) { throw new NullPointerException(); }
       ensureOverrideDocumentationIsMutable();
       overrideDocumentation_.add(value);
-      bitField0_ |= 0x00000008;
+      bitField0_ |= 0x00000020;
       onChanged();
       return this;
     }
@@ -1747,7 +2300,7 @@ private static final long serialVersionUID = 0L;
       ensureOverrideDocumentationIsMutable();
       com.google.protobuf.AbstractMessageLite.Builder.addAll(
           values, overrideDocumentation_);
-      bitField0_ |= 0x00000008;
+      bitField0_ |= 0x00000020;
       onChanged();
       return this;
     }
@@ -1769,7 +2322,7 @@ private static final long serialVersionUID = 0L;
     public Builder clearOverrideDocumentation() {
       overrideDocumentation_ =
         com.google.protobuf.LazyStringArrayList.emptyList();
-      bitField0_ = (bitField0_ & ~0x00000008);;
+      bitField0_ = (bitField0_ & ~0x00000020);;
       onChanged();
       return this;
     }
@@ -1795,7 +2348,7 @@ private static final long serialVersionUID = 0L;
       checkByteStringIsUtf8(value);
       ensureOverrideDocumentationIsMutable();
       overrideDocumentation_.add(value);
-      bitField0_ |= 0x00000008;
+      bitField0_ |= 0x00000020;
       onChanged();
       return this;
     }
@@ -1824,7 +2377,7 @@ private static final long serialVersionUID = 0L;
      */
     public Builder setSyntaxKindValue(int value) {
       syntaxKind_ = value;
-      bitField0_ |= 0x00000010;
+      bitField0_ |= 0x00000040;
       onChanged();
       return this;
     }
@@ -1852,7 +2405,7 @@ private static final long serialVersionUID = 0L;
      */
     public Builder setSyntaxKind(org.scip_code.scip.SyntaxKind value) {
       if (value == null) { throw new NullPointerException(); }
-      bitField0_ |= 0x00000010;
+      bitField0_ |= 0x00000040;
       syntaxKind_ = value.getNumber();
       onChanged();
       return this;
@@ -1866,7 +2419,7 @@ private static final long serialVersionUID = 0L;
      * @return This builder for chaining.
      */
     public Builder clearSyntaxKind() {
-      bitField0_ = (bitField0_ & ~0x00000010);
+      bitField0_ = (bitField0_ & ~0x00000040);
       syntaxKind_ = 0;
       onChanged();
       return this;
@@ -1875,9 +2428,9 @@ private static final long serialVersionUID = 0L;
     private java.util.List<org.scip_code.scip.Diagnostic> diagnostics_ =
       java.util.Collections.emptyList();
     private void ensureDiagnosticsIsMutable() {
-      if (!((bitField0_ & 0x00000020) != 0)) {
+      if (!((bitField0_ & 0x00000080) != 0)) {
         diagnostics_ = new java.util.ArrayList<org.scip_code.scip.Diagnostic>(diagnostics_);
-        bitField0_ |= 0x00000020;
+        bitField0_ |= 0x00000080;
        }
     }
 
@@ -2071,7 +2624,7 @@ private static final long serialVersionUID = 0L;
     public Builder clearDiagnostics() {
       if (diagnosticsBuilder_ == null) {
         diagnostics_ = java.util.Collections.emptyList();
-        bitField0_ = (bitField0_ & ~0x00000020);
+        bitField0_ = (bitField0_ & ~0x00000080);
         onChanged();
       } else {
         diagnosticsBuilder_.clear();
@@ -2176,7 +2729,7 @@ private static final long serialVersionUID = 0L;
         diagnosticsBuilder_ = new com.google.protobuf.RepeatedFieldBuilder<
             org.scip_code.scip.Diagnostic, org.scip_code.scip.Diagnostic.Builder, org.scip_code.scip.DiagnosticOrBuilder>(
                 diagnostics_,
-                ((bitField0_ & 0x00000020) != 0),
+                ((bitField0_ & 0x00000080) != 0),
                 getParentForChildren(),
                 isClean());
         diagnostics_ = null;
@@ -2189,468 +2742,409 @@ private static final long serialVersionUID = 0L;
       if (!enclosingRange_.isModifiable()) {
         enclosingRange_ = makeMutableCopy(enclosingRange_);
       }
-      bitField0_ |= 0x00000040;
+      bitField0_ |= 0x00000100;
     }
     /**
      * <pre>
-     * (optional) Using the same encoding as the sibling `range` field, half-open
-     * source range of the nearest non-trivial enclosing AST node. This range must
-     * enclose the `range` field. Example applications that make use of the
-     * enclosing_range field:
-     *
-     * - Call hierarchies: to determine what symbols are references from the body
-     * of a function
-     * - Symbol outline: to display breadcrumbs from the cursor position to the
-     * root of the file
-     * - Expand selection: to select the nearest enclosing AST node.
-     * - Highlight range: to indicate the AST expression that is associated with a
-     * hover popover
-     *
-     * For definition occurrences, the enclosing range should indicate the
-     * start/end bounds of the entire definition AST node, including
-     * documentation.
-     * ```
-     * const n = 3
-     * ^ range
-     * ^^^^^^^^^^^ enclosing_range
-     *
-     * /&#42;* Parses the string into something *&#47;
-     * ^ enclosing_range start --------------------------------------|
-     * function parse(input string): string {                        |
-     * ^^^^^ range                                          |
-     * return input.slice(n)                                     |
-     * }                                                             |
-     * ^ enclosing_range end &lt;---------------------------------------|
-     * ```
-     *
-     * Any attributes/decorators/attached macros should also be part of the
-     * enclosing range.
-     *
-     * ```python
-     * &#64;cache
-     * ^ enclosing_range start---------------------|
-     * def factorial(n):                           |
-     * return n * factorial(n-1) if n else 1   |
-     * &lt; enclosing_range end-----------------------|
-     *
-     * ```
-     *
-     * For reference occurrences, the enclosing range should indicate the start/end
-     * bounds of the parent expression.
-     * ```
-     * const a = a.b
-     * ^ range
-     * ^^^ enclosing_range
-     * const b = a.b(41).f(42).g(43)
-     * ^ range
-     * ^^^^^^^^^^^^^ enclosing_range
-     * ```
+     * Deprecated: Use `typed_enclosing_range` instead.
      * </pre>
      *
-     * <code>repeated int32 enclosing_range = 7 [json_name = "enclosingRange"];</code>
+     * <code>repeated int32 enclosing_range = 7 [json_name = "enclosingRange", deprecated = true];</code>
+     * @deprecated scip.Occurrence.enclosing_range is deprecated.
+     *     See scip.proto;l=713
      * @return A list containing the enclosingRange.
      */
-    public java.util.List<java.lang.Integer>
+    @java.lang.Deprecated public java.util.List<java.lang.Integer>
         getEnclosingRangeList() {
       enclosingRange_.makeImmutable();
       return enclosingRange_;
     }
     /**
      * <pre>
-     * (optional) Using the same encoding as the sibling `range` field, half-open
-     * source range of the nearest non-trivial enclosing AST node. This range must
-     * enclose the `range` field. Example applications that make use of the
-     * enclosing_range field:
-     *
-     * - Call hierarchies: to determine what symbols are references from the body
-     * of a function
-     * - Symbol outline: to display breadcrumbs from the cursor position to the
-     * root of the file
-     * - Expand selection: to select the nearest enclosing AST node.
-     * - Highlight range: to indicate the AST expression that is associated with a
-     * hover popover
-     *
-     * For definition occurrences, the enclosing range should indicate the
-     * start/end bounds of the entire definition AST node, including
-     * documentation.
-     * ```
-     * const n = 3
-     * ^ range
-     * ^^^^^^^^^^^ enclosing_range
-     *
-     * /&#42;* Parses the string into something *&#47;
-     * ^ enclosing_range start --------------------------------------|
-     * function parse(input string): string {                        |
-     * ^^^^^ range                                          |
-     * return input.slice(n)                                     |
-     * }                                                             |
-     * ^ enclosing_range end &lt;---------------------------------------|
-     * ```
-     *
-     * Any attributes/decorators/attached macros should also be part of the
-     * enclosing range.
-     *
-     * ```python
-     * &#64;cache
-     * ^ enclosing_range start---------------------|
-     * def factorial(n):                           |
-     * return n * factorial(n-1) if n else 1   |
-     * &lt; enclosing_range end-----------------------|
-     *
-     * ```
-     *
-     * For reference occurrences, the enclosing range should indicate the start/end
-     * bounds of the parent expression.
-     * ```
-     * const a = a.b
-     * ^ range
-     * ^^^ enclosing_range
-     * const b = a.b(41).f(42).g(43)
-     * ^ range
-     * ^^^^^^^^^^^^^ enclosing_range
-     * ```
+     * Deprecated: Use `typed_enclosing_range` instead.
      * </pre>
      *
-     * <code>repeated int32 enclosing_range = 7 [json_name = "enclosingRange"];</code>
+     * <code>repeated int32 enclosing_range = 7 [json_name = "enclosingRange", deprecated = true];</code>
+     * @deprecated scip.Occurrence.enclosing_range is deprecated.
+     *     See scip.proto;l=713
      * @return The count of enclosingRange.
      */
-    public int getEnclosingRangeCount() {
+    @java.lang.Deprecated public int getEnclosingRangeCount() {
       return enclosingRange_.size();
     }
     /**
      * <pre>
-     * (optional) Using the same encoding as the sibling `range` field, half-open
-     * source range of the nearest non-trivial enclosing AST node. This range must
-     * enclose the `range` field. Example applications that make use of the
-     * enclosing_range field:
-     *
-     * - Call hierarchies: to determine what symbols are references from the body
-     * of a function
-     * - Symbol outline: to display breadcrumbs from the cursor position to the
-     * root of the file
-     * - Expand selection: to select the nearest enclosing AST node.
-     * - Highlight range: to indicate the AST expression that is associated with a
-     * hover popover
-     *
-     * For definition occurrences, the enclosing range should indicate the
-     * start/end bounds of the entire definition AST node, including
-     * documentation.
-     * ```
-     * const n = 3
-     * ^ range
-     * ^^^^^^^^^^^ enclosing_range
-     *
-     * /&#42;* Parses the string into something *&#47;
-     * ^ enclosing_range start --------------------------------------|
-     * function parse(input string): string {                        |
-     * ^^^^^ range                                          |
-     * return input.slice(n)                                     |
-     * }                                                             |
-     * ^ enclosing_range end &lt;---------------------------------------|
-     * ```
-     *
-     * Any attributes/decorators/attached macros should also be part of the
-     * enclosing range.
-     *
-     * ```python
-     * &#64;cache
-     * ^ enclosing_range start---------------------|
-     * def factorial(n):                           |
-     * return n * factorial(n-1) if n else 1   |
-     * &lt; enclosing_range end-----------------------|
-     *
-     * ```
-     *
-     * For reference occurrences, the enclosing range should indicate the start/end
-     * bounds of the parent expression.
-     * ```
-     * const a = a.b
-     * ^ range
-     * ^^^ enclosing_range
-     * const b = a.b(41).f(42).g(43)
-     * ^ range
-     * ^^^^^^^^^^^^^ enclosing_range
-     * ```
+     * Deprecated: Use `typed_enclosing_range` instead.
      * </pre>
      *
-     * <code>repeated int32 enclosing_range = 7 [json_name = "enclosingRange"];</code>
+     * <code>repeated int32 enclosing_range = 7 [json_name = "enclosingRange", deprecated = true];</code>
+     * @deprecated scip.Occurrence.enclosing_range is deprecated.
+     *     See scip.proto;l=713
      * @param index The index of the element to return.
      * @return The enclosingRange at the given index.
      */
-    public int getEnclosingRange(int index) {
+    @java.lang.Deprecated public int getEnclosingRange(int index) {
       return enclosingRange_.getInt(index);
     }
     /**
      * <pre>
-     * (optional) Using the same encoding as the sibling `range` field, half-open
-     * source range of the nearest non-trivial enclosing AST node. This range must
-     * enclose the `range` field. Example applications that make use of the
-     * enclosing_range field:
-     *
-     * - Call hierarchies: to determine what symbols are references from the body
-     * of a function
-     * - Symbol outline: to display breadcrumbs from the cursor position to the
-     * root of the file
-     * - Expand selection: to select the nearest enclosing AST node.
-     * - Highlight range: to indicate the AST expression that is associated with a
-     * hover popover
-     *
-     * For definition occurrences, the enclosing range should indicate the
-     * start/end bounds of the entire definition AST node, including
-     * documentation.
-     * ```
-     * const n = 3
-     * ^ range
-     * ^^^^^^^^^^^ enclosing_range
-     *
-     * /&#42;* Parses the string into something *&#47;
-     * ^ enclosing_range start --------------------------------------|
-     * function parse(input string): string {                        |
-     * ^^^^^ range                                          |
-     * return input.slice(n)                                     |
-     * }                                                             |
-     * ^ enclosing_range end &lt;---------------------------------------|
-     * ```
-     *
-     * Any attributes/decorators/attached macros should also be part of the
-     * enclosing range.
-     *
-     * ```python
-     * &#64;cache
-     * ^ enclosing_range start---------------------|
-     * def factorial(n):                           |
-     * return n * factorial(n-1) if n else 1   |
-     * &lt; enclosing_range end-----------------------|
-     *
-     * ```
-     *
-     * For reference occurrences, the enclosing range should indicate the start/end
-     * bounds of the parent expression.
-     * ```
-     * const a = a.b
-     * ^ range
-     * ^^^ enclosing_range
-     * const b = a.b(41).f(42).g(43)
-     * ^ range
-     * ^^^^^^^^^^^^^ enclosing_range
-     * ```
+     * Deprecated: Use `typed_enclosing_range` instead.
      * </pre>
      *
-     * <code>repeated int32 enclosing_range = 7 [json_name = "enclosingRange"];</code>
+     * <code>repeated int32 enclosing_range = 7 [json_name = "enclosingRange", deprecated = true];</code>
+     * @deprecated scip.Occurrence.enclosing_range is deprecated.
+     *     See scip.proto;l=713
      * @param index The index to set the value at.
      * @param value The enclosingRange to set.
      * @return This builder for chaining.
      */
-    public Builder setEnclosingRange(
+    @java.lang.Deprecated public Builder setEnclosingRange(
         int index, int value) {
 
       ensureEnclosingRangeIsMutable();
       enclosingRange_.setInt(index, value);
-      bitField0_ |= 0x00000040;
+      bitField0_ |= 0x00000100;
       onChanged();
       return this;
     }
     /**
      * <pre>
-     * (optional) Using the same encoding as the sibling `range` field, half-open
-     * source range of the nearest non-trivial enclosing AST node. This range must
-     * enclose the `range` field. Example applications that make use of the
-     * enclosing_range field:
-     *
-     * - Call hierarchies: to determine what symbols are references from the body
-     * of a function
-     * - Symbol outline: to display breadcrumbs from the cursor position to the
-     * root of the file
-     * - Expand selection: to select the nearest enclosing AST node.
-     * - Highlight range: to indicate the AST expression that is associated with a
-     * hover popover
-     *
-     * For definition occurrences, the enclosing range should indicate the
-     * start/end bounds of the entire definition AST node, including
-     * documentation.
-     * ```
-     * const n = 3
-     * ^ range
-     * ^^^^^^^^^^^ enclosing_range
-     *
-     * /&#42;* Parses the string into something *&#47;
-     * ^ enclosing_range start --------------------------------------|
-     * function parse(input string): string {                        |
-     * ^^^^^ range                                          |
-     * return input.slice(n)                                     |
-     * }                                                             |
-     * ^ enclosing_range end &lt;---------------------------------------|
-     * ```
-     *
-     * Any attributes/decorators/attached macros should also be part of the
-     * enclosing range.
-     *
-     * ```python
-     * &#64;cache
-     * ^ enclosing_range start---------------------|
-     * def factorial(n):                           |
-     * return n * factorial(n-1) if n else 1   |
-     * &lt; enclosing_range end-----------------------|
-     *
-     * ```
-     *
-     * For reference occurrences, the enclosing range should indicate the start/end
-     * bounds of the parent expression.
-     * ```
-     * const a = a.b
-     * ^ range
-     * ^^^ enclosing_range
-     * const b = a.b(41).f(42).g(43)
-     * ^ range
-     * ^^^^^^^^^^^^^ enclosing_range
-     * ```
+     * Deprecated: Use `typed_enclosing_range` instead.
      * </pre>
      *
-     * <code>repeated int32 enclosing_range = 7 [json_name = "enclosingRange"];</code>
+     * <code>repeated int32 enclosing_range = 7 [json_name = "enclosingRange", deprecated = true];</code>
+     * @deprecated scip.Occurrence.enclosing_range is deprecated.
+     *     See scip.proto;l=713
      * @param value The enclosingRange to add.
      * @return This builder for chaining.
      */
-    public Builder addEnclosingRange(int value) {
+    @java.lang.Deprecated public Builder addEnclosingRange(int value) {
 
       ensureEnclosingRangeIsMutable();
       enclosingRange_.addInt(value);
-      bitField0_ |= 0x00000040;
+      bitField0_ |= 0x00000100;
       onChanged();
       return this;
     }
     /**
      * <pre>
-     * (optional) Using the same encoding as the sibling `range` field, half-open
-     * source range of the nearest non-trivial enclosing AST node. This range must
-     * enclose the `range` field. Example applications that make use of the
-     * enclosing_range field:
-     *
-     * - Call hierarchies: to determine what symbols are references from the body
-     * of a function
-     * - Symbol outline: to display breadcrumbs from the cursor position to the
-     * root of the file
-     * - Expand selection: to select the nearest enclosing AST node.
-     * - Highlight range: to indicate the AST expression that is associated with a
-     * hover popover
-     *
-     * For definition occurrences, the enclosing range should indicate the
-     * start/end bounds of the entire definition AST node, including
-     * documentation.
-     * ```
-     * const n = 3
-     * ^ range
-     * ^^^^^^^^^^^ enclosing_range
-     *
-     * /&#42;* Parses the string into something *&#47;
-     * ^ enclosing_range start --------------------------------------|
-     * function parse(input string): string {                        |
-     * ^^^^^ range                                          |
-     * return input.slice(n)                                     |
-     * }                                                             |
-     * ^ enclosing_range end &lt;---------------------------------------|
-     * ```
-     *
-     * Any attributes/decorators/attached macros should also be part of the
-     * enclosing range.
-     *
-     * ```python
-     * &#64;cache
-     * ^ enclosing_range start---------------------|
-     * def factorial(n):                           |
-     * return n * factorial(n-1) if n else 1   |
-     * &lt; enclosing_range end-----------------------|
-     *
-     * ```
-     *
-     * For reference occurrences, the enclosing range should indicate the start/end
-     * bounds of the parent expression.
-     * ```
-     * const a = a.b
-     * ^ range
-     * ^^^ enclosing_range
-     * const b = a.b(41).f(42).g(43)
-     * ^ range
-     * ^^^^^^^^^^^^^ enclosing_range
-     * ```
+     * Deprecated: Use `typed_enclosing_range` instead.
      * </pre>
      *
-     * <code>repeated int32 enclosing_range = 7 [json_name = "enclosingRange"];</code>
+     * <code>repeated int32 enclosing_range = 7 [json_name = "enclosingRange", deprecated = true];</code>
+     * @deprecated scip.Occurrence.enclosing_range is deprecated.
+     *     See scip.proto;l=713
      * @param values The enclosingRange to add.
      * @return This builder for chaining.
      */
-    public Builder addAllEnclosingRange(
+    @java.lang.Deprecated public Builder addAllEnclosingRange(
         java.lang.Iterable<? extends java.lang.Integer> values) {
       ensureEnclosingRangeIsMutable();
       com.google.protobuf.AbstractMessageLite.Builder.addAll(
           values, enclosingRange_);
-      bitField0_ |= 0x00000040;
+      bitField0_ |= 0x00000100;
       onChanged();
       return this;
     }
     /**
      * <pre>
-     * (optional) Using the same encoding as the sibling `range` field, half-open
-     * source range of the nearest non-trivial enclosing AST node. This range must
-     * enclose the `range` field. Example applications that make use of the
-     * enclosing_range field:
-     *
-     * - Call hierarchies: to determine what symbols are references from the body
-     * of a function
-     * - Symbol outline: to display breadcrumbs from the cursor position to the
-     * root of the file
-     * - Expand selection: to select the nearest enclosing AST node.
-     * - Highlight range: to indicate the AST expression that is associated with a
-     * hover popover
-     *
-     * For definition occurrences, the enclosing range should indicate the
-     * start/end bounds of the entire definition AST node, including
-     * documentation.
-     * ```
-     * const n = 3
-     * ^ range
-     * ^^^^^^^^^^^ enclosing_range
-     *
-     * /&#42;* Parses the string into something *&#47;
-     * ^ enclosing_range start --------------------------------------|
-     * function parse(input string): string {                        |
-     * ^^^^^ range                                          |
-     * return input.slice(n)                                     |
-     * }                                                             |
-     * ^ enclosing_range end &lt;---------------------------------------|
-     * ```
-     *
-     * Any attributes/decorators/attached macros should also be part of the
-     * enclosing range.
-     *
-     * ```python
-     * &#64;cache
-     * ^ enclosing_range start---------------------|
-     * def factorial(n):                           |
-     * return n * factorial(n-1) if n else 1   |
-     * &lt; enclosing_range end-----------------------|
-     *
-     * ```
-     *
-     * For reference occurrences, the enclosing range should indicate the start/end
-     * bounds of the parent expression.
-     * ```
-     * const a = a.b
-     * ^ range
-     * ^^^ enclosing_range
-     * const b = a.b(41).f(42).g(43)
-     * ^ range
-     * ^^^^^^^^^^^^^ enclosing_range
-     * ```
+     * Deprecated: Use `typed_enclosing_range` instead.
      * </pre>
      *
-     * <code>repeated int32 enclosing_range = 7 [json_name = "enclosingRange"];</code>
+     * <code>repeated int32 enclosing_range = 7 [json_name = "enclosingRange", deprecated = true];</code>
+     * @deprecated scip.Occurrence.enclosing_range is deprecated.
+     *     See scip.proto;l=713
      * @return This builder for chaining.
      */
-    public Builder clearEnclosingRange() {
+    @java.lang.Deprecated public Builder clearEnclosingRange() {
       enclosingRange_ = emptyIntList();
-      bitField0_ = (bitField0_ & ~0x00000040);
+      bitField0_ = (bitField0_ & ~0x00000100);
       onChanged();
       return this;
+    }
+
+    private com.google.protobuf.SingleFieldBuilder<
+        org.scip_code.scip.SingleLineRange, org.scip_code.scip.SingleLineRange.Builder, org.scip_code.scip.SingleLineRangeOrBuilder> singleLineEnclosingRangeBuilder_;
+    /**
+     * <code>.scip.SingleLineRange single_line_enclosing_range = 10 [json_name = "singleLineEnclosingRange"];</code>
+     * @return Whether the singleLineEnclosingRange field is set.
+     */
+    @java.lang.Override
+    public boolean hasSingleLineEnclosingRange() {
+      return typedEnclosingRangeCase_ == 10;
+    }
+    /**
+     * <code>.scip.SingleLineRange single_line_enclosing_range = 10 [json_name = "singleLineEnclosingRange"];</code>
+     * @return The singleLineEnclosingRange.
+     */
+    @java.lang.Override
+    public org.scip_code.scip.SingleLineRange getSingleLineEnclosingRange() {
+      if (singleLineEnclosingRangeBuilder_ == null) {
+        if (typedEnclosingRangeCase_ == 10) {
+          return (org.scip_code.scip.SingleLineRange) typedEnclosingRange_;
+        }
+        return org.scip_code.scip.SingleLineRange.getDefaultInstance();
+      } else {
+        if (typedEnclosingRangeCase_ == 10) {
+          return singleLineEnclosingRangeBuilder_.getMessage();
+        }
+        return org.scip_code.scip.SingleLineRange.getDefaultInstance();
+      }
+    }
+    /**
+     * <code>.scip.SingleLineRange single_line_enclosing_range = 10 [json_name = "singleLineEnclosingRange"];</code>
+     */
+    public Builder setSingleLineEnclosingRange(org.scip_code.scip.SingleLineRange value) {
+      if (singleLineEnclosingRangeBuilder_ == null) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        typedEnclosingRange_ = value;
+        onChanged();
+      } else {
+        singleLineEnclosingRangeBuilder_.setMessage(value);
+      }
+      typedEnclosingRangeCase_ = 10;
+      return this;
+    }
+    /**
+     * <code>.scip.SingleLineRange single_line_enclosing_range = 10 [json_name = "singleLineEnclosingRange"];</code>
+     */
+    public Builder setSingleLineEnclosingRange(
+        org.scip_code.scip.SingleLineRange.Builder builderForValue) {
+      if (singleLineEnclosingRangeBuilder_ == null) {
+        typedEnclosingRange_ = builderForValue.build();
+        onChanged();
+      } else {
+        singleLineEnclosingRangeBuilder_.setMessage(builderForValue.build());
+      }
+      typedEnclosingRangeCase_ = 10;
+      return this;
+    }
+    /**
+     * <code>.scip.SingleLineRange single_line_enclosing_range = 10 [json_name = "singleLineEnclosingRange"];</code>
+     */
+    public Builder mergeSingleLineEnclosingRange(org.scip_code.scip.SingleLineRange value) {
+      if (singleLineEnclosingRangeBuilder_ == null) {
+        if (typedEnclosingRangeCase_ == 10 &&
+            typedEnclosingRange_ != org.scip_code.scip.SingleLineRange.getDefaultInstance()) {
+          typedEnclosingRange_ = org.scip_code.scip.SingleLineRange.newBuilder((org.scip_code.scip.SingleLineRange) typedEnclosingRange_)
+              .mergeFrom(value).buildPartial();
+        } else {
+          typedEnclosingRange_ = value;
+        }
+        onChanged();
+      } else {
+        if (typedEnclosingRangeCase_ == 10) {
+          singleLineEnclosingRangeBuilder_.mergeFrom(value);
+        } else {
+          singleLineEnclosingRangeBuilder_.setMessage(value);
+        }
+      }
+      typedEnclosingRangeCase_ = 10;
+      return this;
+    }
+    /**
+     * <code>.scip.SingleLineRange single_line_enclosing_range = 10 [json_name = "singleLineEnclosingRange"];</code>
+     */
+    public Builder clearSingleLineEnclosingRange() {
+      if (singleLineEnclosingRangeBuilder_ == null) {
+        if (typedEnclosingRangeCase_ == 10) {
+          typedEnclosingRangeCase_ = 0;
+          typedEnclosingRange_ = null;
+          onChanged();
+        }
+      } else {
+        if (typedEnclosingRangeCase_ == 10) {
+          typedEnclosingRangeCase_ = 0;
+          typedEnclosingRange_ = null;
+        }
+        singleLineEnclosingRangeBuilder_.clear();
+      }
+      return this;
+    }
+    /**
+     * <code>.scip.SingleLineRange single_line_enclosing_range = 10 [json_name = "singleLineEnclosingRange"];</code>
+     */
+    public org.scip_code.scip.SingleLineRange.Builder getSingleLineEnclosingRangeBuilder() {
+      return internalGetSingleLineEnclosingRangeFieldBuilder().getBuilder();
+    }
+    /**
+     * <code>.scip.SingleLineRange single_line_enclosing_range = 10 [json_name = "singleLineEnclosingRange"];</code>
+     */
+    @java.lang.Override
+    public org.scip_code.scip.SingleLineRangeOrBuilder getSingleLineEnclosingRangeOrBuilder() {
+      if ((typedEnclosingRangeCase_ == 10) && (singleLineEnclosingRangeBuilder_ != null)) {
+        return singleLineEnclosingRangeBuilder_.getMessageOrBuilder();
+      } else {
+        if (typedEnclosingRangeCase_ == 10) {
+          return (org.scip_code.scip.SingleLineRange) typedEnclosingRange_;
+        }
+        return org.scip_code.scip.SingleLineRange.getDefaultInstance();
+      }
+    }
+    /**
+     * <code>.scip.SingleLineRange single_line_enclosing_range = 10 [json_name = "singleLineEnclosingRange"];</code>
+     */
+    private com.google.protobuf.SingleFieldBuilder<
+        org.scip_code.scip.SingleLineRange, org.scip_code.scip.SingleLineRange.Builder, org.scip_code.scip.SingleLineRangeOrBuilder> 
+        internalGetSingleLineEnclosingRangeFieldBuilder() {
+      if (singleLineEnclosingRangeBuilder_ == null) {
+        if (!(typedEnclosingRangeCase_ == 10)) {
+          typedEnclosingRange_ = org.scip_code.scip.SingleLineRange.getDefaultInstance();
+        }
+        singleLineEnclosingRangeBuilder_ = new com.google.protobuf.SingleFieldBuilder<
+            org.scip_code.scip.SingleLineRange, org.scip_code.scip.SingleLineRange.Builder, org.scip_code.scip.SingleLineRangeOrBuilder>(
+                (org.scip_code.scip.SingleLineRange) typedEnclosingRange_,
+                getParentForChildren(),
+                isClean());
+        typedEnclosingRange_ = null;
+      }
+      typedEnclosingRangeCase_ = 10;
+      onChanged();
+      return singleLineEnclosingRangeBuilder_;
+    }
+
+    private com.google.protobuf.SingleFieldBuilder<
+        org.scip_code.scip.MultiLineRange, org.scip_code.scip.MultiLineRange.Builder, org.scip_code.scip.MultiLineRangeOrBuilder> multiLineEnclosingRangeBuilder_;
+    /**
+     * <code>.scip.MultiLineRange multi_line_enclosing_range = 11 [json_name = "multiLineEnclosingRange"];</code>
+     * @return Whether the multiLineEnclosingRange field is set.
+     */
+    @java.lang.Override
+    public boolean hasMultiLineEnclosingRange() {
+      return typedEnclosingRangeCase_ == 11;
+    }
+    /**
+     * <code>.scip.MultiLineRange multi_line_enclosing_range = 11 [json_name = "multiLineEnclosingRange"];</code>
+     * @return The multiLineEnclosingRange.
+     */
+    @java.lang.Override
+    public org.scip_code.scip.MultiLineRange getMultiLineEnclosingRange() {
+      if (multiLineEnclosingRangeBuilder_ == null) {
+        if (typedEnclosingRangeCase_ == 11) {
+          return (org.scip_code.scip.MultiLineRange) typedEnclosingRange_;
+        }
+        return org.scip_code.scip.MultiLineRange.getDefaultInstance();
+      } else {
+        if (typedEnclosingRangeCase_ == 11) {
+          return multiLineEnclosingRangeBuilder_.getMessage();
+        }
+        return org.scip_code.scip.MultiLineRange.getDefaultInstance();
+      }
+    }
+    /**
+     * <code>.scip.MultiLineRange multi_line_enclosing_range = 11 [json_name = "multiLineEnclosingRange"];</code>
+     */
+    public Builder setMultiLineEnclosingRange(org.scip_code.scip.MultiLineRange value) {
+      if (multiLineEnclosingRangeBuilder_ == null) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        typedEnclosingRange_ = value;
+        onChanged();
+      } else {
+        multiLineEnclosingRangeBuilder_.setMessage(value);
+      }
+      typedEnclosingRangeCase_ = 11;
+      return this;
+    }
+    /**
+     * <code>.scip.MultiLineRange multi_line_enclosing_range = 11 [json_name = "multiLineEnclosingRange"];</code>
+     */
+    public Builder setMultiLineEnclosingRange(
+        org.scip_code.scip.MultiLineRange.Builder builderForValue) {
+      if (multiLineEnclosingRangeBuilder_ == null) {
+        typedEnclosingRange_ = builderForValue.build();
+        onChanged();
+      } else {
+        multiLineEnclosingRangeBuilder_.setMessage(builderForValue.build());
+      }
+      typedEnclosingRangeCase_ = 11;
+      return this;
+    }
+    /**
+     * <code>.scip.MultiLineRange multi_line_enclosing_range = 11 [json_name = "multiLineEnclosingRange"];</code>
+     */
+    public Builder mergeMultiLineEnclosingRange(org.scip_code.scip.MultiLineRange value) {
+      if (multiLineEnclosingRangeBuilder_ == null) {
+        if (typedEnclosingRangeCase_ == 11 &&
+            typedEnclosingRange_ != org.scip_code.scip.MultiLineRange.getDefaultInstance()) {
+          typedEnclosingRange_ = org.scip_code.scip.MultiLineRange.newBuilder((org.scip_code.scip.MultiLineRange) typedEnclosingRange_)
+              .mergeFrom(value).buildPartial();
+        } else {
+          typedEnclosingRange_ = value;
+        }
+        onChanged();
+      } else {
+        if (typedEnclosingRangeCase_ == 11) {
+          multiLineEnclosingRangeBuilder_.mergeFrom(value);
+        } else {
+          multiLineEnclosingRangeBuilder_.setMessage(value);
+        }
+      }
+      typedEnclosingRangeCase_ = 11;
+      return this;
+    }
+    /**
+     * <code>.scip.MultiLineRange multi_line_enclosing_range = 11 [json_name = "multiLineEnclosingRange"];</code>
+     */
+    public Builder clearMultiLineEnclosingRange() {
+      if (multiLineEnclosingRangeBuilder_ == null) {
+        if (typedEnclosingRangeCase_ == 11) {
+          typedEnclosingRangeCase_ = 0;
+          typedEnclosingRange_ = null;
+          onChanged();
+        }
+      } else {
+        if (typedEnclosingRangeCase_ == 11) {
+          typedEnclosingRangeCase_ = 0;
+          typedEnclosingRange_ = null;
+        }
+        multiLineEnclosingRangeBuilder_.clear();
+      }
+      return this;
+    }
+    /**
+     * <code>.scip.MultiLineRange multi_line_enclosing_range = 11 [json_name = "multiLineEnclosingRange"];</code>
+     */
+    public org.scip_code.scip.MultiLineRange.Builder getMultiLineEnclosingRangeBuilder() {
+      return internalGetMultiLineEnclosingRangeFieldBuilder().getBuilder();
+    }
+    /**
+     * <code>.scip.MultiLineRange multi_line_enclosing_range = 11 [json_name = "multiLineEnclosingRange"];</code>
+     */
+    @java.lang.Override
+    public org.scip_code.scip.MultiLineRangeOrBuilder getMultiLineEnclosingRangeOrBuilder() {
+      if ((typedEnclosingRangeCase_ == 11) && (multiLineEnclosingRangeBuilder_ != null)) {
+        return multiLineEnclosingRangeBuilder_.getMessageOrBuilder();
+      } else {
+        if (typedEnclosingRangeCase_ == 11) {
+          return (org.scip_code.scip.MultiLineRange) typedEnclosingRange_;
+        }
+        return org.scip_code.scip.MultiLineRange.getDefaultInstance();
+      }
+    }
+    /**
+     * <code>.scip.MultiLineRange multi_line_enclosing_range = 11 [json_name = "multiLineEnclosingRange"];</code>
+     */
+    private com.google.protobuf.SingleFieldBuilder<
+        org.scip_code.scip.MultiLineRange, org.scip_code.scip.MultiLineRange.Builder, org.scip_code.scip.MultiLineRangeOrBuilder> 
+        internalGetMultiLineEnclosingRangeFieldBuilder() {
+      if (multiLineEnclosingRangeBuilder_ == null) {
+        if (!(typedEnclosingRangeCase_ == 11)) {
+          typedEnclosingRange_ = org.scip_code.scip.MultiLineRange.getDefaultInstance();
+        }
+        multiLineEnclosingRangeBuilder_ = new com.google.protobuf.SingleFieldBuilder<
+            org.scip_code.scip.MultiLineRange, org.scip_code.scip.MultiLineRange.Builder, org.scip_code.scip.MultiLineRangeOrBuilder>(
+                (org.scip_code.scip.MultiLineRange) typedEnclosingRange_,
+                getParentForChildren(),
+                isClean());
+        typedEnclosingRange_ = null;
+      }
+      typedEnclosingRangeCase_ = 11;
+      onChanged();
+      return multiLineEnclosingRangeBuilder_;
     }
 
     // @@protoc_insertion_point(builder_scope:scip.Occurrence)

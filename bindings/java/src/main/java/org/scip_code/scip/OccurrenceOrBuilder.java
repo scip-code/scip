@@ -12,98 +12,125 @@ public interface OccurrenceOrBuilder extends
 
   /**
    * <pre>
-   * Half-open [start, end) range of this occurrence. Must be exactly three or four
-   * elements:
+   * Deprecated: Use `single_line_range` or `multi_line_range` instead.
    *
+   * Half-open [start, end) range. Must be exactly three or four elements:
+   * - Three elements: `[startLine, startCharacter, endCharacter]` (single-line)
    * - Four elements: `[startLine, startCharacter, endLine, endCharacter]`
-   * - Three elements: `[startLine, startCharacter, endCharacter]`. The end line
-   * is inferred to have the same value as the start line.
-   *
-   * It is allowed for the range to be empty (i.e. start==end).
-   *
-   * Line numbers and characters are always 0-based. Make sure to increment the
-   * line/character values before displaying them in an editor-like UI because
-   * editors conventionally use 1-based numbers.
-   *
-   * The 'character' value is interpreted based on the PositionEncoding for
-   * the Document.
    *
    * Historical note: the original draft of this schema had a `Range` message
    * type with `start` and `end` fields of type `Position`, mirroring LSP.
    * Benchmarks revealed that this encoding was inefficient and that we could
    * reduce the total payload size of an index by 50% by using `repeated int32`
-   * instead. The `repeated int32` encoding is admittedly more embarrassing to
-   * work with in some programming languages but we hope the performance
-   * improvements make up for it.
+   * instead. However, the lack of type safety led to the introduction of
+   * `single_line_range` and `multi_line_range` as typed alternatives.
    * </pre>
    *
-   * <code>repeated int32 range = 1 [json_name = "range"];</code>
+   * <code>repeated int32 range = 1 [json_name = "range", deprecated = true];</code>
+   * @deprecated scip.Occurrence.range is deprecated.
+   *     See scip.proto;l=675
    * @return A list containing the range.
    */
-  java.util.List<java.lang.Integer> getRangeList();
+  @java.lang.Deprecated java.util.List<java.lang.Integer> getRangeList();
   /**
    * <pre>
-   * Half-open [start, end) range of this occurrence. Must be exactly three or four
-   * elements:
+   * Deprecated: Use `single_line_range` or `multi_line_range` instead.
    *
+   * Half-open [start, end) range. Must be exactly three or four elements:
+   * - Three elements: `[startLine, startCharacter, endCharacter]` (single-line)
    * - Four elements: `[startLine, startCharacter, endLine, endCharacter]`
-   * - Three elements: `[startLine, startCharacter, endCharacter]`. The end line
-   * is inferred to have the same value as the start line.
-   *
-   * It is allowed for the range to be empty (i.e. start==end).
-   *
-   * Line numbers and characters are always 0-based. Make sure to increment the
-   * line/character values before displaying them in an editor-like UI because
-   * editors conventionally use 1-based numbers.
-   *
-   * The 'character' value is interpreted based on the PositionEncoding for
-   * the Document.
    *
    * Historical note: the original draft of this schema had a `Range` message
    * type with `start` and `end` fields of type `Position`, mirroring LSP.
    * Benchmarks revealed that this encoding was inefficient and that we could
    * reduce the total payload size of an index by 50% by using `repeated int32`
-   * instead. The `repeated int32` encoding is admittedly more embarrassing to
-   * work with in some programming languages but we hope the performance
-   * improvements make up for it.
+   * instead. However, the lack of type safety led to the introduction of
+   * `single_line_range` and `multi_line_range` as typed alternatives.
    * </pre>
    *
-   * <code>repeated int32 range = 1 [json_name = "range"];</code>
+   * <code>repeated int32 range = 1 [json_name = "range", deprecated = true];</code>
+   * @deprecated scip.Occurrence.range is deprecated.
+   *     See scip.proto;l=675
    * @return The count of range.
    */
-  int getRangeCount();
+  @java.lang.Deprecated int getRangeCount();
   /**
    * <pre>
-   * Half-open [start, end) range of this occurrence. Must be exactly three or four
-   * elements:
+   * Deprecated: Use `single_line_range` or `multi_line_range` instead.
    *
+   * Half-open [start, end) range. Must be exactly three or four elements:
+   * - Three elements: `[startLine, startCharacter, endCharacter]` (single-line)
    * - Four elements: `[startLine, startCharacter, endLine, endCharacter]`
-   * - Three elements: `[startLine, startCharacter, endCharacter]`. The end line
-   * is inferred to have the same value as the start line.
-   *
-   * It is allowed for the range to be empty (i.e. start==end).
-   *
-   * Line numbers and characters are always 0-based. Make sure to increment the
-   * line/character values before displaying them in an editor-like UI because
-   * editors conventionally use 1-based numbers.
-   *
-   * The 'character' value is interpreted based on the PositionEncoding for
-   * the Document.
    *
    * Historical note: the original draft of this schema had a `Range` message
    * type with `start` and `end` fields of type `Position`, mirroring LSP.
    * Benchmarks revealed that this encoding was inefficient and that we could
    * reduce the total payload size of an index by 50% by using `repeated int32`
-   * instead. The `repeated int32` encoding is admittedly more embarrassing to
-   * work with in some programming languages but we hope the performance
-   * improvements make up for it.
+   * instead. However, the lack of type safety led to the introduction of
+   * `single_line_range` and `multi_line_range` as typed alternatives.
    * </pre>
    *
-   * <code>repeated int32 range = 1 [json_name = "range"];</code>
+   * <code>repeated int32 range = 1 [json_name = "range", deprecated = true];</code>
+   * @deprecated scip.Occurrence.range is deprecated.
+   *     See scip.proto;l=675
    * @param index The index of the element to return.
    * @return The range at the given index.
    */
-  int getRange(int index);
+  @java.lang.Deprecated int getRange(int index);
+
+  /**
+   * <pre>
+   * Range spanning a single line.
+   * </pre>
+   *
+   * <code>.scip.SingleLineRange single_line_range = 8 [json_name = "singleLineRange"];</code>
+   * @return Whether the singleLineRange field is set.
+   */
+  boolean hasSingleLineRange();
+  /**
+   * <pre>
+   * Range spanning a single line.
+   * </pre>
+   *
+   * <code>.scip.SingleLineRange single_line_range = 8 [json_name = "singleLineRange"];</code>
+   * @return The singleLineRange.
+   */
+  org.scip_code.scip.SingleLineRange getSingleLineRange();
+  /**
+   * <pre>
+   * Range spanning a single line.
+   * </pre>
+   *
+   * <code>.scip.SingleLineRange single_line_range = 8 [json_name = "singleLineRange"];</code>
+   */
+  org.scip_code.scip.SingleLineRangeOrBuilder getSingleLineRangeOrBuilder();
+
+  /**
+   * <pre>
+   * Range spanning multiple lines.
+   * </pre>
+   *
+   * <code>.scip.MultiLineRange multi_line_range = 9 [json_name = "multiLineRange"];</code>
+   * @return Whether the multiLineRange field is set.
+   */
+  boolean hasMultiLineRange();
+  /**
+   * <pre>
+   * Range spanning multiple lines.
+   * </pre>
+   *
+   * <code>.scip.MultiLineRange multi_line_range = 9 [json_name = "multiLineRange"];</code>
+   * @return The multiLineRange.
+   */
+  org.scip_code.scip.MultiLineRange getMultiLineRange();
+  /**
+   * <pre>
+   * Range spanning multiple lines.
+   * </pre>
+   *
+   * <code>.scip.MultiLineRange multi_line_range = 9 [json_name = "multiLineRange"];</code>
+   */
+  org.scip_code.scip.MultiLineRangeOrBuilder getMultiLineRangeOrBuilder();
 
   /**
    * <pre>
@@ -272,183 +299,70 @@ public interface OccurrenceOrBuilder extends
 
   /**
    * <pre>
-   * (optional) Using the same encoding as the sibling `range` field, half-open
-   * source range of the nearest non-trivial enclosing AST node. This range must
-   * enclose the `range` field. Example applications that make use of the
-   * enclosing_range field:
-   *
-   * - Call hierarchies: to determine what symbols are references from the body
-   * of a function
-   * - Symbol outline: to display breadcrumbs from the cursor position to the
-   * root of the file
-   * - Expand selection: to select the nearest enclosing AST node.
-   * - Highlight range: to indicate the AST expression that is associated with a
-   * hover popover
-   *
-   * For definition occurrences, the enclosing range should indicate the
-   * start/end bounds of the entire definition AST node, including
-   * documentation.
-   * ```
-   * const n = 3
-   * ^ range
-   * ^^^^^^^^^^^ enclosing_range
-   *
-   * /&#42;* Parses the string into something *&#47;
-   * ^ enclosing_range start --------------------------------------|
-   * function parse(input string): string {                        |
-   * ^^^^^ range                                          |
-   * return input.slice(n)                                     |
-   * }                                                             |
-   * ^ enclosing_range end &lt;---------------------------------------|
-   * ```
-   *
-   * Any attributes/decorators/attached macros should also be part of the
-   * enclosing range.
-   *
-   * ```python
-   * &#64;cache
-   * ^ enclosing_range start---------------------|
-   * def factorial(n):                           |
-   * return n * factorial(n-1) if n else 1   |
-   * &lt; enclosing_range end-----------------------|
-   *
-   * ```
-   *
-   * For reference occurrences, the enclosing range should indicate the start/end
-   * bounds of the parent expression.
-   * ```
-   * const a = a.b
-   * ^ range
-   * ^^^ enclosing_range
-   * const b = a.b(41).f(42).g(43)
-   * ^ range
-   * ^^^^^^^^^^^^^ enclosing_range
-   * ```
+   * Deprecated: Use `typed_enclosing_range` instead.
    * </pre>
    *
-   * <code>repeated int32 enclosing_range = 7 [json_name = "enclosingRange"];</code>
+   * <code>repeated int32 enclosing_range = 7 [json_name = "enclosingRange", deprecated = true];</code>
+   * @deprecated scip.Occurrence.enclosing_range is deprecated.
+   *     See scip.proto;l=713
    * @return A list containing the enclosingRange.
    */
-  java.util.List<java.lang.Integer> getEnclosingRangeList();
+  @java.lang.Deprecated java.util.List<java.lang.Integer> getEnclosingRangeList();
   /**
    * <pre>
-   * (optional) Using the same encoding as the sibling `range` field, half-open
-   * source range of the nearest non-trivial enclosing AST node. This range must
-   * enclose the `range` field. Example applications that make use of the
-   * enclosing_range field:
-   *
-   * - Call hierarchies: to determine what symbols are references from the body
-   * of a function
-   * - Symbol outline: to display breadcrumbs from the cursor position to the
-   * root of the file
-   * - Expand selection: to select the nearest enclosing AST node.
-   * - Highlight range: to indicate the AST expression that is associated with a
-   * hover popover
-   *
-   * For definition occurrences, the enclosing range should indicate the
-   * start/end bounds of the entire definition AST node, including
-   * documentation.
-   * ```
-   * const n = 3
-   * ^ range
-   * ^^^^^^^^^^^ enclosing_range
-   *
-   * /&#42;* Parses the string into something *&#47;
-   * ^ enclosing_range start --------------------------------------|
-   * function parse(input string): string {                        |
-   * ^^^^^ range                                          |
-   * return input.slice(n)                                     |
-   * }                                                             |
-   * ^ enclosing_range end &lt;---------------------------------------|
-   * ```
-   *
-   * Any attributes/decorators/attached macros should also be part of the
-   * enclosing range.
-   *
-   * ```python
-   * &#64;cache
-   * ^ enclosing_range start---------------------|
-   * def factorial(n):                           |
-   * return n * factorial(n-1) if n else 1   |
-   * &lt; enclosing_range end-----------------------|
-   *
-   * ```
-   *
-   * For reference occurrences, the enclosing range should indicate the start/end
-   * bounds of the parent expression.
-   * ```
-   * const a = a.b
-   * ^ range
-   * ^^^ enclosing_range
-   * const b = a.b(41).f(42).g(43)
-   * ^ range
-   * ^^^^^^^^^^^^^ enclosing_range
-   * ```
+   * Deprecated: Use `typed_enclosing_range` instead.
    * </pre>
    *
-   * <code>repeated int32 enclosing_range = 7 [json_name = "enclosingRange"];</code>
+   * <code>repeated int32 enclosing_range = 7 [json_name = "enclosingRange", deprecated = true];</code>
+   * @deprecated scip.Occurrence.enclosing_range is deprecated.
+   *     See scip.proto;l=713
    * @return The count of enclosingRange.
    */
-  int getEnclosingRangeCount();
+  @java.lang.Deprecated int getEnclosingRangeCount();
   /**
    * <pre>
-   * (optional) Using the same encoding as the sibling `range` field, half-open
-   * source range of the nearest non-trivial enclosing AST node. This range must
-   * enclose the `range` field. Example applications that make use of the
-   * enclosing_range field:
-   *
-   * - Call hierarchies: to determine what symbols are references from the body
-   * of a function
-   * - Symbol outline: to display breadcrumbs from the cursor position to the
-   * root of the file
-   * - Expand selection: to select the nearest enclosing AST node.
-   * - Highlight range: to indicate the AST expression that is associated with a
-   * hover popover
-   *
-   * For definition occurrences, the enclosing range should indicate the
-   * start/end bounds of the entire definition AST node, including
-   * documentation.
-   * ```
-   * const n = 3
-   * ^ range
-   * ^^^^^^^^^^^ enclosing_range
-   *
-   * /&#42;* Parses the string into something *&#47;
-   * ^ enclosing_range start --------------------------------------|
-   * function parse(input string): string {                        |
-   * ^^^^^ range                                          |
-   * return input.slice(n)                                     |
-   * }                                                             |
-   * ^ enclosing_range end &lt;---------------------------------------|
-   * ```
-   *
-   * Any attributes/decorators/attached macros should also be part of the
-   * enclosing range.
-   *
-   * ```python
-   * &#64;cache
-   * ^ enclosing_range start---------------------|
-   * def factorial(n):                           |
-   * return n * factorial(n-1) if n else 1   |
-   * &lt; enclosing_range end-----------------------|
-   *
-   * ```
-   *
-   * For reference occurrences, the enclosing range should indicate the start/end
-   * bounds of the parent expression.
-   * ```
-   * const a = a.b
-   * ^ range
-   * ^^^ enclosing_range
-   * const b = a.b(41).f(42).g(43)
-   * ^ range
-   * ^^^^^^^^^^^^^ enclosing_range
-   * ```
+   * Deprecated: Use `typed_enclosing_range` instead.
    * </pre>
    *
-   * <code>repeated int32 enclosing_range = 7 [json_name = "enclosingRange"];</code>
+   * <code>repeated int32 enclosing_range = 7 [json_name = "enclosingRange", deprecated = true];</code>
+   * @deprecated scip.Occurrence.enclosing_range is deprecated.
+   *     See scip.proto;l=713
    * @param index The index of the element to return.
    * @return The enclosingRange at the given index.
    */
-  int getEnclosingRange(int index);
+  @java.lang.Deprecated int getEnclosingRange(int index);
+
+  /**
+   * <code>.scip.SingleLineRange single_line_enclosing_range = 10 [json_name = "singleLineEnclosingRange"];</code>
+   * @return Whether the singleLineEnclosingRange field is set.
+   */
+  boolean hasSingleLineEnclosingRange();
+  /**
+   * <code>.scip.SingleLineRange single_line_enclosing_range = 10 [json_name = "singleLineEnclosingRange"];</code>
+   * @return The singleLineEnclosingRange.
+   */
+  org.scip_code.scip.SingleLineRange getSingleLineEnclosingRange();
+  /**
+   * <code>.scip.SingleLineRange single_line_enclosing_range = 10 [json_name = "singleLineEnclosingRange"];</code>
+   */
+  org.scip_code.scip.SingleLineRangeOrBuilder getSingleLineEnclosingRangeOrBuilder();
+
+  /**
+   * <code>.scip.MultiLineRange multi_line_enclosing_range = 11 [json_name = "multiLineEnclosingRange"];</code>
+   * @return Whether the multiLineEnclosingRange field is set.
+   */
+  boolean hasMultiLineEnclosingRange();
+  /**
+   * <code>.scip.MultiLineRange multi_line_enclosing_range = 11 [json_name = "multiLineEnclosingRange"];</code>
+   * @return The multiLineEnclosingRange.
+   */
+  org.scip_code.scip.MultiLineRange getMultiLineEnclosingRange();
+  /**
+   * <code>.scip.MultiLineRange multi_line_enclosing_range = 11 [json_name = "multiLineEnclosingRange"];</code>
+   */
+  org.scip_code.scip.MultiLineRangeOrBuilder getMultiLineEnclosingRangeOrBuilder();
+
+  org.scip_code.scip.Occurrence.TypedRangeCase getTypedRangeCase();
+
+  org.scip_code.scip.Occurrence.TypedEnclosingRangeCase getTypedEnclosingRangeCase();
 }

@@ -77,6 +77,16 @@ public final class ScipProto extends com.google.protobuf.GeneratedFile {
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
       internal_static_scip_Relationship_fieldAccessorTable;
   static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_scip_SingleLineRange_descriptor;
+  static final 
+    com.google.protobuf.GeneratedMessage.FieldAccessorTable
+      internal_static_scip_SingleLineRange_fieldAccessorTable;
+  static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_scip_MultiLineRange_descriptor;
+  static final 
+    com.google.protobuf.GeneratedMessage.FieldAccessorTable
+      internal_static_scip_MultiLineRange_fieldAccessorTable;
+  static final com.google.protobuf.Descriptors.Descriptor
     internal_static_scip_Occurrence_descriptor;
   static final 
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
@@ -175,91 +185,106 @@ public final class ScipProto extends com.google.protobuf.GeneratedFile {
       "sReference\022+\n\021is_implementation\030\003 \001(\010R\020i" +
       "sImplementation\022,\n\022is_type_definition\030\004 " +
       "\001(\010R\020isTypeDefinition\022#\n\ris_definition\030\005" +
-      " \001(\010R\014isDefinition\"\244\002\n\nOccurrence\022\024\n\005ran" +
-      "ge\030\001 \003(\005R\005range\022\026\n\006symbol\030\002 \001(\tR\006symbol\022" +
-      "!\n\014symbol_roles\030\003 \001(\005R\013symbolRoles\0225\n\026ov" +
-      "erride_documentation\030\004 \003(\tR\025overrideDocu" +
-      "mentation\0221\n\013syntax_kind\030\005 \001(\0162\020.scip.Sy" +
-      "ntaxKindR\nsyntaxKind\0222\n\013diagnostics\030\006 \003(" +
-      "\0132\020.scip.DiagnosticR\013diagnostics\022\'\n\017encl" +
-      "osing_range\030\007 \003(\005R\016enclosingRange\"\247\001\n\nDi" +
-      "agnostic\022*\n\010severity\030\001 \001(\0162\016.scip.Severi" +
-      "tyR\010severity\022\022\n\004code\030\002 \001(\tR\004code\022\030\n\007mess" +
-      "age\030\003 \001(\tR\007message\022\026\n\006source\030\004 \001(\tR\006sour" +
-      "ce\022\'\n\004tags\030\005 \003(\0162\023.scip.DiagnosticTagR\004t" +
-      "ags*1\n\017ProtocolVersion\022\036\n\032UnspecifiedPro" +
-      "tocolVersion\020\000*@\n\014TextEncoding\022\033\n\027Unspec" +
-      "ifiedTextEncoding\020\000\022\010\n\004UTF8\020\001\022\t\n\005UTF16\020\002" +
-      "*\244\001\n\020PositionEncoding\022\037\n\033UnspecifiedPosi" +
-      "tionEncoding\020\000\022#\n\037UTF8CodeUnitOffsetFrom" +
-      "LineStart\020\001\022$\n UTF16CodeUnitOffsetFromLi" +
-      "neStart\020\002\022$\n UTF32CodeUnitOffsetFromLine" +
-      "Start\020\003*\224\001\n\nSymbolRole\022\031\n\025UnspecifiedSym" +
-      "bolRole\020\000\022\016\n\nDefinition\020\001\022\n\n\006Import\020\002\022\017\n" +
-      "\013WriteAccess\020\004\022\016\n\nReadAccess\020\010\022\r\n\tGenera" +
-      "ted\020\020\022\010\n\004Test\020 \022\025\n\021ForwardDefinition\020@*\352" +
-      "\006\n\nSyntaxKind\022\031\n\025UnspecifiedSyntaxKind\020\000" +
-      "\022\013\n\007Comment\020\001\022\030\n\024PunctuationDelimiter\020\002\022" +
-      "\026\n\022PunctuationBracket\020\003\022\013\n\007Keyword\020\004\022\031\n\021" +
-      "IdentifierKeyword\020\004\032\002\010\001\022\026\n\022IdentifierOpe" +
-      "rator\020\005\022\016\n\nIdentifier\020\006\022\025\n\021IdentifierBui" +
-      "ltin\020\007\022\022\n\016IdentifierNull\020\010\022\026\n\022Identifier" +
-      "Constant\020\t\022\033\n\027IdentifierMutableGlobal\020\n\022" +
-      "\027\n\023IdentifierParameter\020\013\022\023\n\017IdentifierLo" +
-      "cal\020\014\022\026\n\022IdentifierShadowed\020\r\022\027\n\023Identif" +
-      "ierNamespace\020\016\022\030\n\020IdentifierModule\020\016\032\002\010\001" +
-      "\022\026\n\022IdentifierFunction\020\017\022 \n\034IdentifierFu" +
-      "nctionDefinition\020\020\022\023\n\017IdentifierMacro\020\021\022" +
-      "\035\n\031IdentifierMacroDefinition\020\022\022\022\n\016Identi" +
-      "fierType\020\023\022\031\n\025IdentifierBuiltinType\020\024\022\027\n" +
-      "\023IdentifierAttribute\020\025\022\017\n\013RegexEscape\020\026\022" +
-      "\021\n\rRegexRepeated\020\027\022\021\n\rRegexWildcard\020\030\022\022\n" +
-      "\016RegexDelimiter\020\031\022\r\n\tRegexJoin\020\032\022\021\n\rStri" +
-      "ngLiteral\020\033\022\027\n\023StringLiteralEscape\020\034\022\030\n\024" +
-      "StringLiteralSpecial\020\035\022\024\n\020StringLiteralK" +
-      "ey\020\036\022\024\n\020CharacterLiteral\020\037\022\022\n\016NumericLit" +
-      "eral\020 \022\022\n\016BooleanLiteral\020!\022\007\n\003Tag\020\"\022\020\n\014T" +
-      "agAttribute\020#\022\020\n\014TagDelimiter\020$\032\002\020\001*V\n\010S" +
-      "everity\022\027\n\023UnspecifiedSeverity\020\000\022\t\n\005Erro" +
-      "r\020\001\022\013\n\007Warning\020\002\022\017\n\013Information\020\003\022\010\n\004Hin" +
-      "t\020\004*N\n\rDiagnosticTag\022\034\n\030UnspecifiedDiagn" +
-      "osticTag\020\000\022\017\n\013Unnecessary\020\001\022\016\n\nDeprecate" +
-      "d\020\002*\233\n\n\010Language\022\027\n\023UnspecifiedLanguage\020" +
-      "\000\022\010\n\004ABAP\020<\022\010\n\004Apex\020`\022\007\n\003APL\0201\022\007\n\003Ada\020\'\022" +
-      "\010\n\004Agda\020-\022\014\n\010AsciiDoc\020V\022\014\n\010Assembly\020:\022\007\n" +
-      "\003Awk\020B\022\007\n\003Bat\020D\022\n\n\006BibTeX\020Q\022\005\n\001C\020\"\022\t\n\005CO" +
-      "BOL\020;\022\007\n\003CPP\020#\022\007\n\003CSS\020\032\022\n\n\006CSharp\020\001\022\013\n\007C" +
-      "lojure\020\010\022\020\n\014Coffeescript\020\025\022\016\n\nCommonLisp" +
-      "\020\t\022\007\n\003Coq\020/\022\010\n\004CUDA\020a\022\010\n\004Dart\020\003\022\n\n\006Delph" +
-      "i\0209\022\010\n\004Diff\020X\022\016\n\nDockerfile\020P\022\n\n\006Dyalog\020" +
-      "2\022\n\n\006Elixir\020\021\022\n\n\006Erlang\020\022\022\n\n\006FSharp\020*\022\010\n" +
-      "\004Fish\020A\022\010\n\004Flow\020\030\022\013\n\007Fortran\0208\022\016\n\nGit_Co" +
-      "mmit\020[\022\016\n\nGit_Config\020Y\022\016\n\nGit_Rebase\020\\\022\006" +
-      "\n\002Go\020!\022\013\n\007GraphQL\020b\022\n\n\006Groovy\020\007\022\010\n\004HTML\020" +
-      "\036\022\010\n\004Hack\020\024\022\016\n\nHandlebars\020Z\022\013\n\007Haskell\020," +
-      "\022\t\n\005Idris\020.\022\007\n\003Ini\020H\022\005\n\001J\0203\022\010\n\004JSON\020K\022\010\n" +
-      "\004Java\020\006\022\016\n\nJavaScript\020\026\022\023\n\017JavaScriptRea" +
-      "ct\020]\022\013\n\007Jsonnet\020L\022\t\n\005Julia\0207\022\014\n\010Justfile" +
-      "\020m\022\n\n\006Kotlin\020\004\022\t\n\005LaTeX\020S\022\010\n\004Lean\0200\022\010\n\004L" +
-      "ess\020\033\022\007\n\003Lua\020\014\022\010\n\004Luau\020l\022\014\n\010Makefile\020O\022\014" +
-      "\n\010Markdown\020T\022\n\n\006Matlab\0204\022\n\n\006Nickel\020n\022\007\n\003" +
-      "Nix\020M\022\t\n\005OCaml\020)\022\017\n\013Objective_C\020$\022\021\n\rObj" +
-      "ective_CPP\020%\022\n\n\006Pascal\020c\022\007\n\003PHP\020\023\022\t\n\005PLS" +
-      "QL\020F\022\010\n\004Perl\020\r\022\016\n\nPowerShell\020C\022\n\n\006Prolog" +
-      "\020G\022\014\n\010Protobuf\020d\022\n\n\006Python\020\017\022\005\n\001R\0206\022\n\n\006R" +
-      "acket\020\013\022\010\n\004Raku\020\016\022\t\n\005Razor\020>\022\t\n\005Repro\020f\022" +
-      "\010\n\004ReST\020U\022\010\n\004Ruby\020\020\022\010\n\004Rust\020(\022\007\n\003SAS\020=\022\010" +
-      "\n\004SCSS\020\035\022\007\n\003SML\020+\022\007\n\003SQL\020E\022\010\n\004Sass\020\034\022\t\n\005" +
-      "Scala\020\005\022\n\n\006Scheme\020\n\022\017\n\013ShellScript\020@\022\013\n\007" +
-      "Skylark\020N\022\t\n\005Slang\020k\022\014\n\010Solidity\020_\022\n\n\006Sv" +
-      "elte\020j\022\t\n\005Swift\020\002\022\007\n\003Tcl\020e\022\010\n\004TOML\020I\022\007\n\003" +
-      "TeX\020R\022\n\n\006Thrift\020g\022\016\n\nTypeScript\020\027\022\023\n\017Typ" +
-      "eScriptReact\020^\022\013\n\007Verilog\020h\022\010\n\004VHDL\020i\022\017\n" +
-      "\013VisualBasic\020?\022\007\n\003Vue\020\031\022\013\n\007Wolfram\0205\022\007\n\003" +
-      "XML\020\037\022\007\n\003XSL\020 \022\010\n\004YAML\020J\022\007\n\003Zig\020&BN\n\022org" +
-      ".scip_code.scipB\tScipProtoP\001Z+github.com" +
-      "/scip-code/scip/bindings/go/scip/b\006proto" +
-      "3"
+      " \001(\010R\014isDefinition\"s\n\017SingleLineRange\022\022\n" +
+      "\004line\030\001 \001(\005R\004line\022\'\n\017start_character\030\002 \001" +
+      "(\005R\016startCharacter\022#\n\rend_character\030\003 \001(" +
+      "\005R\014endCharacter\"\230\001\n\016MultiLineRange\022\035\n\nst" +
+      "art_line\030\001 \001(\005R\tstartLine\022\'\n\017start_chara" +
+      "cter\030\002 \001(\005R\016startCharacter\022\031\n\010end_line\030\003" +
+      " \001(\005R\007endLine\022#\n\rend_character\030\004 \001(\005R\014en" +
+      "dCharacter\"\210\005\n\nOccurrence\022\030\n\005range\030\001 \003(\005" +
+      "B\002\030\001R\005range\022C\n\021single_line_range\030\010 \001(\0132\025" +
+      ".scip.SingleLineRangeH\000R\017singleLineRange" +
+      "\022@\n\020multi_line_range\030\t \001(\0132\024.scip.MultiL" +
+      "ineRangeH\000R\016multiLineRange\022\026\n\006symbol\030\002 \001" +
+      "(\tR\006symbol\022!\n\014symbol_roles\030\003 \001(\005R\013symbol" +
+      "Roles\0225\n\026override_documentation\030\004 \003(\tR\025o" +
+      "verrideDocumentation\0221\n\013syntax_kind\030\005 \001(" +
+      "\0162\020.scip.SyntaxKindR\nsyntaxKind\0222\n\013diagn" +
+      "ostics\030\006 \003(\0132\020.scip.DiagnosticR\013diagnost" +
+      "ics\022+\n\017enclosing_range\030\007 \003(\005B\002\030\001R\016enclos" +
+      "ingRange\022V\n\033single_line_enclosing_range\030" +
+      "\n \001(\0132\025.scip.SingleLineRangeH\001R\030singleLi" +
+      "neEnclosingRange\022S\n\032multi_line_enclosing" +
+      "_range\030\013 \001(\0132\024.scip.MultiLineRangeH\001R\027mu" +
+      "ltiLineEnclosingRangeB\r\n\013typed_rangeB\027\n\025" +
+      "typed_enclosing_range\"\247\001\n\nDiagnostic\022*\n\010" +
+      "severity\030\001 \001(\0162\016.scip.SeverityR\010severity" +
+      "\022\022\n\004code\030\002 \001(\tR\004code\022\030\n\007message\030\003 \001(\tR\007m" +
+      "essage\022\026\n\006source\030\004 \001(\tR\006source\022\'\n\004tags\030\005" +
+      " \003(\0162\023.scip.DiagnosticTagR\004tags*1\n\017Proto" +
+      "colVersion\022\036\n\032UnspecifiedProtocolVersion" +
+      "\020\000*@\n\014TextEncoding\022\033\n\027UnspecifiedTextEnc" +
+      "oding\020\000\022\010\n\004UTF8\020\001\022\t\n\005UTF16\020\002*\244\001\n\020Positio" +
+      "nEncoding\022\037\n\033UnspecifiedPositionEncoding" +
+      "\020\000\022#\n\037UTF8CodeUnitOffsetFromLineStart\020\001\022" +
+      "$\n UTF16CodeUnitOffsetFromLineStart\020\002\022$\n" +
+      " UTF32CodeUnitOffsetFromLineStart\020\003*\224\001\n\n" +
+      "SymbolRole\022\031\n\025UnspecifiedSymbolRole\020\000\022\016\n" +
+      "\nDefinition\020\001\022\n\n\006Import\020\002\022\017\n\013WriteAccess" +
+      "\020\004\022\016\n\nReadAccess\020\010\022\r\n\tGenerated\020\020\022\010\n\004Tes" +
+      "t\020 \022\025\n\021ForwardDefinition\020@*\352\006\n\nSyntaxKin" +
+      "d\022\031\n\025UnspecifiedSyntaxKind\020\000\022\013\n\007Comment\020" +
+      "\001\022\030\n\024PunctuationDelimiter\020\002\022\026\n\022Punctuati" +
+      "onBracket\020\003\022\013\n\007Keyword\020\004\022\031\n\021IdentifierKe" +
+      "yword\020\004\032\002\010\001\022\026\n\022IdentifierOperator\020\005\022\016\n\nI" +
+      "dentifier\020\006\022\025\n\021IdentifierBuiltin\020\007\022\022\n\016Id" +
+      "entifierNull\020\010\022\026\n\022IdentifierConstant\020\t\022\033" +
+      "\n\027IdentifierMutableGlobal\020\n\022\027\n\023Identifie" +
+      "rParameter\020\013\022\023\n\017IdentifierLocal\020\014\022\026\n\022Ide" +
+      "ntifierShadowed\020\r\022\027\n\023IdentifierNamespace" +
+      "\020\016\022\030\n\020IdentifierModule\020\016\032\002\010\001\022\026\n\022Identifi" +
+      "erFunction\020\017\022 \n\034IdentifierFunctionDefini" +
+      "tion\020\020\022\023\n\017IdentifierMacro\020\021\022\035\n\031Identifie" +
+      "rMacroDefinition\020\022\022\022\n\016IdentifierType\020\023\022\031" +
+      "\n\025IdentifierBuiltinType\020\024\022\027\n\023IdentifierA" +
+      "ttribute\020\025\022\017\n\013RegexEscape\020\026\022\021\n\rRegexRepe" +
+      "ated\020\027\022\021\n\rRegexWildcard\020\030\022\022\n\016RegexDelimi" +
+      "ter\020\031\022\r\n\tRegexJoin\020\032\022\021\n\rStringLiteral\020\033\022" +
+      "\027\n\023StringLiteralEscape\020\034\022\030\n\024StringLitera" +
+      "lSpecial\020\035\022\024\n\020StringLiteralKey\020\036\022\024\n\020Char" +
+      "acterLiteral\020\037\022\022\n\016NumericLiteral\020 \022\022\n\016Bo" +
+      "oleanLiteral\020!\022\007\n\003Tag\020\"\022\020\n\014TagAttribute\020" +
+      "#\022\020\n\014TagDelimiter\020$\032\002\020\001*V\n\010Severity\022\027\n\023U" +
+      "nspecifiedSeverity\020\000\022\t\n\005Error\020\001\022\013\n\007Warni" +
+      "ng\020\002\022\017\n\013Information\020\003\022\010\n\004Hint\020\004*N\n\rDiagn" +
+      "osticTag\022\034\n\030UnspecifiedDiagnosticTag\020\000\022\017" +
+      "\n\013Unnecessary\020\001\022\016\n\nDeprecated\020\002*\233\n\n\010Lang" +
+      "uage\022\027\n\023UnspecifiedLanguage\020\000\022\010\n\004ABAP\020<\022" +
+      "\010\n\004Apex\020`\022\007\n\003APL\0201\022\007\n\003Ada\020\'\022\010\n\004Agda\020-\022\014\n" +
+      "\010AsciiDoc\020V\022\014\n\010Assembly\020:\022\007\n\003Awk\020B\022\007\n\003Ba" +
+      "t\020D\022\n\n\006BibTeX\020Q\022\005\n\001C\020\"\022\t\n\005COBOL\020;\022\007\n\003CPP" +
+      "\020#\022\007\n\003CSS\020\032\022\n\n\006CSharp\020\001\022\013\n\007Clojure\020\010\022\020\n\014" +
+      "Coffeescript\020\025\022\016\n\nCommonLisp\020\t\022\007\n\003Coq\020/\022" +
+      "\010\n\004CUDA\020a\022\010\n\004Dart\020\003\022\n\n\006Delphi\0209\022\010\n\004Diff\020" +
+      "X\022\016\n\nDockerfile\020P\022\n\n\006Dyalog\0202\022\n\n\006Elixir\020" +
+      "\021\022\n\n\006Erlang\020\022\022\n\n\006FSharp\020*\022\010\n\004Fish\020A\022\010\n\004F" +
+      "low\020\030\022\013\n\007Fortran\0208\022\016\n\nGit_Commit\020[\022\016\n\nGi" +
+      "t_Config\020Y\022\016\n\nGit_Rebase\020\\\022\006\n\002Go\020!\022\013\n\007Gr" +
+      "aphQL\020b\022\n\n\006Groovy\020\007\022\010\n\004HTML\020\036\022\010\n\004Hack\020\024\022" +
+      "\016\n\nHandlebars\020Z\022\013\n\007Haskell\020,\022\t\n\005Idris\020.\022" +
+      "\007\n\003Ini\020H\022\005\n\001J\0203\022\010\n\004JSON\020K\022\010\n\004Java\020\006\022\016\n\nJ" +
+      "avaScript\020\026\022\023\n\017JavaScriptReact\020]\022\013\n\007Json" +
+      "net\020L\022\t\n\005Julia\0207\022\014\n\010Justfile\020m\022\n\n\006Kotlin" +
+      "\020\004\022\t\n\005LaTeX\020S\022\010\n\004Lean\0200\022\010\n\004Less\020\033\022\007\n\003Lua" +
+      "\020\014\022\010\n\004Luau\020l\022\014\n\010Makefile\020O\022\014\n\010Markdown\020T" +
+      "\022\n\n\006Matlab\0204\022\n\n\006Nickel\020n\022\007\n\003Nix\020M\022\t\n\005OCa" +
+      "ml\020)\022\017\n\013Objective_C\020$\022\021\n\rObjective_CPP\020%" +
+      "\022\n\n\006Pascal\020c\022\007\n\003PHP\020\023\022\t\n\005PLSQL\020F\022\010\n\004Perl" +
+      "\020\r\022\016\n\nPowerShell\020C\022\n\n\006Prolog\020G\022\014\n\010Protob" +
+      "uf\020d\022\n\n\006Python\020\017\022\005\n\001R\0206\022\n\n\006Racket\020\013\022\010\n\004R" +
+      "aku\020\016\022\t\n\005Razor\020>\022\t\n\005Repro\020f\022\010\n\004ReST\020U\022\010\n" +
+      "\004Ruby\020\020\022\010\n\004Rust\020(\022\007\n\003SAS\020=\022\010\n\004SCSS\020\035\022\007\n\003" +
+      "SML\020+\022\007\n\003SQL\020E\022\010\n\004Sass\020\034\022\t\n\005Scala\020\005\022\n\n\006S" +
+      "cheme\020\n\022\017\n\013ShellScript\020@\022\013\n\007Skylark\020N\022\t\n" +
+      "\005Slang\020k\022\014\n\010Solidity\020_\022\n\n\006Svelte\020j\022\t\n\005Sw" +
+      "ift\020\002\022\007\n\003Tcl\020e\022\010\n\004TOML\020I\022\007\n\003TeX\020R\022\n\n\006Thr" +
+      "ift\020g\022\016\n\nTypeScript\020\027\022\023\n\017TypeScriptReact" +
+      "\020^\022\013\n\007Verilog\020h\022\010\n\004VHDL\020i\022\017\n\013VisualBasic" +
+      "\020?\022\007\n\003Vue\020\031\022\013\n\007Wolfram\0205\022\007\n\003XML\020\037\022\007\n\003XSL" +
+      "\020 \022\010\n\004YAML\020J\022\007\n\003Zig\020&BN\n\022org.scip_code.s" +
+      "cipB\tScipProtoP\001Z+github.com/scip-code/s" +
+      "cip/bindings/go/scip/b\006proto3"
     };
     descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
@@ -325,14 +350,26 @@ public final class ScipProto extends com.google.protobuf.GeneratedFile {
       com.google.protobuf.GeneratedMessage.FieldAccessorTable(
         internal_static_scip_Relationship_descriptor,
         new java.lang.String[] { "Symbol", "IsReference", "IsImplementation", "IsTypeDefinition", "IsDefinition", });
-    internal_static_scip_Occurrence_descriptor =
+    internal_static_scip_SingleLineRange_descriptor =
       getDescriptor().getMessageType(10);
+    internal_static_scip_SingleLineRange_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+        internal_static_scip_SingleLineRange_descriptor,
+        new java.lang.String[] { "Line", "StartCharacter", "EndCharacter", });
+    internal_static_scip_MultiLineRange_descriptor =
+      getDescriptor().getMessageType(11);
+    internal_static_scip_MultiLineRange_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+        internal_static_scip_MultiLineRange_descriptor,
+        new java.lang.String[] { "StartLine", "StartCharacter", "EndLine", "EndCharacter", });
+    internal_static_scip_Occurrence_descriptor =
+      getDescriptor().getMessageType(12);
     internal_static_scip_Occurrence_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessage.FieldAccessorTable(
         internal_static_scip_Occurrence_descriptor,
-        new java.lang.String[] { "Range", "Symbol", "SymbolRoles", "OverrideDocumentation", "SyntaxKind", "Diagnostics", "EnclosingRange", });
+        new java.lang.String[] { "Range", "SingleLineRange", "MultiLineRange", "Symbol", "SymbolRoles", "OverrideDocumentation", "SyntaxKind", "Diagnostics", "EnclosingRange", "SingleLineEnclosingRange", "MultiLineEnclosingRange", "TypedRange", "TypedEnclosingRange", });
     internal_static_scip_Diagnostic_descriptor =
-      getDescriptor().getMessageType(11);
+      getDescriptor().getMessageType(13);
     internal_static_scip_Diagnostic_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessage.FieldAccessorTable(
         internal_static_scip_Diagnostic_descriptor,

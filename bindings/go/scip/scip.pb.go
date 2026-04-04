@@ -2293,6 +2293,136 @@ func (x *Relationship) GetIsDefinition() bool {
 	return false
 }
 
+// SingleLineRange represents a half-open [start, end) range within a single line.
+type SingleLineRange struct {
+	state          protoimpl.MessageState `protogen:"open.v1"`
+	Line           int32                  `protobuf:"varint,1,opt,name=line,proto3" json:"line,omitempty"`
+	StartCharacter int32                  `protobuf:"varint,2,opt,name=start_character,json=startCharacter,proto3" json:"start_character,omitempty"`
+	EndCharacter   int32                  `protobuf:"varint,3,opt,name=end_character,json=endCharacter,proto3" json:"end_character,omitempty"`
+	unknownFields  protoimpl.UnknownFields
+	sizeCache      protoimpl.SizeCache
+}
+
+func (x *SingleLineRange) Reset() {
+	*x = SingleLineRange{}
+	mi := &file_scip_proto_msgTypes[10]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *SingleLineRange) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SingleLineRange) ProtoMessage() {}
+
+func (x *SingleLineRange) ProtoReflect() protoreflect.Message {
+	mi := &file_scip_proto_msgTypes[10]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SingleLineRange.ProtoReflect.Descriptor instead.
+func (*SingleLineRange) Descriptor() ([]byte, []int) {
+	return file_scip_proto_rawDescGZIP(), []int{10}
+}
+
+func (x *SingleLineRange) GetLine() int32 {
+	if x != nil {
+		return x.Line
+	}
+	return 0
+}
+
+func (x *SingleLineRange) GetStartCharacter() int32 {
+	if x != nil {
+		return x.StartCharacter
+	}
+	return 0
+}
+
+func (x *SingleLineRange) GetEndCharacter() int32 {
+	if x != nil {
+		return x.EndCharacter
+	}
+	return 0
+}
+
+// MultiLineRange represents a half-open [start, end) range spanning multiple lines.
+type MultiLineRange struct {
+	state          protoimpl.MessageState `protogen:"open.v1"`
+	StartLine      int32                  `protobuf:"varint,1,opt,name=start_line,json=startLine,proto3" json:"start_line,omitempty"`
+	StartCharacter int32                  `protobuf:"varint,2,opt,name=start_character,json=startCharacter,proto3" json:"start_character,omitempty"`
+	EndLine        int32                  `protobuf:"varint,3,opt,name=end_line,json=endLine,proto3" json:"end_line,omitempty"`
+	EndCharacter   int32                  `protobuf:"varint,4,opt,name=end_character,json=endCharacter,proto3" json:"end_character,omitempty"`
+	unknownFields  protoimpl.UnknownFields
+	sizeCache      protoimpl.SizeCache
+}
+
+func (x *MultiLineRange) Reset() {
+	*x = MultiLineRange{}
+	mi := &file_scip_proto_msgTypes[11]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *MultiLineRange) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*MultiLineRange) ProtoMessage() {}
+
+func (x *MultiLineRange) ProtoReflect() protoreflect.Message {
+	mi := &file_scip_proto_msgTypes[11]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use MultiLineRange.ProtoReflect.Descriptor instead.
+func (*MultiLineRange) Descriptor() ([]byte, []int) {
+	return file_scip_proto_rawDescGZIP(), []int{11}
+}
+
+func (x *MultiLineRange) GetStartLine() int32 {
+	if x != nil {
+		return x.StartLine
+	}
+	return 0
+}
+
+func (x *MultiLineRange) GetStartCharacter() int32 {
+	if x != nil {
+		return x.StartCharacter
+	}
+	return 0
+}
+
+func (x *MultiLineRange) GetEndLine() int32 {
+	if x != nil {
+		return x.EndLine
+	}
+	return 0
+}
+
+func (x *MultiLineRange) GetEndCharacter() int32 {
+	if x != nil {
+		return x.EndCharacter
+	}
+	return 0
+}
+
 // Occurrence associates a source position with a symbol and/or highlighting
 // information.
 //
@@ -2300,12 +2430,22 @@ func (x *Relationship) GetIsDefinition() bool {
 // across occurrences into a single occurrence to reduce payload sizes.
 type Occurrence struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
-	// Half-open [start, end) range of this occurrence. Must be exactly three or four
-	// elements:
+	// Deprecated: Use `single_line_range` or `multi_line_range` instead.
 	//
-	//   - Four elements: `[startLine, startCharacter, endLine, endCharacter]`
-	//   - Three elements: `[startLine, startCharacter, endCharacter]`. The end line
-	//     is inferred to have the same value as the start line.
+	// Half-open [start, end) range. Must be exactly three or four elements:
+	// - Three elements: `[startLine, startCharacter, endCharacter]` (single-line)
+	// - Four elements: `[startLine, startCharacter, endLine, endCharacter]`
+	//
+	// Historical note: the original draft of this schema had a `Range` message
+	// type with `start` and `end` fields of type `Position`, mirroring LSP.
+	// Benchmarks revealed that this encoding was inefficient and that we could
+	// reduce the total payload size of an index by 50% by using `repeated int32`
+	// instead. However, the lack of type safety led to the introduction of
+	// `single_line_range` and `multi_line_range` as typed alternatives.
+	//
+	// Deprecated: Marked as deprecated in scip.proto.
+	Range []int32 `protobuf:"varint,1,rep,packed,name=range,proto3" json:"range,omitempty"`
+	// Half-open [start, end) source range of this occurrence.
 	//
 	// It is allowed for the range to be empty (i.e. start==end).
 	//
@@ -2316,14 +2456,11 @@ type Occurrence struct {
 	// The 'character' value is interpreted based on the PositionEncoding for
 	// the Document.
 	//
-	// Historical note: the original draft of this schema had a `Range` message
-	// type with `start` and `end` fields of type `Position`, mirroring LSP.
-	// Benchmarks revealed that this encoding was inefficient and that we could
-	// reduce the total payload size of an index by 50% by using `repeated int32`
-	// instead. The `repeated int32` encoding is admittedly more embarrassing to
-	// work with in some programming languages but we hope the performance
-	// improvements make up for it.
-	Range []int32 `protobuf:"varint,1,rep,packed,name=range,proto3" json:"range,omitempty"`
+	// Types that are valid to be assigned to TypedRange:
+	//
+	//	*Occurrence_SingleLineRange
+	//	*Occurrence_MultiLineRange
+	TypedRange isOccurrence_TypedRange `protobuf_oneof:"typed_range"`
 	// (optional) The symbol that appears at this position. See
 	// `SymbolInformation.symbol` for how to format symbols as strings.
 	Symbol string `protobuf:"bytes,2,opt,name=symbol,proto3" json:"symbol,omitempty"`
@@ -2343,12 +2480,14 @@ type Occurrence struct {
 	SyntaxKind SyntaxKind `protobuf:"varint,5,opt,name=syntax_kind,json=syntaxKind,proto3,enum=scip.SyntaxKind" json:"syntax_kind,omitempty"`
 	// (optional) Diagnostics that have been reported for this specific range.
 	Diagnostics []*Diagnostic `protobuf:"bytes,6,rep,name=diagnostics,proto3" json:"diagnostics,omitempty"`
-	// (optional) Using the same encoding as the sibling `range` field, half-open
-	// source range of the nearest non-trivial enclosing AST node. This range must
-	// enclose the `range` field. Example applications that make use of the
-	// enclosing_range field:
+	// Deprecated: Use `typed_enclosing_range` instead.
 	//
-	//   - Call hierarchies: to determine what symbols are references from the body
+	// Deprecated: Marked as deprecated in scip.proto.
+	EnclosingRange []int32 `protobuf:"varint,7,rep,packed,name=enclosing_range,json=enclosingRange,proto3" json:"enclosing_range,omitempty"`
+	// (optional) Half-open source range of the nearest non-trivial enclosing AST
+	// node. This range must enclose the occurrence range. Example applications:
+	//
+	//   - Call hierarchies: to determine what symbols are referenced from the body
 	//     of a function
 	//   - Symbol outline: to display breadcrumbs from the cursor position to the
 	//     root of the file
@@ -2405,14 +2544,19 @@ type Occurrence struct {
 	//	^^^^^^^^^^^^^ enclosing_range
 	//
 	// ```
-	EnclosingRange []int32 `protobuf:"varint,7,rep,packed,name=enclosing_range,json=enclosingRange,proto3" json:"enclosing_range,omitempty"`
-	unknownFields  protoimpl.UnknownFields
-	sizeCache      protoimpl.SizeCache
+	//
+	// Types that are valid to be assigned to TypedEnclosingRange:
+	//
+	//	*Occurrence_SingleLineEnclosingRange
+	//	*Occurrence_MultiLineEnclosingRange
+	TypedEnclosingRange isOccurrence_TypedEnclosingRange `protobuf_oneof:"typed_enclosing_range"`
+	unknownFields       protoimpl.UnknownFields
+	sizeCache           protoimpl.SizeCache
 }
 
 func (x *Occurrence) Reset() {
 	*x = Occurrence{}
-	mi := &file_scip_proto_msgTypes[10]
+	mi := &file_scip_proto_msgTypes[12]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2424,7 +2568,7 @@ func (x *Occurrence) String() string {
 func (*Occurrence) ProtoMessage() {}
 
 func (x *Occurrence) ProtoReflect() protoreflect.Message {
-	mi := &file_scip_proto_msgTypes[10]
+	mi := &file_scip_proto_msgTypes[12]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2437,12 +2581,38 @@ func (x *Occurrence) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Occurrence.ProtoReflect.Descriptor instead.
 func (*Occurrence) Descriptor() ([]byte, []int) {
-	return file_scip_proto_rawDescGZIP(), []int{10}
+	return file_scip_proto_rawDescGZIP(), []int{12}
 }
 
+// Deprecated: Marked as deprecated in scip.proto.
 func (x *Occurrence) GetRange() []int32 {
 	if x != nil {
 		return x.Range
+	}
+	return nil
+}
+
+func (x *Occurrence) GetTypedRange() isOccurrence_TypedRange {
+	if x != nil {
+		return x.TypedRange
+	}
+	return nil
+}
+
+func (x *Occurrence) GetSingleLineRange() *SingleLineRange {
+	if x != nil {
+		if x, ok := x.TypedRange.(*Occurrence_SingleLineRange); ok {
+			return x.SingleLineRange
+		}
+	}
+	return nil
+}
+
+func (x *Occurrence) GetMultiLineRange() *MultiLineRange {
+	if x != nil {
+		if x, ok := x.TypedRange.(*Occurrence_MultiLineRange); ok {
+			return x.MultiLineRange
+		}
 	}
 	return nil
 }
@@ -2482,12 +2652,72 @@ func (x *Occurrence) GetDiagnostics() []*Diagnostic {
 	return nil
 }
 
+// Deprecated: Marked as deprecated in scip.proto.
 func (x *Occurrence) GetEnclosingRange() []int32 {
 	if x != nil {
 		return x.EnclosingRange
 	}
 	return nil
 }
+
+func (x *Occurrence) GetTypedEnclosingRange() isOccurrence_TypedEnclosingRange {
+	if x != nil {
+		return x.TypedEnclosingRange
+	}
+	return nil
+}
+
+func (x *Occurrence) GetSingleLineEnclosingRange() *SingleLineRange {
+	if x != nil {
+		if x, ok := x.TypedEnclosingRange.(*Occurrence_SingleLineEnclosingRange); ok {
+			return x.SingleLineEnclosingRange
+		}
+	}
+	return nil
+}
+
+func (x *Occurrence) GetMultiLineEnclosingRange() *MultiLineRange {
+	if x != nil {
+		if x, ok := x.TypedEnclosingRange.(*Occurrence_MultiLineEnclosingRange); ok {
+			return x.MultiLineEnclosingRange
+		}
+	}
+	return nil
+}
+
+type isOccurrence_TypedRange interface {
+	isOccurrence_TypedRange()
+}
+
+type Occurrence_SingleLineRange struct {
+	// Range spanning a single line.
+	SingleLineRange *SingleLineRange `protobuf:"bytes,8,opt,name=single_line_range,json=singleLineRange,proto3,oneof"`
+}
+
+type Occurrence_MultiLineRange struct {
+	// Range spanning multiple lines.
+	MultiLineRange *MultiLineRange `protobuf:"bytes,9,opt,name=multi_line_range,json=multiLineRange,proto3,oneof"`
+}
+
+func (*Occurrence_SingleLineRange) isOccurrence_TypedRange() {}
+
+func (*Occurrence_MultiLineRange) isOccurrence_TypedRange() {}
+
+type isOccurrence_TypedEnclosingRange interface {
+	isOccurrence_TypedEnclosingRange()
+}
+
+type Occurrence_SingleLineEnclosingRange struct {
+	SingleLineEnclosingRange *SingleLineRange `protobuf:"bytes,10,opt,name=single_line_enclosing_range,json=singleLineEnclosingRange,proto3,oneof"`
+}
+
+type Occurrence_MultiLineEnclosingRange struct {
+	MultiLineEnclosingRange *MultiLineRange `protobuf:"bytes,11,opt,name=multi_line_enclosing_range,json=multiLineEnclosingRange,proto3,oneof"`
+}
+
+func (*Occurrence_SingleLineEnclosingRange) isOccurrence_TypedEnclosingRange() {}
+
+func (*Occurrence_MultiLineEnclosingRange) isOccurrence_TypedEnclosingRange() {}
 
 // Represents a diagnostic, such as a compiler error or warning, which should be
 // reported for a document.
@@ -2509,7 +2739,7 @@ type Diagnostic struct {
 
 func (x *Diagnostic) Reset() {
 	*x = Diagnostic{}
-	mi := &file_scip_proto_msgTypes[11]
+	mi := &file_scip_proto_msgTypes[13]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2521,7 +2751,7 @@ func (x *Diagnostic) String() string {
 func (*Diagnostic) ProtoMessage() {}
 
 func (x *Diagnostic) ProtoReflect() protoreflect.Message {
-	mi := &file_scip_proto_msgTypes[11]
+	mi := &file_scip_proto_msgTypes[13]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2534,7 +2764,7 @@ func (x *Diagnostic) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Diagnostic.ProtoReflect.Descriptor instead.
 func (*Diagnostic) Descriptor() ([]byte, []int) {
-	return file_scip_proto_rawDescGZIP(), []int{11}
+	return file_scip_proto_rawDescGZIP(), []int{13}
 }
 
 func (x *Diagnostic) GetSeverity() Severity {
@@ -2741,17 +2971,34 @@ const file_scip_proto_rawDesc = "" +
 	"\fis_reference\x18\x02 \x01(\bR\visReference\x12+\n" +
 	"\x11is_implementation\x18\x03 \x01(\bR\x10isImplementation\x12,\n" +
 	"\x12is_type_definition\x18\x04 \x01(\bR\x10isTypeDefinition\x12#\n" +
-	"\ris_definition\x18\x05 \x01(\bR\fisDefinition\"\xa4\x02\n" +
+	"\ris_definition\x18\x05 \x01(\bR\fisDefinition\"s\n" +
+	"\x0fSingleLineRange\x12\x12\n" +
+	"\x04line\x18\x01 \x01(\x05R\x04line\x12'\n" +
+	"\x0fstart_character\x18\x02 \x01(\x05R\x0estartCharacter\x12#\n" +
+	"\rend_character\x18\x03 \x01(\x05R\fendCharacter\"\x98\x01\n" +
+	"\x0eMultiLineRange\x12\x1d\n" +
 	"\n" +
-	"Occurrence\x12\x14\n" +
-	"\x05range\x18\x01 \x03(\x05R\x05range\x12\x16\n" +
+	"start_line\x18\x01 \x01(\x05R\tstartLine\x12'\n" +
+	"\x0fstart_character\x18\x02 \x01(\x05R\x0estartCharacter\x12\x19\n" +
+	"\bend_line\x18\x03 \x01(\x05R\aendLine\x12#\n" +
+	"\rend_character\x18\x04 \x01(\x05R\fendCharacter\"\x88\x05\n" +
+	"\n" +
+	"Occurrence\x12\x18\n" +
+	"\x05range\x18\x01 \x03(\x05B\x02\x18\x01R\x05range\x12C\n" +
+	"\x11single_line_range\x18\b \x01(\v2\x15.scip.SingleLineRangeH\x00R\x0fsingleLineRange\x12@\n" +
+	"\x10multi_line_range\x18\t \x01(\v2\x14.scip.MultiLineRangeH\x00R\x0emultiLineRange\x12\x16\n" +
 	"\x06symbol\x18\x02 \x01(\tR\x06symbol\x12!\n" +
 	"\fsymbol_roles\x18\x03 \x01(\x05R\vsymbolRoles\x125\n" +
 	"\x16override_documentation\x18\x04 \x03(\tR\x15overrideDocumentation\x121\n" +
 	"\vsyntax_kind\x18\x05 \x01(\x0e2\x10.scip.SyntaxKindR\n" +
 	"syntaxKind\x122\n" +
-	"\vdiagnostics\x18\x06 \x03(\v2\x10.scip.DiagnosticR\vdiagnostics\x12'\n" +
-	"\x0fenclosing_range\x18\a \x03(\x05R\x0eenclosingRange\"\xa7\x01\n" +
+	"\vdiagnostics\x18\x06 \x03(\v2\x10.scip.DiagnosticR\vdiagnostics\x12+\n" +
+	"\x0fenclosing_range\x18\a \x03(\x05B\x02\x18\x01R\x0eenclosingRange\x12V\n" +
+	"\x1bsingle_line_enclosing_range\x18\n" +
+	" \x01(\v2\x15.scip.SingleLineRangeH\x01R\x18singleLineEnclosingRange\x12S\n" +
+	"\x1amulti_line_enclosing_range\x18\v \x01(\v2\x14.scip.MultiLineRangeH\x01R\x17multiLineEnclosingRangeB\r\n" +
+	"\vtyped_rangeB\x17\n" +
+	"\x15typed_enclosing_range\"\xa7\x01\n" +
 	"\n" +
 	"Diagnostic\x12*\n" +
 	"\bseverity\x18\x01 \x01(\x0e2\x0e.scip.SeverityR\bseverity\x12\x12\n" +
@@ -2992,7 +3239,7 @@ func file_scip_proto_rawDescGZIP() []byte {
 }
 
 var file_scip_proto_enumTypes = make([]protoimpl.EnumInfo, 10)
-var file_scip_proto_msgTypes = make([]protoimpl.MessageInfo, 12)
+var file_scip_proto_msgTypes = make([]protoimpl.MessageInfo, 14)
 var file_scip_proto_goTypes = []any{
 	(ProtocolVersion)(0),        // 0: scip.ProtocolVersion
 	(TextEncoding)(0),           // 1: scip.TextEncoding
@@ -3014,8 +3261,10 @@ var file_scip_proto_goTypes = []any{
 	(*Signature)(nil),           // 17: scip.Signature
 	(*SymbolInformation)(nil),   // 18: scip.SymbolInformation
 	(*Relationship)(nil),        // 19: scip.Relationship
-	(*Occurrence)(nil),          // 20: scip.Occurrence
-	(*Diagnostic)(nil),          // 21: scip.Diagnostic
+	(*SingleLineRange)(nil),     // 20: scip.SingleLineRange
+	(*MultiLineRange)(nil),      // 21: scip.MultiLineRange
+	(*Occurrence)(nil),          // 22: scip.Occurrence
+	(*Diagnostic)(nil),          // 23: scip.Diagnostic
 }
 var file_scip_proto_depIdxs = []int32{
 	11, // 0: scip.Index.metadata:type_name -> scip.Metadata
@@ -3024,25 +3273,29 @@ var file_scip_proto_depIdxs = []int32{
 	0,  // 3: scip.Metadata.version:type_name -> scip.ProtocolVersion
 	12, // 4: scip.Metadata.tool_info:type_name -> scip.ToolInfo
 	1,  // 5: scip.Metadata.text_document_encoding:type_name -> scip.TextEncoding
-	20, // 6: scip.Document.occurrences:type_name -> scip.Occurrence
+	22, // 6: scip.Document.occurrences:type_name -> scip.Occurrence
 	18, // 7: scip.Document.symbols:type_name -> scip.SymbolInformation
 	2,  // 8: scip.Document.position_encoding:type_name -> scip.PositionEncoding
 	15, // 9: scip.Symbol.package:type_name -> scip.Package
 	16, // 10: scip.Symbol.descriptors:type_name -> scip.Descriptor
 	8,  // 11: scip.Descriptor.suffix:type_name -> scip.Descriptor.Suffix
-	20, // 12: scip.Signature.occurrences:type_name -> scip.Occurrence
+	22, // 12: scip.Signature.occurrences:type_name -> scip.Occurrence
 	19, // 13: scip.SymbolInformation.relationships:type_name -> scip.Relationship
 	9,  // 14: scip.SymbolInformation.kind:type_name -> scip.SymbolInformation.Kind
 	17, // 15: scip.SymbolInformation.signature_documentation:type_name -> scip.Signature
-	4,  // 16: scip.Occurrence.syntax_kind:type_name -> scip.SyntaxKind
-	21, // 17: scip.Occurrence.diagnostics:type_name -> scip.Diagnostic
-	5,  // 18: scip.Diagnostic.severity:type_name -> scip.Severity
-	6,  // 19: scip.Diagnostic.tags:type_name -> scip.DiagnosticTag
-	20, // [20:20] is the sub-list for method output_type
-	20, // [20:20] is the sub-list for method input_type
-	20, // [20:20] is the sub-list for extension type_name
-	20, // [20:20] is the sub-list for extension extendee
-	0,  // [0:20] is the sub-list for field type_name
+	20, // 16: scip.Occurrence.single_line_range:type_name -> scip.SingleLineRange
+	21, // 17: scip.Occurrence.multi_line_range:type_name -> scip.MultiLineRange
+	4,  // 18: scip.Occurrence.syntax_kind:type_name -> scip.SyntaxKind
+	23, // 19: scip.Occurrence.diagnostics:type_name -> scip.Diagnostic
+	20, // 20: scip.Occurrence.single_line_enclosing_range:type_name -> scip.SingleLineRange
+	21, // 21: scip.Occurrence.multi_line_enclosing_range:type_name -> scip.MultiLineRange
+	5,  // 22: scip.Diagnostic.severity:type_name -> scip.Severity
+	6,  // 23: scip.Diagnostic.tags:type_name -> scip.DiagnosticTag
+	24, // [24:24] is the sub-list for method output_type
+	24, // [24:24] is the sub-list for method input_type
+	24, // [24:24] is the sub-list for extension type_name
+	24, // [24:24] is the sub-list for extension extendee
+	0,  // [0:24] is the sub-list for field type_name
 }
 
 func init() { file_scip_proto_init() }
@@ -3050,13 +3303,19 @@ func file_scip_proto_init() {
 	if File_scip_proto != nil {
 		return
 	}
+	file_scip_proto_msgTypes[12].OneofWrappers = []any{
+		(*Occurrence_SingleLineRange)(nil),
+		(*Occurrence_MultiLineRange)(nil),
+		(*Occurrence_SingleLineEnclosingRange)(nil),
+		(*Occurrence_MultiLineEnclosingRange)(nil),
+	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_scip_proto_rawDesc), len(file_scip_proto_rawDesc)),
 			NumEnums:      10,
-			NumMessages:   12,
+			NumMessages:   14,
 			NumExtensions: 0,
 			NumServices:   0,
 		},

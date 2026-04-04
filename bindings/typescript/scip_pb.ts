@@ -20,7 +20,7 @@ import type { Message } from "@bufbuild/protobuf";
  * Describes the file scip.proto.
  */
 export const file_scip: GenFile = /*@__PURE__*/
-  fileDesc("CgpzY2lwLnByb3RvEgRzY2lwIn8KBUluZGV4EiAKCG1ldGFkYXRhGAEgASgLMg4uc2NpcC5NZXRhZGF0YRIhCglkb2N1bWVudHMYAiADKAsyDi5zY2lwLkRvY3VtZW50EjEKEGV4dGVybmFsX3N5bWJvbHMYAyADKAsyFy5zY2lwLlN5bWJvbEluZm9ybWF0aW9uIp8BCghNZXRhZGF0YRImCgd2ZXJzaW9uGAEgASgOMhUuc2NpcC5Qcm90b2NvbFZlcnNpb24SIQoJdG9vbF9pbmZvGAIgASgLMg4uc2NpcC5Ub29sSW5mbxIUCgxwcm9qZWN0X3Jvb3QYAyABKAkSMgoWdGV4dF9kb2N1bWVudF9lbmNvZGluZxgEIAEoDjISLnNjaXAuVGV4dEVuY29kaW5nIjwKCFRvb2xJbmZvEgwKBG5hbWUYASABKAkSDwoHdmVyc2lvbhgCIAEoCRIRCglhcmd1bWVudHMYAyADKAkixQEKCERvY3VtZW50EhAKCGxhbmd1YWdlGAQgASgJEhUKDXJlbGF0aXZlX3BhdGgYASABKAkSJQoLb2NjdXJyZW5jZXMYAiADKAsyEC5zY2lwLk9jY3VycmVuY2USKAoHc3ltYm9scxgDIAMoCzIXLnNjaXAuU3ltYm9sSW5mb3JtYXRpb24SDAoEdGV4dBgFIAEoCRIxChFwb3NpdGlvbl9lbmNvZGluZxgGIAEoDjIWLnNjaXAuUG9zaXRpb25FbmNvZGluZyJfCgZTeW1ib2wSDgoGc2NoZW1lGAEgASgJEh4KB3BhY2thZ2UYAiABKAsyDS5zY2lwLlBhY2thZ2USJQoLZGVzY3JpcHRvcnMYAyADKAsyEC5zY2lwLkRlc2NyaXB0b3IiOQoHUGFja2FnZRIPCgdtYW5hZ2VyGAEgASgJEgwKBG5hbWUYAiABKAkSDwoHdmVyc2lvbhgDIAEoCSKCAgoKRGVzY3JpcHRvchIMCgRuYW1lGAEgASgJEhUKDWRpc2FtYmlndWF0b3IYAiABKAkSJwoGc3VmZml4GAMgASgOMhcuc2NpcC5EZXNjcmlwdG9yLlN1ZmZpeCKlAQoGU3VmZml4EhUKEVVuc3BlY2lmaWVkU3VmZml4EAASDQoJTmFtZXNwYWNlEAESDwoHUGFja2FnZRABGgIIARIICgRUeXBlEAISCAoEVGVybRADEgoKBk1ldGhvZBAEEhEKDVR5cGVQYXJhbWV0ZXIQBRINCglQYXJhbWV0ZXIQBhIICgRNZXRhEAcSCQoFTG9jYWwQCBIJCgVNYWNybxAJGgIQASJkCglTaWduYXR1cmUSEAoIbGFuZ3VhZ2UYBCABKAkSDAoEdGV4dBgFIAEoCRIlCgtvY2N1cnJlbmNlcxgCIAMoCzIQLnNjaXAuT2NjdXJyZW5jZUoECAEQAkoECAMQBEoECAYQByLxCwoRU3ltYm9sSW5mb3JtYXRpb24SDgoGc3ltYm9sGAEgASgJEhUKDWRvY3VtZW50YXRpb24YAyADKAkSKQoNcmVsYXRpb25zaGlwcxgEIAMoCzISLnNjaXAuUmVsYXRpb25zaGlwEioKBGtpbmQYBSABKA4yHC5zY2lwLlN5bWJvbEluZm9ybWF0aW9uLktpbmQSFAoMZGlzcGxheV9uYW1lGAYgASgJEjAKF3NpZ25hdHVyZV9kb2N1bWVudGF0aW9uGAcgASgLMg8uc2NpcC5TaWduYXR1cmUSGAoQZW5jbG9zaW5nX3N5bWJvbBgIIAEoCSL7CQoES2luZBITCg9VbnNwZWNpZmllZEtpbmQQABISCg5BYnN0cmFjdE1ldGhvZBBCEgwKCEFjY2Vzc29yEEgSCQoFQXJyYXkQARINCglBc3NlcnRpb24QAhISCg5Bc3NvY2lhdGVkVHlwZRADEg0KCUF0dHJpYnV0ZRAEEgkKBUF4aW9tEAUSCwoHQm9vbGVhbhAGEgkKBUNsYXNzEAcSCwoHQ29uY2VwdBBWEgwKCENvbnN0YW50EAgSDwoLQ29uc3RydWN0b3IQCRIMCghDb250cmFjdBA+Eg4KCkRhdGFGYW1pbHkQChIMCghEZWxlZ2F0ZRBJEggKBEVudW0QCxIOCgpFbnVtTWVtYmVyEAwSCQoFRXJyb3IQPxIJCgVFdmVudBANEg0KCUV4dGVuc2lvbhBUEggKBEZhY3QQDhIJCgVGaWVsZBAPEggKBEZpbGUQEBIMCghGdW5jdGlvbhAREgoKBkdldHRlchASEgsKB0dyYW1tYXIQExIMCghJbnN0YW5jZRAUEg0KCUludGVyZmFjZRAVEgcKA0tleRAWEggKBExhbmcQFxIJCgVMZW1tYRAYEgsKB0xpYnJhcnkQQBIJCgVNYWNybxAZEgoKBk1ldGhvZBAaEg8KC01ldGhvZEFsaWFzEEoSEgoOTWV0aG9kUmVjZWl2ZXIQGxIXChNNZXRob2RTcGVjaWZpY2F0aW9uEEMSCwoHTWVzc2FnZRAcEgkKBU1peGluEFUSDAoITW9kaWZpZXIQQRIKCgZNb2R1bGUQHRINCglOYW1lc3BhY2UQHhIICgROdWxsEB8SCgoGTnVtYmVyECASCgoGT2JqZWN0ECESDAoIT3BlcmF0b3IQIhILCgdQYWNrYWdlECMSEQoNUGFja2FnZU9iamVjdBAkEg0KCVBhcmFtZXRlchAlEhIKDlBhcmFtZXRlckxhYmVsECYSCwoHUGF0dGVybhAnEg0KCVByZWRpY2F0ZRAoEgwKCFByb3BlcnR5ECkSDAoIUHJvdG9jb2wQKhISCg5Qcm90b2NvbE1ldGhvZBBEEhUKEVB1cmVWaXJ0dWFsTWV0aG9kEEUSDwoLUXVhc2lxdW90ZXIQKxIRCg1TZWxmUGFyYW1ldGVyECwSCgoGU2V0dGVyEC0SDQoJU2lnbmF0dXJlEC4SEgoOU2luZ2xldG9uQ2xhc3MQSxITCg9TaW5nbGV0b25NZXRob2QQTBIUChBTdGF0aWNEYXRhTWVtYmVyEE0SDwoLU3RhdGljRXZlbnQQThIPCgtTdGF0aWNGaWVsZBBPEhAKDFN0YXRpY01ldGhvZBBQEhIKDlN0YXRpY1Byb3BlcnR5EFESEgoOU3RhdGljVmFyaWFibGUQUhIKCgZTdHJpbmcQMBIKCgZTdHJ1Y3QQMRINCglTdWJzY3JpcHQQLxIKCgZUYWN0aWMQMhILCgdUaGVvcmVtEDMSEQoNVGhpc1BhcmFtZXRlchA0EgkKBVRyYWl0EDUSDwoLVHJhaXRNZXRob2QQRhIICgRUeXBlEDYSDQoJVHlwZUFsaWFzEDcSDQoJVHlwZUNsYXNzEDgSEwoPVHlwZUNsYXNzTWV0aG9kEEcSDgoKVHlwZUZhbWlseRA5EhEKDVR5cGVQYXJhbWV0ZXIQOhIJCgVVbmlvbhA7EgkKBVZhbHVlEDwSDAoIVmFyaWFibGUQPSKCAQoMUmVsYXRpb25zaGlwEg4KBnN5bWJvbBgBIAEoCRIUCgxpc19yZWZlcmVuY2UYAiABKAgSGQoRaXNfaW1wbGVtZW50YXRpb24YAyABKAgSGgoSaXNfdHlwZV9kZWZpbml0aW9uGAQgASgIEhUKDWlzX2RlZmluaXRpb24YBSABKAgiyAEKCk9jY3VycmVuY2USDQoFcmFuZ2UYASADKAUSDgoGc3ltYm9sGAIgASgJEhQKDHN5bWJvbF9yb2xlcxgDIAEoBRIeChZvdmVycmlkZV9kb2N1bWVudGF0aW9uGAQgAygJEiUKC3N5bnRheF9raW5kGAUgASgOMhAuc2NpcC5TeW50YXhLaW5kEiUKC2RpYWdub3N0aWNzGAYgAygLMhAuc2NpcC5EaWFnbm9zdGljEhcKD2VuY2xvc2luZ19yYW5nZRgHIAMoBSKAAQoKRGlhZ25vc3RpYxIgCghzZXZlcml0eRgBIAEoDjIOLnNjaXAuU2V2ZXJpdHkSDAoEY29kZRgCIAEoCRIPCgdtZXNzYWdlGAMgASgJEg4KBnNvdXJjZRgEIAEoCRIhCgR0YWdzGAUgAygOMhMuc2NpcC5EaWFnbm9zdGljVGFnKjEKD1Byb3RvY29sVmVyc2lvbhIeChpVbnNwZWNpZmllZFByb3RvY29sVmVyc2lvbhAAKkAKDFRleHRFbmNvZGluZxIbChdVbnNwZWNpZmllZFRleHRFbmNvZGluZxAAEggKBFVURjgQARIJCgVVVEYxNhACKqQBChBQb3NpdGlvbkVuY29kaW5nEh8KG1Vuc3BlY2lmaWVkUG9zaXRpb25FbmNvZGluZxAAEiMKH1VURjhDb2RlVW5pdE9mZnNldEZyb21MaW5lU3RhcnQQARIkCiBVVEYxNkNvZGVVbml0T2Zmc2V0RnJvbUxpbmVTdGFydBACEiQKIFVURjMyQ29kZVVuaXRPZmZzZXRGcm9tTGluZVN0YXJ0EAMqlAEKClN5bWJvbFJvbGUSGQoVVW5zcGVjaWZpZWRTeW1ib2xSb2xlEAASDgoKRGVmaW5pdGlvbhABEgoKBkltcG9ydBACEg8KC1dyaXRlQWNjZXNzEAQSDgoKUmVhZEFjY2VzcxAIEg0KCUdlbmVyYXRlZBAQEggKBFRlc3QQIBIVChFGb3J3YXJkRGVmaW5pdGlvbhBAKuoGCgpTeW50YXhLaW5kEhkKFVVuc3BlY2lmaWVkU3ludGF4S2luZBAAEgsKB0NvbW1lbnQQARIYChRQdW5jdHVhdGlvbkRlbGltaXRlchACEhYKElB1bmN0dWF0aW9uQnJhY2tldBADEgsKB0tleXdvcmQQBBIZChFJZGVudGlmaWVyS2V5d29yZBAEGgIIARIWChJJZGVudGlmaWVyT3BlcmF0b3IQBRIOCgpJZGVudGlmaWVyEAYSFQoRSWRlbnRpZmllckJ1aWx0aW4QBxISCg5JZGVudGlmaWVyTnVsbBAIEhYKEklkZW50aWZpZXJDb25zdGFudBAJEhsKF0lkZW50aWZpZXJNdXRhYmxlR2xvYmFsEAoSFwoTSWRlbnRpZmllclBhcmFtZXRlchALEhMKD0lkZW50aWZpZXJMb2NhbBAMEhYKEklkZW50aWZpZXJTaGFkb3dlZBANEhcKE0lkZW50aWZpZXJOYW1lc3BhY2UQDhIYChBJZGVudGlmaWVyTW9kdWxlEA4aAggBEhYKEklkZW50aWZpZXJGdW5jdGlvbhAPEiAKHElkZW50aWZpZXJGdW5jdGlvbkRlZmluaXRpb24QEBITCg9JZGVudGlmaWVyTWFjcm8QERIdChlJZGVudGlmaWVyTWFjcm9EZWZpbml0aW9uEBISEgoOSWRlbnRpZmllclR5cGUQExIZChVJZGVudGlmaWVyQnVpbHRpblR5cGUQFBIXChNJZGVudGlmaWVyQXR0cmlidXRlEBUSDwoLUmVnZXhFc2NhcGUQFhIRCg1SZWdleFJlcGVhdGVkEBcSEQoNUmVnZXhXaWxkY2FyZBAYEhIKDlJlZ2V4RGVsaW1pdGVyEBkSDQoJUmVnZXhKb2luEBoSEQoNU3RyaW5nTGl0ZXJhbBAbEhcKE1N0cmluZ0xpdGVyYWxFc2NhcGUQHBIYChRTdHJpbmdMaXRlcmFsU3BlY2lhbBAdEhQKEFN0cmluZ0xpdGVyYWxLZXkQHhIUChBDaGFyYWN0ZXJMaXRlcmFsEB8SEgoOTnVtZXJpY0xpdGVyYWwQIBISCg5Cb29sZWFuTGl0ZXJhbBAhEgcKA1RhZxAiEhAKDFRhZ0F0dHJpYnV0ZRAjEhAKDFRhZ0RlbGltaXRlchAkGgIQASpWCghTZXZlcml0eRIXChNVbnNwZWNpZmllZFNldmVyaXR5EAASCQoFRXJyb3IQARILCgdXYXJuaW5nEAISDwoLSW5mb3JtYXRpb24QAxIICgRIaW50EAQqTgoNRGlhZ25vc3RpY1RhZxIcChhVbnNwZWNpZmllZERpYWdub3N0aWNUYWcQABIPCgtVbm5lY2Vzc2FyeRABEg4KCkRlcHJlY2F0ZWQQAiqbCgoITGFuZ3VhZ2USFwoTVW5zcGVjaWZpZWRMYW5ndWFnZRAAEggKBEFCQVAQPBIICgRBcGV4EGASBwoDQVBMEDESBwoDQWRhECcSCAoEQWdkYRAtEgwKCEFzY2lpRG9jEFYSDAoIQXNzZW1ibHkQOhIHCgNBd2sQQhIHCgNCYXQQRBIKCgZCaWJUZVgQURIFCgFDECISCQoFQ09CT0wQOxIHCgNDUFAQIxIHCgNDU1MQGhIKCgZDU2hhcnAQARILCgdDbG9qdXJlEAgSEAoMQ29mZmVlc2NyaXB0EBUSDgoKQ29tbW9uTGlzcBAJEgcKA0NvcRAvEggKBENVREEQYRIICgREYXJ0EAMSCgoGRGVscGhpEDkSCAoERGlmZhBYEg4KCkRvY2tlcmZpbGUQUBIKCgZEeWFsb2cQMhIKCgZFbGl4aXIQERIKCgZFcmxhbmcQEhIKCgZGU2hhcnAQKhIICgRGaXNoEEESCAoERmxvdxAYEgsKB0ZvcnRyYW4QOBIOCgpHaXRfQ29tbWl0EFsSDgoKR2l0X0NvbmZpZxBZEg4KCkdpdF9SZWJhc2UQXBIGCgJHbxAhEgsKB0dyYXBoUUwQYhIKCgZHcm9vdnkQBxIICgRIVE1MEB4SCAoESGFjaxAUEg4KCkhhbmRsZWJhcnMQWhILCgdIYXNrZWxsECwSCQoFSWRyaXMQLhIHCgNJbmkQSBIFCgFKEDMSCAoESlNPThBLEggKBEphdmEQBhIOCgpKYXZhU2NyaXB0EBYSEwoPSmF2YVNjcmlwdFJlYWN0EF0SCwoHSnNvbm5ldBBMEgkKBUp1bGlhEDcSDAoISnVzdGZpbGUQbRIKCgZLb3RsaW4QBBIJCgVMYVRlWBBTEggKBExlYW4QMBIICgRMZXNzEBsSBwoDTHVhEAwSCAoETHVhdRBsEgwKCE1ha2VmaWxlEE8SDAoITWFya2Rvd24QVBIKCgZNYXRsYWIQNBIKCgZOaWNrZWwQbhIHCgNOaXgQTRIJCgVPQ2FtbBApEg8KC09iamVjdGl2ZV9DECQSEQoNT2JqZWN0aXZlX0NQUBAlEgoKBlBhc2NhbBBjEgcKA1BIUBATEgkKBVBMU1FMEEYSCAoEUGVybBANEg4KClBvd2VyU2hlbGwQQxIKCgZQcm9sb2cQRxIMCghQcm90b2J1ZhBkEgoKBlB5dGhvbhAPEgUKAVIQNhIKCgZSYWNrZXQQCxIICgRSYWt1EA4SCQoFUmF6b3IQPhIJCgVSZXBybxBmEggKBFJlU1QQVRIICgRSdWJ5EBASCAoEUnVzdBAoEgcKA1NBUxA9EggKBFNDU1MQHRIHCgNTTUwQKxIHCgNTUUwQRRIICgRTYXNzEBwSCQoFU2NhbGEQBRIKCgZTY2hlbWUQChIPCgtTaGVsbFNjcmlwdBBAEgsKB1NreWxhcmsQThIJCgVTbGFuZxBrEgwKCFNvbGlkaXR5EF8SCgoGU3ZlbHRlEGoSCQoFU3dpZnQQAhIHCgNUY2wQZRIICgRUT01MEEkSBwoDVGVYEFISCgoGVGhyaWZ0EGcSDgoKVHlwZVNjcmlwdBAXEhMKD1R5cGVTY3JpcHRSZWFjdBBeEgsKB1Zlcmlsb2cQaBIICgRWSERMEGkSDwoLVmlzdWFsQmFzaWMQPxIHCgNWdWUQGRILCgdXb2xmcmFtEDUSBwoDWE1MEB8SBwoDWFNMECASCAoEWUFNTBBKEgcKA1ppZxAmQk4KEm9yZy5zY2lwX2NvZGUuc2NpcEIJU2NpcFByb3RvUAFaK2dpdGh1Yi5jb20vc2NpcC1jb2RlL3NjaXAvYmluZGluZ3MvZ28vc2NpcC9iBnByb3RvMw");
+  fileDesc("CgpzY2lwLnByb3RvEgRzY2lwIn8KBUluZGV4EiAKCG1ldGFkYXRhGAEgASgLMg4uc2NpcC5NZXRhZGF0YRIhCglkb2N1bWVudHMYAiADKAsyDi5zY2lwLkRvY3VtZW50EjEKEGV4dGVybmFsX3N5bWJvbHMYAyADKAsyFy5zY2lwLlN5bWJvbEluZm9ybWF0aW9uIp8BCghNZXRhZGF0YRImCgd2ZXJzaW9uGAEgASgOMhUuc2NpcC5Qcm90b2NvbFZlcnNpb24SIQoJdG9vbF9pbmZvGAIgASgLMg4uc2NpcC5Ub29sSW5mbxIUCgxwcm9qZWN0X3Jvb3QYAyABKAkSMgoWdGV4dF9kb2N1bWVudF9lbmNvZGluZxgEIAEoDjISLnNjaXAuVGV4dEVuY29kaW5nIjwKCFRvb2xJbmZvEgwKBG5hbWUYASABKAkSDwoHdmVyc2lvbhgCIAEoCRIRCglhcmd1bWVudHMYAyADKAkixQEKCERvY3VtZW50EhAKCGxhbmd1YWdlGAQgASgJEhUKDXJlbGF0aXZlX3BhdGgYASABKAkSJQoLb2NjdXJyZW5jZXMYAiADKAsyEC5zY2lwLk9jY3VycmVuY2USKAoHc3ltYm9scxgDIAMoCzIXLnNjaXAuU3ltYm9sSW5mb3JtYXRpb24SDAoEdGV4dBgFIAEoCRIxChFwb3NpdGlvbl9lbmNvZGluZxgGIAEoDjIWLnNjaXAuUG9zaXRpb25FbmNvZGluZyJfCgZTeW1ib2wSDgoGc2NoZW1lGAEgASgJEh4KB3BhY2thZ2UYAiABKAsyDS5zY2lwLlBhY2thZ2USJQoLZGVzY3JpcHRvcnMYAyADKAsyEC5zY2lwLkRlc2NyaXB0b3IiOQoHUGFja2FnZRIPCgdtYW5hZ2VyGAEgASgJEgwKBG5hbWUYAiABKAkSDwoHdmVyc2lvbhgDIAEoCSKCAgoKRGVzY3JpcHRvchIMCgRuYW1lGAEgASgJEhUKDWRpc2FtYmlndWF0b3IYAiABKAkSJwoGc3VmZml4GAMgASgOMhcuc2NpcC5EZXNjcmlwdG9yLlN1ZmZpeCKlAQoGU3VmZml4EhUKEVVuc3BlY2lmaWVkU3VmZml4EAASDQoJTmFtZXNwYWNlEAESDwoHUGFja2FnZRABGgIIARIICgRUeXBlEAISCAoEVGVybRADEgoKBk1ldGhvZBAEEhEKDVR5cGVQYXJhbWV0ZXIQBRINCglQYXJhbWV0ZXIQBhIICgRNZXRhEAcSCQoFTG9jYWwQCBIJCgVNYWNybxAJGgIQASJkCglTaWduYXR1cmUSEAoIbGFuZ3VhZ2UYBCABKAkSDAoEdGV4dBgFIAEoCRIlCgtvY2N1cnJlbmNlcxgCIAMoCzIQLnNjaXAuT2NjdXJyZW5jZUoECAEQAkoECAMQBEoECAYQByLxCwoRU3ltYm9sSW5mb3JtYXRpb24SDgoGc3ltYm9sGAEgASgJEhUKDWRvY3VtZW50YXRpb24YAyADKAkSKQoNcmVsYXRpb25zaGlwcxgEIAMoCzISLnNjaXAuUmVsYXRpb25zaGlwEioKBGtpbmQYBSABKA4yHC5zY2lwLlN5bWJvbEluZm9ybWF0aW9uLktpbmQSFAoMZGlzcGxheV9uYW1lGAYgASgJEjAKF3NpZ25hdHVyZV9kb2N1bWVudGF0aW9uGAcgASgLMg8uc2NpcC5TaWduYXR1cmUSGAoQZW5jbG9zaW5nX3N5bWJvbBgIIAEoCSL7CQoES2luZBITCg9VbnNwZWNpZmllZEtpbmQQABISCg5BYnN0cmFjdE1ldGhvZBBCEgwKCEFjY2Vzc29yEEgSCQoFQXJyYXkQARINCglBc3NlcnRpb24QAhISCg5Bc3NvY2lhdGVkVHlwZRADEg0KCUF0dHJpYnV0ZRAEEgkKBUF4aW9tEAUSCwoHQm9vbGVhbhAGEgkKBUNsYXNzEAcSCwoHQ29uY2VwdBBWEgwKCENvbnN0YW50EAgSDwoLQ29uc3RydWN0b3IQCRIMCghDb250cmFjdBA+Eg4KCkRhdGFGYW1pbHkQChIMCghEZWxlZ2F0ZRBJEggKBEVudW0QCxIOCgpFbnVtTWVtYmVyEAwSCQoFRXJyb3IQPxIJCgVFdmVudBANEg0KCUV4dGVuc2lvbhBUEggKBEZhY3QQDhIJCgVGaWVsZBAPEggKBEZpbGUQEBIMCghGdW5jdGlvbhAREgoKBkdldHRlchASEgsKB0dyYW1tYXIQExIMCghJbnN0YW5jZRAUEg0KCUludGVyZmFjZRAVEgcKA0tleRAWEggKBExhbmcQFxIJCgVMZW1tYRAYEgsKB0xpYnJhcnkQQBIJCgVNYWNybxAZEgoKBk1ldGhvZBAaEg8KC01ldGhvZEFsaWFzEEoSEgoOTWV0aG9kUmVjZWl2ZXIQGxIXChNNZXRob2RTcGVjaWZpY2F0aW9uEEMSCwoHTWVzc2FnZRAcEgkKBU1peGluEFUSDAoITW9kaWZpZXIQQRIKCgZNb2R1bGUQHRINCglOYW1lc3BhY2UQHhIICgROdWxsEB8SCgoGTnVtYmVyECASCgoGT2JqZWN0ECESDAoIT3BlcmF0b3IQIhILCgdQYWNrYWdlECMSEQoNUGFja2FnZU9iamVjdBAkEg0KCVBhcmFtZXRlchAlEhIKDlBhcmFtZXRlckxhYmVsECYSCwoHUGF0dGVybhAnEg0KCVByZWRpY2F0ZRAoEgwKCFByb3BlcnR5ECkSDAoIUHJvdG9jb2wQKhISCg5Qcm90b2NvbE1ldGhvZBBEEhUKEVB1cmVWaXJ0dWFsTWV0aG9kEEUSDwoLUXVhc2lxdW90ZXIQKxIRCg1TZWxmUGFyYW1ldGVyECwSCgoGU2V0dGVyEC0SDQoJU2lnbmF0dXJlEC4SEgoOU2luZ2xldG9uQ2xhc3MQSxITCg9TaW5nbGV0b25NZXRob2QQTBIUChBTdGF0aWNEYXRhTWVtYmVyEE0SDwoLU3RhdGljRXZlbnQQThIPCgtTdGF0aWNGaWVsZBBPEhAKDFN0YXRpY01ldGhvZBBQEhIKDlN0YXRpY1Byb3BlcnR5EFESEgoOU3RhdGljVmFyaWFibGUQUhIKCgZTdHJpbmcQMBIKCgZTdHJ1Y3QQMRINCglTdWJzY3JpcHQQLxIKCgZUYWN0aWMQMhILCgdUaGVvcmVtEDMSEQoNVGhpc1BhcmFtZXRlchA0EgkKBVRyYWl0EDUSDwoLVHJhaXRNZXRob2QQRhIICgRUeXBlEDYSDQoJVHlwZUFsaWFzEDcSDQoJVHlwZUNsYXNzEDgSEwoPVHlwZUNsYXNzTWV0aG9kEEcSDgoKVHlwZUZhbWlseRA5EhEKDVR5cGVQYXJhbWV0ZXIQOhIJCgVVbmlvbhA7EgkKBVZhbHVlEDwSDAoIVmFyaWFibGUQPSKCAQoMUmVsYXRpb25zaGlwEg4KBnN5bWJvbBgBIAEoCRIUCgxpc19yZWZlcmVuY2UYAiABKAgSGQoRaXNfaW1wbGVtZW50YXRpb24YAyABKAgSGgoSaXNfdHlwZV9kZWZpbml0aW9uGAQgASgIEhUKDWlzX2RlZmluaXRpb24YBSABKAgiTwoPU2luZ2xlTGluZVJhbmdlEgwKBGxpbmUYASABKAUSFwoPc3RhcnRfY2hhcmFjdGVyGAIgASgFEhUKDWVuZF9jaGFyYWN0ZXIYAyABKAUiZgoOTXVsdGlMaW5lUmFuZ2USEgoKc3RhcnRfbGluZRgBIAEoBRIXCg9zdGFydF9jaGFyYWN0ZXIYAiABKAUSEAoIZW5kX2xpbmUYAyABKAUSFQoNZW5kX2NoYXJhY3RlchgEIAEoBSLYAwoKT2NjdXJyZW5jZRIRCgVyYW5nZRgBIAMoBUICGAESMgoRc2luZ2xlX2xpbmVfcmFuZ2UYCCABKAsyFS5zY2lwLlNpbmdsZUxpbmVSYW5nZUgAEjAKEG11bHRpX2xpbmVfcmFuZ2UYCSABKAsyFC5zY2lwLk11bHRpTGluZVJhbmdlSAASDgoGc3ltYm9sGAIgASgJEhQKDHN5bWJvbF9yb2xlcxgDIAEoBRIeChZvdmVycmlkZV9kb2N1bWVudGF0aW9uGAQgAygJEiUKC3N5bnRheF9raW5kGAUgASgOMhAuc2NpcC5TeW50YXhLaW5kEiUKC2RpYWdub3N0aWNzGAYgAygLMhAuc2NpcC5EaWFnbm9zdGljEhsKD2VuY2xvc2luZ19yYW5nZRgHIAMoBUICGAESPAobc2luZ2xlX2xpbmVfZW5jbG9zaW5nX3JhbmdlGAogASgLMhUuc2NpcC5TaW5nbGVMaW5lUmFuZ2VIARI6ChptdWx0aV9saW5lX2VuY2xvc2luZ19yYW5nZRgLIAEoCzIULnNjaXAuTXVsdGlMaW5lUmFuZ2VIAUINCgt0eXBlZF9yYW5nZUIXChV0eXBlZF9lbmNsb3NpbmdfcmFuZ2UigAEKCkRpYWdub3N0aWMSIAoIc2V2ZXJpdHkYASABKA4yDi5zY2lwLlNldmVyaXR5EgwKBGNvZGUYAiABKAkSDwoHbWVzc2FnZRgDIAEoCRIOCgZzb3VyY2UYBCABKAkSIQoEdGFncxgFIAMoDjITLnNjaXAuRGlhZ25vc3RpY1RhZyoxCg9Qcm90b2NvbFZlcnNpb24SHgoaVW5zcGVjaWZpZWRQcm90b2NvbFZlcnNpb24QACpACgxUZXh0RW5jb2RpbmcSGwoXVW5zcGVjaWZpZWRUZXh0RW5jb2RpbmcQABIICgRVVEY4EAESCQoFVVRGMTYQAiqkAQoQUG9zaXRpb25FbmNvZGluZxIfChtVbnNwZWNpZmllZFBvc2l0aW9uRW5jb2RpbmcQABIjCh9VVEY4Q29kZVVuaXRPZmZzZXRGcm9tTGluZVN0YXJ0EAESJAogVVRGMTZDb2RlVW5pdE9mZnNldEZyb21MaW5lU3RhcnQQAhIkCiBVVEYzMkNvZGVVbml0T2Zmc2V0RnJvbUxpbmVTdGFydBADKpQBCgpTeW1ib2xSb2xlEhkKFVVuc3BlY2lmaWVkU3ltYm9sUm9sZRAAEg4KCkRlZmluaXRpb24QARIKCgZJbXBvcnQQAhIPCgtXcml0ZUFjY2VzcxAEEg4KClJlYWRBY2Nlc3MQCBINCglHZW5lcmF0ZWQQEBIICgRUZXN0ECASFQoRRm9yd2FyZERlZmluaXRpb24QQCrqBgoKU3ludGF4S2luZBIZChVVbnNwZWNpZmllZFN5bnRheEtpbmQQABILCgdDb21tZW50EAESGAoUUHVuY3R1YXRpb25EZWxpbWl0ZXIQAhIWChJQdW5jdHVhdGlvbkJyYWNrZXQQAxILCgdLZXl3b3JkEAQSGQoRSWRlbnRpZmllcktleXdvcmQQBBoCCAESFgoSSWRlbnRpZmllck9wZXJhdG9yEAUSDgoKSWRlbnRpZmllchAGEhUKEUlkZW50aWZpZXJCdWlsdGluEAcSEgoOSWRlbnRpZmllck51bGwQCBIWChJJZGVudGlmaWVyQ29uc3RhbnQQCRIbChdJZGVudGlmaWVyTXV0YWJsZUdsb2JhbBAKEhcKE0lkZW50aWZpZXJQYXJhbWV0ZXIQCxITCg9JZGVudGlmaWVyTG9jYWwQDBIWChJJZGVudGlmaWVyU2hhZG93ZWQQDRIXChNJZGVudGlmaWVyTmFtZXNwYWNlEA4SGAoQSWRlbnRpZmllck1vZHVsZRAOGgIIARIWChJJZGVudGlmaWVyRnVuY3Rpb24QDxIgChxJZGVudGlmaWVyRnVuY3Rpb25EZWZpbml0aW9uEBASEwoPSWRlbnRpZmllck1hY3JvEBESHQoZSWRlbnRpZmllck1hY3JvRGVmaW5pdGlvbhASEhIKDklkZW50aWZpZXJUeXBlEBMSGQoVSWRlbnRpZmllckJ1aWx0aW5UeXBlEBQSFwoTSWRlbnRpZmllckF0dHJpYnV0ZRAVEg8KC1JlZ2V4RXNjYXBlEBYSEQoNUmVnZXhSZXBlYXRlZBAXEhEKDVJlZ2V4V2lsZGNhcmQQGBISCg5SZWdleERlbGltaXRlchAZEg0KCVJlZ2V4Sm9pbhAaEhEKDVN0cmluZ0xpdGVyYWwQGxIXChNTdHJpbmdMaXRlcmFsRXNjYXBlEBwSGAoUU3RyaW5nTGl0ZXJhbFNwZWNpYWwQHRIUChBTdHJpbmdMaXRlcmFsS2V5EB4SFAoQQ2hhcmFjdGVyTGl0ZXJhbBAfEhIKDk51bWVyaWNMaXRlcmFsECASEgoOQm9vbGVhbkxpdGVyYWwQIRIHCgNUYWcQIhIQCgxUYWdBdHRyaWJ1dGUQIxIQCgxUYWdEZWxpbWl0ZXIQJBoCEAEqVgoIU2V2ZXJpdHkSFwoTVW5zcGVjaWZpZWRTZXZlcml0eRAAEgkKBUVycm9yEAESCwoHV2FybmluZxACEg8KC0luZm9ybWF0aW9uEAMSCAoESGludBAEKk4KDURpYWdub3N0aWNUYWcSHAoYVW5zcGVjaWZpZWREaWFnbm9zdGljVGFnEAASDwoLVW5uZWNlc3NhcnkQARIOCgpEZXByZWNhdGVkEAIqmwoKCExhbmd1YWdlEhcKE1Vuc3BlY2lmaWVkTGFuZ3VhZ2UQABIICgRBQkFQEDwSCAoEQXBleBBgEgcKA0FQTBAxEgcKA0FkYRAnEggKBEFnZGEQLRIMCghBc2NpaURvYxBWEgwKCEFzc2VtYmx5EDoSBwoDQXdrEEISBwoDQmF0EEQSCgoGQmliVGVYEFESBQoBQxAiEgkKBUNPQk9MEDsSBwoDQ1BQECMSBwoDQ1NTEBoSCgoGQ1NoYXJwEAESCwoHQ2xvanVyZRAIEhAKDENvZmZlZXNjcmlwdBAVEg4KCkNvbW1vbkxpc3AQCRIHCgNDb3EQLxIICgRDVURBEGESCAoERGFydBADEgoKBkRlbHBoaRA5EggKBERpZmYQWBIOCgpEb2NrZXJmaWxlEFASCgoGRHlhbG9nEDISCgoGRWxpeGlyEBESCgoGRXJsYW5nEBISCgoGRlNoYXJwECoSCAoERmlzaBBBEggKBEZsb3cQGBILCgdGb3J0cmFuEDgSDgoKR2l0X0NvbW1pdBBbEg4KCkdpdF9Db25maWcQWRIOCgpHaXRfUmViYXNlEFwSBgoCR28QIRILCgdHcmFwaFFMEGISCgoGR3Jvb3Z5EAcSCAoESFRNTBAeEggKBEhhY2sQFBIOCgpIYW5kbGViYXJzEFoSCwoHSGFza2VsbBAsEgkKBUlkcmlzEC4SBwoDSW5pEEgSBQoBShAzEggKBEpTT04QSxIICgRKYXZhEAYSDgoKSmF2YVNjcmlwdBAWEhMKD0phdmFTY3JpcHRSZWFjdBBdEgsKB0pzb25uZXQQTBIJCgVKdWxpYRA3EgwKCEp1c3RmaWxlEG0SCgoGS290bGluEAQSCQoFTGFUZVgQUxIICgRMZWFuEDASCAoETGVzcxAbEgcKA0x1YRAMEggKBEx1YXUQbBIMCghNYWtlZmlsZRBPEgwKCE1hcmtkb3duEFQSCgoGTWF0bGFiEDQSCgoGTmlja2VsEG4SBwoDTml4EE0SCQoFT0NhbWwQKRIPCgtPYmplY3RpdmVfQxAkEhEKDU9iamVjdGl2ZV9DUFAQJRIKCgZQYXNjYWwQYxIHCgNQSFAQExIJCgVQTFNRTBBGEggKBFBlcmwQDRIOCgpQb3dlclNoZWxsEEMSCgoGUHJvbG9nEEcSDAoIUHJvdG9idWYQZBIKCgZQeXRob24QDxIFCgFSEDYSCgoGUmFja2V0EAsSCAoEUmFrdRAOEgkKBVJhem9yED4SCQoFUmVwcm8QZhIICgRSZVNUEFUSCAoEUnVieRAQEggKBFJ1c3QQKBIHCgNTQVMQPRIICgRTQ1NTEB0SBwoDU01MECsSBwoDU1FMEEUSCAoEU2FzcxAcEgkKBVNjYWxhEAUSCgoGU2NoZW1lEAoSDwoLU2hlbGxTY3JpcHQQQBILCgdTa3lsYXJrEE4SCQoFU2xhbmcQaxIMCghTb2xpZGl0eRBfEgoKBlN2ZWx0ZRBqEgkKBVN3aWZ0EAISBwoDVGNsEGUSCAoEVE9NTBBJEgcKA1RlWBBSEgoKBlRocmlmdBBnEg4KClR5cGVTY3JpcHQQFxITCg9UeXBlU2NyaXB0UmVhY3QQXhILCgdWZXJpbG9nEGgSCAoEVkhETBBpEg8KC1Zpc3VhbEJhc2ljED8SBwoDVnVlEBkSCwoHV29sZnJhbRA1EgcKA1hNTBAfEgcKA1hTTBAgEggKBFlBTUwQShIHCgNaaWcQJkJOChJvcmcuc2NpcF9jb2RlLnNjaXBCCVNjaXBQcm90b1ABWitnaXRodWIuY29tL3NjaXAtY29kZS9zY2lwL2JpbmRpbmdzL2dvL3NjaXAvYgZwcm90bzM");
 
 /**
  * Index represents a complete SCIP index for a workspace this is rooted at a
@@ -1230,6 +1230,69 @@ export const RelationshipSchema: GenMessage<Relationship> = /*@__PURE__*/
   messageDesc(file_scip, 9);
 
 /**
+ * SingleLineRange represents a half-open [start, end) range within a single line.
+ *
+ * @generated from message scip.SingleLineRange
+ */
+export type SingleLineRange = Message<"scip.SingleLineRange"> & {
+  /**
+   * @generated from field: int32 line = 1;
+   */
+  line: number;
+
+  /**
+   * @generated from field: int32 start_character = 2;
+   */
+  startCharacter: number;
+
+  /**
+   * @generated from field: int32 end_character = 3;
+   */
+  endCharacter: number;
+};
+
+/**
+ * Describes the message scip.SingleLineRange.
+ * Use `create(SingleLineRangeSchema)` to create a new message.
+ */
+export const SingleLineRangeSchema: GenMessage<SingleLineRange> = /*@__PURE__*/
+  messageDesc(file_scip, 10);
+
+/**
+ * MultiLineRange represents a half-open [start, end) range spanning multiple lines.
+ *
+ * @generated from message scip.MultiLineRange
+ */
+export type MultiLineRange = Message<"scip.MultiLineRange"> & {
+  /**
+   * @generated from field: int32 start_line = 1;
+   */
+  startLine: number;
+
+  /**
+   * @generated from field: int32 start_character = 2;
+   */
+  startCharacter: number;
+
+  /**
+   * @generated from field: int32 end_line = 3;
+   */
+  endLine: number;
+
+  /**
+   * @generated from field: int32 end_character = 4;
+   */
+  endCharacter: number;
+};
+
+/**
+ * Describes the message scip.MultiLineRange.
+ * Use `create(MultiLineRangeSchema)` to create a new message.
+ */
+export const MultiLineRangeSchema: GenMessage<MultiLineRange> = /*@__PURE__*/
+  messageDesc(file_scip, 11);
+
+/**
  * Occurrence associates a source position with a symbol and/or highlighting
  * information.
  *
@@ -1240,12 +1303,26 @@ export const RelationshipSchema: GenMessage<Relationship> = /*@__PURE__*/
  */
 export type Occurrence = Message<"scip.Occurrence"> & {
   /**
-   * Half-open [start, end) range of this occurrence. Must be exactly three or four
-   * elements:
+   * Deprecated: Use `single_line_range` or `multi_line_range` instead.
    *
+   * Half-open [start, end) range. Must be exactly three or four elements:
+   * - Three elements: `[startLine, startCharacter, endCharacter]` (single-line)
    * - Four elements: `[startLine, startCharacter, endLine, endCharacter]`
-   * - Three elements: `[startLine, startCharacter, endCharacter]`. The end line
-   *   is inferred to have the same value as the start line.
+   *
+   * Historical note: the original draft of this schema had a `Range` message
+   * type with `start` and `end` fields of type `Position`, mirroring LSP.
+   * Benchmarks revealed that this encoding was inefficient and that we could
+   * reduce the total payload size of an index by 50% by using `repeated int32`
+   * instead. However, the lack of type safety led to the introduction of
+   * `single_line_range` and `multi_line_range` as typed alternatives.
+   *
+   * @generated from field: repeated int32 range = 1 [deprecated = true];
+   * @deprecated
+   */
+  range: number[];
+
+  /**
+   * Half-open [start, end) source range of this occurrence.
    *
    * It is allowed for the range to be empty (i.e. start==end).
    *
@@ -1256,17 +1333,25 @@ export type Occurrence = Message<"scip.Occurrence"> & {
    * The 'character' value is interpreted based on the PositionEncoding for
    * the Document.
    *
-   * Historical note: the original draft of this schema had a `Range` message
-   * type with `start` and `end` fields of type `Position`, mirroring LSP.
-   * Benchmarks revealed that this encoding was inefficient and that we could
-   * reduce the total payload size of an index by 50% by using `repeated int32`
-   * instead. The `repeated int32` encoding is admittedly more embarrassing to
-   * work with in some programming languages but we hope the performance
-   * improvements make up for it.
-   *
-   * @generated from field: repeated int32 range = 1;
+   * @generated from oneof scip.Occurrence.typed_range
    */
-  range: number[];
+  typedRange: {
+    /**
+     * Range spanning a single line.
+     *
+     * @generated from field: scip.SingleLineRange single_line_range = 8;
+     */
+    value: SingleLineRange;
+    case: "singleLineRange";
+  } | {
+    /**
+     * Range spanning multiple lines.
+     *
+     * @generated from field: scip.MultiLineRange multi_line_range = 9;
+     */
+    value: MultiLineRange;
+    case: "multiLineRange";
+  } | { case: undefined; value?: undefined };
 
   /**
    * (optional) The symbol that appears at this position. See
@@ -1313,12 +1398,18 @@ export type Occurrence = Message<"scip.Occurrence"> & {
   diagnostics: Diagnostic[];
 
   /**
-   * (optional) Using the same encoding as the sibling `range` field, half-open
-   * source range of the nearest non-trivial enclosing AST node. This range must
-   * enclose the `range` field. Example applications that make use of the
-   * enclosing_range field:
+   * Deprecated: Use `typed_enclosing_range` instead.
    *
-   * - Call hierarchies: to determine what symbols are references from the body
+   * @generated from field: repeated int32 enclosing_range = 7 [deprecated = true];
+   * @deprecated
+   */
+  enclosingRange: number[];
+
+  /**
+   * (optional) Half-open source range of the nearest non-trivial enclosing AST
+   * node. This range must enclose the occurrence range. Example applications:
+   *
+   * - Call hierarchies: to determine what symbols are referenced from the body
    *   of a function
    * - Symbol outline: to display breadcrumbs from the cursor position to the
    *   root of the file
@@ -1366,9 +1457,21 @@ export type Occurrence = Message<"scip.Occurrence"> & {
    *           ^^^^^^^^^^^^^ enclosing_range
    * ```
    *
-   * @generated from field: repeated int32 enclosing_range = 7;
+   * @generated from oneof scip.Occurrence.typed_enclosing_range
    */
-  enclosingRange: number[];
+  typedEnclosingRange: {
+    /**
+     * @generated from field: scip.SingleLineRange single_line_enclosing_range = 10;
+     */
+    value: SingleLineRange;
+    case: "singleLineEnclosingRange";
+  } | {
+    /**
+     * @generated from field: scip.MultiLineRange multi_line_enclosing_range = 11;
+     */
+    value: MultiLineRange;
+    case: "multiLineEnclosingRange";
+  } | { case: undefined; value?: undefined };
 };
 
 /**
@@ -1376,7 +1479,7 @@ export type Occurrence = Message<"scip.Occurrence"> & {
  * Use `create(OccurrenceSchema)` to create a new message.
  */
 export const OccurrenceSchema: GenMessage<Occurrence> = /*@__PURE__*/
-  messageDesc(file_scip, 10);
+  messageDesc(file_scip, 12);
 
 /**
  * Represents a diagnostic, such as a compiler error or warning, which should be
@@ -1425,7 +1528,7 @@ export type Diagnostic = Message<"scip.Diagnostic"> & {
  * Use `create(DiagnosticSchema)` to create a new message.
  */
 export const DiagnosticSchema: GenMessage<Diagnostic> = /*@__PURE__*/
-  messageDesc(file_scip, 11);
+  messageDesc(file_scip, 13);
 
 /**
  * @generated from enum scip.ProtocolVersion

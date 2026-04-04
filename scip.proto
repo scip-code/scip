@@ -640,18 +640,42 @@ enum SyntaxKind {
   TagDelimiter = 36;
 }
 
+// SingleLineRange represents a half-open [start, end) range within a single line.
+message SingleLineRange {
+  int32 line = 1;
+  int32 start_character = 2;
+  int32 end_character = 3;
+}
+
+// MultiLineRange represents a half-open [start, end) range spanning multiple lines.
+message MultiLineRange {
+  int32 start_line = 1;
+  int32 start_character = 2;
+  int32 end_line = 3;
+  int32 end_character = 4;
+}
+
 // Occurrence associates a source position with a symbol and/or highlighting
 // information.
 //
 // If possible, indexers should try to bundle logically related information
 // across occurrences into a single occurrence to reduce payload sizes.
 message Occurrence {
-  // Half-open [start, end) range of this occurrence. Must be exactly three or four
-  // elements:
+  // Deprecated: Use `single_line_range` or `multi_line_range` instead.
   //
+  // Half-open [start, end) range. Must be exactly three or four elements:
+  // - Three elements: `[startLine, startCharacter, endCharacter]` (single-line)
   // - Four elements: `[startLine, startCharacter, endLine, endCharacter]`
-  // - Three elements: `[startLine, startCharacter, endCharacter]`. The end line
-  //   is inferred to have the same value as the start line.
+  //
+  // Historical note: the original draft of this schema had a `Range` message
+  // type with `start` and `end` fields of type `Position`, mirroring LSP.
+  // Benchmarks revealed that this encoding was inefficient and that we could
+  // reduce the total payload size of an index by 50% by using `repeated int32`
+  // instead. However, the lack of type safety led to the introduction of
+  // `single_line_range` and `multi_line_range` as typed alternatives.
+  repeated int32 range = 1 [deprecated = true];
+
+  // Half-open [start, end) source range of this occurrence.
   //
   // It is allowed for the range to be empty (i.e. start==end).
   //
@@ -661,15 +685,12 @@ message Occurrence {
   //
   // The 'character' value is interpreted based on the PositionEncoding for
   // the Document.
-  //
-  // Historical note: the original draft of this schema had a `Range` message
-  // type with `start` and `end` fields of type `Position`, mirroring LSP.
-  // Benchmarks revealed that this encoding was inefficient and that we could
-  // reduce the total payload size of an index by 50% by using `repeated int32`
-  // instead. The `repeated int32` encoding is admittedly more embarrassing to
-  // work with in some programming languages but we hope the performance
-  // improvements make up for it.
-  repeated int32 range = 1;
+  oneof typed_range {
+    // Range spanning a single line.
+    SingleLineRange single_line_range = 8;
+    // Range spanning multiple lines.
+    MultiLineRange multi_line_range = 9;
+  }
   // (optional) The symbol that appears at this position. See
   // `SymbolInformation.symbol` for how to format symbols as strings.
   string symbol = 2;
@@ -689,12 +710,13 @@ message Occurrence {
   SyntaxKind syntax_kind = 5;
   // (optional) Diagnostics that have been reported for this specific range.
   repeated Diagnostic diagnostics = 6;
-  // (optional) Using the same encoding as the sibling `range` field, half-open
-  // source range of the nearest non-trivial enclosing AST node. This range must
-  // enclose the `range` field. Example applications that make use of the
-  // enclosing_range field:
+  // Deprecated: Use `typed_enclosing_range` instead.
+  repeated int32 enclosing_range = 7 [deprecated = true];
+
+  // (optional) Half-open source range of the nearest non-trivial enclosing AST
+  // node. This range must enclose the occurrence range. Example applications:
   //
-  // - Call hierarchies: to determine what symbols are references from the body
+  // - Call hierarchies: to determine what symbols are referenced from the body
   //   of a function
   // - Symbol outline: to display breadcrumbs from the cursor position to the
   //   root of the file
@@ -741,7 +763,10 @@ message Occurrence {
   //                   ^ range
   //           ^^^^^^^^^^^^^ enclosing_range
   // ```
-  repeated int32 enclosing_range = 7;
+  oneof typed_enclosing_range {
+    SingleLineRange single_line_enclosing_range = 10;
+    MultiLineRange multi_line_enclosing_range = 11;
+  }
 }
 
 // Represents a diagnostic, such as a compiler error or warning, which should be

@@ -12,7 +12,7 @@ require (
 	github.com/scip-code/scip/bindings/go/scip v0.0.0-00010101000000-000000000000
 	github.com/stretchr/testify v1.11.1
 	github.com/urfave/cli/v2 v2.25.7
-	google.golang.org/protobuf v1.36.6
+	google.golang.org/protobuf v1.36.11
 	zombiezen.com/go/sqlite v1.0.0
 )
 

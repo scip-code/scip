@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>com.scip-code</groupId>
+  <artifactId>scip-java</artifactId>
+  <version>0.7.1</version>
+  <packaging>jar</packaging>
+
+  <name>scip-java</name>
+  <description>
+    Generated Java bindings for the Semantic Code Intelligence Protocol (SCIP).
+  </description>
+  <url>https://github.com/scip-code/scip</url>
+
+  <licenses>
+    <license>
+      <name>Apache License, Version 2.0</name>
+      <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
+    </license>
+  </licenses>
+
+  <scm>
+    <url>https://github.com/scip-code/scip</url>
+    <connection>scm:git:https://github.com/scip-code/scip.git</connection>
+  </scm>
+
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <maven.compiler.source>11</maven.compiler.source>
+    <maven.compiler.target>11</maven.compiler.target>
+    <!--
+      Must match the protoc version used for code generation (see flake.nix).
+      The runtime is forwards/backwards compatible within a major version.
+    -->
+    <protobuf.version>4.32.1</protobuf.version>
+  </properties>
+
+  <dependencies>
+    <dependency>
+      <groupId>com.google.protobuf</groupId>
+      <artifactId>protobuf-java</artifactId>
+      <version>${protobuf.version}</version>
+    </dependency>
+  </dependencies>
+</project>

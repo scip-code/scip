@@ -1,0 +1,46 @@
+name: update-vendor-hash
+on:
+  pull_request:
+    paths:
+      - go.mod
+      - go.sum
+
+permissions:
+  contents: write
+  actions: write
+
+jobs:
+  update:
+    if: >-
+      github.event.pull_request.head.repo.full_name == github.repository &&
+      startsWith(github.head_ref, 'renovate/')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+
+      - uses: DeterminateSystems/nix-installer-action@v22
+      - uses: DeterminateSystems/magic-nix-cache-action@v13
+
+      - name: Recompute vendorHash with nix-update
+        run: |
+          nix run github:Mic92/nix-update -- \
+            --flake --version=skip scip
+
+      - name: Commit, push, and re-trigger test workflow
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          HEAD_REF: ${{ github.head_ref }}
+        run: |
+          set -euo pipefail
+          if git diff --quiet flake.nix; then
+            exit 0
+          fi
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add flake.nix
+          git commit -m 'chore: update vendorHash for go.mod changes'
+          git push
+          # Re-trigger the test workflow against the new HEAD
+          gh workflow run nix-checks.yaml --ref "$HEAD_REF"

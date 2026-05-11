@@ -2,6 +2,7 @@ name: Nix
 
 on:
   pull_request:
+  workflow_dispatch: # Allowed exception for GITHUB_TOKEN recursion
 
 jobs:
   list:

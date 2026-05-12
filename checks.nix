@@ -42,7 +42,7 @@
     inherit version;
     src = ./.;
     modRoot = "./bindings/go/scip";
-    vendorHash = "sha256-6n1H+0t+CWJXo8CYb37NNoLi+ONVoaiDvyQZMxIRByo=";
+    vendorHash = "sha256-7UG581Z4Nso6qh56+X7DkmtTi7BWE8kKBiCUwBvyQ3M=";
     env.GOWORK = "off";
     buildTags = [ "asserts" ];
     subPackages = [
@@ -78,7 +78,7 @@
       inherit version;
       src = ./.;
       modRoot = "./reprolang";
-      vendorHash = "sha256-aCkHVPbkmXuNOxpHJxNRgfpeM6ywo+y1M1iC0ski9qU=";
+      vendorHash = "sha256-1T4+V9KtDNVSg+F25MhWd6wdlrPqf7VOIHyGz026OcI=";
       proxyVendor = true;
       env.GOWORK = "off";
       buildInputs = [ pkgs.tree-sitter ];

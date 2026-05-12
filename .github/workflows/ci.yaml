@@ -41,6 +41,8 @@ jobs:
               - 'reprolang/go.sum'
               - 'bindings/typescript/package.json'
               - 'bindings/typescript/package-lock.json'
+              - 'bindings/java/pom.xml'
+              - 'bindings/kotlin/pom.xml'
 
       - name: Generate GitHub App token
         if: steps.filter.outputs.relevant == 'true'
@@ -88,6 +90,8 @@ jobs:
           for attr in \
             packages.x86_64-linux.scip \
             checks.x86_64-linux.go-bindings \
+            checks.x86_64-linux.java-bindings \
+            checks.x86_64-linux.kotlin-bindings \
             checks.x86_64-linux.reprolang \
             checks.x86_64-linux.typescript-bindings; do
             nix run github:Mic92/nix-update -- \

@@ -6,7 +6,7 @@ replace github.com/scip-code/scip/bindings/go/scip => ./bindings/go/scip
 
 require (
 	github.com/hhatto/gocloc v0.4.2
-	github.com/k0kubun/pp/v3 v3.1.0
+	github.com/k0kubun/pp/v3 v3.5.1
 	github.com/klauspost/compress v1.18.6
 	github.com/montanaflynn/stats v0.7.1
 	github.com/scip-code/scip/bindings/go/scip v0.0.0-00010101000000-000000000000

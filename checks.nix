@@ -11,9 +11,9 @@ let
     pomFile:
     let
       lines = pkgs.lib.splitString "\n" (builtins.readFile pomFile);
-      isVersionLine = line: builtins.match "^  <version>[^<]+</version>$" line != null;
+      isVersionLine = line: builtins.match "^  <version>[0-9.]+</version>$" line != null;
       versionLine = pkgs.lib.findFirst isVersionLine null lines;
-      match = builtins.match "^  <version>([^<]+)</version>$" versionLine;
+      match = builtins.match "^  <version>([0-9.]+)</version>$" versionLine;
     in
     builtins.head match;
 in

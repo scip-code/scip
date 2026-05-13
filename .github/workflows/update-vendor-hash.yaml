@@ -54,8 +54,14 @@ jobs:
           summarize: false
       - uses: DeterminateSystems/magic-nix-cache-action@v13
 
-      - name: Sync Go workspace
-        run: go work sync
+      - name: Tidy Go modules
+        env:
+          GOWORK: 'off'
+        run: |
+          set -euo pipefail
+          for dir in bindings/go/scip . reprolang; do
+            (cd "$dir" && go mod tidy)
+          done
 
       - name: Recompute vendor hashes with nix-update
         run: |

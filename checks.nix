@@ -78,7 +78,7 @@
       inherit version;
       src = ./.;
       modRoot = "./reprolang";
-      vendorHash = "sha256-1T4+V9KtDNVSg+F25MhWd6wdlrPqf7VOIHyGz026OcI=";
+      vendorHash = "sha256-WaBw0gI++jQ4X1Vyd0j4B5WARZP+rYSafjxCPCX53r0=";
       proxyVendor = true;
       env.GOWORK = "off";
       buildInputs = [ pkgs.tree-sitter ];

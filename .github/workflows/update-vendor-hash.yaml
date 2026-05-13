@@ -45,10 +45,6 @@ jobs:
           ref: ${{ github.event.pull_request.head.ref }}
           token: ${{ steps.app-token.outputs.token }}
 
-      - uses: actions/setup-go@v6
-        with:
-          go-version-file: go.mod
-
       - uses: DeterminateSystems/nix-installer-action@v22
         with:
           summarize: false
@@ -59,8 +55,9 @@ jobs:
           GOWORK: 'off'
         run: |
           set -euo pipefail
+          # https://github.com/golang/go/issues/63901
           for dir in bindings/go/scip . reprolang; do
-            (cd "$dir" && go mod tidy)
+            (cd "$dir" && nix develop --command go mod tidy)
           done
 
       - name: Recompute vendor hashes with nix-update

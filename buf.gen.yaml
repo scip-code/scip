@@ -19,10 +19,9 @@ plugins:
     out: ./bindings/haskell/src
   - protoc_builtin: java
     out: ./bindings/java/src/main/java/
-  # The Kotlin generator only emits the DSL extensions; the underlying message
-  # classes are still produced by the Java generator and must live alongside
-  # them so that the Kotlin binding is buildable on its own.
-  - protoc_builtin: java
-    out: ./bindings/kotlin/src/main/java/
+  # The Kotlin binding only ships the DSL extensions; the underlying Java
+  # message classes are consumed via a Maven dependency on scip-java, which
+  # mirrors how the upstream protobuf-kotlin artifact relates to
+  # protobuf-java.
   - protoc_builtin: kotlin
     out: ./bindings/kotlin/src/main/kotlin/

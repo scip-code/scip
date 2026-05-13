@@ -11,9 +11,9 @@
 
   <name>scip-kotlin</name>
   <description>
-    Generated Kotlin bindings for the Semantic Code Intelligence Protocol
-    (SCIP). Includes the Kotlin DSL extensions on top of the Java protobuf
-    message classes, both bundled in a single artifact.
+    Generated Kotlin DSL extensions for the Semantic Code Intelligence
+    Protocol (SCIP). Pulls scip-java transitively for the underlying
+    protobuf message classes.
   </description>
   <url>https://github.com/scip-code/scip</url>
 
@@ -37,32 +37,28 @@
       Must match the protoc version used for code generation (see flake.nix).
       Protobuf 4 generated code calls validateProtobufGencodeVersion() at
       class load: the runtime version must be >= the gencode version within
-      the same major version. Consumers who pull a newer protobuf-java
-      transitively are fine; consumers who downgrade to <4.32.1 will crash.
+      the same major version. Consumers who pull a newer protobuf transitively
+      are fine; consumers who downgrade to <4.32.1 will crash.
     -->
     <protobuf.version>4.32.1</protobuf.version>
     <kotlin.version>2.0.21</kotlin.version>
   </properties>
 
   <dependencies>
+    <!--
+      scip-java provides the underlying protobuf message classes that the
+      Kotlin DSL extensions wrap. It transitively pulls in protobuf-java
+      and protobuf-java-util, so consumers of scip-kotlin get the full
+      stack with a single coordinate.
+    -->
     <dependency>
-      <groupId>com.google.protobuf</groupId>
-      <artifactId>protobuf-java</artifactId>
-      <version>${protobuf.version}</version>
+      <groupId>org.scip-code</groupId>
+      <artifactId>scip-java</artifactId>
+      <version>${project.version}</version>
     </dependency>
     <dependency>
       <groupId>com.google.protobuf</groupId>
       <artifactId>protobuf-kotlin</artifactId>
-      <version>${protobuf.version}</version>
-    </dependency>
-    <!--
-      protobuf-java-util provides JsonFormat and other helpers that most
-      real-world consumers eventually need. Declaring it here saves them
-      from a NoClassDefFoundError at runtime when they reach for it.
-    -->
-    <dependency>
-      <groupId>com.google.protobuf</groupId>
-      <artifactId>protobuf-java-util</artifactId>
       <version>${protobuf.version}</version>
     </dependency>
     <dependency>
@@ -73,7 +69,7 @@
   </dependencies>
 
   <build>
-    <sourceDirectory>src/main/java</sourceDirectory>
+    <sourceDirectory>src/main/kotlin</sourceDirectory>
     <plugins>
       <plugin>
         <groupId>org.jetbrains.kotlin</groupId>
@@ -82,30 +78,6 @@
         <executions>
           <execution>
             <id>compile</id>
-            <phase>process-sources</phase>
-            <goals>
-              <goal>compile</goal>
-            </goals>
-            <configuration>
-              <sourceDirs>
-                <sourceDir>src/main/java</sourceDir>
-                <sourceDir>src/main/kotlin</sourceDir>
-              </sourceDirs>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-compiler-plugin</artifactId>
-        <version>3.13.0</version>
-        <executions>
-          <execution>
-            <id>default-compile</id>
-            <phase>none</phase>
-          </execution>
-          <execution>
-            <id>java-compile</id>
             <phase>compile</phase>
             <goals>
               <goal>compile</goal>

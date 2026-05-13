@@ -99,7 +99,7 @@ in
       pname = "scip-bindings-java";
       inherit version;
       src = ./bindings/java;
-      mvnHash = "sha256-qh+F+aNYKBDkdW4fZVnjN03F0bxTMhlZmWM51EnXF6Y=";
+      mvnHash = "sha256-IwVaByO6zz87VLL6pX8uhKrp9Co1eBiTH+U0ze29EnE=";
       doCheck = false;
       installPhase = "touch $out";
     };
@@ -115,7 +115,7 @@ in
       pname = "scip-bindings-kotlin";
       inherit version;
       src = ./bindings/kotlin;
-      mvnHash = "sha256-sLoAmf+p/UGVYOxbTT8u+zfzfZzckdxTUktWmbZFg/A=";
+      mvnHash = "sha256-DhQWd2Zcrbf04cqwjI0UqNJiU3h/OWYnfOAZAuzRdWk=";
       doCheck = false;
       installPhase = "touch $out";
     };

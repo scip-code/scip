@@ -2,4 +2,7 @@ bindings/typescript/scip_pb.ts linguist-generated=true
 bindings/go/scip/scip.pb.go linguist-generated=true
 bindings/rust/src/generated/scip.rs linguist-generated=true
 bindings/haskell/src/Proto/**.hs linguist-generated=true
+bindings/java/src/main/java/scip/Scip.java linguist-generated=true
+bindings/kotlin/src/main/java/scip/Scip.java linguist-generated=true
+bindings/kotlin/src/main/kotlin/scip/**.kt linguist-generated=true
 docs/scip.md linguist-generated=true

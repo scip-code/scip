@@ -76,6 +76,13 @@
                 buf generate
                 goimports -w ./bindings/go/scip/scip.pb.go
                 prettier --write --list-different '**/*.{ts,js(on)?,md,yml}'
+                # Make scip.proto available to the JVM bindings' Maven build
+                # so they can attach it as a classifier artifact (consumers
+                # can then `mvn dependency:get` the canonical schema instead
+                # of vendoring it).
+                for d in bindings/java bindings/kotlin; do
+                  install -D -m644 scip.proto "$d/src/main/proto/scip.proto"
+                done
               '';
             };
 

@@ -35,7 +35,10 @@
     <maven.compiler.target>11</maven.compiler.target>
     <!--
       Must match the protoc version used for code generation (see flake.nix).
-      The runtime is forwards/backwards compatible within a major version.
+      Protobuf 4 generated code calls validateProtobufGencodeVersion() at
+      class load: the runtime version must be >= the gencode version within
+      the same major version. Consumers who pull a newer protobuf-java
+      transitively are fine; consumers who downgrade to <4.32.1 will crash.
     -->
     <protobuf.version>4.32.1</protobuf.version>
     <kotlin.version>2.0.21</kotlin.version>
@@ -50,6 +53,16 @@
     <dependency>
       <groupId>com.google.protobuf</groupId>
       <artifactId>protobuf-kotlin</artifactId>
+      <version>${protobuf.version}</version>
+    </dependency>
+    <!--
+      protobuf-java-util provides JsonFormat and other helpers that most
+      real-world consumers eventually need. Declaring it here saves them
+      from a NoClassDefFoundError at runtime when they reach for it.
+    -->
+    <dependency>
+      <groupId>com.google.protobuf</groupId>
+      <artifactId>protobuf-java-util</artifactId>
       <version>${protobuf.version}</version>
     </dependency>
     <dependency>
@@ -97,6 +110,35 @@
             <goals>
               <goal>compile</goal>
             </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <!--
+        Attach the canonical scip.proto schema as a classifier artifact so
+        Bazel/Buck/Pants users (and anyone generating bindings in another
+        language) can `mvn dependency:get scip-kotlin:VERSION:proto:proto`
+        instead of vendoring the file.
+      -->
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>build-helper-maven-plugin</artifactId>
+        <version>3.6.1</version>
+        <executions>
+          <execution>
+            <id>attach-proto</id>
+            <phase>package</phase>
+            <goals>
+              <goal>attach-artifact</goal>
+            </goals>
+            <configuration>
+              <artifacts>
+                <artifact>
+                  <file>${project.basedir}/src/main/proto/scip.proto</file>
+                  <type>proto</type>
+                  <classifier>proto</classifier>
+                </artifact>
+              </artifacts>
+            </configuration>
           </execution>
         </executions>
       </plugin>

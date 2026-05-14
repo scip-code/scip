@@ -1,0 +1,205 @@
+name: ci
+
+# Combined CI pipeline: a `fix` job runs first, post-processing Renovate
+# (or any same-repo) PRs that bump Go modules / npm manifests so the
+# workspace ends up in a state the Nix build can consume — i.e. tidies
+# every Go module to add missing go.sum entries
+# (https://github.com/golang/go/issues/63901) and recomputes the vendor
+# hashes in flake.nix / checks.nix with `nix-update`. Downstream
+# nix-checks jobs (`list`, `checks`, `packages`) only run after `fix`
+# completes, and are skipped if `fix` pushed corrective commits — that
+# push fires `pull_request synchronize` and a fresh CI run on the
+# corrected SHA does the actual validation.
+
+on:
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.head_ref || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  fix:
+    # Forks can't be pushed to (their GITHUB_TOKEN is read-only and
+    # secrets are not exposed); skip the job entirely there.
+    if: github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    outputs:
+      pushed: ${{ steps.push.outputs.pushed }}
+    steps:
+      - uses: dorny/paths-filter@v3
+        id: filter
+        with:
+          filters: |
+            relevant:
+              - 'go.mod'
+              - 'go.sum'
+              - 'bindings/go/scip/go.mod'
+              - 'bindings/go/scip/go.sum'
+              - 'reprolang/go.mod'
+              - 'reprolang/go.sum'
+              - 'bindings/typescript/package.json'
+              - 'bindings/typescript/package-lock.json'
+
+      - name: Generate GitHub App token
+        if: steps.filter.outputs.relevant == 'true'
+        id: app-token
+        uses: actions/create-github-app-token@v3
+        with:
+          app-id: ${{ vars.RENOVATE_FIX_APP_ID }}
+          private-key: ${{ secrets.RENOVATE_FIX_APP_PRIVATE_KEY }}
+
+      - if: steps.filter.outputs.relevant == 'true'
+        uses: actions/checkout@v6
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+          # Pushing under the App identity (not GITHUB_TOKEN) makes
+          # `git push` fire `pull_request synchronize`, which triggers
+          # a fresh CI run that revalidates the corrected SHA.
+          token: ${{ steps.app-token.outputs.token }}
+
+      - if: steps.filter.outputs.relevant == 'true'
+        uses: DeterminateSystems/nix-installer-action@v22
+        with:
+          summarize: false
+      - if: steps.filter.outputs.relevant == 'true'
+        uses: DeterminateSystems/magic-nix-cache-action@v13
+
+      - name: Tidy Go modules
+        if: steps.filter.outputs.relevant == 'true'
+        env:
+          GOWORK: 'off'
+        # https://github.com/golang/go/issues/63901
+        run: |
+          set -euo pipefail
+          for dir in bindings/go/scip . reprolang; do
+            (cd "$dir" && nix develop --command go mod tidy)
+          done
+
+      - name: Recompute vendor hashes with nix-update
+        if: steps.filter.outputs.relevant == 'true'
+        run: |
+          set -euo pipefail
+          # nix-update only auto-resolves packages.<system>.<attr>; for
+          # attributes under `checks` we must pass the full dotted path.
+          # One attribute per invocation; sequential to avoid concurrent
+          # writes to the same .nix files.
+          for attr in \
+            packages.x86_64-linux.scip \
+            checks.x86_64-linux.go-bindings \
+            checks.x86_64-linux.reprolang \
+            checks.x86_64-linux.typescript-bindings; do
+            nix run github:Mic92/nix-update -- \
+              --flake --version=skip "$attr"
+          done
+
+      - name: Commit and push
+        id: push
+        if: steps.filter.outputs.relevant == 'true'
+        run: |
+          set -euo pipefail
+          if git diff --quiet; then
+            echo "No changes; nothing to push."
+            echo "pushed=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git commit -am 'chore: tidy Go modules and update vendor hashes'
+          git push
+          echo "pushed=true" >> "$GITHUB_OUTPUT"
+
+  list:
+    needs: fix
+    # Run when `fix` succeeded with no push, was skipped (fork), or
+    # didn't need to do anything (filter said not relevant). Skip when
+    # `fix` pushed corrective commits — the resulting `pull_request
+    # synchronize` triggers a fresh CI run that does the validation.
+    if: >-
+      always() &&
+      needs.fix.outputs.pushed != 'true' &&
+      needs.fix.result != 'failure' &&
+      needs.fix.result != 'cancelled'
+    runs-on: ubuntu-latest
+    outputs:
+      checks: ${{ steps.checks.outputs.result }}
+      packages: ${{ steps.packages.outputs.result }}
+    steps:
+      - uses: actions/checkout@v6
+      - uses: DeterminateSystems/nix-installer-action@v22
+      - id: checks
+        run: |
+          CHECKS=$(nix eval .#checks.x86_64-linux \
+            --apply builtins.attrNames --json)
+          echo "result=$CHECKS" >> "$GITHUB_OUTPUT"
+      - id: packages
+        run: |
+          PACKAGES=$(nix eval .#packages.x86_64-linux \
+            --apply 'ps: builtins.attrNames (removeAttrs ps ["default"])' \
+            --json)
+          echo "result=$PACKAGES" >> "$GITHUB_OUTPUT"
+
+  checks:
+    needs: list
+    if: needs.list.result == 'success'
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        check: ${{ fromJSON(needs.list.outputs.checks) }}
+    steps:
+      - uses: actions/checkout@v6
+      - uses: DeterminateSystems/nix-installer-action@v22
+      - uses: DeterminateSystems/magic-nix-cache-action@v13
+      - run: nix build .#checks.x86_64-linux.${{ matrix.check }}
+
+  packages:
+    needs: list
+    if: needs.list.result == 'success'
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        package: ${{ fromJSON(needs.list.outputs.packages) }}
+    steps:
+      - uses: actions/checkout@v6
+      - uses: DeterminateSystems/nix-installer-action@v22
+      - uses: DeterminateSystems/magic-nix-cache-action@v13
+      - run: nix run .#${{ matrix.package }}
+      - run: git diff --exit-code
+
+  # Single required check for branch protection. Passes if either:
+  #   * `fix` pushed corrective commits (the next CI run will validate), or
+  #   * `fix` did not push and every downstream nix-checks job succeeded.
+  ci-pass:
+    if: always()
+    needs: [fix, list, checks, packages]
+    runs-on: ubuntu-latest
+    steps:
+      - env:
+          FIX_RESULT: ${{ needs.fix.result }}
+          FIX_PUSHED: ${{ needs.fix.outputs.pushed }}
+          LIST_RESULT: ${{ needs.list.result }}
+          CHECKS_RESULT: ${{ needs.checks.result }}
+          PACKAGES_RESULT: ${{ needs.packages.result }}
+        run: |
+          set -euo pipefail
+          case "$FIX_RESULT" in
+            failure|cancelled)
+              echo "fix job $FIX_RESULT"
+              exit 1
+              ;;
+          esac
+          if [[ "$FIX_PUSHED" == "true" ]]; then
+            echo "fix pushed; downstream skipped (next run will validate)"
+            exit 0
+          fi
+          for r in "$LIST_RESULT" "$CHECKS_RESULT" "$PACKAGES_RESULT"; do
+            case "$r" in
+              failure|cancelled)
+                echo "downstream job $r"
+                exit 1
+                ;;
+            esac
+          done

@@ -42,7 +42,7 @@
     inherit version;
     src = ./.;
     modRoot = "./bindings/go/scip";
-    vendorHash = "sha256-bUtydR5j2k/bade7wX0oxjqrC7ZgDkGoixCUv7zxPdk=";
+    vendorHash = "sha256-7R+qrgZCcoJ9oy5VhLsdskC/oyJRrqkcrI0JOiMAR0w=";
     env.GOWORK = "off";
     buildTags = [ "asserts" ];
     subPackages = [

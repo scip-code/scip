@@ -50,6 +50,16 @@ jobs:
           summarize: false
       - uses: DeterminateSystems/magic-nix-cache-action@v13
 
+      - name: Tidy Go modules
+        env:
+          GOWORK: 'off'
+        run: |
+          set -euo pipefail
+          # https://github.com/golang/go/issues/63901
+          for dir in bindings/go/scip . reprolang; do
+            (cd "$dir" && nix develop --command go mod tidy)
+          done
+
       - name: Recompute vendor hashes with nix-update
         run: |
           set -euo pipefail
@@ -69,12 +79,11 @@ jobs:
       - name: Commit and push
         run: |
           set -euo pipefail
-          if git diff --quiet flake.nix checks.nix; then
-            echo "Vendor hashes unchanged; nothing to push."
+          if git diff --quiet; then
+            echo "No changes; nothing to push."
             exit 0
           fi
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add flake.nix checks.nix
-          git commit -m 'chore: update vendor hashes for Renovate update'
+          git commit -am 'chore: tidy Go modules and update vendor hashes'
           git push

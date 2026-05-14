@@ -1,13 +1,16 @@
-name: update-vendor-hash
+name: fix-renovate-prs
 
-# Renovate updates go.mod / go.sum (and TypeScript package manifests) but
-# cannot update the vendor hashes in flake.nix / checks.nix, which causes
-# the Nix build to fail until the hashes are fixed by hand. This workflow
-# watches PRs that modify those files, recomputes the affected hashes with
-# `nix-update`, and pushes the corrected files back to the PR branch using
-# a GitHub App token. Pushing under a non-GITHUB_TOKEN identity makes the
-# push fire `pull_request synchronize` naturally, producing a check_suite
-# the PR UI displays.
+# Renovate updates a single module's go.mod / go.sum (or TypeScript
+# package manifests) but does not (a) propagate the new transitive
+# versions to other workspace members that pull it in via `replace`,
+# nor (b) update the vendor hashes in flake.nix / checks.nix. Both
+# leave the Nix build broken until fixed by hand. This workflow watches
+# PRs that modify those files, runs `go mod tidy` per module to add any
+# missing go.sum entries, recomputes the affected hashes with
+# `nix-update`, and pushes the corrected files back to the PR branch
+# using a GitHub App token. Pushing under a non-GITHUB_TOKEN identity
+# makes the push fire `pull_request synchronize` naturally, producing a
+# check_suite the PR UI displays.
 
 on:
   pull_request:

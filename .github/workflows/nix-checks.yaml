@@ -4,7 +4,7 @@ on:
   pull_request:
 
 # Cancel an in-progress run when a newer commit supersedes it on the same
-# branch (e.g. when update-vendor-hash pushes a hash fix).
+# branch (e.g. when fix-renovate-prs pushes an auto-fix).
 concurrency:
   group: nix-checks-${{ github.head_ref || github.ref }}
   cancel-in-progress: true

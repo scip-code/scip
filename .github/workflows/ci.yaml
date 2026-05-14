@@ -1,15 +1,13 @@
 name: ci
 
-# Combined CI pipeline: a `fix` job runs first, post-processing Renovate
-# (or any same-repo) PRs that bump Go modules / npm manifests so the
-# workspace ends up in a state the Nix build can consume — i.e. tidies
-# every Go module to add missing go.sum entries
-# (https://github.com/golang/go/issues/63901) and recomputes the vendor
-# hashes in flake.nix / checks.nix with `nix-update`. Downstream
-# nix-checks jobs (`list`, `checks`, `packages`) only run after `fix`
-# completes, and are skipped if `fix` pushed corrective commits — that
-# push fires `pull_request synchronize` and a fresh CI run on the
-# corrected SHA does the actual validation.
+# Combined CI pipeline. `fix` runs first, post-processing same-repo PRs
+# that bump Go modules / npm manifests so the workspace ends up in a
+# state the Nix build can consume (per-module `go mod tidy` plus
+# `nix-update` of vendor hashes; see https://github.com/golang/go/issues/63901).
+# If `fix` pushed a corrective commit, downstream nix-checks jobs are
+# skipped — the resulting `pull_request synchronize` triggers a fresh
+# CI run on the corrected SHA, and branch protection on the PR HEAD
+# prevents merging until that fresh run reports success.
 
 on:
   pull_request:
@@ -114,15 +112,11 @@ jobs:
 
   list:
     needs: fix
-    # Run when `fix` succeeded with no push, was skipped (fork), or
-    # didn't need to do anything (filter said not relevant). Skip when
-    # `fix` pushed corrective commits — the resulting `pull_request
-    # synchronize` triggers a fresh CI run that does the validation.
-    if: >-
-      always() &&
-      needs.fix.outputs.pushed != 'true' &&
-      needs.fix.result != 'failure' &&
-      needs.fix.result != 'cancelled'
+    # Skip downstream when `fix` pushed corrective commits — the
+    # resulting `pull_request synchronize` triggers a fresh CI run that
+    # validates the corrected SHA, and branch protection on the PR
+    # HEAD prevents merging until that fresh run reports success.
+    if: always() && needs.fix.outputs.pushed != 'true'
     runs-on: ubuntu-latest
     outputs:
       checks: ${{ steps.checks.outputs.result }}
@@ -144,7 +138,6 @@ jobs:
 
   checks:
     needs: list
-    if: needs.list.result == 'success'
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -157,7 +150,6 @@ jobs:
 
   packages:
     needs: list
-    if: needs.list.result == 'success'
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -169,37 +161,12 @@ jobs:
       - run: nix run .#${{ matrix.package }}
       - run: git diff --exit-code
 
-  # Single required check for branch protection. Passes if either:
-  #   * `fix` pushed corrective commits (the next CI run will validate), or
-  #   * `fix` did not push and every downstream nix-checks job succeeded.
   ci-pass:
     if: always()
     needs: [fix, list, checks, packages]
     runs-on: ubuntu-latest
     steps:
-      - env:
-          FIX_RESULT: ${{ needs.fix.result }}
-          FIX_PUSHED: ${{ needs.fix.outputs.pushed }}
-          LIST_RESULT: ${{ needs.list.result }}
-          CHECKS_RESULT: ${{ needs.checks.result }}
-          PACKAGES_RESULT: ${{ needs.packages.result }}
-        run: |
-          set -euo pipefail
-          case "$FIX_RESULT" in
-            failure|cancelled)
-              echo "fix job $FIX_RESULT"
-              exit 1
-              ;;
-          esac
-          if [[ "$FIX_PUSHED" == "true" ]]; then
-            echo "fix pushed; downstream skipped (next run will validate)"
-            exit 0
-          fi
-          for r in "$LIST_RESULT" "$CHECKS_RESULT" "$PACKAGES_RESULT"; do
-            case "$r" in
-              failure|cancelled)
-                echo "downstream job $r"
-                exit 1
-                ;;
-            esac
-          done
+      - if: >-
+          contains(needs.*.result, 'failure') ||
+          contains(needs.*.result, 'cancelled')
+        run: exit 1

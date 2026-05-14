@@ -21,7 +21,7 @@ require (
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/dustin/go-humanize v1.0.1 // indirect
 	github.com/fatih/color v1.19.0 // indirect
-	github.com/go-enry/go-enry/v2 v2.7.2 // indirect
+	github.com/go-enry/go-enry/v2 v2.8.0 // indirect
 	github.com/go-enry/go-oniguruma v1.2.1 // indirect
 	github.com/google/uuid v1.6.0 // indirect
 	github.com/hexops/gotextdiff v1.0.3 // indirect

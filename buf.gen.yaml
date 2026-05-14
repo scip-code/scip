@@ -1,21 +1,19 @@
 # Configuration file for https://buf.build/, which we use for Protobuf code generation.
-version: v1
+version: v2
 plugins:
-  - name: doc
+  - local: protoc-gen-doc
     out: ./docs/
     opt: docs/scip.sprig,scip.md
     # NOTE: the sprig file is a template, it is not generated.
-  - name: go
+  - local: protoc-gen-go
     out: ./bindings/go/scip/
     opt:
       - paths=source_relative
-  - name: es
+  - local: protoc-gen-es
     out: ./bindings/typescript/
     opt:
       - target=ts
-  - name: rust
-    path: protoc-gen-rs
+  - local: protoc-gen-rs
     out: ./bindings/rust/src/generated/
-  - name: haskell
-    path: proto-lens-protoc
+  - local: proto-lens-protoc
     out: ./bindings/haskell/src

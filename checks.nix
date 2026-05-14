@@ -2,21 +2,6 @@
   pkgs,
   version,
 }:
-let
-  # Extracts the project's <version> element from a pom.xml.
-  # Looks for the unique top-level <version> at 2-space indentation, which
-  # distinguishes it from <version> elements nested inside <dependencies>,
-  # <plugin>, etc. (deeper indentation).
-  extractPomVersion =
-    pomFile:
-    let
-      lines = pkgs.lib.splitString "\n" (builtins.readFile pomFile);
-      isVersionLine = line: builtins.match "^  <version>[0-9.]+</version>$" line != null;
-      versionLine = pkgs.lib.findFirst isVersionLine null lines;
-      match = builtins.match "^  <version>([0-9.]+)</version>$" versionLine;
-    in
-    builtins.head match;
-in
 {
   github-actions = pkgs.stdenv.mkDerivation {
     pname = "scip-github-actions";
@@ -86,38 +71,6 @@ in
       prePatch = ''
         cp --remove-destination ${./LICENSE} LICENSE
       '';
-    };
-
-  java-bindings =
-    let
-      pomVersion = extractPomVersion ./bindings/java/pom.xml;
-    in
-    assert pkgs.lib.assertMsg (
-      pomVersion == version
-    ) "Version mismatch in bindings/java/pom.xml: expected ${version}, got ${pomVersion}";
-    pkgs.maven.buildMavenPackage {
-      pname = "scip-bindings-java";
-      inherit version;
-      src = ./bindings/java;
-      mvnHash = "sha256-IwVaByO6zz87VLL6pX8uhKrp9Co1eBiTH+U0ze29EnE=";
-      doCheck = false;
-      installPhase = "touch $out";
-    };
-
-  kotlin-bindings =
-    let
-      pomVersion = extractPomVersion ./bindings/kotlin/pom.xml;
-    in
-    assert pkgs.lib.assertMsg (
-      pomVersion == version
-    ) "Version mismatch in bindings/kotlin/pom.xml: expected ${version}, got ${pomVersion}";
-    pkgs.maven.buildMavenPackage {
-      pname = "scip-bindings-kotlin";
-      inherit version;
-      src = ./bindings/kotlin;
-      mvnHash = "sha256-DhQWd2Zcrbf04cqwjI0UqNJiU3h/OWYnfOAZAuzRdWk=";
-      doCheck = false;
-      installPhase = "touch $out";
     };
 
   reprolang =

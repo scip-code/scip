@@ -1,0 +1,59 @@
+name: JVM bindings
+
+# The Java and Kotlin bindings are built with Maven directly rather than
+# Nix because scip-kotlin depends on scip-java as a Maven artifact, which
+# nixpkgs' offline `maven.buildMavenPackage` sandbox cannot resolve from
+# the sibling derivation. A regular `mvn install` -> `mvn package` flow
+# in a single CI job is simpler and more reliable.
+
+on:
+  pull_request:
+    paths:
+      - bindings/java/**
+      - bindings/kotlin/**
+      - cmd/scip/version.txt
+      - scip.proto
+      - .github/workflows/jvm-bindings.yaml
+
+permissions:
+  contents: read
+
+concurrency:
+  group: jvm-bindings-${{ github.head_ref || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: 11
+          cache: maven
+
+      - name: Validate pom.xml versions match cmd/scip/version.txt
+        shell: python
+        run: |
+          import pathlib, sys, xml.etree.ElementTree as ET
+
+          expected = pathlib.Path('cmd/scip/version.txt').read_text().strip()
+          ns = {'pom': 'http://maven.apache.org/POM/4.0.0'}
+          failed = False
+          for pom in ('bindings/java/pom.xml', 'bindings/kotlin/pom.xml'):
+              actual = ET.parse(pom).getroot().findtext('pom:version', namespaces=ns)
+              if actual != expected:
+                  print(
+                      f'::error file={pom}::Project version is {actual!r}, '
+                      f'expected {expected!r} (from cmd/scip/version.txt)'
+                  )
+                  failed = True
+          sys.exit(1 if failed else 0)
+
+      - name: Build scip-java and install to local Maven repo
+        run: mvn -B -ntp -f bindings/java/pom.xml install
+
+      - name: Build scip-kotlin (resolves scip-java from local repo)
+        run: mvn -B -ntp -f bindings/kotlin/pom.xml package

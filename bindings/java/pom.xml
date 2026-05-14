@@ -47,49 +47,10 @@
       <artifactId>protobuf-java</artifactId>
       <version>${protobuf.version}</version>
     </dependency>
-    <!--
-      protobuf-java-util provides JsonFormat and other helpers that most
-      real-world consumers eventually need. Declaring it here saves them
-      from a NoClassDefFoundError at runtime when they reach for it.
-    -->
     <dependency>
       <groupId>com.google.protobuf</groupId>
       <artifactId>protobuf-java-util</artifactId>
       <version>${protobuf.version}</version>
     </dependency>
   </dependencies>
-
-  <build>
-    <plugins>
-      <!--
-        Attach the canonical scip.proto schema as a classifier artifact so
-        Bazel/Buck/Pants users (and anyone generating bindings in another
-        language) can `mvn dependency:get scip-java:VERSION:proto:proto`
-        instead of vendoring the file.
-      -->
-      <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>build-helper-maven-plugin</artifactId>
-        <version>3.6.1</version>
-        <executions>
-          <execution>
-            <id>attach-proto</id>
-            <phase>package</phase>
-            <goals>
-              <goal>attach-artifact</goal>
-            </goals>
-            <configuration>
-              <artifacts>
-                <artifact>
-                  <file>${project.basedir}/src/main/proto/scip.proto</file>
-                  <type>proto</type>
-                  <classifier>proto</classifier>
-                </artifact>
-              </artifacts>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
-    </plugins>
-  </build>
 </project>

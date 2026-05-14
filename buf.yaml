@@ -4,12 +4,6 @@ build:
   excludes:
     - .direnv
     - node_modules
-    # The JVM bindings ship a copy of scip.proto as a Maven classifier
-    # artifact (see bindings/{java,kotlin}/pom.xml). Exclude those copies
-    # from buf's input set so we don't re-process them as duplicate
-    # top-level proto files.
-    - bindings/java/src/main/proto
-    - bindings/kotlin/src/main/proto
 lint:
   use:
     - DEFAULT

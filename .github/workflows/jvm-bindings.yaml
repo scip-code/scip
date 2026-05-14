@@ -37,20 +37,11 @@ jobs:
       - name: Validate pom.xml versions match cmd/scip/version.txt
         shell: python
         run: |
-          import pathlib, sys, xml.etree.ElementTree as ET
-
-          expected = pathlib.Path('cmd/scip/version.txt').read_text().strip()
-          ns = {'pom': 'http://maven.apache.org/POM/4.0.0'}
-          failed = False
-          for pom in ('bindings/java/pom.xml', 'bindings/kotlin/pom.xml'):
-              actual = ET.parse(pom).getroot().findtext('pom:version', namespaces=ns)
-              if actual != expected:
-                  print(
-                      f'::error file={pom}::Project version is {actual!r}, '
-                      f'expected {expected!r} (from cmd/scip/version.txt)'
-                  )
-                  failed = True
-          sys.exit(1 if failed else 0)
+          import xml.etree.ElementTree as ET
+          expected = open('cmd/scip/version.txt').read().strip()
+          for pom in 'bindings/java/pom.xml', 'bindings/kotlin/pom.xml':
+              actual = ET.parse(pom).getroot().findtext('{http://maven.apache.org/POM/4.0.0}version')
+              assert actual == expected, f'{pom}: version is {actual!r}, expected {expected!r}'
 
       - name: Build scip-java and install to local Maven repo
         run: mvn -B -ntp -f bindings/java/pom.xml install

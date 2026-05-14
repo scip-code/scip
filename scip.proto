@@ -14,9 +14,6 @@ package scip;
 
 option go_package = "github.com/scip-code/scip/bindings/go/scip/";
 option java_multiple_files = true;
-// Avoid collision between the file-level outer class (which holds the file
-// descriptor and registerAllExtensions) and messages also called "Scip*"
-// once java_multiple_files emits each message as its own top-level class.
 option java_outer_classname = "ScipProto";
 option java_package = "org.scip_code.scip";
 

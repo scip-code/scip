@@ -17,7 +17,7 @@ jobs:
       packages: ${{ steps.packages.outputs.result }}
     steps:
       - uses: actions/checkout@v6
-      - uses: DeterminateSystems/nix-installer-action@v21
+      - uses: DeterminateSystems/nix-installer-action@v22
       - id: checks
         run: |
           CHECKS=$(nix eval .#checks.x86_64-linux \
@@ -38,7 +38,7 @@ jobs:
         check: ${{ fromJSON(needs.list.outputs.checks) }}
     steps:
       - uses: actions/checkout@v6
-      - uses: DeterminateSystems/nix-installer-action@v21
+      - uses: DeterminateSystems/nix-installer-action@v22
       - uses: DeterminateSystems/magic-nix-cache-action@v13
       - run: nix build .#checks.x86_64-linux.${{ matrix.check }}
 
@@ -50,7 +50,7 @@ jobs:
         package: ${{ fromJSON(needs.list.outputs.packages) }}
     steps:
       - uses: actions/checkout@v6
-      - uses: DeterminateSystems/nix-installer-action@v21
+      - uses: DeterminateSystems/nix-installer-action@v22
       - uses: DeterminateSystems/magic-nix-cache-action@v13
       - run: nix run .#${{ matrix.package }}
       - run: git diff --exit-code

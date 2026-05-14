@@ -76,7 +76,7 @@ jobs:
       - uses: actions/checkout@v6
         with:
           ref: v${{ inputs.version }}
-      - uses: DeterminateSystems/nix-installer-action@v21
+      - uses: DeterminateSystems/nix-installer-action@v22
       - uses: DeterminateSystems/magic-nix-cache-action@v13
       - name: Publish crate
         run: |

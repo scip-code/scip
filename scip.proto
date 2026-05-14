@@ -13,6 +13,9 @@ syntax = "proto3";
 package scip;
 
 option go_package = "github.com/scip-code/scip/bindings/go/scip/";
+option java_multiple_files = true;
+option java_outer_classname = "ScipProto";
+option java_package = "org.scip_code.scip";
 
 // Index represents a complete SCIP index for a workspace this is rooted at a
 // single directory. An Index message payload can have a large memory footprint

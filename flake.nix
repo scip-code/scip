@@ -66,6 +66,7 @@
                 gotools
                 haskellPackages.proto-lens-protoc
                 prettier
+                protobuf
                 protoc-gen-doc
                 protoc-gen-es
                 protoc-gen-go

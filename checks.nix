@@ -42,7 +42,7 @@
     inherit version;
     src = ./.;
     modRoot = "./bindings/go/scip";
-    vendorHash = "sha256-6n1H+0t+CWJXo8CYb37NNoLi+ONVoaiDvyQZMxIRByo=";
+    vendorHash = "sha256-bUtydR5j2k/bade7wX0oxjqrC7ZgDkGoixCUv7zxPdk=";
     env.GOWORK = "off";
     buildTags = [ "asserts" ];
     subPackages = [
@@ -78,7 +78,7 @@
       inherit version;
       src = ./.;
       modRoot = "./reprolang";
-      vendorHash = "sha256-aCkHVPbkmXuNOxpHJxNRgfpeM6ywo+y1M1iC0ski9qU=";
+      vendorHash = "sha256-RnXZMTHrIr02jA4GI1kX4D94GiHu7XbLLCk1RBtPVQc=";
       proxyVendor = true;
       env.GOWORK = "off";
       buildInputs = [ pkgs.tree-sitter ];
@@ -136,7 +136,7 @@
       pname = "scip-bindings-typescript";
       inherit version;
       src = ./bindings/typescript;
-      npmDepsHash = "sha256-U5IEj1R4LQnR38VY/LIRJVoSRJBGkbpAfE0vFyy6d6w=";
+      npmDepsHash = "sha256-fFtREUUGYkY5/gCCC2lvuE0AI+B0EVZ5QnqdjpzexKs=";
       buildPhase = ''
         runHook preBuild
         npx tsc --noEmit

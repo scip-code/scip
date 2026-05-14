@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"encoding/json"
 	"io"
 	"os"
@@ -9,7 +10,7 @@ import (
 	"errors"
 
 	"github.com/k0kubun/pp/v3"
-	"github.com/urfave/cli/v2"
+	"github.com/urfave/cli/v3"
 )
 
 func printCommand() cli.Command {
@@ -33,8 +34,8 @@ Do not rely on non-JSON output in scripts`,
 				DefaultText: "true",
 			},
 		},
-		Action: func(c *cli.Context) error {
-			indexPath := c.Args().Get(0)
+		Action: func(ctx context.Context, cmd *cli.Command) error {
+			indexPath := cmd.Args().Get(0)
 			if indexPath == "" {
 				return errors.New("missing argument for path to SCIP index")
 			}
@@ -49,7 +50,7 @@ Do not rely on non-JSON output in scripts`,
 					colorOutput = true
 				}
 			}
-			return printMain(indexPath, colorOutput, jsonOutput, c.App.Writer)
+			return printMain(indexPath, colorOutput, jsonOutput, cmd.Root().Writer)
 		},
 	}
 	return snapshot

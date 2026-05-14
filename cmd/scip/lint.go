@@ -1,12 +1,13 @@
 package main
 
 import (
+	"context"
 	stderrors "errors"
 	"fmt"
 	"sort"
 	"strings"
 
-	"github.com/urfave/cli/v2"
+	"github.com/urfave/cli/v3"
 
 	"github.com/scip-code/scip/bindings/go/scip"
 )
@@ -18,8 +19,8 @@ func lintCommand() cli.Command {
 		Description: "Example usage:\n\n  scip lint /path/to/index.scip\n\n" +
 			"You may want to filter the output using `grep -v <pattern>`\n" +
 			"to narrow down on certain classes of errors.",
-		Action: func(c *cli.Context) error {
-			indexPath := c.Args().Get(0)
+		Action: func(ctx context.Context, cmd *cli.Command) error {
+			indexPath := cmd.Args().Get(0)
 			if indexPath == "" {
 				return stderrors.New("missing argument for path to SCIP index")
 			}

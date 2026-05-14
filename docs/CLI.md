@@ -15,7 +15,7 @@ NAME:
    scip - SCIP Code Intelligence Protocol CLI
 
 USAGE:
-   scip [global options] command [command options] [arguments...]
+   scip [global options] [command [command options]]
 
 VERSION:
    v0.7.1
@@ -46,7 +46,7 @@ NAME:
    scip lint - Flag potential issues with a SCIP index
 
 USAGE:
-   scip lint [command options] [arguments...]
+   scip lint [options]
 
 DESCRIPTION:
    Example usage:
@@ -67,14 +67,14 @@ NAME:
    scip print - Print a SCIP index for debugging
 
 USAGE:
-   scip print [command options] [arguments...]
+   scip print [options]
 
 DESCRIPTION:
    WARNING: The TTY output may change over time.
    Do not rely on non-JSON output in scripts
 
 OPTIONS:
-   --json      Output in JSON format (default: false)
+   --json      Output in JSON format
    --color     Enable color output for TTY (no effect for JSON) (default: true)
    --help, -h  show help
 ```
@@ -86,7 +86,7 @@ NAME:
    scip snapshot - Generate snapshot files for golden testing
 
 USAGE:
-   scip snapshot [command options] [arguments...]
+   scip snapshot [options]
 
 DESCRIPTION:
    The snapshot subcommand generates snapshot files which
@@ -100,12 +100,12 @@ DESCRIPTION:
 
 
 OPTIONS:
-   --from value            Path to SCIP index file (default: "index.scip")
-   --to value              Path to output directory for snapshot files (default: "scip-snapshot")
-   --project-root value    Override project root in the SCIP file. This can be helpful when the SCIP index was created on another computer
-   --strict                If true, fail fast on errors (default: true)
-   --comment-syntax value  Comment syntax to use for snapshot files (default: "//")
-   --help, -h              show help
+   --from string            Path to SCIP index file (default: "index.scip")
+   --to string              Path to output directory for snapshot files (default: "scip-snapshot")
+   --project-root string    Override project root in the SCIP file. This can be helpful when the SCIP index was created on another computer
+   --strict                 If true, fail fast on errors
+   --comment-syntax string  Comment syntax to use for snapshot files (default: "//")
+   --help, -h               show help
 ```
 
 ## `scip test`
@@ -115,7 +115,7 @@ NAME:
    scip test - Validate a SCIP index against test files
 
 USAGE:
-   scip test [command options] [arguments...]
+   scip test [options]
 
 DESCRIPTION:
    Validates whether the SCIP data present in an index
@@ -133,11 +133,11 @@ DESCRIPTION:
    use the 'snapshot' subcommand.
 
 OPTIONS:
-   --from value                                           Path to SCIP index file (default: "index.scip")
-   --comment-syntax value                                 Comment syntax to use for snapshot files (default: "//")
-   --filter value, -f value [ --filter value, -f value ]  Explicit list of test files to check. Can be specified multiple times. If not specified, all files are tested.
-   --check-documents                                      Whether or not to validate whether every file in the test directory has a correlating document in the SCIP index. (default: false)
-   --help, -h                                             show help
+   --from string                                              Path to SCIP index file (default: "index.scip")
+   --comment-syntax string                                    Comment syntax to use for snapshot files (default: "//")
+   --filter string, -f string [ --filter string, -f string ]  Explicit list of test files to check. Can be specified multiple times. If not specified, all files are tested.
+   --check-documents                                          Whether or not to validate whether every file in the test directory has a correlating document in the SCIP index.
+   --help, -h                                                 show help
 ```
 
 ## `scip stats`
@@ -147,12 +147,12 @@ NAME:
    scip stats - Output useful statistics about a SCIP index
 
 USAGE:
-   scip stats [command options] [arguments...]
+   scip stats [options]
 
 OPTIONS:
-   --from value          Path to SCIP index file (default: "index.scip")
-   --project-root value  Override project root in the SCIP file. This can be helpful when the SCIP index was created on another computer
-   --help, -h            show help
+   --from string          Path to SCIP index file (default: "index.scip")
+   --project-root string  Override project root in the SCIP file. This can be helpful when the SCIP index was created on another computer
+   --help, -h             show help
 ```
 
 ## `scip expt-convert`
@@ -162,7 +162,7 @@ NAME:
    scip expt-convert - [EXPERIMENTAL] Convert a SCIP index to a SQLite database
 
 USAGE:
-   scip expt-convert [command options] [arguments...]
+   scip expt-convert [options]
 
 DESCRIPTION:
    Converts a SCIP index to a SQLite database.
@@ -173,7 +173,7 @@ DESCRIPTION:
    Occurrences are stored opaquely as a blob to prevent the DB size from growing very quickly.
 
 OPTIONS:
-   --output value       Path to output SQLite database file (default: "index.db")
-   --cpu-profile value  Path to output prof file
-   --help, -h           show help
+   --output string       Path to output SQLite database file (default: "index.db")
+   --cpu-profile string  Path to output prof file
+   --help, -h            show help
 ```

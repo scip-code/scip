@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"log"
@@ -12,7 +13,7 @@ import (
 
 	"github.com/hhatto/gocloc"
 	"github.com/montanaflynn/stats"
-	"github.com/urfave/cli/v2"
+	"github.com/urfave/cli/v3"
 	"google.golang.org/protobuf/proto"
 
 	"github.com/scip-code/scip/bindings/go/scip"
@@ -32,7 +33,7 @@ func statsCommand() cli.Command {
 			fromFlag(&statsFlags.from),
 			projectRootFlag(&statsFlags.customProjectRoot),
 		},
-		Action: func(c *cli.Context) error {
+		Action: func(ctx context.Context, cmd *cli.Command) error {
 			return statsMain(statsFlags)
 		},
 	}

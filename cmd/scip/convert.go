@@ -2,6 +2,7 @@ package main
 
 import (
 	"bytes"
+	"context"
 	"errors"
 	"fmt"
 	"io"
@@ -13,7 +14,7 @@ import (
 	"strings"
 
 	"github.com/klauspost/compress/zstd"
-	"github.com/urfave/cli/v2"
+	"github.com/urfave/cli/v3"
 	"google.golang.org/protobuf/proto"
 	"zombiezen.com/go/sqlite"
 	"zombiezen.com/go/sqlite/sqlitex"
@@ -51,15 +52,18 @@ Occurrences are stored opaquely as a blob to prevent the DB size from growing ve
 				Value:       "",
 			},
 		},
-		Action: func(c *cli.Context) error {
-			indexPath = c.Args().Get(0)
+		Action: func(ctx context.Context, cmd *cli.Command) error {
+			indexPath = cmd.Args().Get(0)
 			if indexPath == "" {
 				return errors.New("missing argument for path to SCIP index")
 			}
 
-			err := convertMain(indexPath, outputPath, cpuProfilePath, chunkSizeHint, c.App.Writer)
+			err := convertMain(indexPath, outputPath, cpuProfilePath, chunkSizeHint)
 			if err == nil {
-				fmt.Fprintf(c.App.Writer, "Successfully converted SCIP index to SQLite database at %s\n", outputPath)
+				fmt.Fprintf(
+					cmd.Root().Writer,
+					"Successfully converted SCIP index to SQLite database at %s\n",
+					outputPath)
 			}
 			return err
 		},
@@ -67,7 +71,7 @@ Occurrences are stored opaquely as a blob to prevent the DB size from growing ve
 	return command
 }
 
-func convertMain(indexPath, sqliteDBPath, cpuProfilePath string, chunkSize int, out io.Writer) (err error) {
+func convertMain(indexPath, sqliteDBPath, cpuProfilePath string, chunkSize int) (err error) {
 	index, err := readFromOption(indexPath)
 	if err != nil {
 		return err
@@ -76,7 +80,7 @@ func convertMain(indexPath, sqliteDBPath, cpuProfilePath string, chunkSize int, 
 	// Create the output directory if it doesn't exist
 	outputDir := filepath.Dir(sqliteDBPath)
 	if outputDir != "." {
-		if err := os.MkdirAll(outputDir, 0755); err != nil {
+		if err := os.MkdirAll(outputDir, 0o755); err != nil {
 			return fmt.Errorf("failed to create output directory %s: %w", outputDir, err)
 		}
 	}

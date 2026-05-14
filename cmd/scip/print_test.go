@@ -2,6 +2,7 @@ package main
 
 import (
 	"bytes"
+	"context"
 	"encoding/json"
 	"io"
 	"io/ioutil"
@@ -40,7 +41,8 @@ func TestJSONPrinting(t *testing.T) {
 	}
 
 	// Run the JSON command with the temporary file
-	runErr := app.Run([]string{"scip", "print", "--json", file.Name()})
+	runErr := app.Run(
+		context.Background(), []string{"scip", "print", "--json", file.Name()})
 	if runErr != nil {
 		log.Fatal(runErr)
 	}

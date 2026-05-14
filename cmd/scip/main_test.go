@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"os"
 	"path/filepath"
@@ -28,7 +29,7 @@ func TestCLIReferenceInSync(t *testing.T) {
 		os.Stdout = w
 		defer func() { os.Stdout = origStdout }()
 
-		require.Nil(t, app.Run(args))
+		require.Nil(t, app.Run(context.Background(), args))
 		_, err = w.Write([]byte{0}) // needed for Read below to terminate
 		require.Nil(t, err)
 		helpBytes := make([]byte, 1024*1024)

@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	_ "embed"
 	"fmt"
 	"log"
@@ -8,12 +9,12 @@ import (
 	"runtime/debug"
 	"strings"
 
-	"github.com/urfave/cli/v2"
+	"github.com/urfave/cli/v3"
 )
 
 func main() {
 	app := scipApp()
-	if err := app.Run(os.Args); err != nil {
+	if err := app.Run(context.Background(), os.Args); err != nil {
 		log.Fatal(err)
 	}
 }
@@ -56,8 +57,8 @@ func gitSuffix() string {
 	return fmt.Sprintf("-dev\nSHA: %s\ntimestamp: %s\nclean: %s", rev, timestamp, clean)
 }
 
-func scipApp() *cli.App {
-	app := &cli.App{
+func scipApp() *cli.Command {
+	app := &cli.Command{
 		Name:        "scip",
 		Version:     fmt.Sprintf("v%s%s", strings.TrimSpace(version), gitSuffix()),
 		Usage:       "SCIP Code Intelligence Protocol CLI",

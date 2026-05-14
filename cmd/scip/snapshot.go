@@ -1,11 +1,12 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"os"
 	"path/filepath"
 
-	"github.com/urfave/cli/v2"
+	"github.com/urfave/cli/v3"
 
 	"github.com/scip-code/scip/bindings/go/scip"
 	"github.com/scip-code/scip/bindings/go/scip/testutil"
@@ -50,7 +51,7 @@ along with 'git diff' or equivalent, or you can use the dedicated
 			},
 			commentSyntaxFlag(&snapshotFlags.commentSyntax),
 		},
-		Action: func(c *cli.Context) error {
+		Action: func(ctx context.Context, cmd *cli.Command) error {
 			return snapshotMain(snapshotFlags)
 		},
 	}

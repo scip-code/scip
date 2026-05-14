@@ -1,10 +1,11 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"os"
 
-	"github.com/urfave/cli/v2"
+	"github.com/urfave/cli/v3"
 
 	"github.com/scip-code/scip/bindings/go/scip/testutil"
 )
@@ -12,7 +13,7 @@ import (
 type testFlags struct {
 	from           string // default: 'index.scip'
 	commentSyntax  string // default: '//'
-	pathFilters    cli.StringSlice
+	pathFilters    []string
 	checkDocuments bool // default: false
 }
 
@@ -50,16 +51,22 @@ use the 'snapshot' subcommand.`, version),
 				Value:       false,
 			},
 		},
-		Action: func(c *cli.Context) error {
-			dir := c.Args().Get(0)
+		Action: func(ctx context.Context, cmd *cli.Command) error {
+			dir := cmd.Args().Get(0)
 
 			index, err := readFromOption(testFlags.from)
 			if err != nil {
 				return err
 			}
 
-			err = testutil.RunTests(dir, testFlags.pathFilters.Value(), testFlags.checkDocuments, index, testFlags.commentSyntax, os.Stdout)
-			if err != nil {
+			if err = testutil.RunTests(
+				dir,
+				testFlags.pathFilters,
+				testFlags.checkDocuments,
+				index,
+				testFlags.commentSyntax,
+				os.Stdout,
+			); err != nil {
 				return cli.Exit("", 1)
 			}
 			return nil

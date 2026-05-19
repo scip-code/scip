@@ -365,7 +365,11 @@ func TestMergeIndexes_EmptyRelativePathGetsPrefix(t *testing.T) {
 		docPaths(merged))
 }
 
-func TestMergeIndexes_UnspecifiedEncodingPromotes(t *testing.T) {
+func TestMergeIndexes_UnspecifiedAndConcreteEncodingMismatch(t *testing.T) {
+	// Unspecified is treated as a distinct value, not a wildcard: mixing it
+	// with a concrete encoding must error rather than silently labeling the
+	// merged output with the concrete encoding (which could mislabel the
+	// Unspecified index's source files).
 	a := &scip.Index{
 		Metadata: &scip.Metadata{
 			ProjectRoot:          "file:///repo",
@@ -379,9 +383,30 @@ func TestMergeIndexes_UnspecifiedEncodingPromotes(t *testing.T) {
 		},
 	}
 
+	_, err := mergeIndexes([]*scip.Index{a, b}, "")
+	require.Error(t, err)
+	require.Contains(t, err.Error(), "text encoding")
+}
+
+func TestMergeIndexes_AllUnspecifiedEncodingPreserved(t *testing.T) {
+	// When every input has the same encoding (including Unspecified), the
+	// merged output preserves it.
+	a := &scip.Index{
+		Metadata: &scip.Metadata{
+			ProjectRoot:          "file:///repo",
+			TextDocumentEncoding: scip.TextEncoding_UnspecifiedTextEncoding,
+		},
+	}
+	b := &scip.Index{
+		Metadata: &scip.Metadata{
+			ProjectRoot:          "file:///repo",
+			TextDocumentEncoding: scip.TextEncoding_UnspecifiedTextEncoding,
+		},
+	}
+
 	merged, err := mergeIndexes([]*scip.Index{a, b}, "")
 	require.NoError(t, err)
-	require.Equal(t, scip.TextEncoding_UTF8, merged.Metadata.TextDocumentEncoding)
+	require.Equal(t, scip.TextEncoding_UnspecifiedTextEncoding, merged.Metadata.TextDocumentEncoding)
 }
 
 func TestMergeMain_EndToEnd(t *testing.T) {

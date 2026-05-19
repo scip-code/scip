@@ -97,19 +97,20 @@ func mergeMain(inputs []string, flags mergeFlags) error {
 	return nil
 }
 
-// mergeIndexes combines multiple SCIP indexes into one. It determines the
-// output project_root as the common URI ancestor of the inputs' project_root
-// values (or projectRootOverride if non-empty), rewrites each
-// Document.relative_path to be relative to that root, and deduplicates
-// documents and external symbols.
 func mergeIndexes(indexes []*scip.Index, projectRootOverride string) (*scip.Index, error) {
 	if len(indexes) == 0 {
 		return nil, errors.New("no indexes to merge")
 	}
 
-	// Validate metadata and pick the merged ProtocolVersion / TextEncoding.
-	protoVersion := indexes[0].Metadata.GetVersion()
-	encoding := scip.TextEncoding_UnspecifiedTextEncoding
+	// Validate metadata. All inputs must agree exactly on ProtocolVersion and
+	// TextDocumentEncoding (Unspecified is treated as a distinct value, not a
+	// wildcard, to avoid silently mislabeling an index whose encoding was
+	// unknown).
+	if indexes[0].Metadata == nil {
+		return nil, errors.New("index 0 has no metadata")
+	}
+	protoVersion := indexes[0].Metadata.Version
+	encoding := indexes[0].Metadata.TextDocumentEncoding
 	roots := make([]*url.URL, len(indexes))
 	for i, idx := range indexes {
 		if idx.Metadata == nil {
@@ -120,14 +121,10 @@ func mergeIndexes(indexes []*scip.Index, projectRootOverride string) (*scip.Inde
 				"index %d has incompatible protocol version %v (expected %v)",
 				i, idx.Metadata.Version, protoVersion)
 		}
-		if e := idx.Metadata.TextDocumentEncoding; e != scip.TextEncoding_UnspecifiedTextEncoding {
-			if encoding == scip.TextEncoding_UnspecifiedTextEncoding {
-				encoding = e
-			} else if encoding != e {
-				return nil, fmt.Errorf(
-					"index %d has incompatible text encoding %v (expected %v)",
-					i, e, encoding)
-			}
+		if idx.Metadata.TextDocumentEncoding != encoding {
+			return nil, fmt.Errorf(
+				"index %d has incompatible text encoding %v (expected %v)",
+				i, idx.Metadata.TextDocumentEncoding, encoding)
 		}
 		u, err := parseRootURI(idx.Metadata.ProjectRoot)
 		if err != nil {

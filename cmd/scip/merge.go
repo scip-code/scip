@@ -16,13 +16,13 @@ import (
 )
 
 type mergeFlags struct {
-	output            string
+	output              string
 	projectRootOverride string
 }
 
 func mergeCommand() cli.Command {
 	var flags mergeFlags
-	command := cli.Command{
+	return cli.Command{
 		Name:  "merge",
 		Usage: "Merge multiple SCIP indexes into a single SCIP index",
 		Description: `Merges two or more SCIP indexes into one.
@@ -70,17 +70,16 @@ Example usage:
 			return mergeMain(inputs, flags)
 		},
 	}
-	return command
 }
 
 func mergeMain(inputs []string, flags mergeFlags) error {
-	indexes := make([]*scip.Index, 0, len(inputs))
-	for _, p := range inputs {
+	indexes := make([]*scip.Index, len(inputs))
+	for i, p := range inputs {
 		idx, err := readFromOption(p)
 		if err != nil {
 			return fmt.Errorf("reading %s: %w", p, err)
 		}
-		indexes = append(indexes, idx)
+		indexes[i] = idx
 	}
 
 	merged, err := mergeIndexes(indexes, flags.projectRootOverride)
@@ -88,78 +87,73 @@ func mergeMain(inputs []string, flags mergeFlags) error {
 		return err
 	}
 
-	bytes, err := proto.Marshal(merged)
+	data, err := proto.Marshal(merged)
 	if err != nil {
 		return fmt.Errorf("marshaling merged index: %w", err)
 	}
-	if err := os.WriteFile(flags.output, bytes, 0o644); err != nil {
+	if err := os.WriteFile(flags.output, data, 0o644); err != nil {
 		return fmt.Errorf("writing %s: %w", flags.output, err)
 	}
 	return nil
 }
 
 // mergeIndexes combines multiple SCIP indexes into one. It determines the
-// output project_root by computing the common URI ancestor of the inputs'
-// project_root values (unless projectRootOverride is non-empty), rewrites
-// each Document.relative_path to be relative to that root, and deduplicates
+// output project_root as the common URI ancestor of the inputs' project_root
+// values (or projectRootOverride if non-empty), rewrites each
+// Document.relative_path to be relative to that root, and deduplicates
 // documents and external symbols.
 func mergeIndexes(indexes []*scip.Index, projectRootOverride string) (*scip.Index, error) {
 	if len(indexes) == 0 {
 		return nil, errors.New("no indexes to merge")
 	}
 
-	// Validate metadata is present everywhere.
+	// Validate metadata and pick the merged ProtocolVersion / TextEncoding.
+	protoVersion := indexes[0].Metadata.GetVersion()
+	encoding := scip.TextEncoding_UnspecifiedTextEncoding
+	roots := make([]*url.URL, len(indexes))
 	for i, idx := range indexes {
 		if idx.Metadata == nil {
 			return nil, fmt.Errorf("index %d has no metadata", i)
 		}
-	}
-
-	// Validate compatible ProtocolVersion and TextDocumentEncoding.
-	protoVersion := indexes[0].Metadata.Version
-	encoding := indexes[0].Metadata.TextDocumentEncoding
-	for i, idx := range indexes[1:] {
 		if idx.Metadata.Version != protoVersion {
 			return nil, fmt.Errorf(
 				"index %d has incompatible protocol version %v (expected %v)",
-				i+1, idx.Metadata.Version, protoVersion)
+				i, idx.Metadata.Version, protoVersion)
 		}
-		if !encodingsCompatible(encoding, idx.Metadata.TextDocumentEncoding) {
-			return nil, fmt.Errorf(
-				"index %d has incompatible text encoding %v (expected %v)",
-				i+1, idx.Metadata.TextDocumentEncoding, encoding)
+		if e := idx.Metadata.TextDocumentEncoding; e != scip.TextEncoding_UnspecifiedTextEncoding {
+			if encoding == scip.TextEncoding_UnspecifiedTextEncoding {
+				encoding = e
+			} else if encoding != e {
+				return nil, fmt.Errorf(
+					"index %d has incompatible text encoding %v (expected %v)",
+					i, e, encoding)
+			}
 		}
-		// Promote from Unspecified to a concrete encoding if one input has it.
-		if encoding == scip.TextEncoding_UnspecifiedTextEncoding {
-			encoding = idx.Metadata.TextDocumentEncoding
+		u, err := parseRootURI(idx.Metadata.ProjectRoot)
+		if err != nil {
+			return nil, fmt.Errorf("index %d: %w", i, err)
 		}
+		roots[i] = u
 	}
 
-	// Determine the output project_root and per-input prefix.
-	outputRoot, prefixes, err := computeOutputRootAndPrefixes(indexes, projectRootOverride)
+	// Determine the output project_root and the per-input prefix.
+	outputURL, prefixes, err := planPaths(roots, projectRootOverride)
 	if err != nil {
 		return nil, err
 	}
 
-	// Aggregate documents (rewriting paths) and external symbols.
+	// Aggregate documents (rewriting relative_path) and external symbols.
 	var allDocuments []*scip.Document
 	var allExternalSymbols []*scip.SymbolInformation
 	for i, idx := range indexes {
 		for _, doc := range idx.Documents {
 			if prefixes[i] != "" {
-				if doc.RelativePath == "" {
-					doc.RelativePath = prefixes[i]
-				} else {
-					doc.RelativePath = path.Join(prefixes[i], doc.RelativePath)
-				}
+				doc.RelativePath = path.Join(prefixes[i], doc.RelativePath)
 			}
 			allDocuments = append(allDocuments, doc)
 		}
 		allExternalSymbols = append(allExternalSymbols, idx.ExternalSymbols...)
 	}
-
-	mergedDocuments := scip.FlattenDocuments(allDocuments)
-	mergedExternalSymbols := scip.FlattenSymbols(allExternalSymbols)
 
 	return &scip.Index{
 		Metadata: &scip.Metadata{
@@ -169,168 +163,99 @@ func mergeIndexes(indexes []*scip.Index, projectRootOverride string) (*scip.Inde
 				Version:   strings.TrimSpace(version),
 				Arguments: []string{"merge"},
 			},
-			ProjectRoot:          outputRoot,
+			ProjectRoot:          outputURL.String(),
 			TextDocumentEncoding: encoding,
 		},
-		Documents:       mergedDocuments,
-		ExternalSymbols: mergedExternalSymbols,
+		Documents:       scip.FlattenDocuments(allDocuments),
+		ExternalSymbols: scip.FlattenSymbols(allExternalSymbols),
 	}, nil
 }
 
-// encodingsCompatible reports whether two TextEncoding values can be merged.
-// Unspecified is treated as compatible with any value.
-func encodingsCompatible(a, b scip.TextEncoding) bool {
-	if a == scip.TextEncoding_UnspecifiedTextEncoding ||
-		b == scip.TextEncoding_UnspecifiedTextEncoding {
-		return true
+// parseRootURI parses a project_root URI and normalizes its path component
+// (trailing slashes trimmed, "." / ".." resolved, "" replaced with "/").
+func parseRootURI(raw string) (*url.URL, error) {
+	u, err := url.Parse(raw)
+	if err != nil {
+		return nil, fmt.Errorf("parsing project_root %q: %w", raw, err)
 	}
-	return a == b
-}
-
-// computeOutputRootAndPrefixes returns the URI to use as the merged index's
-// project_root, together with one path-prefix per input index. The prefix for
-// input i is what should be prepended to each document's relative_path so that
-// it remains relative to the output root.
-//
-// If projectRootOverride is non-empty, it is used directly and each input root
-// must be a descendant of it. Otherwise, the output root is the common URI
-// ancestor of all inputs.
-func computeOutputRootAndPrefixes(indexes []*scip.Index, projectRootOverride string) (string, []string, error) {
-	roots := make([]string, len(indexes))
-	for i, idx := range indexes {
-		roots[i] = idx.Metadata.ProjectRoot
-	}
-
-	var outputRoot string
-	if projectRootOverride != "" {
-		outputRoot = projectRootOverride
+	if u.Path == "" {
+		u.Path = "/"
 	} else {
-		var err error
-		outputRoot, err = commonAncestorURI(roots)
+		u.Path = path.Clean(u.Path)
+	}
+	return u, nil
+}
+
+// planPaths returns the output project_root URL and the prefix that must be
+// prepended to each input's document relative_paths. If override is non-empty
+// it becomes the output root and every input root must be a descendant of it;
+// otherwise the output root is the common URI ancestor of all inputs.
+func planPaths(inputs []*url.URL, override string) (*url.URL, []string, error) {
+	var root *url.URL
+	if override != "" {
+		u, err := parseRootURI(override)
 		if err != nil {
-			return "", nil, err
+			return nil, nil, fmt.Errorf("invalid --project-root: %w", err)
+		}
+		root = u
+	} else {
+		root = inputs[0]
+		for _, u := range inputs[1:] {
+			if u.Scheme != root.Scheme || u.Host != root.Host {
+				return nil, nil, fmt.Errorf(
+					"inputs have incompatible URI scheme/host: %q vs %q; "+
+						"pass --project-root to override",
+					root, u)
+			}
+			root = &url.URL{Scheme: root.Scheme, Host: root.Host, Path: commonPath(root.Path, u.Path)}
 		}
 	}
 
-	prefixes := make([]string, len(indexes))
-	for i, r := range roots {
-		prefix, err := relativePrefix(outputRoot, r)
+	prefixes := make([]string, len(inputs))
+	for i, u := range inputs {
+		if u.Scheme != root.Scheme || u.Host != root.Host {
+			return nil, nil, fmt.Errorf(
+				"index %d project_root %q has different scheme/host than output root %q",
+				i, u, root)
+		}
+		rel, err := relativeTo(root.Path, u.Path)
 		if err != nil {
-			return "", nil, fmt.Errorf(
-				"index %d project_root %q is not under output root %q: %w",
-				i, r, outputRoot, err)
+			return nil, nil, fmt.Errorf("index %d project_root %q: %w", i, u, err)
 		}
-		prefixes[i] = prefix
+		prefixes[i] = rel
 	}
-	return outputRoot, prefixes, nil
+	return root, prefixes, nil
 }
 
-// commonAncestorURI returns the longest URI that is an ancestor of every input
-// URI. All inputs must share the same scheme and host.
-func commonAncestorURI(roots []string) (string, error) {
-	if len(roots) == 0 {
-		return "", errors.New("no project roots provided")
+// commonPath returns the longest slash-bounded ancestor of both a and b.
+// Inputs must be absolute (start with "/") and cleaned.
+func commonPath(a, b string) string {
+	for !isAncestor(a, b) {
+		a = path.Dir(a)
 	}
-
-	first, err := url.Parse(roots[0])
-	if err != nil {
-		return "", fmt.Errorf("parsing project_root %q: %w", roots[0], err)
-	}
-
-	commonScheme := first.Scheme
-	commonHost := first.Host
-	commonPath := normalizeURIPath(first.Path)
-
-	for _, r := range roots[1:] {
-		u, err := url.Parse(r)
-		if err != nil {
-			return "", fmt.Errorf("parsing project_root %q: %w", r, err)
-		}
-		if u.Scheme != commonScheme {
-			return "", fmt.Errorf(
-				"incompatible URI schemes %q and %q across inputs; "+
-					"pass --project-root to override",
-				commonScheme, u.Scheme)
-		}
-		if u.Host != commonHost {
-			return "", fmt.Errorf(
-				"incompatible URI hosts %q and %q across inputs; "+
-					"pass --project-root to override",
-				commonHost, u.Host)
-		}
-		commonPath = commonPathPrefix(commonPath, normalizeURIPath(u.Path))
-	}
-
-	out := url.URL{
-		Scheme: commonScheme,
-		Host:   commonHost,
-		Path:   commonPath,
-	}
-	return out.String(), nil
+	return a
 }
 
-// normalizeURIPath trims trailing slashes while preserving the root "/".
-func normalizeURIPath(p string) string {
-	if p == "" || p == "/" {
-		return p
+// isAncestor reports whether parent is an ancestor of (or equal to) child.
+// Inputs must be cleaned.
+func isAncestor(parent, child string) bool {
+	if parent == "/" {
+		return strings.HasPrefix(child, "/")
 	}
-	return strings.TrimRight(p, "/")
+	return child == parent || strings.HasPrefix(child, parent+"/")
 }
 
-// commonPathPrefix returns the longest path prefix of a and b along "/"
-// component boundaries.
-func commonPathPrefix(a, b string) string {
-	aParts := strings.Split(a, "/")
-	bParts := strings.Split(b, "/")
-	n := len(aParts)
-	if len(bParts) < n {
-		n = len(bParts)
-	}
-	i := 0
-	for ; i < n; i++ {
-		if aParts[i] != bParts[i] {
-			break
-		}
-	}
-	common := strings.Join(aParts[:i], "/")
-	// If only the leading empty element matched, both paths were absolute and
-	// the only shared ancestor is the root.
-	if common == "" && i > 0 && strings.HasPrefix(a, "/") && strings.HasPrefix(b, "/") {
-		return "/"
-	}
-	return common
-}
-
-// relativePrefix returns the path that, when prepended to a relative_path under
-// the input root, makes it relative to the output root.
-func relativePrefix(outputRoot, inputRoot string) (string, error) {
-	outURL, err := url.Parse(outputRoot)
-	if err != nil {
-		return "", fmt.Errorf("parsing output project_root %q: %w", outputRoot, err)
-	}
-	inURL, err := url.Parse(inputRoot)
-	if err != nil {
-		return "", fmt.Errorf("parsing input project_root %q: %w", inputRoot, err)
-	}
-	if outURL.Scheme != inURL.Scheme {
-		return "", fmt.Errorf("scheme mismatch: %q vs %q", outURL.Scheme, inURL.Scheme)
-	}
-	if outURL.Host != inURL.Host {
-		return "", fmt.Errorf("host mismatch: %q vs %q", outURL.Host, inURL.Host)
-	}
-
-	outPath := normalizeURIPath(outURL.Path)
-	inPath := normalizeURIPath(inURL.Path)
-
-	if outPath == inPath {
+// relativeTo returns child's path relative to parent (no leading slash).
+// Returns an error if parent is not an ancestor of child.
+func relativeTo(parent, child string) (string, error) {
+	if child == parent {
 		return "", nil
 	}
-	// outPath must be a directory prefix of inPath.
-	if outPath == "/" {
-		return strings.TrimLeft(inPath, "/"), nil
+	if parent == "/" {
+		return strings.TrimPrefix(child, "/"), nil
 	}
-	if !strings.HasPrefix(inPath, outPath+"/") {
-		return "", fmt.Errorf("%q is not under %q", inPath, outPath)
+	if rel, ok := strings.CutPrefix(child, parent+"/"); ok {
+		return rel, nil
 	}
-	return strings.TrimPrefix(inPath, outPath+"/"), nil
+	return "", fmt.Errorf("%q is not under %q", child, parent)
 }

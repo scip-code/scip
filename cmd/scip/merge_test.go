@@ -1,6 +1,7 @@
 package main
 
 import (
+	"net/url"
 	"os"
 	"path/filepath"
 	"sort"
@@ -12,42 +13,56 @@ import (
 	"github.com/scip-code/scip/bindings/go/scip"
 )
 
-func TestMerge_CommonAncestorURI(t *testing.T) {
+func TestMerge_PlanPaths(t *testing.T) {
 	cases := []struct {
-		name    string
-		roots   []string
-		want    string
-		wantErr bool
+		name         string
+		roots        []string
+		override     string
+		wantRoot     string
+		wantPrefixes []string
+		wantErr      bool
 	}{
 		{
-			name:  "identical roots",
-			roots: []string{"file:///repo", "file:///repo"},
-			want:  "file:///repo",
+			name:         "identical roots",
+			roots:        []string{"file:///repo", "file:///repo"},
+			wantRoot:     "file:///repo",
+			wantPrefixes: []string{"", ""},
 		},
 		{
-			name:  "sibling subdirs",
-			roots: []string{"file:///repo/frontend", "file:///repo/backend"},
-			want:  "file:///repo",
+			name:         "sibling subdirs",
+			roots:        []string{"file:///repo/frontend", "file:///repo/backend"},
+			wantRoot:     "file:///repo",
+			wantPrefixes: []string{"frontend", "backend"},
 		},
 		{
-			name:  "one is ancestor of the other",
-			roots: []string{"file:///repo", "file:///repo/sub"},
-			want:  "file:///repo",
+			name:         "one is ancestor of the other",
+			roots:        []string{"file:///repo", "file:///repo/sub"},
+			wantRoot:     "file:///repo",
+			wantPrefixes: []string{"", "sub"},
 		},
 		{
-			name:  "deep nesting",
-			roots: []string{"file:///repo/a/b/c", "file:///repo/a/b/d", "file:///repo/a/e"},
-			want:  "file:///repo/a",
+			name:         "deep nesting",
+			roots:        []string{"file:///repo/a/b/c", "file:///repo/a/b/d", "file:///repo/a/e"},
+			wantRoot:     "file:///repo/a",
+			wantPrefixes: []string{"b/c", "b/d", "e"},
 		},
 		{
-			name:  "common component is filesystem root",
-			roots: []string{"file:///alpha/x", "file:///beta/y"},
-			want:  "file:///",
+			name:         "common component is filesystem root",
+			roots:        []string{"file:///alpha/x", "file:///beta/y"},
+			wantRoot:     "file:///",
+			wantPrefixes: []string{"alpha/x", "beta/y"},
 		},
 		{
-			name:  "trailing slashes normalized",
-			roots: []string{"file:///repo/", "file:///repo/sub"},
-			want:  "file:///repo",
+			name:         "trailing slashes normalized",
+			roots:        []string{"file:///repo/", "file:///repo/sub"},
+			wantRoot:     "file:///repo",
+			wantPrefixes: []string{"", "sub"},
+		},
+		{
+			name:         "prefix-like names don't share parent",
+			roots:        []string{"file:///repo/frontend", "file:///repo/frontend-v2"},
+			wantRoot:     "file:///repo",
+			wantPrefixes: []string{"frontend", "frontend-v2"},
 		},
 		{
 			name:    "different schemes error",
@@ -60,91 +75,61 @@ func TestMerge_CommonAncestorURI(t *testing.T) {
 			wantErr: true,
 		},
 		{
-			name:  "non-overlapping but same scheme is ancestor=/",
-			roots: []string{"file:///repo/frontend", "file:///different-name/backend"},
-			want:  "file:///",
+			name:         "override at a common ancestor",
+			roots:        []string{"file:///workspace/repo/frontend", "file:///workspace/repo/backend"},
+			override:     "file:///workspace",
+			wantRoot:     "file:///workspace",
+			wantPrefixes: []string{"repo/frontend", "repo/backend"},
 		},
 		{
-			name:  "prefix-like names don't share parent",
-			roots: []string{"file:///repo/frontend", "file:///repo/frontend-v2"},
-			want:  "file:///repo",
+			name:     "override must be ancestor of all inputs",
+			roots:    []string{"file:///repo/frontend", "file:///elsewhere/backend"},
+			override: "file:///repo",
+			wantErr:  true,
 		},
 	}
 
 	for _, c := range cases {
 		t.Run(c.name, func(t *testing.T) {
-			got, err := commonAncestorURI(c.roots)
+			parsed := make([]*url.URL, len(c.roots))
+			for i, r := range c.roots {
+				u, err := parseRootURI(r)
+				require.NoError(t, err)
+				parsed[i] = u
+			}
+			gotURL, gotPrefixes, err := planPaths(parsed, c.override)
 			if c.wantErr {
 				require.Error(t, err)
 				return
 			}
 			require.NoError(t, err)
-			require.Equal(t, c.want, got)
+			require.Equal(t, c.wantRoot, gotURL.String())
+			require.Equal(t, c.wantPrefixes, gotPrefixes)
 		})
 	}
 }
 
-func TestMerge_RelativePrefix(t *testing.T) {
+func TestMerge_RelativeTo(t *testing.T) {
 	cases := []struct {
-		name       string
-		outputRoot string
-		inputRoot  string
-		want       string
-		wantErr    bool
+		name    string
+		parent  string
+		child   string
+		want    string
+		wantErr bool
 	}{
-		{
-			name:       "same root",
-			outputRoot: "file:///repo",
-			inputRoot:  "file:///repo",
-			want:       "",
-		},
-		{
-			name:       "direct child",
-			outputRoot: "file:///repo",
-			inputRoot:  "file:///repo/sub",
-			want:       "sub",
-		},
-		{
-			name:       "deep child",
-			outputRoot: "file:///repo",
-			inputRoot:  "file:///repo/a/b/c",
-			want:       "a/b/c",
-		},
-		{
-			name:       "input is ancestor (error)",
-			outputRoot: "file:///repo/sub",
-			inputRoot:  "file:///repo",
-			wantErr:    true,
-		},
-		{
-			name:       "siblings (error)",
-			outputRoot: "file:///repo/frontend",
-			inputRoot:  "file:///repo/backend",
-			wantErr:    true,
-		},
-		{
-			name:       "prefix-like but not actual ancestor",
-			outputRoot: "file:///repo/frontend",
-			inputRoot:  "file:///repo/frontend-v2",
-			wantErr:    true,
-		},
-		{
-			name:       "output is filesystem root",
-			outputRoot: "file:///",
-			inputRoot:  "file:///alpha/x",
-			want:       "alpha/x",
-		},
-		{
-			name:       "trailing slash on input",
-			outputRoot: "file:///repo",
-			inputRoot:  "file:///repo/sub/",
-			want:       "sub",
-		},
+		{"same", "/repo", "/repo", "", false},
+		{"direct child", "/repo", "/repo/sub", "sub", false},
+		{"deep child", "/repo", "/repo/a/b/c", "a/b/c", false},
+		{"parent is filesystem root", "/", "/alpha/x", "alpha/x", false},
+		{"parent equals root and child equals root", "/", "/", "", false},
+		{"input is ancestor (error)", "/repo/sub", "/repo", "", true},
+		{"siblings (error)", "/repo/frontend", "/repo/backend", "", true},
+		{"prefix-like but not ancestor", "/repo/frontend", "/repo/frontend-v2", "", true},
 	}
 
 	for _, c := range cases {
 		t.Run(c.name, func(t *testing.T) {
-			got, err := relativePrefix(c.outputRoot, c.inputRoot)
+			got, err := relativeTo(c.parent, c.child)
 			if c.wantErr {
 				require.Error(t, err)
 				return
@@ -315,6 +300,69 @@ func TestMergeIndexes_IncompatibleEncoding(t *testing.T) {
 
 	_, err := mergeIndexes([]*scip.Index{a, b}, "")
 	require.Error(t, err)
+}
+
+func TestMergeIndexes_IncompatibleProtocolVersion(t *testing.T) {
+	a := &scip.Index{
+		Metadata: &scip.Metadata{
+			ProjectRoot:          "file:///repo",
+			TextDocumentEncoding: scip.TextEncoding_UTF8,
+			Version:              scip.ProtocolVersion_UnspecifiedProtocolVersion,
+		},
+	}
+	b := &scip.Index{
+		Metadata: &scip.Metadata{
+			ProjectRoot:          "file:///repo",
+			TextDocumentEncoding: scip.TextEncoding_UTF8,
+			Version:              scip.ProtocolVersion(42), // imaginary future version
+		},
+	}
+
+	_, err := mergeIndexes([]*scip.Index{a, b}, "")
+	require.Error(t, err)
+	require.Contains(t, err.Error(), "protocol version")
+}
+
+func TestMergeIndexes_MissingMetadata(t *testing.T) {
+	a := &scip.Index{
+		Metadata: &scip.Metadata{
+			ProjectRoot:          "file:///repo",
+			TextDocumentEncoding: scip.TextEncoding_UTF8,
+		},
+	}
+	b := &scip.Index{Metadata: nil}
+
+	_, err := mergeIndexes([]*scip.Index{a, b}, "")
+	require.Error(t, err)
+	require.Contains(t, err.Error(), "metadata")
+}
+
+func TestMergeIndexes_EmptyRelativePathGetsPrefix(t *testing.T) {
+	a := &scip.Index{
+		Metadata: &scip.Metadata{
+			ProjectRoot:          "file:///repo/frontend",
+			TextDocumentEncoding: scip.TextEncoding_UTF8,
+		},
+		Documents: []*scip.Document{
+			{RelativePath: ""}, // empty -- represents the project root itself
+		},
+	}
+	b := &scip.Index{
+		Metadata: &scip.Metadata{
+			ProjectRoot:          "file:///repo/backend",
+			TextDocumentEncoding: scip.TextEncoding_UTF8,
+		},
+		Documents: []*scip.Document{
+			{RelativePath: "main.go"},
+		},
+	}
+
+	merged, err := mergeIndexes([]*scip.Index{a, b}, "")
+	require.NoError(t, err)
+	require.Equal(t, "file:///repo", merged.Metadata.ProjectRoot)
+	require.ElementsMatch(t,
+		[]string{"frontend", "backend/main.go"},
+		docPaths(merged))
 }
 
 func TestMergeIndexes_UnspecifiedEncodingPromotes(t *testing.T) {

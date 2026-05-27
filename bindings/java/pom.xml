@@ -47,10 +47,12 @@
       <artifactId>protobuf-java</artifactId>
       <version>${protobuf.version}</version>
     </dependency>
+    <!-- Optional: pulls Guava transitively. Re-declare without <optional> to use JsonFormat etc. -->
     <dependency>
       <groupId>com.google.protobuf</groupId>
       <artifactId>protobuf-java-util</artifactId>
       <version>${protobuf.version}</version>
+      <optional>true</optional>
     </dependency>
   </dependencies>
 </project>

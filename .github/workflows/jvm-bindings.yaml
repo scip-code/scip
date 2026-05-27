@@ -1,10 +1,9 @@
 name: JVM bindings
 
-# The Java and Kotlin bindings are built with Maven directly rather than
-# Nix because scip-kotlin depends on scip-java as a Maven artifact, which
-# nixpkgs' offline `maven.buildMavenPackage` sandbox cannot resolve from
-# the sibling derivation. A regular `mvn install` -> `mvn package` flow
-# in a single CI job is simpler and more reliable.
+# The Java and Kotlin bindings are built with Maven directly rather than Nix
+# because scip-kotlin-bindings depends on scip-java-bindings as a Maven
+# artifact, which nixpkgs' offline `maven.buildMavenPackage` sandbox cannot
+# resolve from the sibling derivation.
 
 on:
   pull_request:
@@ -48,8 +47,8 @@ jobs:
             fi
           done
 
-      - name: Build scip-java and install to local Maven repo
+      - name: Build scip-java-bindings and install to local Maven repo
         run: mvn -B -ntp -f bindings/java/pom.xml install
 
-      - name: Build scip-kotlin (resolves scip-java from local repo)
+      - name: Build scip-kotlin-bindings (resolves scip-java-bindings from local repo)
         run: mvn -B -ntp -f bindings/kotlin/pom.xml package

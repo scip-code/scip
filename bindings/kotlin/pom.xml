@@ -5,15 +5,15 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>org.scip-code</groupId>
-  <artifactId>scip-kotlin</artifactId>
+  <artifactId>scip-kotlin-bindings</artifactId>
   <version>0.7.1</version>
   <packaging>jar</packaging>
 
-  <name>scip-kotlin</name>
+  <name>scip-kotlin-bindings</name>
   <description>
     Generated Kotlin DSL extensions for the Semantic Code Intelligence
-    Protocol (SCIP). Pulls scip-java transitively for the underlying
-    protobuf message classes.
+    Protocol (SCIP). Pulls scip-java-bindings transitively for the
+    underlying protobuf message classes.
   </description>
   <url>https://github.com/scip-code/scip</url>
 
@@ -47,7 +47,7 @@
   <dependencies>
     <dependency>
       <groupId>org.scip-code</groupId>
-      <artifactId>scip-java</artifactId>
+      <artifactId>scip-java-bindings</artifactId>
       <version>${project.version}</version>
     </dependency>
     <dependency>

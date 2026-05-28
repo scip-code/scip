@@ -91,6 +91,46 @@ jobs:
           fi
         working-directory: bindings/rust
 
+  publish-jvm-bindings:
+    needs: publish
+    runs-on: ubuntu-latest
+    # Maven Central publication with waitUntil=published can block for
+    # 10-30 min per module while Sonatype mirrors propagate. Two
+    # sequential deploys (Java then Kotlin, which resolves Java from
+    # Central) means worst-case ~60 min.
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: v${{ inputs.version }}
+
+      - uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: 11
+          cache: maven
+          server-id: central
+          server-username: MAVEN_USERNAME
+          server-password: MAVEN_PASSWORD
+          gpg-private-key: ${{ secrets.MAVEN_GPG_PRIVATE_KEY }}
+
+      # scip-kotlin-bindings depends on scip-java-bindings at the same
+      # version and resolves it from Central, not from this runner. The
+      # release profile sets waitUntil=published, so the Java step
+      # blocks until the artifact is live on repo1.maven.org before the
+      # Kotlin step runs.
+      - name: Deploy scip-java-bindings to Maven Central
+        run: mvn -B -ntp -Prelease -f bindings/java/pom.xml deploy
+        env:
+          MAVEN_USERNAME: ${{ secrets.MAVEN_USERNAME }}
+          MAVEN_PASSWORD: ${{ secrets.MAVEN_PASSWORD }}
+
+      - name: Deploy scip-kotlin-bindings to Maven Central
+        run: mvn -B -ntp -Prelease -f bindings/kotlin/pom.xml deploy
+        env:
+          MAVEN_USERNAME: ${{ secrets.MAVEN_USERNAME }}
+          MAVEN_PASSWORD: ${{ secrets.MAVEN_PASSWORD }}
+
   build-go-binaries:
     needs: publish
     permissions:
@@ -152,7 +192,7 @@ jobs:
           gh release upload "$TAG" "$ASSET.tar.gz" "$ASSET.tar.gz.sha256" --clobber
 
   finalize-release:
-    needs: [release-crate, build-go-binaries]
+    needs: [release-crate, build-go-binaries, publish-jvm-bindings]
     runs-on: ubuntu-latest
     permissions:
       contents: write

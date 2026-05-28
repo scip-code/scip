@@ -104,11 +104,11 @@ The Java and Kotlin bindings are published to Maven Central under the
 
 Required GitHub Actions secrets:
 
-| Secret | Source |
-| --- | --- |
-| `MAVEN_USERNAME` | Token name from the [Central Portal account page](https://central.sonatype.com/account) |
-| `MAVEN_PASSWORD` | Token secret from the same page |
-| `MAVEN_GPG_PRIVATE_KEY` | `gpg --armor --export-secret-keys $KEYID` of a passphrase-less primary signing key |
+| Secret                  | Source                                                                                  |
+| ----------------------- | --------------------------------------------------------------------------------------- |
+| `MAVEN_USERNAME`        | Token name from the [Central Portal account page](https://central.sonatype.com/account) |
+| `MAVEN_PASSWORD`        | Token secret from the same page                                                         |
+| `MAVEN_GPG_PRIVATE_KEY` | `gpg --armor --export-secret-keys $KEYID` of a passphrase-less primary signing key      |
 
 `scip-kotlin-bindings` depends on `scip-java-bindings`, so the Java
 deploy uses `<waitUntil>published</waitUntil>` (~10–30 min) before the

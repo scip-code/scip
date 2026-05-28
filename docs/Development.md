@@ -81,12 +81,36 @@ go test ./cmd/scip -update-snapshots
 ## Release a new version
 
 Update the version in `cmd/scip/version.txt`, `bindings/rust/Cargo.toml`,
-`bindings/rust/Cargo.lock`, and `docs/CLI.md`, then land a commit with those
-changes.
+`bindings/rust/Cargo.lock`, `bindings/java/pom.xml`, `bindings/kotlin/pom.xml`,
+and `docs/CLI.md`, then land a commit with those changes. The
+[jvm-bindings workflow](/.github/workflows/jvm-bindings.yaml) fails the PR
+if the two `pom.xml` versions don't match `cmd/scip/version.txt`.
 
 After the commit is on `main`, trigger the
-[release workflow](/.github/workflows/release.yml) from the
+[release workflow](/.github/workflows/release.yaml) from the
 Actions tab on GitHub, providing the version number (e.g. `0.7.0`).
 The workflow will validate version.txt, create and push tags, create a draft
-GitHub release (with auto-generated notes), publish the Rust crate, build and
-upload CLI binaries, and finally mark the release as non-draft.
+GitHub release (with auto-generated notes), publish the Rust crate, publish the
+Java/Kotlin bindings to Maven Central, build and upload CLI binaries, and
+finally mark the release as non-draft.
+
+### JVM bindings publishing
+
+The Java and Kotlin bindings are published to Maven Central under the
+`org.scip-code` namespace via the
+[Sonatype Central Portal](https://central.sonatype.com), driven by the
+`release` profile in `bindings/{java,kotlin}/pom.xml` and the
+`publish-jvm-bindings` job in the release workflow.
+
+Required GitHub Actions secrets:
+
+| Secret | Source |
+| --- | --- |
+| `MAVEN_USERNAME` | Token name from the [Central Portal account page](https://central.sonatype.com/account) |
+| `MAVEN_PASSWORD` | Token secret from the same page |
+| `MAVEN_GPG_PRIVATE_KEY` | `gpg --armor --export-secret-keys $KEYID` of a passphrase-less primary signing key |
+
+`scip-kotlin-bindings` depends on `scip-java-bindings`, so the Java
+deploy uses `<waitUntil>published</waitUntil>` (~10–30 min) before the
+Kotlin deploy runs. Publications are irreversible — bad releases are
+fixed by bumping `cmd/scip/version.txt`.

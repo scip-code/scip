@@ -22,9 +22,18 @@
     </license>
   </licenses>
 
+  <developers>
+    <developer>
+      <name>SCIP Maintainers</name>
+      <organization>scip-code</organization>
+      <organizationUrl>https://github.com/scip-code</organizationUrl>
+    </developer>
+  </developers>
+
   <scm>
     <url>https://github.com/scip-code/scip</url>
     <connection>scm:git:https://github.com/scip-code/scip.git</connection>
+    <developerConnection>scm:git:git@github.com:scip-code/scip.git</developerConnection>
   </scm>
 
   <properties>
@@ -39,6 +48,7 @@
       transitively are fine; consumers who downgrade to <4.32.1 will crash.
     -->
     <protobuf.version>4.32.1</protobuf.version>
+    <project.build.outputTimestamp>${git.commit.time}</project.build.outputTimestamp>
   </properties>
 
   <dependencies>
@@ -55,4 +65,101 @@
       <optional>true</optional>
     </dependency>
   </dependencies>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>io.github.git-commit-id</groupId>
+        <artifactId>git-commit-id-maven-plugin</artifactId>
+        <version>10.0.0</version>
+        <executions>
+          <execution>
+            <id>get-git-properties</id>
+            <phase>initialize</phase>
+            <goals><goal>revision</goal></goals>
+          </execution>
+        </executions>
+        <configuration>
+          <dateFormat>yyyy-MM-dd'T'HH:mm:ssXXX</dateFormat>
+          <dateFormatTimeZone>UTC</dateFormatTimeZone>
+          <generateGitPropertiesFile>false</generateGitPropertiesFile>
+          <verbose>false</verbose>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-source-plugin</artifactId>
+        <version>3.4.0</version>
+        <executions>
+          <execution>
+            <id>attach-sources</id>
+            <goals><goal>jar-no-fork</goal></goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-javadoc-plugin</artifactId>
+        <version>3.12.0</version>
+        <configuration>
+          <!-- Generated protobuf code is noisy; don't fail the build on it. -->
+          <doclint>none</doclint>
+          <quiet>true</quiet>
+          <failOnError>false</failOnError>
+        </configuration>
+        <executions>
+          <execution>
+            <id>attach-javadocs</id>
+            <goals><goal>jar</goal></goals>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+
+  <profiles>
+    <!--
+      The `release` profile adds GPG signing and the Sonatype Central
+      publishing plugin. Day-to-day `mvn install` (used by the PR check
+      and by scip-kotlin-bindings to resolve this artifact locally) stays
+      fast and does not need GPG keys configured.
+
+      Activate from the release workflow with `mvn -Prelease deploy`.
+    -->
+    <profile>
+      <id>release</id>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-gpg-plugin</artifactId>
+            <version>3.2.8</version>
+            <executions>
+              <execution>
+                <id>sign-artifacts</id>
+                <phase>verify</phase>
+                <goals><goal>sign</goal></goals>
+                <configuration>
+                  <gpgArguments>
+                    <arg>--pinentry-mode</arg><arg>loopback</arg>
+                  </gpgArguments>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
+            <groupId>org.sonatype.central</groupId>
+            <artifactId>central-publishing-maven-plugin</artifactId>
+            <version>0.10.0</version>
+            <extensions>true</extensions>
+            <configuration>
+              <publishingServerId>central</publishingServerId>
+              <autoPublish>true</autoPublish>
+              <waitUntil>published</waitUntil>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
 </project>

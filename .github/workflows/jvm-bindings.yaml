@@ -48,7 +48,7 @@ jobs:
           done
 
       - name: Build scip-java-bindings and install to local Maven repo
-        run: mvn -B -ntp -f bindings/java/pom.xml install
+        run: mvn -B -ntp -Prelease -Dgpg.skip=true -f bindings/java/pom.xml install
 
       - name: Build scip-kotlin-bindings (resolves scip-java-bindings from local repo)
-        run: mvn -B -ntp -f bindings/kotlin/pom.xml package
+        run: mvn -B -ntp -Prelease -Dgpg.skip=true -f bindings/kotlin/pom.xml verify

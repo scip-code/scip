@@ -49,17 +49,8 @@
                 src = pkgs.fetchCrate {
                   pname = "protobuf-codegen";
                   version = "3.7.2";
-                  # crates.io's API host (https://crates.io/api/v1/crates)
-                  # 403s default HTTP-library User-Agents (curl/*, python-
-                  # requests/*) per their crawler policy. fetchurl shells
-                  # out to curl with the default UA, so the fetch fails.
-                  # The static CDN at static.crates.io serves identical
-                  # bytes with no UA gate. nixpkgs fixed this for
-                  # importCargoLock and fetchCargoVendor (already in
-                  # nixos-26.05) but fetchcrate.nix still defaults to the
-                  # blocked endpoint; remove this override once
-                  # https://github.com/NixOS/nixpkgs/pull/512735 has a
-                  # counterpart for fetchCrate.
+                  # Remove once https://github.com/NixOS/nixpkgs/pull/525163
+                  # lands in the pinned nixos-26.05 channel.
                   registryDl = "https://static.crates.io/crates";
                   hash = "sha256-0d+xjYXpl87Sq/DdE8K2olnKa5bNpEHX7RTjp/2xza4=";
                 };

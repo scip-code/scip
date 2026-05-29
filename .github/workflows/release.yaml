@@ -78,6 +78,8 @@ jobs:
           ref: v${{ inputs.version }}
       - uses: DeterminateSystems/nix-installer-action@v22
       - uses: DeterminateSystems/magic-nix-cache-action@v13
+        with:
+          use-flakehub: "disabled"
       - name: Publish crate
         run: |
           OUTPUT=$(nix develop -c cargo publish --token '${{ secrets.CRATES_TOKEN }}' 2>&1) && exit 0

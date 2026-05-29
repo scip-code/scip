@@ -65,6 +65,8 @@ jobs:
           summarize: false
       - if: steps.filter.outputs.relevant == 'true'
         uses: DeterminateSystems/magic-nix-cache-action@v13
+        with:
+          use-flakehub: "disabled"
 
       - name: Tidy Go modules
         if: steps.filter.outputs.relevant == 'true'
@@ -146,6 +148,8 @@ jobs:
       - uses: actions/checkout@v6
       - uses: DeterminateSystems/nix-installer-action@v22
       - uses: DeterminateSystems/magic-nix-cache-action@v13
+        with:
+          use-flakehub: "disabled"
       - run: nix build .#checks.x86_64-linux.${{ matrix.check }}
 
   packages:
@@ -158,6 +162,8 @@ jobs:
       - uses: actions/checkout@v6
       - uses: DeterminateSystems/nix-installer-action@v22
       - uses: DeterminateSystems/magic-nix-cache-action@v13
+        with:
+          use-flakehub: "disabled"
       - run: nix run .#${{ matrix.package }}
       - run: git diff --exit-code
 

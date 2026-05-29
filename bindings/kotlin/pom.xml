@@ -47,9 +47,9 @@
       Protobuf 4 generated code calls validateProtobufGencodeVersion() at
       class load: the runtime version must be >= the gencode version within
       the same major version. Consumers who pull a newer protobuf transitively
-      are fine; consumers who downgrade to <4.32.1 will crash.
+      are fine; consumers who downgrade to <4.34.2 will crash.
     -->
-    <protobuf.version>4.32.1</protobuf.version>
+    <protobuf.version>4.34.2</protobuf.version>
     <kotlin.version>2.0.21</kotlin.version>
     <project.build.outputTimestamp>${git.commit.time}</project.build.outputTimestamp>
   </properties>

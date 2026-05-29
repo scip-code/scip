@@ -7,8 +7,15 @@
     pname = "scip-github-actions";
     inherit version;
     src = ./.;
-    nativeBuildInputs = [ pkgs.action-validator ];
+    nativeBuildInputs = [
+      pkgs.action-validator
+      pkgs.git
+    ];
     buildPhase = ''
+      # action-validator >=0.7 calls `git ls-files` to discover workflows;
+      # initialise a throwaway repo so it works inside the Nix sandbox.
+      git init -q
+      git add -A
       for f in .github/workflows/*.yml .github/workflows/*.yaml; do
         [ -e "$f" ] && action-validator -v "$f"
       done

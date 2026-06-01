@@ -136,8 +136,6 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: read
-      # Required for `npm publish --provenance` to mint an OIDC token
-      # that npm verifies against this workflow's identity.
       id-token: write
     steps:
       - uses: actions/checkout@v6
@@ -146,7 +144,6 @@ jobs:
       - uses: actions/setup-node@v6
         with:
           node-version: 22
-          registry-url: https://registry.npmjs.org
           cache: npm
           cache-dependency-path: bindings/typescript/package-lock.json
       - name: Install dependencies
@@ -157,18 +154,12 @@ jobs:
         working-directory: bindings/typescript
       - name: Stage LICENSE into package
         run: cp LICENSE bindings/typescript/LICENSE
-      - name: Publish to npm
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-        run: |
-          OUTPUT=$(npm publish --access public --provenance 2>&1) && exit 0
-          if echo "$OUTPUT" | grep -qE "(cannot publish over the previously published versions|EPUBLISHCONFLICT|You cannot publish over the previously published versions)"; then
-            echo "Package version already published, skipping"
-          else
-            echo "$OUTPUT"
-            exit 1
-          fi
-        working-directory: bindings/typescript
+      - uses: JS-DevTools/npm-publish@v4
+        with:
+          token: ${{ secrets.NPM_TOKEN }}
+          package: bindings/typescript
+          access: public
+          provenance: true
 
   build-go-binaries:
     needs: publish

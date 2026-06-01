@@ -47,7 +47,7 @@
       the same major version. Consumers who pull a newer protobuf-java
       transitively are fine; consumers who downgrade to <4.34.2 will crash.
     -->
-    <protobuf.version>4.34.2</protobuf.version>
+    <protobuf.version>4.35.0</protobuf.version>
     <project.build.outputTimestamp>${git.commit.time}</project.build.outputTimestamp>
   </properties>
 

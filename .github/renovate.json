@@ -14,6 +14,12 @@
       "matchManagers": ["maven"],
       "matchPackageNames": ["com.google.protobuf:*"],
       "enabled": false
+    },
+    {
+      "description": "Stay on Kotlin 2.0.x to keep the consumer floor low.",
+      "matchManagers": ["maven"],
+      "matchPackageNames": ["org.jetbrains.kotlin:*"],
+      "allowedVersions": "<2.1.0"
     }
   ]
 }

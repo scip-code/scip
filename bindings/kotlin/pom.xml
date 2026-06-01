@@ -50,7 +50,7 @@
       are fine; consumers who downgrade to <4.34.2 will crash.
     -->
     <protobuf.version>4.34.2</protobuf.version>
-    <kotlin.version>2.0.21</kotlin.version>
+    <kotlin.version>2.3.21</kotlin.version>
     <project.build.outputTimestamp>${git.commit.time}</project.build.outputTimestamp>
   </properties>
 

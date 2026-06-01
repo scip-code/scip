@@ -131,6 +131,45 @@ jobs:
           MAVEN_USERNAME: ${{ secrets.MAVEN_USERNAME }}
           MAVEN_PASSWORD: ${{ secrets.MAVEN_PASSWORD }}
 
+  publish-npm:
+    needs: publish
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      # Required for `npm publish --provenance` to mint an OIDC token
+      # that npm verifies against this workflow's identity.
+      id-token: write
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: v${{ inputs.version }}
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 22
+          registry-url: https://registry.npmjs.org
+          cache: npm
+          cache-dependency-path: bindings/typescript/package-lock.json
+      - name: Install dependencies
+        run: npm ci
+        working-directory: bindings/typescript
+      - name: Build
+        run: npm run build
+        working-directory: bindings/typescript
+      - name: Stage LICENSE into package
+        run: cp LICENSE bindings/typescript/LICENSE
+      - name: Publish to npm
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: |
+          OUTPUT=$(npm publish --access public --provenance 2>&1) && exit 0
+          if echo "$OUTPUT" | grep -qE "(cannot publish over the previously published versions|EPUBLISHCONFLICT|You cannot publish over the previously published versions)"; then
+            echo "Package version already published, skipping"
+          else
+            echo "$OUTPUT"
+            exit 1
+          fi
+        working-directory: bindings/typescript
+
   build-go-binaries:
     needs: publish
     permissions:
@@ -192,7 +231,7 @@ jobs:
           gh release upload "$TAG" "$ASSET.tar.gz" "$ASSET.tar.gz.sha256" --clobber
 
   finalize-release:
-    needs: [release-crate, build-go-binaries, publish-jvm-bindings]
+    needs: [release-crate, build-go-binaries, publish-jvm-bindings, publish-npm]
     runs-on: ubuntu-latest
     permissions:
       contents: write

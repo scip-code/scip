@@ -2,11 +2,28 @@
   "name": "@scip-code/scip",
   "version": "0.8.0",
   "description": "Generated TypeScript definitions for the Semantic Code Intelligence Protocol.",
-  "repository": "https://github.com/scip-code/scip/bindings/typescript",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/scip-code/scip",
+    "directory": "bindings/typescript"
+  },
   "author": "Sourcegraph",
   "license": "Apache-2.0",
+  "type": "module",
+  "main": "./dist/scip_pb.js",
+  "types": "./dist/scip_pb.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/scip_pb.d.ts",
+      "import": "./dist/scip_pb.js"
+    }
+  },
+  "files": ["dist"],
   "sideEffects": false,
-  "private": false,
+  "scripts": {
+    "build": "tsc",
+    "typecheck": "tsc --noEmit"
+  },
   "dependencies": {
     "@bufbuild/protobuf": "^2.11.0"
   },

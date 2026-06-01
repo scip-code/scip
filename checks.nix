@@ -146,7 +146,7 @@
       npmDepsHash = "sha256-c+UXwcqJVmRvaIwmzjj42gbmu0X/iEUJUiTcqfXNDvg=";
       buildPhase = ''
         runHook preBuild
-        npx tsc --noEmit
+        npm run build
         runHook postBuild
       '';
       installPhase = "touch $out";

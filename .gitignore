@@ -29,4 +29,7 @@ dist-newstyle/
 # Nix output
 /result
 
+# TypeScript bindings build output
+/bindings/typescript/dist/
+
 vendor/

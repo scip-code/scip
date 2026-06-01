@@ -6,7 +6,7 @@
 
   <groupId>org.scip-code</groupId>
   <artifactId>scip-java-bindings</artifactId>
-  <version>0.7.1</version>
+  <version>0.8.0</version>
   <packaging>jar</packaging>
 
   <name>scip-java-bindings</name>

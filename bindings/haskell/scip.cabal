@@ -1,7 +1,7 @@
 cabal-version:      3.6
 
 name:               scip
-version:            0.7.1
+version:            0.8.0
 synopsis:           Haskell bindings for SCIP Code Intelligence Protocol
 license:            Apache-2.0
 license-file:       LICENSE

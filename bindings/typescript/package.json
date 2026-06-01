@@ -1,6 +1,6 @@
 {
   "name": "@scip-code/scip",
-  "version": "0.7.1",
+  "version": "0.8.0",
   "description": "Generated TypeScript definitions for the Semantic Code Intelligence Protocol.",
   "repository": "https://github.com/scip-code/scip/bindings/typescript",
   "author": "Sourcegraph",

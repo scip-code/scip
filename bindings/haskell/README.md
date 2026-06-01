@@ -6,7 +6,7 @@ code. This package exposes Haskell types and lenses generated from
 
 ## Usage
 
-``` haskell
+```haskell
 import Data.ProtoLens (decodeMessage)
 import qualified Data.ByteString as BS
 import qualified Proto.Scip as Scip
@@ -25,6 +25,6 @@ main = do
       ]
 ```
 
-  [SCIP]: https://github.com/scip-code/scip
-  [`scip.proto`]: https://github.com/scip-code/scip/blob/main/scip.proto
-  [`proto-lens`]: https://github.com/google/proto-lens
+[SCIP]: https://github.com/scip-code/scip
+[`scip.proto`]: https://github.com/scip-code/scip/blob/main/scip.proto
+[`proto-lens`]: https://github.com/google/proto-lens

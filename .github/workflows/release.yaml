@@ -102,20 +102,16 @@ jobs:
       - uses: DeterminateSystems/magic-nix-cache-action@v14
         with:
           use-flakehub: "disabled"
-      - name: Publish to Hackage
-        env:
-          HACKAGE_TOKEN: ${{ secrets.HACKAGE_TOKEN }}
+      - name: Build sdist
         working-directory: bindings/haskell
-        run: |
-          nix develop -c cabal sdist
-          TARBALL="dist-newstyle/sdist/scip-${{ inputs.version }}.tar.gz"
-          OUTPUT=$(nix develop -c cabal upload --publish --token="$HACKAGE_TOKEN" "$TARBALL" 2>&1) && exit 0
-          echo "$OUTPUT"
-          if echo "$OUTPUT" | grep -qF "has already been uploaded"; then
-            echo "Hackage version already published, skipping"
-          else
-            exit 1
-          fi
+        run: nix develop -c cabal sdist
+      - name: Publish to Hackage
+        uses: haskell-actions/hackage-publish@v1.1
+        with:
+          hackageServer: https://hackage.haskell.org
+          hackageToken: ${{ secrets.HACKAGE_TOKEN }}
+          packagesPath: bindings/haskell/dist-newstyle/sdist
+          publish: true
 
   publish-jvm-bindings:
     needs: publish

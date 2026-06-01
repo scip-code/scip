@@ -152,8 +152,14 @@ jobs:
       - name: Build
         run: npm run build
         working-directory: bindings/typescript
-      - name: Stage LICENSE into package
-        run: cp LICENSE bindings/typescript/LICENSE
+      # bindings/typescript/LICENSE is a symlink to ../../LICENSE in the
+      # source tree (matching bindings/haskell and bindings/rust), but
+      # npm-pack drops symlinks. Replace it with a regular file so the
+      # published tarball carries the license text.
+      - name: Materialize LICENSE for npm pack
+        run: |
+          rm -f bindings/typescript/LICENSE
+          cp LICENSE bindings/typescript/LICENSE
       - uses: JS-DevTools/npm-publish@v4
         with:
           token: ${{ secrets.NPM_TOKEN }}

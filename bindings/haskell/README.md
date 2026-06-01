@@ -1,50 +1,30 @@
-[![CI](https://github.com/scip-code/scip/actions/workflows/haskell.yml/badge.svg)](https://github.com/scip-code/scip/actions/workflows/haskell.yml/badge.svg)
+# scip --- Haskell bindings for SCIP
 
-# Haskell bindings for SCIP
+[SCIP] (pronounced "skip") is a language-agnostic protocol for indexing source
+code. This package exposes Haskell types and lenses generated from
+[`scip.proto`] via [`proto-lens`].
 
-These bindings use [Google's proto-lens generator for Haskell](https://github.com/google/proto-lens).
+## Usage
 
-Building: see the following workflow file for most up to date:
-https://github.com/scip-code/scip/blob/main/.github/workflows/haskell.yml
+``` haskell
+import Data.ProtoLens (decodeMessage)
+import qualified Data.ByteString as BS
+import qualified Proto.Scip as Scip
+import           Proto.Scip_Fields (documents, occurrences, symbol)
+import           Lens.Family2 ((^.))
 
-First, get a working GHC environment:
-
-```sh
-# Linux
-GHCUPVERSION=0.1.17.4
-curl --proto '=https' --tlsv1.2 -sSf https://downloads.haskell.org/~ghcup/$GHCUPVERSION/x86_64-linux-ghcup-$GHCUPVERSION > /usr/bin/ghcup && \
-chmod +x /usr/bin/ghcup
-ghcup install ghc 8.10.7 --set
-ghcup install cabal 3.6.0.0 --set
+main :: IO ()
+main = do
+  bytes <- BS.readFile "index.scip"
+  case decodeMessage bytes :: Either String Scip.Index of
+    Left  err -> putStrLn $ "parse error: " ++ err
+    Right idx -> mapM_ print
+      [ occ ^. symbol
+      | doc <- idx ^. documents
+      , occ <- doc ^. occurrences
+      ]
 ```
 
-```sh
-# macOS
-GHCUPVERSION=0.1.17.4
-curl --proto '=https' --tlsv1.2 -sSf https://downloads.haskell.org/~ghcup/$GHCUPVERSION/x86_64-apple-darwin-ghcup-$GHCUPVERSION > /usr/local/bin/ghcup && \
-chmod +x /usr/local/bin/ghcup
-ghcup install ghc 8.10.7 --set
-ghcup install cabal 3.6.0.0 --set
-```
-
-Next, install Google's `protoc` compiler. See: https://github.com/google/proto-lens/blob/master/docs/installing-protoc.md
-
-Then install the haskell generator from the proto-lens packages:
-
-```
-cabal install proto-lens-protoc
-```
-
-Finally, generate the source files manually in `src/*`
-
-```sh
-# working directory: bindings/haskell
-protoc --plugin=protoc-gen-haskell=`which proto-lens-protoc` --haskell_out=src --proto_path=../.. scip.proto
-```
-
-Build the library as normal:
-
-```
-# working directory: bindings/haskell
-cabal build
-```
+  [SCIP]: https://github.com/scip-code/scip
+  [`scip.proto`]: https://github.com/scip-code/scip/blob/main/scip.proto
+  [`proto-lens`]: https://github.com/google/proto-lens

@@ -1,23 +1,38 @@
-cabal-version:      3.6
+cabal-version:      3.12
 
 name:               scip
 version:            0.8.0
-synopsis:           Haskell bindings for SCIP Code Intelligence Protocol
+synopsis:           Haskell bindings for the SCIP code intelligence protocol
+description:
+    SCIP (pronounced "skip") is a language-agnostic protocol for
+    indexing source code, used to power code navigation functionality
+    such as go-to-definition, find-references, and find-implementations.
+    .
+    This package provides Haskell bindings generated from the SCIP
+    protobuf schema via @proto-lens@.
 license:            Apache-2.0
 license-file:       LICENSE
 author:             SCIP Maintainers
 maintainer:         code-intel@sourcegraph.com
 homepage:           https://github.com/scip-code/scip
+bug-reports:        https://github.com/scip-code/scip/issues
 category:           Language
 build-type:         Simple
+extra-doc-files:    README.md
+tested-with:        GHC == 9.10.3
+
+source-repository head
+    type:     git
+    location: https://github.com/scip-code/scip.git
+    subdir:   bindings/haskell
 
 library
-    ghc-options: -Wall
+    ghc-options:      -Wall
     exposed-modules:
         Proto.Scip,
         Proto.Scip_Fields
     hs-source-dirs:   src
-    default-language: Haskell2010
+    default-language: GHC2024
     build-depends:
         proto-lens-runtime ^>= 0.7.0.0,
-        base >= 4.14.0.0
+        base               >= 4.20 && < 5

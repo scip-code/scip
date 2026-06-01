@@ -91,6 +91,32 @@ jobs:
           fi
         working-directory: bindings/rust
 
+  publish-haskell-bindings:
+    needs: publish
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: v${{ inputs.version }}
+      - uses: DeterminateSystems/nix-installer-action@v22
+      - uses: DeterminateSystems/magic-nix-cache-action@v14
+        with:
+          use-flakehub: "disabled"
+      - name: Publish to Hackage
+        env:
+          HACKAGE_TOKEN: ${{ secrets.HACKAGE_TOKEN }}
+        working-directory: bindings/haskell
+        run: |
+          nix develop -c cabal sdist
+          TARBALL="dist-newstyle/sdist/scip-${{ inputs.version }}.tar.gz"
+          OUTPUT=$(nix develop -c cabal upload --publish --token="$HACKAGE_TOKEN" "$TARBALL" 2>&1) && exit 0
+          echo "$OUTPUT"
+          if echo "$OUTPUT" | grep -qF "has already been uploaded"; then
+            echo "Hackage version already published, skipping"
+          else
+            exit 1
+          fi
+
   publish-jvm-bindings:
     needs: publish
     runs-on: ubuntu-latest
@@ -225,7 +251,7 @@ jobs:
           gh release upload "$TAG" "$ASSET.tar.gz" "$ASSET.tar.gz.sha256" --clobber
 
   finalize-release:
-    needs: [release-crate, build-go-binaries, publish-jvm-bindings, publish-npm]
+    needs: [release-crate, publish-haskell-bindings, build-go-binaries, publish-jvm-bindings, publish-npm]
     runs-on: ubuntu-latest
     permissions:
       contents: write

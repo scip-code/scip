@@ -7,5 +7,13 @@
   ],
   "nix": {
     "enabled": true
-  }
+  },
+  "packageRules": [
+    {
+      "description": "Bump manually in lock-step with flake.nix's protoc.",
+      "matchManagers": ["maven"],
+      "matchPackageNames": ["com.google.protobuf:*"],
+      "enabled": false
+    }
+  ]
 }

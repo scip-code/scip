@@ -5,12 +5,7 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>org.scip-code</groupId>
-  <!--
-    Scala binary version is encoded in the artifactId (sbt convention),
-    not the version. The active `scala-2.13` (default) or `scala-3`
-    profile sets `scala.binary.version`. Publishing both flavours is a
-    matter of running `mvn -Pscala-2.13` and then `mvn -Pscala-3`.
-  -->
+  <!-- Scala binary version goes in the artifactId (sbt convention), not the version. -->
   <artifactId>scip-scala-bindings_${scala.binary.version}</artifactId>
   <version>0.8.0</version>
   <packaging>jar</packaging>
@@ -47,18 +42,10 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.compiler.source>11</maven.compiler.source>
     <maven.compiler.target>11</maven.compiler.target>
-    <!--
-      ScalaPB runtime that the generated code links against. Must match
-      the protoc-gen-scala version pinned in flake.nix; bumping one
-      without the other risks gencode/runtime API drift.
-    -->
+    <!-- Must match the protoc-gen-scala version pinned in flake.nix. -->
     <scalapb.version>0.11.20</scalapb.version>
-    <!--
-      Default Scala flavour. The `scala-3` profile overrides these.
-    -->
     <scala.binary.version>2.13</scala.binary.version>
     <scala.version>2.13.18</scala.version>
-    <scala-maven-plugin.version>4.9.5</scala-maven-plugin.version>
     <project.build.outputTimestamp>${git.commit.time}</project.build.outputTimestamp>
   </properties>
 
@@ -91,29 +78,13 @@
           <verbose>false</verbose>
         </configuration>
       </plugin>
-      <!--
-        Maven does not resolve property references like
-        `${scala.binary.version}` inside the consumed POM, so the
-        published POM would otherwise carry the literal placeholder
-        in `<artifactId>` and the `scalapb-runtime_…` dependency.
-        flatten-maven-plugin writes a flattened consumer POM with
-        properties already substituted; Maven publishes that file
-        instead of pom.xml. Required for cross-Scala publishing.
-      -->
+      <!-- Publishes a consumer POM with ${scala.binary.version} resolved. -->
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>flatten-maven-plugin</artifactId>
         <version>1.7.3</version>
         <configuration>
           <updatePomFile>true</updatePomFile>
-          <!--
-            `oss` mode keeps all elements required by Maven Central
-            (developers, scm, url, licenses, dependencies) and
-            resolves `${...}` property references in the flattened
-            consumer POM. Without resolution, `${scala.binary.version}`
-            would leak into the published `<artifactId>` and into
-            the `scalapb-runtime_…` dependency coordinate.
-          -->
           <flattenMode>oss</flattenMode>
         </configuration>
         <executions>
@@ -132,7 +103,7 @@
       <plugin>
         <groupId>net.alchim31.maven</groupId>
         <artifactId>scala-maven-plugin</artifactId>
-        <version>${scala-maven-plugin.version}</version>
+        <version>4.9.5</version>
         <configuration>
           <scalaVersion>${scala.version}</scalaVersion>
           <scalaCompatVersion>${scala.binary.version}</scalaCompatVersion>
@@ -142,6 +113,11 @@
             <id>scala-compile</id>
             <phase>compile</phase>
             <goals><goal>compile</goal></goals>
+          </execution>
+          <execution>
+            <id>attach-javadocs</id>
+            <phase>package</phase>
+            <goals><goal>doc-jar</goal></goals>
           </execution>
         </executions>
       </plugin>
@@ -160,21 +136,24 @@
   </build>
 
   <profiles>
+    <!-- No-op; defined so `mvn -Pscala-2.13` is symmetric with `-Pscala-3`. -->
     <profile>
       <id>scala-2.13</id>
-      <activation>
-        <activeByDefault>true</activeByDefault>
-      </activation>
+    </profile>
+    <profile>
+      <id>scala-3</id>
       <properties>
-        <scala.binary.version>2.13</scala.binary.version>
-        <scala.version>2.13.18</scala.version>
+        <scala.binary.version>3</scala.binary.version>
+        <!-- Latest 3.3.x LTS. -->
+        <scala.version>3.3.7</scala.version>
       </properties>
       <build>
         <plugins>
           <!--
-            Maven Central requires a `-javadoc.jar`. Under Scala 2.13
-            we generate a real scaladoc jar via scala-maven-plugin's
-            `doc-jar` goal (attached with the `javadoc` classifier).
+            scala-maven-plugin 4.9.5's `doc-jar` emits Scala-2-only flags
+            that Scala 3 scaladoc rejects, so we skip it and attach an
+            empty `-javadoc.jar` to satisfy Maven Central. Doc comments
+            remain in `-sources.jar`.
           -->
           <plugin>
             <groupId>net.alchim31.maven</groupId>
@@ -182,50 +161,7 @@
             <executions>
               <execution>
                 <id>attach-javadocs</id>
-                <phase>package</phase>
-                <goals><goal>doc-jar</goal></goals>
-              </execution>
-            </executions>
-          </plugin>
-        </plugins>
-      </build>
-    </profile>
-    <profile>
-      <id>scala-3</id>
-      <properties>
-        <scala.binary.version>3</scala.binary.version>
-        <!--
-          Pinned to the most recent 3.3.x LTS release. Bump when a new
-          LTS line ships; non-LTS Scala 3 lines (3.4+) are not used
-          here because consumers may still be on 3.3 LTS.
-        -->
-        <scala.version>3.3.7</scala.version>
-      </properties>
-      <build>
-        <plugins>
-          <!--
-            scala-maven-plugin 4.9.5's `doc-jar` goal still passes
-            Scala-2-only flags (`-doc-format:html`, `-doc-title`) that
-            Scala 3's `dotty.tools.scaladoc.Main` rejects, so we
-            skip it and attach an empty javadoc jar instead. Maven
-            Central only requires the artifact to exist; the doc
-            comments on the generated classes remain available via
-            the published `-sources.jar`. Revisit once scala-maven-
-            plugin has working out-of-the-box Scala 3 scaladoc.
-          -->
-          <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-jar-plugin</artifactId>
-            <version>3.4.2</version>
-            <executions>
-              <execution>
-                <id>empty-javadoc-jar</id>
-                <phase>package</phase>
-                <goals><goal>jar</goal></goals>
-                <configuration>
-                  <classifier>javadoc</classifier>
-                  <classesDirectory>${project.build.directory}/empty-javadoc</classesDirectory>
-                </configuration>
+                <phase>none</phase>
               </execution>
             </executions>
           </plugin>
@@ -235,12 +171,16 @@
             <version>3.1.0</version>
             <executions>
               <execution>
-                <id>create-empty-javadoc-dir</id>
-                <phase>prepare-package</phase>
+                <id>empty-javadoc-jar</id>
+                <phase>package</phase>
                 <goals><goal>run</goal></goals>
                 <configuration>
                   <target>
-                    <mkdir dir="${project.build.directory}/empty-javadoc"/>
+                    <jar destfile="${project.build.directory}/${project.build.finalName}-javadoc.jar"/>
+                    <attachartifact
+                      file="${project.build.directory}/${project.build.finalName}-javadoc.jar"
+                      classifier="javadoc"
+                      type="jar"/>
                   </target>
                 </configuration>
               </execution>
@@ -250,11 +190,7 @@
       </build>
     </profile>
 
-    <!--
-      The `release` profile adds GPG signing and the Sonatype Central
-      publishing plugin. Mirror of bindings/java/pom.xml; keep them in
-      sync.
-    -->
+    <!-- Mirror of bindings/java/pom.xml's `release` profile; keep in sync. -->
     <profile>
       <id>release</id>
       <build>

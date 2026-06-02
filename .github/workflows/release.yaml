@@ -95,9 +95,7 @@ jobs:
     needs: publish
     runs-on: ubuntu-latest
     # Maven Central publication with waitUntil=published can block for
-    # 10-30 min per module while Sonatype mirrors propagate. Four
-    # sequential deploys (Java, then Kotlin which resolves Java from
-    # Central, then Scala 2.13, then Scala 3) means worst-case ~2 h.
+    # 10-30 min per module while Sonatype mirrors propagate.
     timeout-minutes: 150
     steps:
       - uses: actions/checkout@v6
@@ -131,11 +129,6 @@ jobs:
           MAVEN_USERNAME: ${{ secrets.MAVEN_USERNAME }}
           MAVEN_PASSWORD: ${{ secrets.MAVEN_PASSWORD }}
 
-      # The Scala bindings cross-publish one artifact per supported
-      # Scala binary version from the same generated sources. They
-      # have no inter-binding dependency, so the two deploys are
-      # independent — but each still waits for Central to mirror
-      # under the release profile's `waitUntil=published`.
       - name: Deploy scip-scala-bindings_2.13 to Maven Central
         run: mvn -B -ntp -Pscala-2.13,release -f bindings/scala/pom.xml deploy
         env:

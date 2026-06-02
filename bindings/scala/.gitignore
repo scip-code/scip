@@ -1,3 +1,2 @@
 target/
-# Consumer POM produced by flatten-maven-plugin (released, not committed).
 .flattened-pom.xml

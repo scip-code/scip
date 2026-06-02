@@ -54,9 +54,6 @@ jobs:
       - name: Build scip-kotlin-bindings (resolves scip-java-bindings from local repo)
         run: mvn -B -ntp -Prelease -Dgpg.skip=true -f bindings/kotlin/pom.xml verify
 
-      # The Scala module has no inter-binding dependency, but it does
-      # produce two artifacts (one per supported Scala binary version)
-      # from the same generated sources, so we cross-build both.
       - name: Build scip-scala-bindings_2.13
         run: mvn -B -ntp -Pscala-2.13,release -Dgpg.skip=true -f bindings/scala/pom.xml verify
 

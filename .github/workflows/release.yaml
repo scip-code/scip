@@ -136,6 +136,12 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: read
+      # Required for npm trusted publishing: GitHub mints an OIDC token
+      # for this workflow run, and npm verifies it against the trusted
+      # publisher configured at
+      # https://www.npmjs.com/package/@scip-code/scip/access
+      # (org=scip-code, repo=scip, workflow=release.yaml). No NPM_TOKEN
+      # secret is needed.
       id-token: write
     steps:
       - uses: actions/checkout@v6
@@ -143,7 +149,10 @@ jobs:
           ref: v${{ inputs.version }}
       - uses: actions/setup-node@v6
         with:
-          node-version: 22
+          # Node 24 ships npm >=11.5.1, the minimum for trusted
+          # publishing. (Node 22 LTS is stuck on npm 10.x for its
+          # lifecycle.)
+          node-version: 24
           cache: npm
           cache-dependency-path: bindings/typescript/package-lock.json
       - name: Install dependencies
@@ -160,9 +169,12 @@ jobs:
         run: |
           rm -f bindings/typescript/LICENSE
           cp LICENSE bindings/typescript/LICENSE
+      # JS-DevTools/npm-publish reads the registry first and is a no-op
+      # if @scip-code/scip@<version> is already published, so this job
+      # is safely re-runnable. With no `token:` input and `id-token:
+      # write` granted above, the action authenticates via OIDC.
       - uses: JS-DevTools/npm-publish@v4
         with:
-          token: ${{ secrets.NPM_TOKEN }}
           package: bindings/typescript
           access: public
           provenance: true

@@ -4,7 +4,7 @@
   "description": "Generated TypeScript definitions for the Semantic Code Intelligence Protocol.",
   "repository": {
     "type": "git",
-    "url": "https://github.com/scip-code/scip",
+    "url": "git+https://github.com/scip-code/scip.git",
     "directory": "bindings/typescript"
   },
   "author": "Sourcegraph",

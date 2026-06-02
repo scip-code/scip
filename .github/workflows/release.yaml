@@ -136,22 +136,14 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: read
-      # Required for npm trusted publishing: GitHub mints an OIDC token
-      # for this workflow run, and npm verifies it against the trusted
-      # publisher configured at
-      # https://www.npmjs.com/package/@scip-code/scip/access
-      # (org=scip-code, repo=scip, workflow=release.yaml). No NPM_TOKEN
-      # secret is needed.
-      id-token: write
+      id-token: write # npm trusted-publishing OIDC
     steps:
       - uses: actions/checkout@v6
         with:
           ref: v${{ inputs.version }}
       - uses: actions/setup-node@v6
         with:
-          # Node 24 ships npm >=11.5.1, the minimum for trusted
-          # publishing. (Node 22 LTS is stuck on npm 10.x for its
-          # lifecycle.)
+          # Trusted publishing needs npm >=11.5.1; Node 22 LTS ships npm 10.x.
           node-version: 24
           cache: npm
           cache-dependency-path: bindings/typescript/package-lock.json
@@ -161,18 +153,11 @@ jobs:
       - name: Build
         run: npm run build
         working-directory: bindings/typescript
-      # bindings/typescript/LICENSE is a symlink to ../../LICENSE in the
-      # source tree (matching bindings/haskell and bindings/rust), but
-      # npm-pack drops symlinks. Replace it with a regular file so the
-      # published tarball carries the license text.
+      # LICENSE is a symlink in-tree (matches bindings/{haskell,rust}); npm-pack drops symlinks.
       - name: Materialize LICENSE for npm pack
         run: |
           rm -f bindings/typescript/LICENSE
           cp LICENSE bindings/typescript/LICENSE
-      # JS-DevTools/npm-publish reads the registry first and is a no-op
-      # if @scip-code/scip@<version> is already published, so this job
-      # is safely re-runnable. With no `token:` input and `id-token:
-      # write` granted above, the action authenticates via OIDC.
       - uses: JS-DevTools/npm-publish@v4
         with:
           package: bindings/typescript

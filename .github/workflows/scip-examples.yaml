@@ -42,9 +42,6 @@ jobs:
             # We pass gem-metadata as an easy alternative to directly
             # linking to brew/Library/Homebrew/Gemfile.lock.
             scip_args: "--gem-metadata homebrew@latest ."
-          - repository: BurntSushi/ripgrep
-            scip_binary: scip-rust
-            scip_args: ""
           - repository: fmtlib/fmt
             scip_binary: scip-clang
             scip_args: ""
@@ -90,12 +87,6 @@ jobs:
         if: ${{ matrix.target.scip_binary == 'scip-ruby' }}
         run: |
           apk add --no-cache curl
-
-      - name: Setup Rust toolchain
-        if: ${{ matrix.target.scip_binary == 'scip-rust' }}
-        uses: actions-rust-lang/setup-rust-toolchain@v1
-        with:
-          components: rust-analyzer
 
       - name: Run SCIP
         run: |

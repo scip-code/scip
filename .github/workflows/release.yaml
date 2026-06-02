@@ -104,7 +104,9 @@ jobs:
           use-flakehub: "disabled"
       - name: Build sdist
         working-directory: bindings/haskell
-        run: nix develop -c cabal sdist
+        run: |
+          nix develop -c cabal check
+          nix develop -c cabal sdist
       - name: Publish to Hackage
         uses: haskell-actions/hackage-publish@v1.1
         with:

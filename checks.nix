@@ -67,11 +67,14 @@
     assert pkgs.lib.assertMsg (
       cabal.version == version
     ) "Version mismatch in bindings/haskell/scip.cabal: expected ${version}, got ${cabal.version}";
-    cabal.overrideAttrs {
+    cabal.overrideAttrs (oldAttrs: {
       prePatch = ''
         cp --remove-destination ${./LICENSE} LICENSE
       '';
-    };
+      postPatch = (oldAttrs.postPatch or "") + ''
+        ${pkgs.haskellPackages.cabal-install}/bin/cabal check
+      '';
+    });
 
   reprolang =
     let

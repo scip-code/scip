@@ -21,3 +21,13 @@ plugins:
     out: ./bindings/java/src/main/java/
   - protoc_builtin: kotlin
     out: ./bindings/kotlin/src/main/kotlin/
+  - local: protoc-gen-scala
+    out: ./bindings/scala/src/main/scala/
+    # ScalaPB requires seeing every file in a single invocation; the buf
+    # default `directory` strategy invokes the plugin per directory.
+    strategy: all
+    opt:
+      # Match the Java/Kotlin package `org.scip_code.scip`. Without this,
+      # ScalaPB appends the proto filename as a subpackage, producing the
+      # awkward `org.scip_code.scip.scip`.
+      - flat_package

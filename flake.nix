@@ -61,6 +61,25 @@
                 ];
                 nativeBuildInputs = [ pkgs.protobuf ];
               };
+              # ScalaPB's protoc plugin. nixpkgs does not package it, so we
+              # fetch the universal `-unix.sh` self-executing JAR launcher
+              # published to Maven Central and wrap it so `java` is on PATH.
+              # The wrapped script also works on aarch64 (unlike the native
+              # binaries published to GitHub releases).
+              # Must stay in sync with the scalapb.version in
+              # bindings/scala/pom.xml.
+              protoc-gen-scala =
+                let
+                  scalapbVersion = "0.11.20";
+                  launcher = pkgs.fetchurl {
+                    url = "https://repo1.maven.org/maven2/com/thesamet/scalapb/protoc-gen-scala/${scalapbVersion}/protoc-gen-scala-${scalapbVersion}-unix.sh";
+                    hash = "sha256-aJZX96LQ+uH22fvobUo1n2pIcfs7feRjKaitSlNCoAE=";
+                  };
+                in
+                pkgs.writeShellScriptBin "protoc-gen-scala" ''
+                  export PATH=${pkgs.jre}/bin:$PATH
+                  exec ${pkgs.bash}/bin/sh ${launcher} "$@"
+                '';
             in
             pkgs.writeShellApplication {
               name = "proto-generate";
@@ -74,6 +93,7 @@
                 protoc-gen-es
                 protoc-gen-go
                 protoc-gen-rs
+                protoc-gen-scala
               ];
               text = ''
                 buf generate

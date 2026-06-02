@@ -10,6 +10,7 @@ on:
     paths:
       - bindings/java/**
       - bindings/kotlin/**
+      - bindings/scala/**
       - cmd/scip/version.txt
       - scip.proto
       - .github/workflows/jvm-bindings.yaml
@@ -39,7 +40,7 @@ jobs:
           sudo apt-get install -qq -y libxml2-utils
           expected=$(cat cmd/scip/version.txt)
           xpath='/*[local-name()="project"]/*[local-name()="version"]/text()'
-          for pom in bindings/java/pom.xml bindings/kotlin/pom.xml; do
+          for pom in bindings/java/pom.xml bindings/kotlin/pom.xml bindings/scala/pom.xml; do
             actual=$(xmllint --xpath "$xpath" "$pom")
             if [ "$actual" != "$expected" ]; then
               echo "::error file=$pom::version is '$actual', expected '$expected'"
@@ -52,3 +53,12 @@ jobs:
 
       - name: Build scip-kotlin-bindings (resolves scip-java-bindings from local repo)
         run: mvn -B -ntp -Prelease -Dgpg.skip=true -f bindings/kotlin/pom.xml verify
+
+      # The Scala module has no inter-binding dependency, but it does
+      # produce two artifacts (one per supported Scala binary version)
+      # from the same generated sources, so we cross-build both.
+      - name: Build scip-scala-bindings_2.13
+        run: mvn -B -ntp -Pscala-2.13,release -Dgpg.skip=true -f bindings/scala/pom.xml verify
+
+      - name: Build scip-scala-bindings_3
+        run: mvn -B -ntp -Pscala-3,release -Dgpg.skip=true -f bindings/scala/pom.xml verify

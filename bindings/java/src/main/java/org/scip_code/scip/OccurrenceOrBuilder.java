@@ -18,17 +18,21 @@ public interface OccurrenceOrBuilder extends
    * - Three elements: `[startLine, startCharacter, endCharacter]` (single-line)
    * - Four elements: `[startLine, startCharacter, endLine, endCharacter]`
    *
+   * The end line of a three-element range is inferred to equal the start line.
+   *
    * Historical note: the original draft of this schema had a `Range` message
    * type with `start` and `end` fields of type `Position`, mirroring LSP.
    * Benchmarks revealed that this encoding was inefficient and that we could
    * reduce the total payload size of an index by 50% by using `repeated int32`
    * instead. However, the lack of type safety led to the introduction of
-   * `single_line_range` and `multi_line_range` as typed alternatives.
+   * `single_line_range` and `multi_line_range` as typed alternatives; the
+   * typed encoding's per-index size overhead is small (single-digit percent)
+   * because ranges are only a fraction of a typical index payload.
    * </pre>
    *
    * <code>repeated int32 range = 1 [json_name = "range", deprecated = true];</code>
    * @deprecated scip.Occurrence.range is deprecated.
-   *     See scip.proto;l=675
+   *     See scip.proto;l=708
    * @return A list containing the range.
    */
   @java.lang.Deprecated java.util.List<java.lang.Integer> getRangeList();
@@ -40,17 +44,21 @@ public interface OccurrenceOrBuilder extends
    * - Three elements: `[startLine, startCharacter, endCharacter]` (single-line)
    * - Four elements: `[startLine, startCharacter, endLine, endCharacter]`
    *
+   * The end line of a three-element range is inferred to equal the start line.
+   *
    * Historical note: the original draft of this schema had a `Range` message
    * type with `start` and `end` fields of type `Position`, mirroring LSP.
    * Benchmarks revealed that this encoding was inefficient and that we could
    * reduce the total payload size of an index by 50% by using `repeated int32`
    * instead. However, the lack of type safety led to the introduction of
-   * `single_line_range` and `multi_line_range` as typed alternatives.
+   * `single_line_range` and `multi_line_range` as typed alternatives; the
+   * typed encoding's per-index size overhead is small (single-digit percent)
+   * because ranges are only a fraction of a typical index payload.
    * </pre>
    *
    * <code>repeated int32 range = 1 [json_name = "range", deprecated = true];</code>
    * @deprecated scip.Occurrence.range is deprecated.
-   *     See scip.proto;l=675
+   *     See scip.proto;l=708
    * @return The count of range.
    */
   @java.lang.Deprecated int getRangeCount();
@@ -62,17 +70,21 @@ public interface OccurrenceOrBuilder extends
    * - Three elements: `[startLine, startCharacter, endCharacter]` (single-line)
    * - Four elements: `[startLine, startCharacter, endLine, endCharacter]`
    *
+   * The end line of a three-element range is inferred to equal the start line.
+   *
    * Historical note: the original draft of this schema had a `Range` message
    * type with `start` and `end` fields of type `Position`, mirroring LSP.
    * Benchmarks revealed that this encoding was inefficient and that we could
    * reduce the total payload size of an index by 50% by using `repeated int32`
    * instead. However, the lack of type safety led to the introduction of
-   * `single_line_range` and `multi_line_range` as typed alternatives.
+   * `single_line_range` and `multi_line_range` as typed alternatives; the
+   * typed encoding's per-index size overhead is small (single-digit percent)
+   * because ranges are only a fraction of a typical index payload.
    * </pre>
    *
    * <code>repeated int32 range = 1 [json_name = "range", deprecated = true];</code>
    * @deprecated scip.Occurrence.range is deprecated.
-   *     See scip.proto;l=675
+   *     See scip.proto;l=708
    * @param index The index of the element to return.
    * @return The range at the given index.
    */
@@ -300,64 +312,94 @@ public interface OccurrenceOrBuilder extends
   /**
    * <pre>
    * Deprecated: Use `typed_enclosing_range` instead.
+   *
+   * Uses the same `repeated int32` encoding as the deprecated `range` field.
    * </pre>
    *
    * <code>repeated int32 enclosing_range = 7 [json_name = "enclosingRange", deprecated = true];</code>
    * @deprecated scip.Occurrence.enclosing_range is deprecated.
-   *     See scip.proto;l=713
+   *     See scip.proto;l=744
    * @return A list containing the enclosingRange.
    */
   @java.lang.Deprecated java.util.List<java.lang.Integer> getEnclosingRangeList();
   /**
    * <pre>
    * Deprecated: Use `typed_enclosing_range` instead.
+   *
+   * Uses the same `repeated int32` encoding as the deprecated `range` field.
    * </pre>
    *
    * <code>repeated int32 enclosing_range = 7 [json_name = "enclosingRange", deprecated = true];</code>
    * @deprecated scip.Occurrence.enclosing_range is deprecated.
-   *     See scip.proto;l=713
+   *     See scip.proto;l=744
    * @return The count of enclosingRange.
    */
   @java.lang.Deprecated int getEnclosingRangeCount();
   /**
    * <pre>
    * Deprecated: Use `typed_enclosing_range` instead.
+   *
+   * Uses the same `repeated int32` encoding as the deprecated `range` field.
    * </pre>
    *
    * <code>repeated int32 enclosing_range = 7 [json_name = "enclosingRange", deprecated = true];</code>
    * @deprecated scip.Occurrence.enclosing_range is deprecated.
-   *     See scip.proto;l=713
+   *     See scip.proto;l=744
    * @param index The index of the element to return.
    * @return The enclosingRange at the given index.
    */
   @java.lang.Deprecated int getEnclosingRange(int index);
 
   /**
+   * <pre>
+   * Enclosing range spanning a single line.
+   * </pre>
+   *
    * <code>.scip.SingleLineRange single_line_enclosing_range = 10 [json_name = "singleLineEnclosingRange"];</code>
    * @return Whether the singleLineEnclosingRange field is set.
    */
   boolean hasSingleLineEnclosingRange();
   /**
+   * <pre>
+   * Enclosing range spanning a single line.
+   * </pre>
+   *
    * <code>.scip.SingleLineRange single_line_enclosing_range = 10 [json_name = "singleLineEnclosingRange"];</code>
    * @return The singleLineEnclosingRange.
    */
   org.scip_code.scip.SingleLineRange getSingleLineEnclosingRange();
   /**
+   * <pre>
+   * Enclosing range spanning a single line.
+   * </pre>
+   *
    * <code>.scip.SingleLineRange single_line_enclosing_range = 10 [json_name = "singleLineEnclosingRange"];</code>
    */
   org.scip_code.scip.SingleLineRangeOrBuilder getSingleLineEnclosingRangeOrBuilder();
 
   /**
+   * <pre>
+   * Enclosing range spanning multiple lines.
+   * </pre>
+   *
    * <code>.scip.MultiLineRange multi_line_enclosing_range = 11 [json_name = "multiLineEnclosingRange"];</code>
    * @return Whether the multiLineEnclosingRange field is set.
    */
   boolean hasMultiLineEnclosingRange();
   /**
+   * <pre>
+   * Enclosing range spanning multiple lines.
+   * </pre>
+   *
    * <code>.scip.MultiLineRange multi_line_enclosing_range = 11 [json_name = "multiLineEnclosingRange"];</code>
    * @return The multiLineEnclosingRange.
    */
   org.scip_code.scip.MultiLineRange getMultiLineEnclosingRange();
   /**
+   * <pre>
+   * Enclosing range spanning multiple lines.
+   * </pre>
+   *
    * <code>.scip.MultiLineRange multi_line_enclosing_range = 11 [json_name = "multiLineEnclosingRange"];</code>
    */
   org.scip_code.scip.MultiLineRangeOrBuilder getMultiLineEnclosingRangeOrBuilder();

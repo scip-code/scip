@@ -2294,6 +2294,11 @@ func (x *Relationship) GetIsDefinition() bool {
 }
 
 // SingleLineRange represents a half-open [start, end) range within a single line.
+//
+// Line numbers and characters are always 0-based. Make sure to increment them
+// before displaying in an editor-like UI because editors conventionally use
+// 1-based numbers. The `character` values are interpreted based on the
+// `PositionEncoding` for the enclosing Document.
 type SingleLineRange struct {
 	state          protoimpl.MessageState `protogen:"open.v1"`
 	Line           int32                  `protobuf:"varint,1,opt,name=line,proto3" json:"line,omitempty"`
@@ -2355,6 +2360,15 @@ func (x *SingleLineRange) GetEndCharacter() int32 {
 }
 
 // MultiLineRange represents a half-open [start, end) range spanning multiple lines.
+//
+// Line numbers and characters are always 0-based. Make sure to increment them
+// before displaying in an editor-like UI because editors conventionally use
+// 1-based numbers. The `character` values are interpreted based on the
+// `PositionEncoding` for the enclosing Document.
+//
+// Producers SHOULD use `SingleLineRange` when `start_line == end_line` to keep
+// indexes compact, but consumers MUST accept multi-line encoding even when the
+// range happens to fit on a single line.
 type MultiLineRange struct {
 	state          protoimpl.MessageState `protogen:"open.v1"`
 	StartLine      int32                  `protobuf:"varint,1,opt,name=start_line,json=startLine,proto3" json:"start_line,omitempty"`
@@ -2428,6 +2442,21 @@ func (x *MultiLineRange) GetEndCharacter() int32 {
 //
 // If possible, indexers should try to bundle logically related information
 // across occurrences into a single occurrence to reduce payload sizes.
+//
+// Range encoding:
+//
+// An Occurrence carries its source range in one of two ways: the deprecated
+// `range` field (a `repeated int32` packed encoding kept for backward
+// compatibility), or one of the typed alternatives in the `typed_range`
+// oneof. New producers SHOULD set `typed_range` and SHOULD NOT set the
+// deprecated `range` field. The same rule applies to `enclosing_range` and
+// `typed_enclosing_range`.
+//
+// When both encodings are present on the same Occurrence, `typed_range` takes
+// precedence over `range` (likewise `typed_enclosing_range` over
+// `enclosing_range`). Producers that set both forms MUST keep them
+// semantically equivalent. Consumers SHOULD prefer the typed form when
+// available and fall back to the `repeated int32` form otherwise.
 type Occurrence struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
 	// Deprecated: Use `single_line_range` or `multi_line_range` instead.
@@ -2436,12 +2465,16 @@ type Occurrence struct {
 	// - Three elements: `[startLine, startCharacter, endCharacter]` (single-line)
 	// - Four elements: `[startLine, startCharacter, endLine, endCharacter]`
 	//
+	// The end line of a three-element range is inferred to equal the start line.
+	//
 	// Historical note: the original draft of this schema had a `Range` message
 	// type with `start` and `end` fields of type `Position`, mirroring LSP.
 	// Benchmarks revealed that this encoding was inefficient and that we could
 	// reduce the total payload size of an index by 50% by using `repeated int32`
 	// instead. However, the lack of type safety led to the introduction of
-	// `single_line_range` and `multi_line_range` as typed alternatives.
+	// `single_line_range` and `multi_line_range` as typed alternatives; the
+	// typed encoding's per-index size overhead is small (single-digit percent)
+	// because ranges are only a fraction of a typical index payload.
 	//
 	// Deprecated: Marked as deprecated in scip.proto.
 	Range []int32 `protobuf:"varint,1,rep,packed,name=range,proto3" json:"range,omitempty"`
@@ -2449,12 +2482,8 @@ type Occurrence struct {
 	//
 	// It is allowed for the range to be empty (i.e. start==end).
 	//
-	// Line numbers and characters are always 0-based. Make sure to increment the
-	// line/character values before displaying them in an editor-like UI because
-	// editors conventionally use 1-based numbers.
-	//
-	// The 'character' value is interpreted based on the PositionEncoding for
-	// the Document.
+	// When both `typed_range` and the deprecated `range` field are set,
+	// `typed_range` takes precedence.
 	//
 	// Types that are valid to be assigned to TypedRange:
 	//
@@ -2481,6 +2510,8 @@ type Occurrence struct {
 	// (optional) Diagnostics that have been reported for this specific range.
 	Diagnostics []*Diagnostic `protobuf:"bytes,6,rep,name=diagnostics,proto3" json:"diagnostics,omitempty"`
 	// Deprecated: Use `typed_enclosing_range` instead.
+	//
+	// Uses the same `repeated int32` encoding as the deprecated `range` field.
 	//
 	// Deprecated: Marked as deprecated in scip.proto.
 	EnclosingRange []int32 `protobuf:"varint,7,rep,packed,name=enclosing_range,json=enclosingRange,proto3" json:"enclosing_range,omitempty"`
@@ -2544,6 +2575,9 @@ type Occurrence struct {
 	//	^^^^^^^^^^^^^ enclosing_range
 	//
 	// ```
+	//
+	// When both `typed_enclosing_range` and the deprecated `enclosing_range`
+	// field are set, `typed_enclosing_range` takes precedence.
 	//
 	// Types that are valid to be assigned to TypedEnclosingRange:
 	//
@@ -2708,10 +2742,12 @@ type isOccurrence_TypedEnclosingRange interface {
 }
 
 type Occurrence_SingleLineEnclosingRange struct {
+	// Enclosing range spanning a single line.
 	SingleLineEnclosingRange *SingleLineRange `protobuf:"bytes,10,opt,name=single_line_enclosing_range,json=singleLineEnclosingRange,proto3,oneof"`
 }
 
 type Occurrence_MultiLineEnclosingRange struct {
+	// Enclosing range spanning multiple lines.
 	MultiLineEnclosingRange *MultiLineRange `protobuf:"bytes,11,opt,name=multi_line_enclosing_range,json=multiLineEnclosingRange,proto3,oneof"`
 }
 

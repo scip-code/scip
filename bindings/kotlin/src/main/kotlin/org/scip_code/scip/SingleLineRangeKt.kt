@@ -13,6 +13,11 @@ public inline fun singleLineRange(block: org.scip_code.scip.SingleLineRangeKt.Ds
 /**
  * ```
  * SingleLineRange represents a half-open [start, end) range within a single line.
+ *
+ * Line numbers and characters are always 0-based. Make sure to increment them
+ * before displaying in an editor-like UI because editors conventionally use
+ * 1-based numbers. The `character` values are interpreted based on the
+ * `PositionEncoding` for the enclosing Document.
  * ```
  *
  * Protobuf type `scip.SingleLineRange`

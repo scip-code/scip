@@ -12,6 +12,21 @@ package org.scip_code.scip;
  *
  * If possible, indexers should try to bundle logically related information
  * across occurrences into a single occurrence to reduce payload sizes.
+ *
+ * Range encoding:
+ *
+ * An Occurrence carries its source range in one of two ways: the deprecated
+ * `range` field (a `repeated int32` packed encoding kept for backward
+ * compatibility), or one of the typed alternatives in the `typed_range`
+ * oneof. New producers SHOULD set `typed_range` and SHOULD NOT set the
+ * deprecated `range` field. The same rule applies to `enclosing_range` and
+ * `typed_enclosing_range`.
+ *
+ * When both encodings are present on the same Occurrence, `typed_range` takes
+ * precedence over `range` (likewise `typed_enclosing_range` over
+ * `enclosing_range`). Producers that set both forms MUST keep them
+ * semantically equivalent. Consumers SHOULD prefer the typed form when
+ * available and fall back to the `repeated int32` form otherwise.
  * </pre>
  *
  * Protobuf type {@code scip.Occurrence}
@@ -159,17 +174,21 @@ private static final long serialVersionUID = 0L;
    * - Three elements: `[startLine, startCharacter, endCharacter]` (single-line)
    * - Four elements: `[startLine, startCharacter, endLine, endCharacter]`
    *
+   * The end line of a three-element range is inferred to equal the start line.
+   *
    * Historical note: the original draft of this schema had a `Range` message
    * type with `start` and `end` fields of type `Position`, mirroring LSP.
    * Benchmarks revealed that this encoding was inefficient and that we could
    * reduce the total payload size of an index by 50% by using `repeated int32`
    * instead. However, the lack of type safety led to the introduction of
-   * `single_line_range` and `multi_line_range` as typed alternatives.
+   * `single_line_range` and `multi_line_range` as typed alternatives; the
+   * typed encoding's per-index size overhead is small (single-digit percent)
+   * because ranges are only a fraction of a typical index payload.
    * </pre>
    *
    * <code>repeated int32 range = 1 [json_name = "range", deprecated = true];</code>
    * @deprecated scip.Occurrence.range is deprecated.
-   *     See scip.proto;l=675
+   *     See scip.proto;l=708
    * @return A list containing the range.
    */
   @java.lang.Override
@@ -185,17 +204,21 @@ private static final long serialVersionUID = 0L;
    * - Three elements: `[startLine, startCharacter, endCharacter]` (single-line)
    * - Four elements: `[startLine, startCharacter, endLine, endCharacter]`
    *
+   * The end line of a three-element range is inferred to equal the start line.
+   *
    * Historical note: the original draft of this schema had a `Range` message
    * type with `start` and `end` fields of type `Position`, mirroring LSP.
    * Benchmarks revealed that this encoding was inefficient and that we could
    * reduce the total payload size of an index by 50% by using `repeated int32`
    * instead. However, the lack of type safety led to the introduction of
-   * `single_line_range` and `multi_line_range` as typed alternatives.
+   * `single_line_range` and `multi_line_range` as typed alternatives; the
+   * typed encoding's per-index size overhead is small (single-digit percent)
+   * because ranges are only a fraction of a typical index payload.
    * </pre>
    *
    * <code>repeated int32 range = 1 [json_name = "range", deprecated = true];</code>
    * @deprecated scip.Occurrence.range is deprecated.
-   *     See scip.proto;l=675
+   *     See scip.proto;l=708
    * @return The count of range.
    */
   @java.lang.Deprecated public int getRangeCount() {
@@ -209,17 +232,21 @@ private static final long serialVersionUID = 0L;
    * - Three elements: `[startLine, startCharacter, endCharacter]` (single-line)
    * - Four elements: `[startLine, startCharacter, endLine, endCharacter]`
    *
+   * The end line of a three-element range is inferred to equal the start line.
+   *
    * Historical note: the original draft of this schema had a `Range` message
    * type with `start` and `end` fields of type `Position`, mirroring LSP.
    * Benchmarks revealed that this encoding was inefficient and that we could
    * reduce the total payload size of an index by 50% by using `repeated int32`
    * instead. However, the lack of type safety led to the introduction of
-   * `single_line_range` and `multi_line_range` as typed alternatives.
+   * `single_line_range` and `multi_line_range` as typed alternatives; the
+   * typed encoding's per-index size overhead is small (single-digit percent)
+   * because ranges are only a fraction of a typical index payload.
    * </pre>
    *
    * <code>repeated int32 range = 1 [json_name = "range", deprecated = true];</code>
    * @deprecated scip.Occurrence.range is deprecated.
-   *     See scip.proto;l=675
+   *     See scip.proto;l=708
    * @param index The index of the element to return.
    * @return The range at the given index.
    */
@@ -554,11 +581,13 @@ private static final long serialVersionUID = 0L;
   /**
    * <pre>
    * Deprecated: Use `typed_enclosing_range` instead.
+   *
+   * Uses the same `repeated int32` encoding as the deprecated `range` field.
    * </pre>
    *
    * <code>repeated int32 enclosing_range = 7 [json_name = "enclosingRange", deprecated = true];</code>
    * @deprecated scip.Occurrence.enclosing_range is deprecated.
-   *     See scip.proto;l=713
+   *     See scip.proto;l=744
    * @return A list containing the enclosingRange.
    */
   @java.lang.Override
@@ -569,11 +598,13 @@ private static final long serialVersionUID = 0L;
   /**
    * <pre>
    * Deprecated: Use `typed_enclosing_range` instead.
+   *
+   * Uses the same `repeated int32` encoding as the deprecated `range` field.
    * </pre>
    *
    * <code>repeated int32 enclosing_range = 7 [json_name = "enclosingRange", deprecated = true];</code>
    * @deprecated scip.Occurrence.enclosing_range is deprecated.
-   *     See scip.proto;l=713
+   *     See scip.proto;l=744
    * @return The count of enclosingRange.
    */
   @java.lang.Deprecated public int getEnclosingRangeCount() {
@@ -582,11 +613,13 @@ private static final long serialVersionUID = 0L;
   /**
    * <pre>
    * Deprecated: Use `typed_enclosing_range` instead.
+   *
+   * Uses the same `repeated int32` encoding as the deprecated `range` field.
    * </pre>
    *
    * <code>repeated int32 enclosing_range = 7 [json_name = "enclosingRange", deprecated = true];</code>
    * @deprecated scip.Occurrence.enclosing_range is deprecated.
-   *     See scip.proto;l=713
+   *     See scip.proto;l=744
    * @param index The index of the element to return.
    * @return The enclosingRange at the given index.
    */
@@ -597,6 +630,10 @@ private static final long serialVersionUID = 0L;
 
   public static final int SINGLE_LINE_ENCLOSING_RANGE_FIELD_NUMBER = 10;
   /**
+   * <pre>
+   * Enclosing range spanning a single line.
+   * </pre>
+   *
    * <code>.scip.SingleLineRange single_line_enclosing_range = 10 [json_name = "singleLineEnclosingRange"];</code>
    * @return Whether the singleLineEnclosingRange field is set.
    */
@@ -605,6 +642,10 @@ private static final long serialVersionUID = 0L;
     return typedEnclosingRangeCase_ == 10;
   }
   /**
+   * <pre>
+   * Enclosing range spanning a single line.
+   * </pre>
+   *
    * <code>.scip.SingleLineRange single_line_enclosing_range = 10 [json_name = "singleLineEnclosingRange"];</code>
    * @return The singleLineEnclosingRange.
    */
@@ -616,6 +657,10 @@ private static final long serialVersionUID = 0L;
     return org.scip_code.scip.SingleLineRange.getDefaultInstance();
   }
   /**
+   * <pre>
+   * Enclosing range spanning a single line.
+   * </pre>
+   *
    * <code>.scip.SingleLineRange single_line_enclosing_range = 10 [json_name = "singleLineEnclosingRange"];</code>
    */
   @java.lang.Override
@@ -628,6 +673,10 @@ private static final long serialVersionUID = 0L;
 
   public static final int MULTI_LINE_ENCLOSING_RANGE_FIELD_NUMBER = 11;
   /**
+   * <pre>
+   * Enclosing range spanning multiple lines.
+   * </pre>
+   *
    * <code>.scip.MultiLineRange multi_line_enclosing_range = 11 [json_name = "multiLineEnclosingRange"];</code>
    * @return Whether the multiLineEnclosingRange field is set.
    */
@@ -636,6 +685,10 @@ private static final long serialVersionUID = 0L;
     return typedEnclosingRangeCase_ == 11;
   }
   /**
+   * <pre>
+   * Enclosing range spanning multiple lines.
+   * </pre>
+   *
    * <code>.scip.MultiLineRange multi_line_enclosing_range = 11 [json_name = "multiLineEnclosingRange"];</code>
    * @return The multiLineEnclosingRange.
    */
@@ -647,6 +700,10 @@ private static final long serialVersionUID = 0L;
     return org.scip_code.scip.MultiLineRange.getDefaultInstance();
   }
   /**
+   * <pre>
+   * Enclosing range spanning multiple lines.
+   * </pre>
+   *
    * <code>.scip.MultiLineRange multi_line_enclosing_range = 11 [json_name = "multiLineEnclosingRange"];</code>
    */
   @java.lang.Override
@@ -1009,6 +1066,21 @@ private static final long serialVersionUID = 0L;
    *
    * If possible, indexers should try to bundle logically related information
    * across occurrences into a single occurrence to reduce payload sizes.
+   *
+   * Range encoding:
+   *
+   * An Occurrence carries its source range in one of two ways: the deprecated
+   * `range` field (a `repeated int32` packed encoding kept for backward
+   * compatibility), or one of the typed alternatives in the `typed_range`
+   * oneof. New producers SHOULD set `typed_range` and SHOULD NOT set the
+   * deprecated `range` field. The same rule applies to `enclosing_range` and
+   * `typed_enclosing_range`.
+   *
+   * When both encodings are present on the same Occurrence, `typed_range` takes
+   * precedence over `range` (likewise `typed_enclosing_range` over
+   * `enclosing_range`). Producers that set both forms MUST keep them
+   * semantically equivalent. Consumers SHOULD prefer the typed form when
+   * available and fall back to the `repeated int32` form otherwise.
    * </pre>
    *
    * Protobuf type {@code scip.Occurrence}
@@ -1455,17 +1527,21 @@ private static final long serialVersionUID = 0L;
      * - Three elements: `[startLine, startCharacter, endCharacter]` (single-line)
      * - Four elements: `[startLine, startCharacter, endLine, endCharacter]`
      *
+     * The end line of a three-element range is inferred to equal the start line.
+     *
      * Historical note: the original draft of this schema had a `Range` message
      * type with `start` and `end` fields of type `Position`, mirroring LSP.
      * Benchmarks revealed that this encoding was inefficient and that we could
      * reduce the total payload size of an index by 50% by using `repeated int32`
      * instead. However, the lack of type safety led to the introduction of
-     * `single_line_range` and `multi_line_range` as typed alternatives.
+     * `single_line_range` and `multi_line_range` as typed alternatives; the
+     * typed encoding's per-index size overhead is small (single-digit percent)
+     * because ranges are only a fraction of a typical index payload.
      * </pre>
      *
      * <code>repeated int32 range = 1 [json_name = "range", deprecated = true];</code>
      * @deprecated scip.Occurrence.range is deprecated.
-     *     See scip.proto;l=675
+     *     See scip.proto;l=708
      * @return A list containing the range.
      */
     @java.lang.Deprecated public java.util.List<java.lang.Integer>
@@ -1481,17 +1557,21 @@ private static final long serialVersionUID = 0L;
      * - Three elements: `[startLine, startCharacter, endCharacter]` (single-line)
      * - Four elements: `[startLine, startCharacter, endLine, endCharacter]`
      *
+     * The end line of a three-element range is inferred to equal the start line.
+     *
      * Historical note: the original draft of this schema had a `Range` message
      * type with `start` and `end` fields of type `Position`, mirroring LSP.
      * Benchmarks revealed that this encoding was inefficient and that we could
      * reduce the total payload size of an index by 50% by using `repeated int32`
      * instead. However, the lack of type safety led to the introduction of
-     * `single_line_range` and `multi_line_range` as typed alternatives.
+     * `single_line_range` and `multi_line_range` as typed alternatives; the
+     * typed encoding's per-index size overhead is small (single-digit percent)
+     * because ranges are only a fraction of a typical index payload.
      * </pre>
      *
      * <code>repeated int32 range = 1 [json_name = "range", deprecated = true];</code>
      * @deprecated scip.Occurrence.range is deprecated.
-     *     See scip.proto;l=675
+     *     See scip.proto;l=708
      * @return The count of range.
      */
     @java.lang.Deprecated public int getRangeCount() {
@@ -1505,17 +1585,21 @@ private static final long serialVersionUID = 0L;
      * - Three elements: `[startLine, startCharacter, endCharacter]` (single-line)
      * - Four elements: `[startLine, startCharacter, endLine, endCharacter]`
      *
+     * The end line of a three-element range is inferred to equal the start line.
+     *
      * Historical note: the original draft of this schema had a `Range` message
      * type with `start` and `end` fields of type `Position`, mirroring LSP.
      * Benchmarks revealed that this encoding was inefficient and that we could
      * reduce the total payload size of an index by 50% by using `repeated int32`
      * instead. However, the lack of type safety led to the introduction of
-     * `single_line_range` and `multi_line_range` as typed alternatives.
+     * `single_line_range` and `multi_line_range` as typed alternatives; the
+     * typed encoding's per-index size overhead is small (single-digit percent)
+     * because ranges are only a fraction of a typical index payload.
      * </pre>
      *
      * <code>repeated int32 range = 1 [json_name = "range", deprecated = true];</code>
      * @deprecated scip.Occurrence.range is deprecated.
-     *     See scip.proto;l=675
+     *     See scip.proto;l=708
      * @param index The index of the element to return.
      * @return The range at the given index.
      */
@@ -1530,17 +1614,21 @@ private static final long serialVersionUID = 0L;
      * - Three elements: `[startLine, startCharacter, endCharacter]` (single-line)
      * - Four elements: `[startLine, startCharacter, endLine, endCharacter]`
      *
+     * The end line of a three-element range is inferred to equal the start line.
+     *
      * Historical note: the original draft of this schema had a `Range` message
      * type with `start` and `end` fields of type `Position`, mirroring LSP.
      * Benchmarks revealed that this encoding was inefficient and that we could
      * reduce the total payload size of an index by 50% by using `repeated int32`
      * instead. However, the lack of type safety led to the introduction of
-     * `single_line_range` and `multi_line_range` as typed alternatives.
+     * `single_line_range` and `multi_line_range` as typed alternatives; the
+     * typed encoding's per-index size overhead is small (single-digit percent)
+     * because ranges are only a fraction of a typical index payload.
      * </pre>
      *
      * <code>repeated int32 range = 1 [json_name = "range", deprecated = true];</code>
      * @deprecated scip.Occurrence.range is deprecated.
-     *     See scip.proto;l=675
+     *     See scip.proto;l=708
      * @param index The index to set the value at.
      * @param value The range to set.
      * @return This builder for chaining.
@@ -1562,17 +1650,21 @@ private static final long serialVersionUID = 0L;
      * - Three elements: `[startLine, startCharacter, endCharacter]` (single-line)
      * - Four elements: `[startLine, startCharacter, endLine, endCharacter]`
      *
+     * The end line of a three-element range is inferred to equal the start line.
+     *
      * Historical note: the original draft of this schema had a `Range` message
      * type with `start` and `end` fields of type `Position`, mirroring LSP.
      * Benchmarks revealed that this encoding was inefficient and that we could
      * reduce the total payload size of an index by 50% by using `repeated int32`
      * instead. However, the lack of type safety led to the introduction of
-     * `single_line_range` and `multi_line_range` as typed alternatives.
+     * `single_line_range` and `multi_line_range` as typed alternatives; the
+     * typed encoding's per-index size overhead is small (single-digit percent)
+     * because ranges are only a fraction of a typical index payload.
      * </pre>
      *
      * <code>repeated int32 range = 1 [json_name = "range", deprecated = true];</code>
      * @deprecated scip.Occurrence.range is deprecated.
-     *     See scip.proto;l=675
+     *     See scip.proto;l=708
      * @param value The range to add.
      * @return This builder for chaining.
      */
@@ -1592,17 +1684,21 @@ private static final long serialVersionUID = 0L;
      * - Three elements: `[startLine, startCharacter, endCharacter]` (single-line)
      * - Four elements: `[startLine, startCharacter, endLine, endCharacter]`
      *
+     * The end line of a three-element range is inferred to equal the start line.
+     *
      * Historical note: the original draft of this schema had a `Range` message
      * type with `start` and `end` fields of type `Position`, mirroring LSP.
      * Benchmarks revealed that this encoding was inefficient and that we could
      * reduce the total payload size of an index by 50% by using `repeated int32`
      * instead. However, the lack of type safety led to the introduction of
-     * `single_line_range` and `multi_line_range` as typed alternatives.
+     * `single_line_range` and `multi_line_range` as typed alternatives; the
+     * typed encoding's per-index size overhead is small (single-digit percent)
+     * because ranges are only a fraction of a typical index payload.
      * </pre>
      *
      * <code>repeated int32 range = 1 [json_name = "range", deprecated = true];</code>
      * @deprecated scip.Occurrence.range is deprecated.
-     *     See scip.proto;l=675
+     *     See scip.proto;l=708
      * @param values The range to add.
      * @return This builder for chaining.
      */
@@ -1623,17 +1719,21 @@ private static final long serialVersionUID = 0L;
      * - Three elements: `[startLine, startCharacter, endCharacter]` (single-line)
      * - Four elements: `[startLine, startCharacter, endLine, endCharacter]`
      *
+     * The end line of a three-element range is inferred to equal the start line.
+     *
      * Historical note: the original draft of this schema had a `Range` message
      * type with `start` and `end` fields of type `Position`, mirroring LSP.
      * Benchmarks revealed that this encoding was inefficient and that we could
      * reduce the total payload size of an index by 50% by using `repeated int32`
      * instead. However, the lack of type safety led to the introduction of
-     * `single_line_range` and `multi_line_range` as typed alternatives.
+     * `single_line_range` and `multi_line_range` as typed alternatives; the
+     * typed encoding's per-index size overhead is small (single-digit percent)
+     * because ranges are only a fraction of a typical index payload.
      * </pre>
      *
      * <code>repeated int32 range = 1 [json_name = "range", deprecated = true];</code>
      * @deprecated scip.Occurrence.range is deprecated.
-     *     See scip.proto;l=675
+     *     See scip.proto;l=708
      * @return This builder for chaining.
      */
     @java.lang.Deprecated public Builder clearRange() {
@@ -2747,11 +2847,13 @@ private static final long serialVersionUID = 0L;
     /**
      * <pre>
      * Deprecated: Use `typed_enclosing_range` instead.
+     *
+     * Uses the same `repeated int32` encoding as the deprecated `range` field.
      * </pre>
      *
      * <code>repeated int32 enclosing_range = 7 [json_name = "enclosingRange", deprecated = true];</code>
      * @deprecated scip.Occurrence.enclosing_range is deprecated.
-     *     See scip.proto;l=713
+     *     See scip.proto;l=744
      * @return A list containing the enclosingRange.
      */
     @java.lang.Deprecated public java.util.List<java.lang.Integer>
@@ -2762,11 +2864,13 @@ private static final long serialVersionUID = 0L;
     /**
      * <pre>
      * Deprecated: Use `typed_enclosing_range` instead.
+     *
+     * Uses the same `repeated int32` encoding as the deprecated `range` field.
      * </pre>
      *
      * <code>repeated int32 enclosing_range = 7 [json_name = "enclosingRange", deprecated = true];</code>
      * @deprecated scip.Occurrence.enclosing_range is deprecated.
-     *     See scip.proto;l=713
+     *     See scip.proto;l=744
      * @return The count of enclosingRange.
      */
     @java.lang.Deprecated public int getEnclosingRangeCount() {
@@ -2775,11 +2879,13 @@ private static final long serialVersionUID = 0L;
     /**
      * <pre>
      * Deprecated: Use `typed_enclosing_range` instead.
+     *
+     * Uses the same `repeated int32` encoding as the deprecated `range` field.
      * </pre>
      *
      * <code>repeated int32 enclosing_range = 7 [json_name = "enclosingRange", deprecated = true];</code>
      * @deprecated scip.Occurrence.enclosing_range is deprecated.
-     *     See scip.proto;l=713
+     *     See scip.proto;l=744
      * @param index The index of the element to return.
      * @return The enclosingRange at the given index.
      */
@@ -2789,11 +2895,13 @@ private static final long serialVersionUID = 0L;
     /**
      * <pre>
      * Deprecated: Use `typed_enclosing_range` instead.
+     *
+     * Uses the same `repeated int32` encoding as the deprecated `range` field.
      * </pre>
      *
      * <code>repeated int32 enclosing_range = 7 [json_name = "enclosingRange", deprecated = true];</code>
      * @deprecated scip.Occurrence.enclosing_range is deprecated.
-     *     See scip.proto;l=713
+     *     See scip.proto;l=744
      * @param index The index to set the value at.
      * @param value The enclosingRange to set.
      * @return This builder for chaining.
@@ -2810,11 +2918,13 @@ private static final long serialVersionUID = 0L;
     /**
      * <pre>
      * Deprecated: Use `typed_enclosing_range` instead.
+     *
+     * Uses the same `repeated int32` encoding as the deprecated `range` field.
      * </pre>
      *
      * <code>repeated int32 enclosing_range = 7 [json_name = "enclosingRange", deprecated = true];</code>
      * @deprecated scip.Occurrence.enclosing_range is deprecated.
-     *     See scip.proto;l=713
+     *     See scip.proto;l=744
      * @param value The enclosingRange to add.
      * @return This builder for chaining.
      */
@@ -2829,11 +2939,13 @@ private static final long serialVersionUID = 0L;
     /**
      * <pre>
      * Deprecated: Use `typed_enclosing_range` instead.
+     *
+     * Uses the same `repeated int32` encoding as the deprecated `range` field.
      * </pre>
      *
      * <code>repeated int32 enclosing_range = 7 [json_name = "enclosingRange", deprecated = true];</code>
      * @deprecated scip.Occurrence.enclosing_range is deprecated.
-     *     See scip.proto;l=713
+     *     See scip.proto;l=744
      * @param values The enclosingRange to add.
      * @return This builder for chaining.
      */
@@ -2849,11 +2961,13 @@ private static final long serialVersionUID = 0L;
     /**
      * <pre>
      * Deprecated: Use `typed_enclosing_range` instead.
+     *
+     * Uses the same `repeated int32` encoding as the deprecated `range` field.
      * </pre>
      *
      * <code>repeated int32 enclosing_range = 7 [json_name = "enclosingRange", deprecated = true];</code>
      * @deprecated scip.Occurrence.enclosing_range is deprecated.
-     *     See scip.proto;l=713
+     *     See scip.proto;l=744
      * @return This builder for chaining.
      */
     @java.lang.Deprecated public Builder clearEnclosingRange() {
@@ -2866,6 +2980,10 @@ private static final long serialVersionUID = 0L;
     private com.google.protobuf.SingleFieldBuilder<
         org.scip_code.scip.SingleLineRange, org.scip_code.scip.SingleLineRange.Builder, org.scip_code.scip.SingleLineRangeOrBuilder> singleLineEnclosingRangeBuilder_;
     /**
+     * <pre>
+     * Enclosing range spanning a single line.
+     * </pre>
+     *
      * <code>.scip.SingleLineRange single_line_enclosing_range = 10 [json_name = "singleLineEnclosingRange"];</code>
      * @return Whether the singleLineEnclosingRange field is set.
      */
@@ -2874,6 +2992,10 @@ private static final long serialVersionUID = 0L;
       return typedEnclosingRangeCase_ == 10;
     }
     /**
+     * <pre>
+     * Enclosing range spanning a single line.
+     * </pre>
+     *
      * <code>.scip.SingleLineRange single_line_enclosing_range = 10 [json_name = "singleLineEnclosingRange"];</code>
      * @return The singleLineEnclosingRange.
      */
@@ -2892,6 +3014,10 @@ private static final long serialVersionUID = 0L;
       }
     }
     /**
+     * <pre>
+     * Enclosing range spanning a single line.
+     * </pre>
+     *
      * <code>.scip.SingleLineRange single_line_enclosing_range = 10 [json_name = "singleLineEnclosingRange"];</code>
      */
     public Builder setSingleLineEnclosingRange(org.scip_code.scip.SingleLineRange value) {
@@ -2908,6 +3034,10 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
+     * <pre>
+     * Enclosing range spanning a single line.
+     * </pre>
+     *
      * <code>.scip.SingleLineRange single_line_enclosing_range = 10 [json_name = "singleLineEnclosingRange"];</code>
      */
     public Builder setSingleLineEnclosingRange(
@@ -2922,6 +3052,10 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
+     * <pre>
+     * Enclosing range spanning a single line.
+     * </pre>
+     *
      * <code>.scip.SingleLineRange single_line_enclosing_range = 10 [json_name = "singleLineEnclosingRange"];</code>
      */
     public Builder mergeSingleLineEnclosingRange(org.scip_code.scip.SingleLineRange value) {
@@ -2945,6 +3079,10 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
+     * <pre>
+     * Enclosing range spanning a single line.
+     * </pre>
+     *
      * <code>.scip.SingleLineRange single_line_enclosing_range = 10 [json_name = "singleLineEnclosingRange"];</code>
      */
     public Builder clearSingleLineEnclosingRange() {
@@ -2964,12 +3102,20 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
+     * <pre>
+     * Enclosing range spanning a single line.
+     * </pre>
+     *
      * <code>.scip.SingleLineRange single_line_enclosing_range = 10 [json_name = "singleLineEnclosingRange"];</code>
      */
     public org.scip_code.scip.SingleLineRange.Builder getSingleLineEnclosingRangeBuilder() {
       return internalGetSingleLineEnclosingRangeFieldBuilder().getBuilder();
     }
     /**
+     * <pre>
+     * Enclosing range spanning a single line.
+     * </pre>
+     *
      * <code>.scip.SingleLineRange single_line_enclosing_range = 10 [json_name = "singleLineEnclosingRange"];</code>
      */
     @java.lang.Override
@@ -2984,6 +3130,10 @@ private static final long serialVersionUID = 0L;
       }
     }
     /**
+     * <pre>
+     * Enclosing range spanning a single line.
+     * </pre>
+     *
      * <code>.scip.SingleLineRange single_line_enclosing_range = 10 [json_name = "singleLineEnclosingRange"];</code>
      */
     private com.google.protobuf.SingleFieldBuilder<
@@ -3008,6 +3158,10 @@ private static final long serialVersionUID = 0L;
     private com.google.protobuf.SingleFieldBuilder<
         org.scip_code.scip.MultiLineRange, org.scip_code.scip.MultiLineRange.Builder, org.scip_code.scip.MultiLineRangeOrBuilder> multiLineEnclosingRangeBuilder_;
     /**
+     * <pre>
+     * Enclosing range spanning multiple lines.
+     * </pre>
+     *
      * <code>.scip.MultiLineRange multi_line_enclosing_range = 11 [json_name = "multiLineEnclosingRange"];</code>
      * @return Whether the multiLineEnclosingRange field is set.
      */
@@ -3016,6 +3170,10 @@ private static final long serialVersionUID = 0L;
       return typedEnclosingRangeCase_ == 11;
     }
     /**
+     * <pre>
+     * Enclosing range spanning multiple lines.
+     * </pre>
+     *
      * <code>.scip.MultiLineRange multi_line_enclosing_range = 11 [json_name = "multiLineEnclosingRange"];</code>
      * @return The multiLineEnclosingRange.
      */
@@ -3034,6 +3192,10 @@ private static final long serialVersionUID = 0L;
       }
     }
     /**
+     * <pre>
+     * Enclosing range spanning multiple lines.
+     * </pre>
+     *
      * <code>.scip.MultiLineRange multi_line_enclosing_range = 11 [json_name = "multiLineEnclosingRange"];</code>
      */
     public Builder setMultiLineEnclosingRange(org.scip_code.scip.MultiLineRange value) {
@@ -3050,6 +3212,10 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
+     * <pre>
+     * Enclosing range spanning multiple lines.
+     * </pre>
+     *
      * <code>.scip.MultiLineRange multi_line_enclosing_range = 11 [json_name = "multiLineEnclosingRange"];</code>
      */
     public Builder setMultiLineEnclosingRange(
@@ -3064,6 +3230,10 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
+     * <pre>
+     * Enclosing range spanning multiple lines.
+     * </pre>
+     *
      * <code>.scip.MultiLineRange multi_line_enclosing_range = 11 [json_name = "multiLineEnclosingRange"];</code>
      */
     public Builder mergeMultiLineEnclosingRange(org.scip_code.scip.MultiLineRange value) {
@@ -3087,6 +3257,10 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
+     * <pre>
+     * Enclosing range spanning multiple lines.
+     * </pre>
+     *
      * <code>.scip.MultiLineRange multi_line_enclosing_range = 11 [json_name = "multiLineEnclosingRange"];</code>
      */
     public Builder clearMultiLineEnclosingRange() {
@@ -3106,12 +3280,20 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
+     * <pre>
+     * Enclosing range spanning multiple lines.
+     * </pre>
+     *
      * <code>.scip.MultiLineRange multi_line_enclosing_range = 11 [json_name = "multiLineEnclosingRange"];</code>
      */
     public org.scip_code.scip.MultiLineRange.Builder getMultiLineEnclosingRangeBuilder() {
       return internalGetMultiLineEnclosingRangeFieldBuilder().getBuilder();
     }
     /**
+     * <pre>
+     * Enclosing range spanning multiple lines.
+     * </pre>
+     *
      * <code>.scip.MultiLineRange multi_line_enclosing_range = 11 [json_name = "multiLineEnclosingRange"];</code>
      */
     @java.lang.Override
@@ -3126,6 +3308,10 @@ private static final long serialVersionUID = 0L;
       }
     }
     /**
+     * <pre>
+     * Enclosing range spanning multiple lines.
+     * </pre>
+     *
      * <code>.scip.MultiLineRange multi_line_enclosing_range = 11 [json_name = "multiLineEnclosingRange"];</code>
      */
     private com.google.protobuf.SingleFieldBuilder<

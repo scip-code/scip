@@ -17,6 +17,21 @@ public inline fun occurrence(block: org.scip_code.scip.OccurrenceKt.Dsl.() -> ko
  *
  * If possible, indexers should try to bundle logically related information
  * across occurrences into a single occurrence to reduce payload sizes.
+ *
+ * Range encoding:
+ *
+ * An Occurrence carries its source range in one of two ways: the deprecated
+ * `range` field (a `repeated int32` packed encoding kept for backward
+ * compatibility), or one of the typed alternatives in the `typed_range`
+ * oneof. New producers SHOULD set `typed_range` and SHOULD NOT set the
+ * deprecated `range` field. The same rule applies to `enclosing_range` and
+ * `typed_enclosing_range`.
+ *
+ * When both encodings are present on the same Occurrence, `typed_range` takes
+ * precedence over `range` (likewise `typed_enclosing_range` over
+ * `enclosing_range`). Producers that set both forms MUST keep them
+ * semantically equivalent. Consumers SHOULD prefer the typed form when
+ * available and fall back to the `repeated int32` form otherwise.
  * ```
  *
  * Protobuf type `scip.Occurrence`
@@ -51,12 +66,16 @@ public object OccurrenceKt {
      * - Three elements: `[startLine, startCharacter, endCharacter]` (single-line)
      * - Four elements: `[startLine, startCharacter, endLine, endCharacter]`
      *
+     * The end line of a three-element range is inferred to equal the start line.
+     *
      * Historical note: the original draft of this schema had a `Range` message
      * type with `start` and `end` fields of type `Position`, mirroring LSP.
      * Benchmarks revealed that this encoding was inefficient and that we could
      * reduce the total payload size of an index by 50% by using `repeated int32`
      * instead. However, the lack of type safety led to the introduction of
-     * `single_line_range` and `multi_line_range` as typed alternatives.
+     * `single_line_range` and `multi_line_range` as typed alternatives; the
+     * typed encoding's per-index size overhead is small (single-digit percent)
+     * because ranges are only a fraction of a typical index payload.
      * ```
      *
      * `repeated int32 range = 1 [json_name = "range", deprecated = true];`
@@ -74,12 +93,16 @@ public object OccurrenceKt {
      * - Three elements: `[startLine, startCharacter, endCharacter]` (single-line)
      * - Four elements: `[startLine, startCharacter, endLine, endCharacter]`
      *
+     * The end line of a three-element range is inferred to equal the start line.
+     *
      * Historical note: the original draft of this schema had a `Range` message
      * type with `start` and `end` fields of type `Position`, mirroring LSP.
      * Benchmarks revealed that this encoding was inefficient and that we could
      * reduce the total payload size of an index by 50% by using `repeated int32`
      * instead. However, the lack of type safety led to the introduction of
-     * `single_line_range` and `multi_line_range` as typed alternatives.
+     * `single_line_range` and `multi_line_range` as typed alternatives; the
+     * typed encoding's per-index size overhead is small (single-digit percent)
+     * because ranges are only a fraction of a typical index payload.
      * ```
      *
      * `repeated int32 range = 1 [json_name = "range", deprecated = true];`
@@ -97,12 +120,16 @@ public object OccurrenceKt {
      * - Three elements: `[startLine, startCharacter, endCharacter]` (single-line)
      * - Four elements: `[startLine, startCharacter, endLine, endCharacter]`
      *
+     * The end line of a three-element range is inferred to equal the start line.
+     *
      * Historical note: the original draft of this schema had a `Range` message
      * type with `start` and `end` fields of type `Position`, mirroring LSP.
      * Benchmarks revealed that this encoding was inefficient and that we could
      * reduce the total payload size of an index by 50% by using `repeated int32`
      * instead. However, the lack of type safety led to the introduction of
-     * `single_line_range` and `multi_line_range` as typed alternatives.
+     * `single_line_range` and `multi_line_range` as typed alternatives; the
+     * typed encoding's per-index size overhead is small (single-digit percent)
+     * because ranges are only a fraction of a typical index payload.
      * ```
      *
      * `repeated int32 range = 1 [json_name = "range", deprecated = true];`
@@ -121,12 +148,16 @@ public object OccurrenceKt {
      * - Three elements: `[startLine, startCharacter, endCharacter]` (single-line)
      * - Four elements: `[startLine, startCharacter, endLine, endCharacter]`
      *
+     * The end line of a three-element range is inferred to equal the start line.
+     *
      * Historical note: the original draft of this schema had a `Range` message
      * type with `start` and `end` fields of type `Position`, mirroring LSP.
      * Benchmarks revealed that this encoding was inefficient and that we could
      * reduce the total payload size of an index by 50% by using `repeated int32`
      * instead. However, the lack of type safety led to the introduction of
-     * `single_line_range` and `multi_line_range` as typed alternatives.
+     * `single_line_range` and `multi_line_range` as typed alternatives; the
+     * typed encoding's per-index size overhead is small (single-digit percent)
+     * because ranges are only a fraction of a typical index payload.
      * ```
      *
      * `repeated int32 range = 1 [json_name = "range", deprecated = true];`
@@ -144,12 +175,16 @@ public object OccurrenceKt {
      * - Three elements: `[startLine, startCharacter, endCharacter]` (single-line)
      * - Four elements: `[startLine, startCharacter, endLine, endCharacter]`
      *
+     * The end line of a three-element range is inferred to equal the start line.
+     *
      * Historical note: the original draft of this schema had a `Range` message
      * type with `start` and `end` fields of type `Position`, mirroring LSP.
      * Benchmarks revealed that this encoding was inefficient and that we could
      * reduce the total payload size of an index by 50% by using `repeated int32`
      * instead. However, the lack of type safety led to the introduction of
-     * `single_line_range` and `multi_line_range` as typed alternatives.
+     * `single_line_range` and `multi_line_range` as typed alternatives; the
+     * typed encoding's per-index size overhead is small (single-digit percent)
+     * because ranges are only a fraction of a typical index payload.
      * ```
      *
      * `repeated int32 range = 1 [json_name = "range", deprecated = true];`
@@ -168,12 +203,16 @@ public object OccurrenceKt {
      * - Three elements: `[startLine, startCharacter, endCharacter]` (single-line)
      * - Four elements: `[startLine, startCharacter, endLine, endCharacter]`
      *
+     * The end line of a three-element range is inferred to equal the start line.
+     *
      * Historical note: the original draft of this schema had a `Range` message
      * type with `start` and `end` fields of type `Position`, mirroring LSP.
      * Benchmarks revealed that this encoding was inefficient and that we could
      * reduce the total payload size of an index by 50% by using `repeated int32`
      * instead. However, the lack of type safety led to the introduction of
-     * `single_line_range` and `multi_line_range` as typed alternatives.
+     * `single_line_range` and `multi_line_range` as typed alternatives; the
+     * typed encoding's per-index size overhead is small (single-digit percent)
+     * because ranges are only a fraction of a typical index payload.
      * ```
      *
      * `repeated int32 range = 1 [json_name = "range", deprecated = true];`
@@ -192,12 +231,16 @@ public object OccurrenceKt {
      * - Three elements: `[startLine, startCharacter, endCharacter]` (single-line)
      * - Four elements: `[startLine, startCharacter, endLine, endCharacter]`
      *
+     * The end line of a three-element range is inferred to equal the start line.
+     *
      * Historical note: the original draft of this schema had a `Range` message
      * type with `start` and `end` fields of type `Position`, mirroring LSP.
      * Benchmarks revealed that this encoding was inefficient and that we could
      * reduce the total payload size of an index by 50% by using `repeated int32`
      * instead. However, the lack of type safety led to the introduction of
-     * `single_line_range` and `multi_line_range` as typed alternatives.
+     * `single_line_range` and `multi_line_range` as typed alternatives; the
+     * typed encoding's per-index size overhead is small (single-digit percent)
+     * because ranges are only a fraction of a typical index payload.
      * ```
      *
      * `repeated int32 range = 1 [json_name = "range", deprecated = true];`
@@ -620,6 +663,8 @@ public object OccurrenceKt {
     /**
      * ```
      * Deprecated: Use `typed_enclosing_range` instead.
+     *
+     * Uses the same `repeated int32` encoding as the deprecated `range` field.
      * ```
      *
      * `repeated int32 enclosing_range = 7 [json_name = "enclosingRange", deprecated = true];`
@@ -632,6 +677,8 @@ public object OccurrenceKt {
     /**
      * ```
      * Deprecated: Use `typed_enclosing_range` instead.
+     *
+     * Uses the same `repeated int32` encoding as the deprecated `range` field.
      * ```
      *
      * `repeated int32 enclosing_range = 7 [json_name = "enclosingRange", deprecated = true];`
@@ -644,6 +691,8 @@ public object OccurrenceKt {
     }/**
      * ```
      * Deprecated: Use `typed_enclosing_range` instead.
+     *
+     * Uses the same `repeated int32` encoding as the deprecated `range` field.
      * ```
      *
      * `repeated int32 enclosing_range = 7 [json_name = "enclosingRange", deprecated = true];`
@@ -657,6 +706,8 @@ public object OccurrenceKt {
     }/**
      * ```
      * Deprecated: Use `typed_enclosing_range` instead.
+     *
+     * Uses the same `repeated int32` encoding as the deprecated `range` field.
      * ```
      *
      * `repeated int32 enclosing_range = 7 [json_name = "enclosingRange", deprecated = true];`
@@ -669,6 +720,8 @@ public object OccurrenceKt {
     }/**
      * ```
      * Deprecated: Use `typed_enclosing_range` instead.
+     *
+     * Uses the same `repeated int32` encoding as the deprecated `range` field.
      * ```
      *
      * `repeated int32 enclosing_range = 7 [json_name = "enclosingRange", deprecated = true];`
@@ -682,6 +735,8 @@ public object OccurrenceKt {
     }/**
      * ```
      * Deprecated: Use `typed_enclosing_range` instead.
+     *
+     * Uses the same `repeated int32` encoding as the deprecated `range` field.
      * ```
      *
      * `repeated int32 enclosing_range = 7 [json_name = "enclosingRange", deprecated = true];`
@@ -695,6 +750,8 @@ public object OccurrenceKt {
     }/**
      * ```
      * Deprecated: Use `typed_enclosing_range` instead.
+     *
+     * Uses the same `repeated int32` encoding as the deprecated `range` field.
      * ```
      *
      * `repeated int32 enclosing_range = 7 [json_name = "enclosingRange", deprecated = true];`
@@ -705,6 +762,10 @@ public object OccurrenceKt {
       _builder.clearEnclosingRange()
     }
     /**
+     * ```
+     * Enclosing range spanning a single line.
+     * ```
+     *
      * `.scip.SingleLineRange single_line_enclosing_range = 10 [json_name = "singleLineEnclosingRange"];`
      */
     public var singleLineEnclosingRange: org.scip_code.scip.SingleLineRange
@@ -715,12 +776,20 @@ public object OccurrenceKt {
         _builder.singleLineEnclosingRange = value
       }
     /**
+     * ```
+     * Enclosing range spanning a single line.
+     * ```
+     *
      * `.scip.SingleLineRange single_line_enclosing_range = 10 [json_name = "singleLineEnclosingRange"];`
      */
     public fun clearSingleLineEnclosingRange() {
       _builder.clearSingleLineEnclosingRange()
     }
     /**
+     * ```
+     * Enclosing range spanning a single line.
+     * ```
+     *
      * `.scip.SingleLineRange single_line_enclosing_range = 10 [json_name = "singleLineEnclosingRange"];`
      * @return Whether the singleLineEnclosingRange field is set.
      */
@@ -729,6 +798,10 @@ public object OccurrenceKt {
     }
 
     /**
+     * ```
+     * Enclosing range spanning multiple lines.
+     * ```
+     *
      * `.scip.MultiLineRange multi_line_enclosing_range = 11 [json_name = "multiLineEnclosingRange"];`
      */
     public var multiLineEnclosingRange: org.scip_code.scip.MultiLineRange
@@ -739,12 +812,20 @@ public object OccurrenceKt {
         _builder.multiLineEnclosingRange = value
       }
     /**
+     * ```
+     * Enclosing range spanning multiple lines.
+     * ```
+     *
      * `.scip.MultiLineRange multi_line_enclosing_range = 11 [json_name = "multiLineEnclosingRange"];`
      */
     public fun clearMultiLineEnclosingRange() {
       _builder.clearMultiLineEnclosingRange()
     }
     /**
+     * ```
+     * Enclosing range spanning multiple lines.
+     * ```
+     *
      * `.scip.MultiLineRange multi_line_enclosing_range = 11 [json_name = "multiLineEnclosingRange"];`
      * @return Whether the multiLineEnclosingRange field is set.
      */

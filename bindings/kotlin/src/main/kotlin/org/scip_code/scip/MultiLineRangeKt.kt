@@ -13,6 +13,15 @@ public inline fun multiLineRange(block: org.scip_code.scip.MultiLineRangeKt.Dsl.
 /**
  * ```
  * MultiLineRange represents a half-open [start, end) range spanning multiple lines.
+ *
+ * Line numbers and characters are always 0-based. Make sure to increment them
+ * before displaying in an editor-like UI because editors conventionally use
+ * 1-based numbers. The `character` values are interpreted based on the
+ * `PositionEncoding` for the enclosing Document.
+ *
+ * Producers SHOULD use `SingleLineRange` when `start_line == end_line` to keep
+ * indexes compact, but consumers MUST accept multi-line encoding even when the
+ * range happens to fit on a single line.
  * ```
  *
  * Protobuf type `scip.MultiLineRange`

@@ -1232,6 +1232,11 @@ export const RelationshipSchema: GenMessage<Relationship> = /*@__PURE__*/
 /**
  * SingleLineRange represents a half-open [start, end) range within a single line.
  *
+ * Line numbers and characters are always 0-based. Make sure to increment them
+ * before displaying in an editor-like UI because editors conventionally use
+ * 1-based numbers. The `character` values are interpreted based on the
+ * `PositionEncoding` for the enclosing Document.
+ *
  * @generated from message scip.SingleLineRange
  */
 export type SingleLineRange = Message<"scip.SingleLineRange"> & {
@@ -1260,6 +1265,15 @@ export const SingleLineRangeSchema: GenMessage<SingleLineRange> = /*@__PURE__*/
 
 /**
  * MultiLineRange represents a half-open [start, end) range spanning multiple lines.
+ *
+ * Line numbers and characters are always 0-based. Make sure to increment them
+ * before displaying in an editor-like UI because editors conventionally use
+ * 1-based numbers. The `character` values are interpreted based on the
+ * `PositionEncoding` for the enclosing Document.
+ *
+ * Producers SHOULD use `SingleLineRange` when `start_line == end_line` to keep
+ * indexes compact, but consumers MUST accept multi-line encoding even when the
+ * range happens to fit on a single line.
  *
  * @generated from message scip.MultiLineRange
  */
@@ -1299,6 +1313,21 @@ export const MultiLineRangeSchema: GenMessage<MultiLineRange> = /*@__PURE__*/
  * If possible, indexers should try to bundle logically related information
  * across occurrences into a single occurrence to reduce payload sizes.
  *
+ * Range encoding:
+ *
+ * An Occurrence carries its source range in one of two ways: the deprecated
+ * `range` field (a `repeated int32` packed encoding kept for backward
+ * compatibility), or one of the typed alternatives in the `typed_range`
+ * oneof. New producers SHOULD set `typed_range` and SHOULD NOT set the
+ * deprecated `range` field. The same rule applies to `enclosing_range` and
+ * `typed_enclosing_range`.
+ *
+ * When both encodings are present on the same Occurrence, `typed_range` takes
+ * precedence over `range` (likewise `typed_enclosing_range` over
+ * `enclosing_range`). Producers that set both forms MUST keep them
+ * semantically equivalent. Consumers SHOULD prefer the typed form when
+ * available and fall back to the `repeated int32` form otherwise.
+ *
  * @generated from message scip.Occurrence
  */
 export type Occurrence = Message<"scip.Occurrence"> & {
@@ -1309,12 +1338,16 @@ export type Occurrence = Message<"scip.Occurrence"> & {
    * - Three elements: `[startLine, startCharacter, endCharacter]` (single-line)
    * - Four elements: `[startLine, startCharacter, endLine, endCharacter]`
    *
+   * The end line of a three-element range is inferred to equal the start line.
+   *
    * Historical note: the original draft of this schema had a `Range` message
    * type with `start` and `end` fields of type `Position`, mirroring LSP.
    * Benchmarks revealed that this encoding was inefficient and that we could
    * reduce the total payload size of an index by 50% by using `repeated int32`
    * instead. However, the lack of type safety led to the introduction of
-   * `single_line_range` and `multi_line_range` as typed alternatives.
+   * `single_line_range` and `multi_line_range` as typed alternatives; the
+   * typed encoding's per-index size overhead is small (single-digit percent)
+   * because ranges are only a fraction of a typical index payload.
    *
    * @generated from field: repeated int32 range = 1 [deprecated = true];
    * @deprecated
@@ -1326,12 +1359,8 @@ export type Occurrence = Message<"scip.Occurrence"> & {
    *
    * It is allowed for the range to be empty (i.e. start==end).
    *
-   * Line numbers and characters are always 0-based. Make sure to increment the
-   * line/character values before displaying them in an editor-like UI because
-   * editors conventionally use 1-based numbers.
-   *
-   * The 'character' value is interpreted based on the PositionEncoding for
-   * the Document.
+   * When both `typed_range` and the deprecated `range` field are set,
+   * `typed_range` takes precedence.
    *
    * @generated from oneof scip.Occurrence.typed_range
    */
@@ -1400,6 +1429,8 @@ export type Occurrence = Message<"scip.Occurrence"> & {
   /**
    * Deprecated: Use `typed_enclosing_range` instead.
    *
+   * Uses the same `repeated int32` encoding as the deprecated `range` field.
+   *
    * @generated from field: repeated int32 enclosing_range = 7 [deprecated = true];
    * @deprecated
    */
@@ -1457,16 +1488,23 @@ export type Occurrence = Message<"scip.Occurrence"> & {
    *           ^^^^^^^^^^^^^ enclosing_range
    * ```
    *
+   * When both `typed_enclosing_range` and the deprecated `enclosing_range`
+   * field are set, `typed_enclosing_range` takes precedence.
+   *
    * @generated from oneof scip.Occurrence.typed_enclosing_range
    */
   typedEnclosingRange: {
     /**
+     * Enclosing range spanning a single line.
+     *
      * @generated from field: scip.SingleLineRange single_line_enclosing_range = 10;
      */
     value: SingleLineRange;
     case: "singleLineEnclosingRange";
   } | {
     /**
+     * Enclosing range spanning multiple lines.
+     *
      * @generated from field: scip.MultiLineRange multi_line_enclosing_range = 11;
      */
     value: MultiLineRange;

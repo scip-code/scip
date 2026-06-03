@@ -153,6 +153,15 @@ function in `IndexVisitor` and update `ParseStreaming`.
 
 MultiLineRange represents a half-open [start, end) range spanning multiple lines.
 
+Line numbers and characters are always 0-based. Make sure to increment them
+before displaying in an editor-like UI because editors conventionally use
+1-based numbers. The `character` values are interpreted based on the
+`PositionEncoding` for the enclosing Document.
+
+Producers SHOULD use `SingleLineRange` when `start_line == end_line` to keep
+indexes compact, but consumers MUST accept multi-line encoding even when the
+range happens to fit on a single line.
+
 | Name | Type | Description |
 | ---- | ---- | ----------- |
 |  **start_line** | int32 | 
@@ -171,6 +180,21 @@ information.
 If possible, indexers should try to bundle logically related information
 across occurrences into a single occurrence to reduce payload sizes.
 
+Range encoding:
+
+An Occurrence carries its source range in one of two ways: the deprecated
+`range` field (a `repeated int32` packed encoding kept for backward
+compatibility), or one of the typed alternatives in the `typed_range`
+oneof. New producers SHOULD set `typed_range` and SHOULD NOT set the
+deprecated `range` field. The same rule applies to `enclosing_range` and
+`typed_enclosing_range`.
+
+When both encodings are present on the same Occurrence, `typed_range` takes
+precedence over `range` (likewise `typed_enclosing_range` over
+`enclosing_range`). Producers that set both forms MUST keep them
+semantically equivalent. Consumers SHOULD prefer the typed form when
+available and fall back to the `repeated int32` form otherwise.
+
 | Name | Type | Description |
 | ---- | ---- | ----------- |
 | repeated **range** | int32 | Deprecated: Use `single_line_range` or `multi_line_range` instead.
@@ -182,8 +206,8 @@ across occurrences into a single occurrence to reduce payload sizes.
 |  **syntax_kind** | SyntaxKind | (optional) What syntax highlighting class should be used for this range?
 | repeated **diagnostics** | Diagnostic | (optional) Diagnostics that have been reported for this specific range.
 | repeated **enclosing_range** | int32 | Deprecated: Use `typed_enclosing_range` instead.
-|  **single_line_enclosing_range** | SingleLineRange | 
-|  **multi_line_enclosing_range** | MultiLineRange | 
+|  **single_line_enclosing_range** | SingleLineRange | Enclosing range spanning a single line.
+|  **multi_line_enclosing_range** | MultiLineRange | Enclosing range spanning multiple lines.
 
 Additional notes on **range**:
 
@@ -193,12 +217,16 @@ Half-open [start, end) range. Must be exactly three or four elements:
 - Three elements: `[startLine, startCharacter, endCharacter]` (single-line)
 - Four elements: `[startLine, startCharacter, endLine, endCharacter]`
 
+The end line of a three-element range is inferred to equal the start line.
+
 Historical note: the original draft of this schema had a `Range` message
 type with `start` and `end` fields of type `Position`, mirroring LSP.
 Benchmarks revealed that this encoding was inefficient and that we could
 reduce the total payload size of an index by 50% by using `repeated int32`
 instead. However, the lack of type safety led to the introduction of
-`single_line_range` and `multi_line_range` as typed alternatives.
+`single_line_range` and `multi_line_range` as typed alternatives; the
+typed encoding's per-index size overhead is small (single-digit percent)
+because ranges are only a fraction of a typical index payload.
 
 
 
@@ -218,6 +246,12 @@ which commonly allow for type-changing assignment.
 
 
 
+
+Additional notes on **enclosing_range**:
+
+Deprecated: Use `typed_enclosing_range` instead.
+
+Uses the same `repeated int32` encoding as the deprecated `range` field.
 
 
 
@@ -286,6 +320,11 @@ signatures using the Document message type.
 ### SingleLineRange
 
 SingleLineRange represents a half-open [start, end) range within a single line.
+
+Line numbers and characters are always 0-based. Make sure to increment them
+before displaying in an editor-like UI because editors conventionally use
+1-based numbers. The `character` values are interpreted based on the
+`PositionEncoding` for the enclosing Document.
 
 | Name | Type | Description |
 | ---- | ---- | ----------- |

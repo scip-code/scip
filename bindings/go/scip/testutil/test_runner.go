@@ -227,7 +227,7 @@ func filterAttributesForTestCase(testCase symbolAttributeTestCase, attributes []
 func attributesForOccurrencesAtLine(lineNumber int, occurrences []*scip.Occurrence) []symbolAttribute {
 	result := []symbolAttribute{}
 	for _, occ := range occurrences {
-		pos, ok := scip.OccurrenceRange(occ)
+		pos, ok := occ.SourceRange()
 		if !ok {
 			continue
 		}

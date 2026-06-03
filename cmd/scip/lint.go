@@ -111,7 +111,7 @@ type occurrenceKey struct {
 }
 
 func scipOccurrenceKey(occ *scip.Occurrence) occurrenceKey {
-	r, _ := scip.OccurrenceRange(occ)
+	r, _ := occ.SourceRange()
 	return occurrenceKey{r, occ.SymbolRoles}
 }
 
@@ -200,7 +200,7 @@ func (st *symbolTable) addRelationship(sym string, path string, rel *scip.Relati
 }
 
 func (st *symbolTable) addOccurrence(path string, occ *scip.Occurrence) error {
-	occRange, _ := scip.OccurrenceRange(occ)
+	occRange, _ := occ.SourceRange()
 	err := lintSymbolString(
 		occ.Symbol,
 		fmt.Sprintf("occurrence at %s @ %s", path, scipRangeToString(occRange)),

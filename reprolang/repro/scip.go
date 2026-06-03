@@ -21,7 +21,7 @@ func (i *identifier) occurrence(roles scip.SymbolRole) *scip.Occurrence {
 		SymbolRoles: int32(roles),
 		Diagnostics: diagnostics,
 	}
-	scip.SetOccurrenceRange(occ, *i.position)
+	occ.SetSourceRange(*i.position)
 	return occ
 }
 

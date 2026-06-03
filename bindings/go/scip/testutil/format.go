@@ -82,8 +82,8 @@ func FormatSnapshot(
 	}
 	symtab := document.SymbolTable()
 	sort.SliceStable(document.Occurrences, func(i, j int) bool {
-		ri, _ := scip.OccurrenceRange(document.Occurrences[i])
-		rj, _ := scip.OccurrenceRange(document.Occurrences[j])
+		ri, _ := document.Occurrences[i].SourceRange()
+		rj, _ := document.Occurrences[j].SourceRange()
 		return ri.LessStrict(rj)
 	})
 	var formattingError error
@@ -116,7 +116,7 @@ func FormatSnapshot(
 		b.WriteString("\n")
 		for i < len(document.Occurrences) {
 			occ := document.Occurrences[i]
-			pos, _ := scip.OccurrenceRange(occ)
+			pos, _ := occ.SourceRange()
 			if pos.Start.Line != int32(lineNumber) {
 				break
 			}
@@ -295,7 +295,7 @@ type enclosingRange struct {
 func enclosingRanges(occurrences []*scip.Occurrence) []enclosingRange {
 	var enclosingRanges []enclosingRange
 	for _, occ := range occurrences {
-		if r, ok := scip.OccurrenceEnclosingRange(occ); ok {
+		if r, ok := occ.EnclosingSourceRange(); ok {
 			enclosingRanges = append(enclosingRanges, enclosingRange{
 				Range:  r,
 				Symbol: occ.Symbol,

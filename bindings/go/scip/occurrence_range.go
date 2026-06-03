@@ -1,10 +1,10 @@
 package scip
 
-// OccurrenceRange returns the source range of an occurrence and whether one
-// is set. `typed_range` takes precedence over the deprecated `range` field.
+// SourceRange returns the source range of this occurrence and whether one is
+// set. `typed_range` takes precedence over the deprecated `range` field.
 // Malformed deprecated ranges (length != 3 or 4) are reported as missing; use
 // `scip lint` to surface them.
-func OccurrenceRange(occ *Occurrence) (Range, bool) {
+func (occ *Occurrence) SourceRange() (Range, bool) {
 	if r, ok := readTypedRange(occ.GetTypedRange()); ok {
 		return r, true
 	}
@@ -14,10 +14,10 @@ func OccurrenceRange(occ *Occurrence) (Range, bool) {
 	return NewRangeUnchecked(occ.Range), true
 }
 
-// OccurrenceEnclosingRange returns the enclosing range of an occurrence and
-// whether one is set. `typed_enclosing_range` takes precedence over the
+// EnclosingSourceRange returns the enclosing source range of this occurrence
+// and whether one is set. `typed_enclosing_range` takes precedence over the
 // deprecated `enclosing_range` field.
-func OccurrenceEnclosingRange(occ *Occurrence) (Range, bool) {
+func (occ *Occurrence) EnclosingSourceRange() (Range, bool) {
 	if r, ok := readTypedRange(occ.GetTypedEnclosingRange()); ok {
 		return r, true
 	}
@@ -27,10 +27,10 @@ func OccurrenceEnclosingRange(occ *Occurrence) (Range, bool) {
 	return NewRangeUnchecked(occ.EnclosingRange), true
 }
 
-// SetOccurrenceRange sets the source range on occ using the typed
-// `typed_range` encoding (SingleLineRange when r fits on one line,
-// MultiLineRange otherwise) and clears the deprecated `range` field.
-func SetOccurrenceRange(occ *Occurrence, r Range) {
+// SetSourceRange sets the source range using the typed `typed_range` encoding
+// (SingleLineRange when r fits on one line, MultiLineRange otherwise) and
+// clears the deprecated `range` field.
+func (occ *Occurrence) SetSourceRange(r Range) {
 	occ.Range = nil
 	if r.IsSingleLine() {
 		occ.TypedRange = &Occurrence_SingleLineRange{SingleLineRange: rangeToSingleLine(r)}
@@ -39,9 +39,9 @@ func SetOccurrenceRange(occ *Occurrence, r Range) {
 	occ.TypedRange = &Occurrence_MultiLineRange{MultiLineRange: rangeToMultiLine(r)}
 }
 
-// SetOccurrenceEnclosingRange is the counterpart of SetOccurrenceRange for
-// the enclosing range.
-func SetOccurrenceEnclosingRange(occ *Occurrence, r Range) {
+// SetEnclosingSourceRange is the counterpart of SetSourceRange for the
+// enclosing range.
+func (occ *Occurrence) SetEnclosingSourceRange(r Range) {
 	occ.EnclosingRange = nil
 	if r.IsSingleLine() {
 		occ.TypedEnclosingRange = &Occurrence_SingleLineEnclosingRange{SingleLineEnclosingRange: rangeToSingleLine(r)}

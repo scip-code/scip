@@ -389,7 +389,7 @@ func (c *Converter) insertEnclosingRangeData(symbolToID map[string]int64, occs [
 			scip.IsLocalSymbol(occ.Symbol) {
 			continue
 		}
-		enclRange, hasEnclosing := scip.OccurrenceEnclosingRange(occ)
+		enclRange, hasEnclosing := occ.EnclosingSourceRange()
 		if !hasEnclosing {
 			continue
 		}
@@ -584,7 +584,7 @@ func chunkOccurrences(occurrences []*scip.Occurrence, chunkSize int) []Chunk {
 	}
 
 	occStartLine := func(i int) int32 {
-		r, _ := scip.OccurrenceRange(occurrences[i])
+		r, _ := occurrences[i].SourceRange()
 		return r.Start.Line
 	}
 	chunks := make([]Chunk, 0, len(occurrences)/chunkSize)

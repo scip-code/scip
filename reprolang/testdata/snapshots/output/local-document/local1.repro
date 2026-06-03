@@ -4,7 +4,7 @@
 #                         documentation
 #                         > signature of Example
 #                         documentation
-#                         > : local is a local method
+#                         > local is a local method
  reference local Example
 #          ^^^^^^^^^^^^^ reference local Example
  

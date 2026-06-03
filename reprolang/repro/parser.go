@@ -1,6 +1,8 @@
 package repro
 
 import (
+	"strings"
+
 	sitter "github.com/tree-sitter/go-tree-sitter"
 
 	reproGrammar "github.com/scip-code/scip/reprolang/grammar"
@@ -32,20 +34,20 @@ func (s *reproSourceFile) loadStatements() {
 			docstring := ""
 			docstringNode := child.ChildByFieldName("docstring")
 			if docstringNode != nil {
-				docstring = s.nodeText(docstringNode)[len("# doctring:"):]
+				docstring = strings.TrimSpace(strings.TrimPrefix(s.nodeText(docstringNode), "# docstring:"))
 			}
 			name := newIdentifier(s, child.ChildByFieldName("name"))
 			relations := relationships{}
 			for i := uint(0); i < child.NamedChildCount(); i++ {
 				relation := child.NamedChild(i)
 				switch relation.Kind() {
-				case "implementation_relation":
+				case "implements":
 					relations.implementsRelation = newIdentifier(s, relation.ChildByFieldName("name"))
-				case "type_definition_relation":
+				case "type_defines":
 					relations.typeDefinesRelation = newIdentifier(s, relation.ChildByFieldName("name"))
-				case "references_relation":
+				case "references":
 					relations.referencesRelation = newIdentifier(s, relation.ChildByFieldName("name"))
-				case "defined_by_relation":
+				case "defined_by":
 					relations.definedByRelation = newIdentifier(s, relation.ChildByFieldName("name"))
 				}
 			}
@@ -62,9 +64,16 @@ func (s *reproSourceFile) loadStatements() {
 				})
 			}
 		case "reference_statement":
+			isForwardDef := false
+			for i := uint(0); i < child.NamedChildCount(); i++ {
+				if child.NamedChild(i).Kind() == "forward_definition" {
+					isForwardDef = true
+					break
+				}
+			}
 			s.references = append(s.references, &referenceStatement{
 				name:         newIdentifier(s, child.ChildByFieldName("name")),
-				isForwardDef: child.ChildByFieldName("forward_definition") != nil,
+				isForwardDef: isForwardDef,
 			})
 		}
 	}

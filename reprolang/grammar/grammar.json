@@ -11,32 +11,23 @@
       }
     },
     "_statement": {
-      "type": "SEQ",
+      "type": "CHOICE",
       "members": [
         {
-          "type": "CHOICE",
-          "members": [
-            {
-              "type": "SYMBOL",
-              "name": "definition_statement"
-            },
-            {
-              "type": "SYMBOL",
-              "name": "reference_statement"
-            },
-            {
-              "type": "SYMBOL",
-              "name": "relationships_statement"
-            },
-            {
-              "type": "SYMBOL",
-              "name": "comment"
-            }
-          ]
+          "type": "SYMBOL",
+          "name": "definition_statement"
         },
         {
-          "type": "STRING",
-          "value": "\n"
+          "type": "SYMBOL",
+          "name": "reference_statement"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "relationships_statement"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "comment"
         }
       ]
     },
@@ -50,17 +41,8 @@
             "type": "CHOICE",
             "members": [
               {
-                "type": "SEQ",
-                "members": [
-                  {
-                    "type": "SYMBOL",
-                    "name": "docstring"
-                  },
-                  {
-                    "type": "STRING",
-                    "value": "\n"
-                  }
-                ]
+                "type": "SYMBOL",
+                "name": "docstring"
               },
               {
                 "type": "BLANK"
@@ -82,7 +64,7 @@
         },
         {
           "type": "FIELD",
-          "name": "roles",
+          "name": "relations",
           "content": {
             "type": "REPEAT",
             "content": {
@@ -101,20 +83,16 @@
           "value": "reference"
         },
         {
-          "type": "FIELD",
-          "name": "forward_definition",
-          "content": {
-            "type": "CHOICE",
-            "members": [
-              {
-                "type": "STRING",
-                "value": "forward_definition"
-              },
-              {
-                "type": "BLANK"
-              }
-            ]
-          }
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "forward_definition"
+            },
+            {
+              "type": "BLANK"
+            }
+          ]
         },
         {
           "type": "FIELD",
@@ -126,24 +104,28 @@
         }
       ]
     },
+    "forward_definition": {
+      "type": "STRING",
+      "value": "forward_definition"
+    },
     "_definition_relations": {
       "type": "CHOICE",
       "members": [
         {
           "type": "SYMBOL",
-          "name": "implementation_relation"
+          "name": "implements"
         },
         {
           "type": "SYMBOL",
-          "name": "type_definition_relation"
+          "name": "type_defines"
         },
         {
           "type": "SYMBOL",
-          "name": "references_relation"
+          "name": "references"
         }
       ]
     },
-    "implementation_relation": {
+    "implements": {
       "type": "SEQ",
       "members": [
         {
@@ -160,7 +142,7 @@
         }
       ]
     },
-    "type_definition_relation": {
+    "type_defines": {
       "type": "SEQ",
       "members": [
         {
@@ -177,7 +159,7 @@
         }
       ]
     },
-    "references_relation": {
+    "references": {
       "type": "SEQ",
       "members": [
         {
@@ -211,7 +193,7 @@
         },
         {
           "type": "FIELD",
-          "name": "roles",
+          "name": "relations",
           "content": {
             "type": "REPEAT",
             "content": {
@@ -231,11 +213,11 @@
         },
         {
           "type": "SYMBOL",
-          "name": "defined_by_relation"
+          "name": "defined_by"
         }
       ]
     },
-    "defined_by_relation": {
+    "defined_by": {
       "type": "SEQ",
       "members": [
         {

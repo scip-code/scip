@@ -15,8 +15,8 @@ deterministic test cases for any SCIP capability.
 Reprolang supports two levels of symbol scope:
 
 - **Global** (default): Visible across all files in the same project.
-  No keyword needed. Use the `global` keyword with a project name and
-  descriptors to reference symbols from an external project/dependency.
+  No keyword needed. To reference a symbol defined in another project, write
+  the project name followed by the descriptors.
 - **Local**: Scoped to a single file. Use the `local` keyword.
 
 ## Example
@@ -34,8 +34,8 @@ reference local myHelper
 reference forward_definition abc#
 definition abc#
 
-# Cross-repo reference
-reference global other-repo animal#
+# Cross-repo reference (project name + descriptors)
+reference other-repo animal#
 
 # Relationships
 definition dog# implements animal#

@@ -1,3 +1,5 @@
+// Reprolang grammar. See README.md for an overview and ./testdata/snapshots
+// for examples.
 module.exports = grammar({
   name: 'reprolang',
   extras: $ => [/\s+/],
@@ -6,39 +8,31 @@ module.exports = grammar({
   rules: {
     source_file: $ => repeat($._statement),
     _statement: $ =>
-      seq(
-        choice(
-          $.definition_statement,
-          $.reference_statement,
-          $.relationships_statement,
-          $.comment
-        ),
-        '\n'
+      choice(
+        $.definition_statement,
+        $.reference_statement,
+        $.relationships_statement,
+        $.comment
       ),
     definition_statement: $ =>
       seq(
-        field('docstring', optional(seq($.docstring, '\n'))),
+        field('docstring', optional($.docstring)),
         'definition',
         field('name', $.identifier),
-        field('roles', repeat($._definition_relations))
+        field('relations', repeat($._definition_relations))
       ),
     reference_statement: $ =>
       seq(
         'reference',
-        field('forward_definition', optional('forward_definition')),
+        optional($.forward_definition),
         field('name', $.identifier)
       ),
+    forward_definition: $ => 'forward_definition',
     _definition_relations: $ =>
-      choice(
-        $.implementation_relation,
-        $.type_definition_relation,
-        $.references_relation
-      ),
-    implementation_relation: $ =>
-      seq('implements', field('name', $.identifier)),
-    type_definition_relation: $ =>
-      seq('type_defines', field('name', $.identifier)),
-    references_relation: $ => seq('references', field('name', $.identifier)),
+      choice($.implements, $.type_defines, $.references),
+    implements: $ => seq('implements', field('name', $.identifier)),
+    type_defines: $ => seq('type_defines', field('name', $.identifier)),
+    references: $ => seq('references', field('name', $.identifier)),
     // Meant to be used primarily when trying to construct indexes with
     // relationships for symbols which lack a definition themselves,
     // and are defined by some other symbol.
@@ -46,10 +40,10 @@ module.exports = grammar({
       seq(
         'relationships',
         field('name', $.identifier),
-        field('roles', repeat($._all_relations))
+        field('relations', repeat($._all_relations))
       ),
-    _all_relations: $ => choice($._definition_relations, $.defined_by_relation),
-    defined_by_relation: $ => seq('defined_by', field('name', $.identifier)),
+    _all_relations: $ => choice($._definition_relations, $.defined_by),
+    defined_by: $ => seq('defined_by', field('name', $.identifier)),
     comment: $ => seq('#', /.*/),
     docstring: $ => seq('# docstring:', /.*/),
     identifier: $ =>

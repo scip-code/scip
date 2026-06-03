@@ -5,7 +5,7 @@
     "fields": {}
   },
   {
-    "type": "defined_by_relation",
+    "type": "defined_by",
     "named": true,
     "fields": {
       "name": {
@@ -25,13 +25,9 @@
     "named": true,
     "fields": {
       "docstring": {
-        "multiple": true,
+        "multiple": false,
         "required": false,
         "types": [
-          {
-            "type": "\n",
-            "named": false
-          },
           {
             "type": "docstring",
             "named": true
@@ -48,20 +44,20 @@
           }
         ]
       },
-      "roles": {
+      "relations": {
         "multiple": true,
         "required": false,
         "types": [
           {
-            "type": "implementation_relation",
+            "type": "implements",
             "named": true
           },
           {
-            "type": "references_relation",
+            "type": "references",
             "named": true
           },
           {
-            "type": "type_definition_relation",
+            "type": "type_defines",
             "named": true
           }
         ]
@@ -136,7 +132,7 @@
     }
   },
   {
-    "type": "implementation_relation",
+    "type": "implements",
     "named": true,
     "fields": {
       "name": {
@@ -171,16 +167,6 @@
     "type": "reference_statement",
     "named": true,
     "fields": {
-      "forward_definition": {
-        "multiple": false,
-        "required": false,
-        "types": [
-          {
-            "type": "forward_definition",
-            "named": false
-          }
-        ]
-      },
       "name": {
         "multiple": false,
         "required": true,
@@ -191,10 +177,20 @@
           }
         ]
       }
+    },
+    "children": {
+      "multiple": false,
+      "required": false,
+      "types": [
+        {
+          "type": "forward_definition",
+          "named": true
+        }
+      ]
     }
   },
   {
-    "type": "references_relation",
+    "type": "references",
     "named": true,
     "fields": {
       "name": {
@@ -223,24 +219,24 @@
           }
         ]
       },
-      "roles": {
+      "relations": {
         "multiple": true,
         "required": false,
         "types": [
           {
-            "type": "defined_by_relation",
+            "type": "defined_by",
             "named": true
           },
           {
-            "type": "implementation_relation",
+            "type": "implements",
             "named": true
           },
           {
-            "type": "references_relation",
+            "type": "references",
             "named": true
           },
           {
-            "type": "type_definition_relation",
+            "type": "type_defines",
             "named": true
           }
         ]
@@ -276,7 +272,7 @@
     }
   },
   {
-    "type": "type_definition_relation",
+    "type": "type_defines",
     "named": true,
     "fields": {
       "name": {
@@ -290,10 +286,6 @@
         ]
       }
     }
-  },
-  {
-    "type": "\n",
-    "named": false
   },
   {
     "type": "#",
@@ -313,7 +305,7 @@
   },
   {
     "type": "forward_definition",
-    "named": false
+    "named": true
   },
   {
     "type": "implements",

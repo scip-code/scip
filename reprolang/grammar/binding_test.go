@@ -17,7 +17,7 @@ func TestParse(t *testing.T) {
 	tree := parser.Parse([]byte("definition a implements b\n"), nil)
 	defer tree.Close()
 	assert.Equal(
-		"(source_file (definition_statement name: (identifier (name)) roles: (implementation_relation name: (identifier (name)))))",
+		"(source_file (definition_statement name: (identifier (name)) relations: (implements name: (identifier (name)))))",
 		tree.RootNode().ToSexp(),
 	)
 }

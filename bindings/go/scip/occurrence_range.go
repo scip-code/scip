@@ -29,27 +29,40 @@ func (occ *Occurrence) EnclosingSourceRange() (Range, bool) {
 	return NewRangeUnchecked(occ.EnclosingRange), true
 }
 
+// AsTypedRange returns this range as the appropriate Occurrence.TypedRange
+// oneof variant (SingleLineRange when r fits on one line, MultiLineRange
+// otherwise). Useful for setting the source range directly in an Occurrence
+// struct literal:
+//
+//	&Occurrence{TypedRange: r.AsTypedRange(), ...}
+func (r Range) AsTypedRange() isOccurrence_TypedRange {
+	if r.IsSingleLine() {
+		return &Occurrence_SingleLineRange{SingleLineRange: r.ToSingleLineRange()}
+	}
+	return &Occurrence_MultiLineRange{MultiLineRange: r.ToMultiLineRange()}
+}
+
+// AsTypedEnclosingRange is the counterpart of AsTypedRange for the
+// `typed_enclosing_range` oneof.
+func (r Range) AsTypedEnclosingRange() isOccurrence_TypedEnclosingRange {
+	if r.IsSingleLine() {
+		return &Occurrence_SingleLineEnclosingRange{SingleLineEnclosingRange: r.ToSingleLineRange()}
+	}
+	return &Occurrence_MultiLineEnclosingRange{MultiLineEnclosingRange: r.ToMultiLineRange()}
+}
+
 // SetSourceRange sets the source range using the typed `typed_range` encoding
-// (SingleLineRange when r fits on one line, MultiLineRange otherwise) and
-// clears the deprecated `range` field.
+// and clears the deprecated `range` field.
 func (occ *Occurrence) SetSourceRange(r Range) {
 	occ.Range = nil
-	if r.IsSingleLine() {
-		occ.TypedRange = &Occurrence_SingleLineRange{SingleLineRange: r.ToSingleLineRange()}
-		return
-	}
-	occ.TypedRange = &Occurrence_MultiLineRange{MultiLineRange: r.ToMultiLineRange()}
+	occ.TypedRange = r.AsTypedRange()
 }
 
 // SetEnclosingSourceRange is the counterpart of SetSourceRange for the
 // enclosing range.
 func (occ *Occurrence) SetEnclosingSourceRange(r Range) {
 	occ.EnclosingRange = nil
-	if r.IsSingleLine() {
-		occ.TypedEnclosingRange = &Occurrence_SingleLineEnclosingRange{SingleLineEnclosingRange: r.ToSingleLineRange()}
-		return
-	}
-	occ.TypedEnclosingRange = &Occurrence_MultiLineEnclosingRange{MultiLineEnclosingRange: r.ToMultiLineRange()}
+	occ.TypedEnclosingRange = r.AsTypedEnclosingRange()
 }
 
 // Compare orders occurrences in the canonical SCIP ordering: ascending by

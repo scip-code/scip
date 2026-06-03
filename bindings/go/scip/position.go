@@ -139,6 +139,27 @@ func (r Range) SCIPRange() []int32 {
 	return []int32{r.Start.Line, r.Start.Character, r.End.Line, r.End.Character}
 }
 
+// ToSingleLineRange returns r as a SingleLineRange.
+//
+// Pre-condition: r.IsSingleLine() must be true.
+func (r Range) ToSingleLineRange() *SingleLineRange {
+	return &SingleLineRange{
+		Line:           r.Start.Line,
+		StartCharacter: r.Start.Character,
+		EndCharacter:   r.End.Character,
+	}
+}
+
+// ToMultiLineRange returns r as a MultiLineRange.
+func (r Range) ToMultiLineRange() *MultiLineRange {
+	return &MultiLineRange{
+		StartLine:      r.Start.Line,
+		StartCharacter: r.Start.Character,
+		EndLine:        r.End.Line,
+		EndCharacter:   r.End.Character,
+	}
+}
+
 // Contains checks if position is within the range
 func (r Range) Contains(position Position) bool {
 	return !position.Less(r.Start) && position.Less(r.End)

@@ -33,10 +33,10 @@ func (occ *Occurrence) EnclosingSourceRange() (Range, bool) {
 func (occ *Occurrence) SetSourceRange(r Range) {
 	occ.Range = nil
 	if r.IsSingleLine() {
-		occ.TypedRange = &Occurrence_SingleLineRange{SingleLineRange: rangeToSingleLine(r)}
+		occ.TypedRange = &Occurrence_SingleLineRange{SingleLineRange: r.ToSingleLineRange()}
 		return
 	}
-	occ.TypedRange = &Occurrence_MultiLineRange{MultiLineRange: rangeToMultiLine(r)}
+	occ.TypedRange = &Occurrence_MultiLineRange{MultiLineRange: r.ToMultiLineRange()}
 }
 
 // SetEnclosingSourceRange is the counterpart of SetSourceRange for the
@@ -44,10 +44,26 @@ func (occ *Occurrence) SetSourceRange(r Range) {
 func (occ *Occurrence) SetEnclosingSourceRange(r Range) {
 	occ.EnclosingRange = nil
 	if r.IsSingleLine() {
-		occ.TypedEnclosingRange = &Occurrence_SingleLineEnclosingRange{SingleLineEnclosingRange: rangeToSingleLine(r)}
+		occ.TypedEnclosingRange = &Occurrence_SingleLineEnclosingRange{SingleLineEnclosingRange: r.ToSingleLineRange()}
 		return
 	}
-	occ.TypedEnclosingRange = &Occurrence_MultiLineEnclosingRange{MultiLineEnclosingRange: rangeToMultiLine(r)}
+	occ.TypedEnclosingRange = &Occurrence_MultiLineEnclosingRange{MultiLineEnclosingRange: r.ToMultiLineRange()}
+}
+
+// ToRange returns this single-line range as a Range.
+func (sr *SingleLineRange) ToRange() Range {
+	return Range{
+		Start: Position{Line: sr.Line, Character: sr.StartCharacter},
+		End:   Position{Line: sr.Line, Character: sr.EndCharacter},
+	}
+}
+
+// ToRange returns this multi-line range as a Range.
+func (mr *MultiLineRange) ToRange() Range {
+	return Range{
+		Start: Position{Line: mr.StartLine, Character: mr.StartCharacter},
+		End:   Position{Line: mr.EndLine, Character: mr.EndCharacter},
+	}
 }
 
 // readTypedRange decodes any of the four typed-range oneof variants on
@@ -55,44 +71,13 @@ func (occ *Occurrence) SetEnclosingSourceRange(r Range) {
 func readTypedRange(typed any) (Range, bool) {
 	switch tr := typed.(type) {
 	case *Occurrence_SingleLineRange:
-		return singleLineToRange(tr.SingleLineRange), true
+		return tr.SingleLineRange.ToRange(), true
 	case *Occurrence_MultiLineRange:
-		return multiLineToRange(tr.MultiLineRange), true
+		return tr.MultiLineRange.ToRange(), true
 	case *Occurrence_SingleLineEnclosingRange:
-		return singleLineToRange(tr.SingleLineEnclosingRange), true
+		return tr.SingleLineEnclosingRange.ToRange(), true
 	case *Occurrence_MultiLineEnclosingRange:
-		return multiLineToRange(tr.MultiLineEnclosingRange), true
+		return tr.MultiLineEnclosingRange.ToRange(), true
 	}
 	return Range{}, false
-}
-
-func singleLineToRange(sr *SingleLineRange) Range {
-	return Range{
-		Start: Position{Line: sr.Line, Character: sr.StartCharacter},
-		End:   Position{Line: sr.Line, Character: sr.EndCharacter},
-	}
-}
-
-func multiLineToRange(mr *MultiLineRange) Range {
-	return Range{
-		Start: Position{Line: mr.StartLine, Character: mr.StartCharacter},
-		End:   Position{Line: mr.EndLine, Character: mr.EndCharacter},
-	}
-}
-
-func rangeToSingleLine(r Range) *SingleLineRange {
-	return &SingleLineRange{
-		Line:           r.Start.Line,
-		StartCharacter: r.Start.Character,
-		EndCharacter:   r.End.Character,
-	}
-}
-
-func rangeToMultiLine(r Range) *MultiLineRange {
-	return &MultiLineRange{
-		StartLine:      r.Start.Line,
-		StartCharacter: r.Start.Character,
-		EndLine:        r.End.Line,
-		EndCharacter:   r.End.Character,
-	}
 }

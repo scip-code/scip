@@ -30,7 +30,7 @@ func CanonicalizeOccurrences(occurrences []*Occurrence) []*Occurrence {
 func RemoveIllegalOccurrences(occurrences []*Occurrence) []*Occurrence {
 	filtered := occurrences[:0]
 	for _, occurrence := range occurrences {
-		if !HasOccurrenceRange(occurrence) {
+		if _, ok := OccurrenceRange(occurrence); !ok {
 			continue
 		}
 

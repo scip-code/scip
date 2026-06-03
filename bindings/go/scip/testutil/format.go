@@ -82,8 +82,9 @@ func FormatSnapshot(
 	}
 	symtab := document.SymbolTable()
 	sort.SliceStable(document.Occurrences, func(i, j int) bool {
-		return scip.OccurrenceRangeUnchecked(document.Occurrences[i]).
-			LessStrict(scip.OccurrenceRangeUnchecked(document.Occurrences[j]))
+		ri, _ := scip.OccurrenceRange(document.Occurrences[i])
+		rj, _ := scip.OccurrenceRange(document.Occurrences[j])
+		return ri.LessStrict(rj)
 	})
 	var formattingError error
 	formatSymbol := func(symbol string) string {
@@ -113,9 +114,12 @@ func FormatSnapshot(
 		b.WriteString(strings.Repeat(" ", len(commentSyntax)))
 		b.WriteString(strings.ReplaceAll(line, "\t", " "))
 		b.WriteString("\n")
-		for i < len(document.Occurrences) && scip.OccurrenceRangeUnchecked(document.Occurrences[i]).Start.Line == int32(lineNumber) {
+		for i < len(document.Occurrences) {
 			occ := document.Occurrences[i]
-			pos := scip.OccurrenceRangeUnchecked(occ)
+			pos, _ := scip.OccurrenceRange(occ)
+			if pos.Start.Line != int32(lineNumber) {
+				break
+			}
 			if !pos.IsSingleLine() {
 				i++
 				continue
@@ -291,7 +295,7 @@ type enclosingRange struct {
 func enclosingRanges(occurrences []*scip.Occurrence) []enclosingRange {
 	var enclosingRanges []enclosingRange
 	for _, occ := range occurrences {
-		if r, ok, _ := scip.OccurrenceEnclosingRange(occ); ok {
+		if r, ok := scip.OccurrenceEnclosingRange(occ); ok {
 			enclosingRanges = append(enclosingRanges, enclosingRange{
 				Range:  r,
 				Symbol: occ.Symbol,

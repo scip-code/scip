@@ -12,10 +12,9 @@ func TestOccurrenceRange_TypedSingleLine(t *testing.T) {
 			SingleLineRange: &SingleLineRange{Line: 5, StartCharacter: 2, EndCharacter: 7},
 		},
 	}
-	r, err := OccurrenceRange(occ)
-	require.NoError(t, err)
+	r, ok := OccurrenceRange(occ)
+	require.True(t, ok)
 	require.Equal(t, Range{Start: Position{5, 2}, End: Position{5, 7}}, r)
-	require.True(t, HasOccurrenceRange(occ))
 }
 
 func TestOccurrenceRange_TypedMultiLine(t *testing.T) {
@@ -24,15 +23,15 @@ func TestOccurrenceRange_TypedMultiLine(t *testing.T) {
 			MultiLineRange: &MultiLineRange{StartLine: 1, StartCharacter: 2, EndLine: 3, EndCharacter: 4},
 		},
 	}
-	r, err := OccurrenceRange(occ)
-	require.NoError(t, err)
+	r, ok := OccurrenceRange(occ)
+	require.True(t, ok)
 	require.Equal(t, Range{Start: Position{1, 2}, End: Position{3, 4}}, r)
 }
 
 func TestOccurrenceRange_DeprecatedFallback(t *testing.T) {
 	occ := &Occurrence{Range: []int32{2, 3, 5}}
-	r, err := OccurrenceRange(occ)
-	require.NoError(t, err)
+	r, ok := OccurrenceRange(occ)
+	require.True(t, ok)
 	require.Equal(t, Range{Start: Position{2, 3}, End: Position{2, 5}}, r)
 }
 
@@ -44,25 +43,23 @@ func TestOccurrenceRange_TypedTakesPrecedenceOverDeprecated(t *testing.T) {
 			SingleLineRange: &SingleLineRange{Line: 5, StartCharacter: 2, EndCharacter: 7},
 		},
 	}
-	r, err := OccurrenceRange(occ)
-	require.NoError(t, err)
+	r, ok := OccurrenceRange(occ)
+	require.True(t, ok)
 	require.Equal(t, Range{Start: Position{5, 2}, End: Position{5, 7}}, r)
-
-	require.Equal(t, Range{Start: Position{5, 2}, End: Position{5, 7}}, OccurrenceRangeUnchecked(occ))
 }
 
 func TestOccurrenceRange_Missing(t *testing.T) {
 	occ := &Occurrence{}
-	_, err := OccurrenceRange(occ)
-	require.ErrorIs(t, err, ErrMissingRange)
-	require.False(t, HasOccurrenceRange(occ))
-	require.Equal(t, Range{}, OccurrenceRangeUnchecked(occ))
+	r, ok := OccurrenceRange(occ)
+	require.False(t, ok)
+	require.Equal(t, Range{}, r)
 }
 
 func TestOccurrenceRange_DeprecatedMalformed(t *testing.T) {
-	occ := &Occurrence{Range: []int32{1, 2}}
-	_, err := OccurrenceRange(occ)
-	require.Error(t, err)
+	occ := &Occurrence{Range: []int32{1, 2}} // wrong length
+	r, ok := OccurrenceRange(occ)
+	require.False(t, ok)
+	require.Equal(t, Range{}, r)
 }
 
 func TestOccurrenceEnclosingRange_TypedSingleLine(t *testing.T) {
@@ -71,8 +68,7 @@ func TestOccurrenceEnclosingRange_TypedSingleLine(t *testing.T) {
 			SingleLineEnclosingRange: &SingleLineRange{Line: 5, StartCharacter: 0, EndCharacter: 10},
 		},
 	}
-	r, ok, err := OccurrenceEnclosingRange(occ)
-	require.NoError(t, err)
+	r, ok := OccurrenceEnclosingRange(occ)
 	require.True(t, ok)
 	require.Equal(t, Range{Start: Position{5, 0}, End: Position{5, 10}}, r)
 }
@@ -83,16 +79,14 @@ func TestOccurrenceEnclosingRange_TypedMultiLine(t *testing.T) {
 			MultiLineEnclosingRange: &MultiLineRange{StartLine: 1, StartCharacter: 0, EndLine: 9, EndCharacter: 1},
 		},
 	}
-	r, ok, err := OccurrenceEnclosingRange(occ)
-	require.NoError(t, err)
+	r, ok := OccurrenceEnclosingRange(occ)
 	require.True(t, ok)
 	require.Equal(t, Range{Start: Position{1, 0}, End: Position{9, 1}}, r)
 }
 
 func TestOccurrenceEnclosingRange_DeprecatedFallback(t *testing.T) {
 	occ := &Occurrence{EnclosingRange: []int32{2, 0, 5, 1}}
-	r, ok, err := OccurrenceEnclosingRange(occ)
-	require.NoError(t, err)
+	r, ok := OccurrenceEnclosingRange(occ)
 	require.True(t, ok)
 	require.Equal(t, Range{Start: Position{2, 0}, End: Position{5, 1}}, r)
 }
@@ -104,16 +98,14 @@ func TestOccurrenceEnclosingRange_TypedTakesPrecedence(t *testing.T) {
 			SingleLineEnclosingRange: &SingleLineRange{Line: 5, StartCharacter: 0, EndCharacter: 10},
 		},
 	}
-	r, ok, err := OccurrenceEnclosingRange(occ)
-	require.NoError(t, err)
+	r, ok := OccurrenceEnclosingRange(occ)
 	require.True(t, ok)
 	require.Equal(t, Range{Start: Position{5, 0}, End: Position{5, 10}}, r)
 }
 
 func TestOccurrenceEnclosingRange_Missing(t *testing.T) {
 	occ := &Occurrence{}
-	r, ok, err := OccurrenceEnclosingRange(occ)
-	require.NoError(t, err)
+	r, ok := OccurrenceEnclosingRange(occ)
 	require.False(t, ok)
 	require.Equal(t, Range{}, r)
 }
@@ -126,8 +118,8 @@ func TestSetOccurrenceRange_SingleLine(t *testing.T) {
 	require.True(t, ok)
 	require.Equal(t, &SingleLineRange{Line: 3, StartCharacter: 1, EndCharacter: 8}, tr.SingleLineRange)
 
-	r, err := OccurrenceRange(occ)
-	require.NoError(t, err)
+	r, ok := OccurrenceRange(occ)
+	require.True(t, ok)
 	require.Equal(t, Range{Start: Position{3, 1}, End: Position{3, 8}}, r)
 }
 

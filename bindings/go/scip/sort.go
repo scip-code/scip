@@ -49,14 +49,16 @@ func FindOccurrences(occurrences []*Occurrence, targetLine, targetCharacter int3
 	var filtered []*Occurrence
 	pos := Position{targetLine, targetCharacter}
 	for _, occurrence := range occurrences {
-		if OccurrenceRangeUnchecked(occurrence).Contains(pos) {
+		if r, _ := OccurrenceRange(occurrence); r.Contains(pos) {
 			filtered = append(filtered, occurrence)
 		}
 	}
 
 	sort.Slice(filtered, func(i, j int) bool {
 		// Ordered so that the least precise (largest) range comes last
-		return OccurrenceRangeUnchecked(filtered[i]).CompareStrict(OccurrenceRangeUnchecked(filtered[j])) > 0
+		ri, _ := OccurrenceRange(filtered[i])
+		rj, _ := OccurrenceRange(filtered[j])
+		return ri.CompareStrict(rj) > 0
 	})
 
 	return filtered
@@ -68,8 +70,8 @@ func FindOccurrences(occurrences []*Occurrence, targetLine, targetCharacter int3
 // occurrences are sorted by symbol name.
 func SortOccurrences(occurrences []*Occurrence) []*Occurrence {
 	sort.Slice(occurrences, func(i, j int) bool {
-		r1 := OccurrenceRangeUnchecked(occurrences[i])
-		r2 := OccurrenceRangeUnchecked(occurrences[j])
+		r1, _ := OccurrenceRange(occurrences[i])
+		r2, _ := OccurrenceRange(occurrences[j])
 		if ret := r1.CompareStrict(r2); ret != 0 {
 			return ret < 0
 		}
@@ -83,8 +85,8 @@ func SortOccurrences(occurrences []*Occurrence) []*Occurrence {
 // equality, normalizing across the deprecated `repeated int32` and the typed
 // `typed_range` encodings.
 func occurrenceRangesEqual(a, b *Occurrence) bool {
-	ra := OccurrenceRangeUnchecked(a)
-	rb := OccurrenceRangeUnchecked(b)
+	ra, _ := OccurrenceRange(a)
+	rb, _ := OccurrenceRange(b)
 	return ra.CompareStrict(rb) == 0
 }
 

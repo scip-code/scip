@@ -167,6 +167,16 @@
     "type": "reference_statement",
     "named": true,
     "fields": {
+      "forward_definition": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "forward_definition",
+            "named": true
+          }
+        ]
+      },
       "name": {
         "multiple": false,
         "required": true,
@@ -177,16 +187,6 @@
           }
         ]
       }
-    },
-    "children": {
-      "multiple": false,
-      "required": false,
-      "types": [
-        {
-          "type": "forward_definition",
-          "named": true
-        }
-      ]
     }
   },
   {

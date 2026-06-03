@@ -13,7 +13,7 @@
 #define ALIAS_COUNT 0
 #define TOKEN_COUNT 14
 #define EXTERNAL_TOKEN_COUNT 0
-#define FIELD_COUNT 7
+#define FIELD_COUNT 8
 #define MAX_ALIAS_SEQUENCE_LENGTH 4
 #define MAX_RESERVED_WORD_SET_SIZE 0
 #define PRODUCTION_ID_COUNT 9
@@ -264,17 +264,19 @@ static const TSSymbolMetadata ts_symbol_metadata[] = {
 enum ts_field_identifiers {
   field_descriptors = 1,
   field_docstring = 2,
-  field_global = 3,
-  field_local = 4,
-  field_name = 5,
-  field_project_name = 6,
-  field_relations = 7,
+  field_forward_definition = 3,
+  field_global = 4,
+  field_local = 5,
+  field_name = 6,
+  field_project_name = 7,
+  field_relations = 8,
 };
 
 static const char * const ts_field_names[] = {
   [0] = NULL,
   [field_descriptors] = "descriptors",
   [field_docstring] = "docstring",
+  [field_forward_definition] = "forward_definition",
   [field_global] = "global",
   [field_local] = "local",
   [field_name] = "name",
@@ -288,9 +290,9 @@ static const TSMapSlice ts_field_map_slices[PRODUCTION_ID_COUNT] = {
   [3] = {.index = 2, .length = 1},
   [4] = {.index = 3, .length = 2},
   [5] = {.index = 5, .length = 2},
-  [6] = {.index = 7, .length = 1},
-  [7] = {.index = 8, .length = 2},
-  [8] = {.index = 10, .length = 3},
+  [6] = {.index = 7, .length = 2},
+  [7] = {.index = 9, .length = 2},
+  [8] = {.index = 11, .length = 3},
 };
 
 static const TSFieldMapEntry ts_field_map_entries[] = {
@@ -307,11 +309,12 @@ static const TSFieldMapEntry ts_field_map_entries[] = {
     {field_name, 1},
     {field_relations, 2},
   [7] =
+    {field_forward_definition, 1},
     {field_name, 2},
-  [8] =
+  [9] =
     {field_docstring, 0},
     {field_name, 2},
-  [10] =
+  [11] =
     {field_docstring, 0},
     {field_name, 2},
     {field_relations, 3},

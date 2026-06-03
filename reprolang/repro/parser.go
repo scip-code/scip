@@ -23,58 +23,51 @@ func parseSourceFile(source *scip.SourceFile) (*reproSourceFile, error) {
 }
 
 func (s *reproSourceFile) loadStatements() {
-	for i := uint(0); i < s.node.ChildCount(); i++ {
-		child := s.node.Child(i)
-		name := child.ChildByFieldName("name")
-		if name == nil {
-			continue
-		}
+	for i := uint(0); i < s.node.NamedChildCount(); i++ {
+		child := s.node.NamedChild(i)
 		switch child.Kind() {
-		case "relationships_statement", "definition_statement":
-			docstring := ""
-			docstringNode := child.ChildByFieldName("docstring")
-			if docstringNode != nil {
-				docstring = strings.TrimSpace(strings.TrimPrefix(s.nodeText(docstringNode), "# docstring:"))
-			}
-			name := newIdentifier(s, child.ChildByFieldName("name"))
-			relations := relationships{}
-			for i := uint(0); i < child.NamedChildCount(); i++ {
-				relation := child.NamedChild(i)
-				switch relation.Kind() {
-				case "implements":
-					relations.implementsRelation = newIdentifier(s, relation.ChildByFieldName("name"))
-				case "type_defines":
-					relations.typeDefinesRelation = newIdentifier(s, relation.ChildByFieldName("name"))
-				case "references":
-					relations.referencesRelation = newIdentifier(s, relation.ChildByFieldName("name"))
-				case "defined_by":
-					relations.definedByRelation = newIdentifier(s, relation.ChildByFieldName("name"))
-				}
-			}
-			if child.Kind() == "definition_statement" {
-				s.definitions = append(s.definitions, &definitionStatement{
-					docstring: docstring,
-					name:      name,
-					relations: relations,
-				})
-			} else {
-				s.relationships = append(s.relationships, &relationshipsStatement{
-					name:      name,
-					relations: relations,
-				})
-			}
+		case "definition_statement":
+			s.definitions = append(s.definitions, &definitionStatement{
+				docstring: s.parseDocstring(child),
+				name:      newIdentifier(s, child.ChildByFieldName("name")),
+				relations: s.parseRelations(child),
+			})
+		case "relationships_statement":
+			s.relationships = append(s.relationships, &relationshipsStatement{
+				name:      newIdentifier(s, child.ChildByFieldName("name")),
+				relations: s.parseRelations(child),
+			})
 		case "reference_statement":
-			isForwardDef := false
-			for i := uint(0); i < child.NamedChildCount(); i++ {
-				if child.NamedChild(i).Kind() == "forward_definition" {
-					isForwardDef = true
-					break
-				}
-			}
 			s.references = append(s.references, &referenceStatement{
 				name:         newIdentifier(s, child.ChildByFieldName("name")),
-				isForwardDef: isForwardDef,
+				isForwardDef: child.ChildByFieldName("forward_definition") != nil,
 			})
 		}
 	}
+}
+
+func (s *reproSourceFile) parseDocstring(node *sitter.Node) string {
+	docstring := node.ChildByFieldName("docstring")
+	if docstring == nil {
+		return ""
+	}
+	return strings.TrimSpace(strings.TrimPrefix(s.nodeText(docstring), "# docstring:"))
+}
+
+func (s *reproSourceFile) parseRelations(node *sitter.Node) relationships {
+	rels := relationships{}
+	for i := uint(0); i < node.NamedChildCount(); i++ {
+		child := node.NamedChild(i)
+		switch child.Kind() {
+		case "implements":
+			rels.implementsRelation = newIdentifier(s, child.ChildByFieldName("name"))
+		case "type_defines":
+			rels.typeDefinesRelation = newIdentifier(s, child.ChildByFieldName("name"))
+		case "references":
+			rels.referencesRelation = newIdentifier(s, child.ChildByFieldName("name"))
+		case "defined_by":
+			rels.definedByRelation = newIdentifier(s, child.ChildByFieldName("name"))
+		}
+	}
+	return rels
 }

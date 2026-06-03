@@ -1,4 +1,4 @@
-cabal-version:      3.12
+cabal-version:      3.6
 
 name:               scip
 version:            0.8.0
@@ -32,7 +32,7 @@ library
         Proto.Scip,
         Proto.Scip_Fields
     hs-source-dirs:   src
-    default-language: GHC2024
+    default-language: GHC2021
     build-depends:
         proto-lens-runtime ^>= 0.7.0.0,
         base               >= 4.20 && < 5

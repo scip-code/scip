@@ -3,8 +3,7 @@ package scip
 // CanonicalizeDocument deterministically sorts and merges fields of the given document.
 //
 // Post-conditions:
-//  1. The Occurrences field only contains those with well-formed ranges
-//     (length 3 or 4, potentially empty).
+//  1. The Occurrences field only contains those with well-formed ranges.
 //  2. The Occurrences field is sorted in ascending order of ranges based on
 //     Range.CompareStrict
 //  3. The Symbols field is sorted in ascending order based on the symbol name,
@@ -31,7 +30,7 @@ func CanonicalizeOccurrences(occurrences []*Occurrence) []*Occurrence {
 func RemoveIllegalOccurrences(occurrences []*Occurrence) []*Occurrence {
 	filtered := occurrences[:0]
 	for _, occurrence := range occurrences {
-		if len(occurrence.Range) != 3 && len(occurrence.Range) != 4 {
+		if !HasOccurrenceRange(occurrence) {
 			continue
 		}
 
@@ -42,9 +41,16 @@ func RemoveIllegalOccurrences(occurrences []*Occurrence) []*Occurrence {
 }
 
 // CanonicalizeOccurrence deterministically re-orders the fields of the given occurrence.
+//
+// It normalizes the occurrence's range encoding so that occurrences carrying
+// only the deprecated `repeated int32 range` field are re-emitted with the
+// most compact three-element form. Occurrences that carry a typed range are
+// left unchanged.
 func CanonicalizeOccurrence(occurrence *Occurrence) *Occurrence {
-	// Express ranges as three-components if possible
-	occurrence.Range = NewRangeUnchecked(occurrence.Range).SCIPRange()
+	if occurrence.GetTypedRange() == nil && len(occurrence.Range) > 0 {
+		// Express ranges as three-components if possible
+		occurrence.Range = NewRangeUnchecked(occurrence.Range).SCIPRange()
+	}
 	occurrence.Diagnostics = CanonicalizeDiagnostics(occurrence.Diagnostics)
 	return occurrence
 }

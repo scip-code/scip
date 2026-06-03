@@ -1,6 +1,9 @@
 package scip
 
-import "fmt"
+import (
+	"errors"
+	"fmt"
+)
 
 // Range represents [start, end) between two offset positions.
 type Range struct {
@@ -194,4 +197,144 @@ func (r Range) LessStrict(other Range) bool {
 
 func (r Range) String() string {
 	return fmt.Sprintf("%d:%d-%d:%d", r.Start.Line, r.Start.Character, r.End.Line, r.End.Character)
+}
+
+// ToSingleLineRange returns this range as a SingleLineRange.
+//
+// Pre-condition: r.IsSingleLine() must be true.
+func (r Range) ToSingleLineRange() *SingleLineRange {
+	return &SingleLineRange{
+		Line:           r.Start.Line,
+		StartCharacter: r.Start.Character,
+		EndCharacter:   r.End.Character,
+	}
+}
+
+// ToMultiLineRange returns this range as a MultiLineRange.
+func (r Range) ToMultiLineRange() *MultiLineRange {
+	return &MultiLineRange{
+		StartLine:      r.Start.Line,
+		StartCharacter: r.Start.Character,
+		EndLine:        r.End.Line,
+		EndCharacter:   r.End.Character,
+	}
+}
+
+// rangeFromSingleLine constructs a Range from a SingleLineRange without
+// validation. Used by Occurrence helpers where the typed message has already
+// been produced by a proto decoder.
+func rangeFromSingleLine(sr *SingleLineRange) Range {
+	return Range{
+		Start: Position{Line: sr.Line, Character: sr.StartCharacter},
+		End:   Position{Line: sr.Line, Character: sr.EndCharacter},
+	}
+}
+
+// rangeFromMultiLine constructs a Range from a MultiLineRange without
+// validation.
+func rangeFromMultiLine(mr *MultiLineRange) Range {
+	return Range{
+		Start: Position{Line: mr.StartLine, Character: mr.StartCharacter},
+		End:   Position{Line: mr.EndLine, Character: mr.EndCharacter},
+	}
+}
+
+// ErrMissingRange is returned by OccurrenceRange when an occurrence has
+// neither typed_range nor the deprecated repeated-int32 range field set.
+var ErrMissingRange = errors.New("occurrence has no range")
+
+// OccurrenceRange returns the source range of an occurrence. It reads
+// `typed_range` if present (taking precedence per the schema), and otherwise
+// falls back to the deprecated `repeated int32 range` field.
+//
+// Returns ErrMissingRange if neither encoding is set, or a RangeError if the
+// deprecated field is present but malformed.
+func OccurrenceRange(occ *Occurrence) (Range, error) {
+	switch tr := occ.GetTypedRange().(type) {
+	case *Occurrence_SingleLineRange:
+		return rangeFromSingleLine(tr.SingleLineRange), nil
+	case *Occurrence_MultiLineRange:
+		return rangeFromMultiLine(tr.MultiLineRange), nil
+	}
+	if len(occ.Range) == 0 {
+		return Range{}, ErrMissingRange
+	}
+	return NewRange(occ.Range)
+}
+
+// OccurrenceRangeUnchecked returns the source range of an occurrence without
+// validating the input. Like OccurrenceRange, `typed_range` takes precedence
+// over the deprecated `range` field.
+//
+// Pre-condition: the occurrence must carry a range in one of the two
+// encodings. Calling this on an occurrence with no range will return a
+// zero-valued Range.
+func OccurrenceRangeUnchecked(occ *Occurrence) Range {
+	switch tr := occ.GetTypedRange().(type) {
+	case *Occurrence_SingleLineRange:
+		return rangeFromSingleLine(tr.SingleLineRange)
+	case *Occurrence_MultiLineRange:
+		return rangeFromMultiLine(tr.MultiLineRange)
+	}
+	if len(occ.Range) == 0 {
+		return Range{}
+	}
+	return NewRangeUnchecked(occ.Range)
+}
+
+// OccurrenceEnclosingRange returns the enclosing range of an occurrence, if
+// any. Returns (zero, false, nil) when no enclosing range is set, (range,
+// true, nil) on success, and (zero, true, err) when a deprecated
+// repeated-int32 enclosing range is present but malformed.
+//
+// `typed_enclosing_range` takes precedence over the deprecated
+// `enclosing_range` field.
+func OccurrenceEnclosingRange(occ *Occurrence) (Range, bool, error) {
+	switch tr := occ.GetTypedEnclosingRange().(type) {
+	case *Occurrence_SingleLineEnclosingRange:
+		return rangeFromSingleLine(tr.SingleLineEnclosingRange), true, nil
+	case *Occurrence_MultiLineEnclosingRange:
+		return rangeFromMultiLine(tr.MultiLineEnclosingRange), true, nil
+	}
+	if len(occ.EnclosingRange) == 0 {
+		return Range{}, false, nil
+	}
+	r, err := NewRange(occ.EnclosingRange)
+	if err != nil {
+		return Range{}, true, err
+	}
+	return r, true, nil
+}
+
+// HasOccurrenceRange reports whether an occurrence carries a source range in
+// either encoding.
+func HasOccurrenceRange(occ *Occurrence) bool {
+	if occ.GetTypedRange() != nil {
+		return true
+	}
+	return len(occ.Range) == 3 || len(occ.Range) == 4
+}
+
+// SetOccurrenceRange stores r on occ using the typed `typed_range` encoding,
+// choosing SingleLineRange when r is single-line and MultiLineRange
+// otherwise. The deprecated `range` field is cleared.
+func SetOccurrenceRange(occ *Occurrence, r Range) {
+	occ.Range = nil
+	if r.IsSingleLine() {
+		occ.TypedRange = &Occurrence_SingleLineRange{SingleLineRange: r.ToSingleLineRange()}
+		return
+	}
+	occ.TypedRange = &Occurrence_MultiLineRange{MultiLineRange: r.ToMultiLineRange()}
+}
+
+// SetOccurrenceEnclosingRange stores r on occ using the typed
+// `typed_enclosing_range` encoding. The deprecated `enclosing_range` field is
+// cleared.
+func SetOccurrenceEnclosingRange(occ *Occurrence, r Range) {
+	occ.EnclosingRange = nil
+	if r.IsSingleLine() {
+		occ.TypedEnclosingRange = &Occurrence_SingleLineEnclosingRange{SingleLineEnclosingRange: r.ToSingleLineRange()}
+		return
+	}
+	occ.TypedEnclosingRange = &Occurrence_MultiLineEnclosingRange{MultiLineEnclosingRange: r.ToMultiLineRange()}
 }

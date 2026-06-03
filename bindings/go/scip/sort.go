@@ -49,14 +49,14 @@ func FindOccurrences(occurrences []*Occurrence, targetLine, targetCharacter int3
 	var filtered []*Occurrence
 	pos := Position{targetLine, targetCharacter}
 	for _, occurrence := range occurrences {
-		if NewRangeUnchecked(occurrence.Range).Contains(pos) {
+		if OccurrenceRangeUnchecked(occurrence).Contains(pos) {
 			filtered = append(filtered, occurrence)
 		}
 	}
 
 	sort.Slice(filtered, func(i, j int) bool {
 		// Ordered so that the least precise (largest) range comes last
-		return NewRangeUnchecked(filtered[i].Range).CompareStrict(NewRangeUnchecked(filtered[j].Range)) > 0
+		return OccurrenceRangeUnchecked(filtered[i]).CompareStrict(OccurrenceRangeUnchecked(filtered[j])) > 0
 	})
 
 	return filtered
@@ -68,8 +68,8 @@ func FindOccurrences(occurrences []*Occurrence, targetLine, targetCharacter int3
 // occurrences are sorted by symbol name.
 func SortOccurrences(occurrences []*Occurrence) []*Occurrence {
 	sort.Slice(occurrences, func(i, j int) bool {
-		r1 := NewRangeUnchecked(occurrences[i].Range)
-		r2 := NewRangeUnchecked(occurrences[j].Range)
+		r1 := OccurrenceRangeUnchecked(occurrences[i])
+		r2 := OccurrenceRangeUnchecked(occurrences[j])
 		if ret := r1.CompareStrict(r2); ret != 0 {
 			return ret < 0
 		}
@@ -79,22 +79,13 @@ func SortOccurrences(occurrences []*Occurrence) []*Occurrence {
 	return occurrences
 }
 
-// rawRangesEqual compares the given SCIP-encoded raw ranges for equality.
-func rawRangesEqual(a, b []int32) bool {
-	if len(a) == len(b) {
-		for i, v := range a {
-			if v != b[i] {
-				return false
-			}
-		}
-
-		return true
-	}
-
-	ra := NewRangeUnchecked(a)
-	rb := NewRangeUnchecked(b)
-
-	return ra.Start.Line == rb.Start.Line && ra.Start.Character == rb.Start.Character && ra.End.Line == rb.End.Line && ra.End.Character == rb.End.Character
+// occurrenceRangesEqual compares the source ranges of two occurrences for
+// equality, normalizing across the deprecated `repeated int32` and the typed
+// `typed_range` encodings.
+func occurrenceRangesEqual(a, b *Occurrence) bool {
+	ra := OccurrenceRangeUnchecked(a)
+	rb := OccurrenceRangeUnchecked(b)
+	return ra.CompareStrict(rb) == 0
 }
 
 // SortRanges sorts the given range slice (in-place) and returns it (for convenience). Ranges are

@@ -82,7 +82,8 @@ func FormatSnapshot(
 	}
 	symtab := document.SymbolTable()
 	sort.SliceStable(document.Occurrences, func(i, j int) bool {
-		return isSCIPRangeLess(document.Occurrences[i].Range, document.Occurrences[j].Range)
+		return scip.OccurrenceRangeUnchecked(document.Occurrences[i]).
+			LessStrict(scip.OccurrenceRangeUnchecked(document.Occurrences[j]))
 	})
 	var formattingError error
 	formatSymbol := func(symbol string) string {
@@ -112,9 +113,9 @@ func FormatSnapshot(
 		b.WriteString(strings.Repeat(" ", len(commentSyntax)))
 		b.WriteString(strings.ReplaceAll(line, "\t", " "))
 		b.WriteString("\n")
-		for i < len(document.Occurrences) && document.Occurrences[i].Range[0] == int32(lineNumber) {
+		for i < len(document.Occurrences) && scip.OccurrenceRangeUnchecked(document.Occurrences[i]).Start.Line == int32(lineNumber) {
 			occ := document.Occurrences[i]
-			pos := scip.NewRangeUnchecked(occ.Range)
+			pos := scip.OccurrenceRangeUnchecked(occ)
 			if !pos.IsSingleLine() {
 				i++
 				continue
@@ -282,26 +283,6 @@ func writeDiagnostic(b *strings.Builder, prefix string, diagnostic *scip.Diagnos
 	writeMultiline(b, prefix, diagnostic.Message)
 }
 
-// isRangeLess compares two SCIP ranges (which are encoded as []int32).
-func isSCIPRangeLess(a []int32, b []int32) bool {
-	if a[0] != b[0] { // start line
-		return a[0] < b[0]
-	}
-	if a[1] != b[1] { // start character
-		return a[1] < b[1]
-	}
-	if len(a) != len(b) { // is one of these multiline
-		return len(a) < len(b)
-	}
-	if a[2] != b[2] { // end line
-		return a[2] < b[2]
-	}
-	if len(a) == 4 {
-		return a[3] < b[3]
-	}
-	return false
-}
-
 type enclosingRange struct {
 	Range  scip.Range
 	Symbol string
@@ -310,9 +291,9 @@ type enclosingRange struct {
 func enclosingRanges(occurrences []*scip.Occurrence) []enclosingRange {
 	var enclosingRanges []enclosingRange
 	for _, occ := range occurrences {
-		if len(occ.EnclosingRange) > 0 {
+		if r, ok, _ := scip.OccurrenceEnclosingRange(occ); ok {
 			enclosingRanges = append(enclosingRanges, enclosingRange{
-				Range:  scip.NewRangeUnchecked(occ.EnclosingRange),
+				Range:  r,
 				Symbol: occ.Symbol,
 			})
 		}

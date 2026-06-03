@@ -64,7 +64,7 @@ func FlattenOccurrences(occurrences []*Occurrence) []*Occurrence {
 	for _, occurrence := range occurrences[1:] {
 		top := flattened[len(flattened)-1]
 
-		if !rawRangesEqual(top.Range, occurrence.Range) {
+		if !occurrenceRangesEqual(top, occurrence) {
 			flattened = append(flattened, occurrence)
 			continue
 		}

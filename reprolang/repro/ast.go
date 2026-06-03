@@ -34,7 +34,7 @@ type identifier struct {
 	value    string
 	symbol   string
 	isLocal  bool
-	position *scip.Range
+	position scip.Range
 }
 
 func newIdentifier(s *reproSourceFile, n *sitter.Node) *identifier {
@@ -74,8 +74,8 @@ type relationshipsStatement struct {
 	relations relationships
 }
 
-func NewRangePositionFromNode(node *sitter.Node) *scip.Range {
-	return &scip.Range{
+func NewRangePositionFromNode(node *sitter.Node) scip.Range {
+	return scip.Range{
 		Start: scip.Position{
 			Line:      int32(node.StartPosition().Row),
 			Character: int32(node.StartPosition().Column),

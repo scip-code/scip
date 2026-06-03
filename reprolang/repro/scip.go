@@ -16,13 +16,12 @@ func (i *identifier) occurrence(roles scip.SymbolRole) *scip.Occurrence {
 		}}
 	}
 
-	occ := &scip.Occurrence{
+	return &scip.Occurrence{
 		Symbol:      i.symbol,
 		SymbolRoles: int32(roles),
 		Diagnostics: diagnostics,
+		TypedRange:  i.position.AsTypedRange(),
 	}
-	occ.SetSourceRange(*i.position)
-	return occ
 }
 
 func (s *reproSourceFile) symbols() []*scip.SymbolInformation {

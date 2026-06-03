@@ -1,5 +1,7 @@
 package scip
 
+import "strings"
+
 // SourceRange returns the source range of this occurrence and whether one is
 // set. `typed_range` takes precedence over the deprecated `range` field.
 // Malformed deprecated ranges (length != 3 or 4) are reported as missing; use
@@ -48,6 +50,28 @@ func (occ *Occurrence) SetEnclosingSourceRange(r Range) {
 		return
 	}
 	occ.TypedEnclosingRange = &Occurrence_MultiLineEnclosingRange{MultiLineEnclosingRange: r.ToMultiLineRange()}
+}
+
+// Compare orders occurrences in the canonical SCIP ordering: ascending by
+// source range, with symbol name as a tiebreaker. Returns -1, 0, or +1.
+//
+// Occurrences missing a source range compare as if their range were the
+// zero range; such occurrences are illegal per the SCIP spec and should be
+// surfaced via `scip lint`.
+func (occ *Occurrence) Compare(other *Occurrence) int {
+	r1, _ := occ.SourceRange()
+	r2, _ := other.SourceRange()
+	if c := r1.CompareStrict(r2); c != 0 {
+		return c
+	}
+	return strings.Compare(occ.Symbol, other.Symbol)
+}
+
+// Contains reports whether the source range of this occurrence contains the
+// given position. Returns false if the occurrence has no range.
+func (occ *Occurrence) Contains(pos Position) bool {
+	r, ok := occ.SourceRange()
+	return ok && r.Contains(pos)
 }
 
 // ToRange returns this single-line range as a Range.

@@ -139,3 +139,37 @@ func TestOccurrence_SetEnclosingSourceRange(t *testing.T) {
 	require.True(t, ok)
 	require.Equal(t, &MultiLineRange{StartLine: 1, StartCharacter: 0, EndLine: 5, EndCharacter: 1}, tr.MultiLineEnclosingRange)
 }
+
+func TestOccurrence_Compare(t *testing.T) {
+	mkOcc := func(r []int32, sym string) *Occurrence {
+		return &Occurrence{Range: r, Symbol: sym}
+	}
+	tests := []struct {
+		name string
+		a, b *Occurrence
+		want int
+	}{
+		{"equal", mkOcc([]int32{1, 0, 5}, "x"), mkOcc([]int32{1, 0, 5}, "x"), 0},
+		{"earlier range", mkOcc([]int32{0, 0, 5}, "x"), mkOcc([]int32{1, 0, 5}, "x"), -1},
+		{"later range", mkOcc([]int32{2, 0, 5}, "x"), mkOcc([]int32{1, 0, 5}, "x"), 1},
+		{"same range, earlier symbol", mkOcc([]int32{1, 0, 5}, "a"), mkOcc([]int32{1, 0, 5}, "b"), -1},
+		{"same range, later symbol", mkOcc([]int32{1, 0, 5}, "b"), mkOcc([]int32{1, 0, 5}, "a"), 1},
+	}
+	for _, tc := range tests {
+		t.Run(tc.name, func(t *testing.T) {
+			require.Equal(t, tc.want, tc.a.Compare(tc.b))
+		})
+	}
+}
+
+func TestOccurrence_Contains(t *testing.T) {
+	occ := &Occurrence{Range: []int32{2, 5, 10}}
+	require.True(t, occ.Contains(Position{2, 5}))
+	require.True(t, occ.Contains(Position{2, 9}))
+	require.False(t, occ.Contains(Position{2, 4}))
+	require.False(t, occ.Contains(Position{2, 10}))
+	require.False(t, occ.Contains(Position{3, 0}))
+
+	empty := &Occurrence{}
+	require.False(t, empty.Contains(Position{0, 0}))
+}

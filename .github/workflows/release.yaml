@@ -2,32 +2,44 @@ name: release
 
 on:
   workflow_dispatch:
-    inputs:
-      version:
-        description: 'Release version (e.g. 0.6.1)'
-        required: true
-        type: string
+  push:
+    branches: [main]
+    paths:
+      - cmd/scip/version.txt
 
 jobs:
+  setup:
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.resolve.outputs.version }}
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: main
+      - id: resolve
+        run: |
+          VERSION=$(cat cmd/scip/version.txt)
+          if [[ ! "$VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            echo "::error::cmd/scip/version.txt ($VERSION) must be MAJOR.MINOR.PATCH"
+            exit 1
+          fi
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+
   publish:
+    needs: setup
     runs-on: ubuntu-latest
     permissions:
       contents: write
+    outputs:
+      version: ${{ needs.setup.outputs.version }}
     steps:
       - uses: actions/checkout@v6
         with:
           ref: main
 
-      - name: Validate version.txt
-        run: |
-          if ! grep -q "${{ inputs.version }}" cmd/scip/version.txt; then
-            echo "::error::cmd/scip/version.txt doesn't match version ${{ inputs.version }}"
-            exit 1
-          fi
-
       - name: Create and push tags
         run: |
-          TAG="v${{ inputs.version }}"
+          TAG="v${{ needs.setup.outputs.version }}"
           BINDINGS_TAG="bindings/go/scip/$TAG"
           for t in "$TAG" "$BINDINGS_TAG"; do
             if git rev-parse "$t" &>/dev/null; then
@@ -46,7 +58,7 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          TAG="v${{ inputs.version }}"
+          TAG="v${{ needs.setup.outputs.version }}"
           if gh release view "$TAG" &>/dev/null; then
             DRAFT=$(gh release view "$TAG" --json isDraft -q '.isDraft')
             if [ "$DRAFT" = "false" ]; then
@@ -75,7 +87,7 @@ jobs:
     steps:
       - uses: actions/checkout@v6
         with:
-          ref: v${{ inputs.version }}
+          ref: v${{ needs.publish.outputs.version }}
       - uses: DeterminateSystems/nix-installer-action@v22
       - uses: DeterminateSystems/magic-nix-cache-action@v14
         with:
@@ -97,7 +109,7 @@ jobs:
     steps:
       - uses: actions/checkout@v6
         with:
-          ref: v${{ inputs.version }}
+          ref: v${{ needs.publish.outputs.version }}
       - uses: DeterminateSystems/nix-installer-action@v22
       - uses: DeterminateSystems/magic-nix-cache-action@v14
         with:
@@ -126,7 +138,7 @@ jobs:
     steps:
       - uses: actions/checkout@v6
         with:
-          ref: v${{ inputs.version }}
+          ref: v${{ needs.publish.outputs.version }}
 
       - uses: actions/setup-java@v5
         with:
@@ -164,7 +176,7 @@ jobs:
     steps:
       - uses: actions/checkout@v6
         with:
-          ref: v${{ inputs.version }}
+          ref: v${{ needs.publish.outputs.version }}
       - uses: actions/setup-node@v6
         with:
           # Trusted publishing needs npm >=11.5.1; Node 22 LTS ships npm 10.x.
@@ -217,7 +229,7 @@ jobs:
     steps:
       - uses: actions/checkout@v6
         with:
-          ref: v${{ inputs.version }}
+          ref: v${{ needs.publish.outputs.version }}
       - uses: actions/setup-go@v6
         with:
           go-version-file: go.mod
@@ -240,7 +252,7 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           ASSET: ${{ matrix.asset_name }}
         run: |
-          TAG="v${{ inputs.version }}"
+          TAG="v${{ needs.publish.outputs.version }}"
           DRAFT=$(gh release view "$TAG" --json isDraft -q '.isDraft')
           if [ "$DRAFT" = "false" ]; then
             echo "::error::Release $TAG is already published, refusing to upload"
@@ -249,7 +261,7 @@ jobs:
           gh release upload "$TAG" "$ASSET.tar.gz" "$ASSET.tar.gz.sha256" --clobber
 
   finalize-release:
-    needs: [release-crate, publish-haskell-bindings, build-go-binaries, publish-jvm-bindings, publish-npm]
+    needs: [publish, release-crate, publish-haskell-bindings, build-go-binaries, publish-jvm-bindings, publish-npm]
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -258,4 +270,4 @@ jobs:
       - name: Mark release as non-draft
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: gh release edit "v${{ inputs.version }}" --draft=false
+        run: gh release edit "v${{ needs.publish.outputs.version }}" --draft=false

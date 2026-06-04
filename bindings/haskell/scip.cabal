@@ -19,7 +19,7 @@ bug-reports:        https://github.com/scip-code/scip/issues
 category:           Language
 build-type:         Simple
 extra-doc-files:    README.md
-tested-with:        GHC == 9.10.3
+tested-with:        GHC == { 9.4.8, 9.6.7, 9.8.4, 9.10.3 }
 
 source-repository head
     type:     git
@@ -35,4 +35,4 @@ library
     default-language: GHC2021
     build-depends:
         proto-lens-runtime ^>= 0.7.0.0,
-        base               >= 4.20 && < 5
+        base               >= 4.17 && < 5

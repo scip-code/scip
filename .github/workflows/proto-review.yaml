@@ -23,6 +23,9 @@ jobs:
                 - scip.proto
               teams:
                 - all-of:
-                    - '@jupblb'
-                    - '@CatherineGasnier'
-                    - '@jamydev'
+                    - is-author-or-reviewer:
+                        - '@jupblb'
+                    - is-author-or-reviewer:
+                        - '@CatherineGasnier'
+                    - is-author-or-reviewer:
+                        - '@jamydev'

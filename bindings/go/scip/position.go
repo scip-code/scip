@@ -82,6 +82,18 @@ func NewRange(scipRange []int32) (Range, error) {
 	return Range{Start: Position{Line: startLine, Character: startChar}, End: Position{Line: endLine, Character: endChar}}, nil
 }
 
+// Validate reports an error if the range has negative offsets or if its end
+// position precedes its start.
+func (r Range) Validate() error {
+	if r.Start.Line < 0 || r.Start.Character < 0 || r.End.Line < 0 || r.End.Character < 0 {
+		return NegativeOffsetsRangeError
+	}
+	if r.Start.Compare(r.End) > 0 {
+		return EndBeforeStartRangeError
+	}
+	return nil
+}
+
 type RangeError int32
 
 const (

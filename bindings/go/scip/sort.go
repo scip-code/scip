@@ -54,8 +54,13 @@ func FindOccurrences(occurrences []*Occurrence, targetLine, targetCharacter int3
 		}
 	}
 
-	// Ordered so that the least precise (largest) range comes last.
-	slices.SortFunc(filtered, func(a, b *Occurrence) int { return b.Compare(a) })
+	// Ordered so that the least precise (largest) range comes last, by range
+	// only (no symbol-name tiebreaker).
+	slices.SortFunc(filtered, func(a, b *Occurrence) int {
+		ra, _ := a.SourceRange()
+		rb, _ := b.SourceRange()
+		return rb.CompareStrict(ra)
+	})
 	return filtered
 }
 

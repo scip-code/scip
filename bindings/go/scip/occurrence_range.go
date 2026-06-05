@@ -104,17 +104,26 @@ func (mr *MultiLineRange) ToRange() Range {
 }
 
 // readTypedRange decodes any of the four typed-range oneof variants on
-// Occurrence into a Range. Returns (Range{}, false) when typed is nil.
+// Occurrence into a Range. Returns (Range{}, false) when typed is nil or holds
+// a nil message pointer.
 func readTypedRange(typed any) (Range, bool) {
 	switch tr := typed.(type) {
 	case *Occurrence_SingleLineRange:
-		return tr.SingleLineRange.ToRange(), true
+		if tr.SingleLineRange != nil {
+			return tr.SingleLineRange.ToRange(), true
+		}
 	case *Occurrence_MultiLineRange:
-		return tr.MultiLineRange.ToRange(), true
+		if tr.MultiLineRange != nil {
+			return tr.MultiLineRange.ToRange(), true
+		}
 	case *Occurrence_SingleLineEnclosingRange:
-		return tr.SingleLineEnclosingRange.ToRange(), true
+		if tr.SingleLineEnclosingRange != nil {
+			return tr.SingleLineEnclosingRange.ToRange(), true
+		}
 	case *Occurrence_MultiLineEnclosingRange:
-		return tr.MultiLineEnclosingRange.ToRange(), true
+		if tr.MultiLineEnclosingRange != nil {
+			return tr.MultiLineEnclosingRange.ToRange(), true
+		}
 	}
 	return Range{}, false
 }

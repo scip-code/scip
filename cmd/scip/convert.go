@@ -393,6 +393,9 @@ func (c *Converter) insertEnclosingRangeData(symbolToID map[string]int64, occs [
 		if !hasEnclosing {
 			continue
 		}
+		if err := enclRange.Validate(); err != nil {
+			return fmt.Errorf("bad enclosing range %v for symbol %q: %w", enclRange, occ.Symbol, err)
+		}
 		symbolID, ok := symbolToID[occ.Symbol]
 		if !ok {
 			return fmt.Errorf("symbol %q has definition occurrence, but no SymbolInformation", occ.Symbol)

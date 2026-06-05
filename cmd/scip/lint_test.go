@@ -186,6 +186,17 @@ func TestErrors(t *testing.T) {
 				duplicateOccurrenceWarning{"b", "f", scip.NewRangeUnchecked(placeholderRange), placeholderRole},
 			},
 		},
+		{
+			"invalidOccurrenceRange",
+			&scip.Index{Documents: []*scip.Document{
+				{RelativePath: "f", Occurrences: []*scip.Occurrence{
+					{Symbol: "a", Range: []int32{1, 2}}, // wrong length
+				}},
+			}},
+			[]error{
+				invalidOccurrenceRangeError{"a", "f"},
+			},
+		},
 	}
 
 	for _, testCase := range testCases {

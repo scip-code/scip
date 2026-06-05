@@ -251,3 +251,15 @@ func TestNewRange(t *testing.T) {
 		}
 	})
 }
+
+func TestRange_Validate(t *testing.T) {
+	require.NoError(t, Range{Start: Position{0, 0}, End: Position{0, 0}}.Validate())
+	require.NoError(t, Range{Start: Position{1, 2}, End: Position{1, 2}}.Validate())
+	require.NoError(t, Range{Start: Position{1, 2}, End: Position{3, 4}}.Validate())
+
+	require.ErrorIs(t, Range{Start: Position{-1, 0}, End: Position{0, 0}}.Validate(), NegativeOffsetsRangeError)
+	require.ErrorIs(t, Range{Start: Position{0, 0}, End: Position{0, -1}}.Validate(), NegativeOffsetsRangeError)
+
+	require.ErrorIs(t, Range{Start: Position{3, 0}, End: Position{1, 0}}.Validate(), EndBeforeStartRangeError)
+	require.ErrorIs(t, Range{Start: Position{1, 5}, End: Position{1, 2}}.Validate(), EndBeforeStartRangeError)
+}

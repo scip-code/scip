@@ -200,7 +200,10 @@ func (st *symbolTable) addRelationship(sym string, path string, rel *scip.Relati
 }
 
 func (st *symbolTable) addOccurrence(path string, occ *scip.Occurrence) error {
-	occRange, _ := occ.SourceRange()
+	occRange, ok := occ.SourceRange()
+	if !ok {
+		return invalidOccurrenceRangeError{occ.Symbol, path}
+	}
 	err := lintSymbolString(
 		occ.Symbol,
 		fmt.Sprintf("occurrence at %s @ %s", path, scipRangeToString(occRange)),
@@ -351,6 +354,16 @@ type multipleRelationshipWarning struct {
 func (e multipleRelationshipWarning) Error() string {
 	return fmt.Sprintf("warning: found multiple relationships from"+
 		" '%s' to '%s', which could optimized into a single relationship", e.symbol, e.relatedSymbol)
+}
+
+type invalidOccurrenceRangeError struct {
+	symbol string
+	path   string
+}
+
+func (e invalidOccurrenceRangeError) Error() string {
+	return fmt.Sprintf("error: occurrence for symbol %s in %s has a missing or malformed range",
+		e.symbol, e.path)
 }
 
 type missingSymbolForOccurrenceError struct {

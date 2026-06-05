@@ -62,6 +62,25 @@ func TestOccurrence_SourceRange_DeprecatedMalformed(t *testing.T) {
 	require.Equal(t, Range{}, r)
 }
 
+func TestOccurrence_SourceRange_NilTypedInnerFallsBack(t *testing.T) {
+	occ := &Occurrence{
+		Range:      []int32{2, 3, 5},
+		TypedRange: &Occurrence_SingleLineRange{SingleLineRange: nil},
+	}
+	r, ok := occ.SourceRange()
+	require.True(t, ok)
+	require.Equal(t, Range{Start: Position{2, 3}, End: Position{2, 5}}, r)
+}
+
+func TestOccurrence_SourceRange_NilTypedInnerNoFallback(t *testing.T) {
+	occ := &Occurrence{
+		TypedRange: &Occurrence_MultiLineRange{MultiLineRange: nil},
+	}
+	r, ok := occ.SourceRange()
+	require.False(t, ok)
+	require.Equal(t, Range{}, r)
+}
+
 func TestOccurrence_EnclosingSourceRange_TypedSingleLine(t *testing.T) {
 	occ := &Occurrence{
 		TypedEnclosingRange: &Occurrence_SingleLineEnclosingRange{

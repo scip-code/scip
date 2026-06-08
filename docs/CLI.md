@@ -8,6 +8,7 @@
   - [`scip snapshot`](#scip-snapshot)
   - [`scip stats`](#scip-stats)
   - [`scip expt-convert`](#scip-convert)
+  - [`scip merge`](#scip-merge)
   <!--toc:end-->
 
 ```
@@ -32,6 +33,7 @@ COMMANDS:
    stats         Output useful statistics about a SCIP index
    test          Validate a SCIP index against test files
    expt-convert  [EXPERIMENTAL] Convert a SCIP index to a SQLite database
+   merge         Merge multiple SCIP indexes into a single SCIP index
    help, h       Shows a list of commands or help for one command
 
 GLOBAL OPTIONS:
@@ -176,4 +178,45 @@ OPTIONS:
    --output string       Path to output SQLite database file (default: "index.db")
    --cpu-profile string  Path to output prof file
    --help, -h            show help
+```
+
+## `scip merge`
+
+```
+NAME:
+   scip merge - Merge multiple SCIP indexes into a single SCIP index
+
+USAGE:
+   scip merge [options]
+
+DESCRIPTION:
+   Merges two or more SCIP indexes into one.
+
+   The output project_root is inferred as the common URI ancestor of the input
+   indexes' project_root values. Each input document's relative_path is rewritten
+   to be relative to that common root.
+
+   For example, given:
+
+     a.scip with project_root file:///repo/frontend, document src/a.ts
+     b.scip with project_root file:///repo/backend,  document src/b.go
+
+   The merged index will have:
+
+     project_root file:///repo
+     documents frontend/src/a.ts and backend/src/b.go
+
+   Documents and symbols are deduplicated after rewriting.
+
+   Use --project-root to override the inferred root (each input's root must then
+   be a descendant of the override).
+
+   Example usage:
+
+     scip merge --output merged.scip a.scip b.scip c.scip
+
+OPTIONS:
+   --output string        Path to write the merged SCIP index (default: "index.scip")
+   --project-root string  Override the inferred output project_root URI. Each input project_root must be a descendant of this URI.
+   --help, -h             show help
 ```

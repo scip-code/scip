@@ -50,7 +50,7 @@ Do not rely on non-JSON output in scripts`,
 					colorOutput = true
 				}
 			}
-			return printMain(indexPath, colorOutput, jsonOutput, cmd.Root().Writer)
+			return printMain(indexPath, colorOutput, jsonOutput, cmd.Writer)
 		},
 	}
 	return snapshot

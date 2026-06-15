@@ -61,7 +61,7 @@ Occurrences are stored opaquely as a blob to prevent the DB size from growing ve
 			err := convertMain(indexPath, outputPath, cpuProfilePath, chunkSizeHint)
 			if err == nil {
 				fmt.Fprintf(
-					cmd.Root().Writer,
+					cmd.Writer,
 					"Successfully converted SCIP index to SQLite database at %s\n",
 					outputPath)
 			}

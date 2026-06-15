@@ -647,6 +647,7 @@ Feel free to send a pull-request to add missing programming languages.
 | 41 | OCaml | 
 | 36 | Objective_C | 
 | 37 | Objective_CPP | 
+| 111 | Odin | https://odin-lang.org/
 | 99 | Pascal | 
 | 19 | PHP | 
 | 70 | PLSQL | 
@@ -690,7 +691,7 @@ Feel free to send a pull-request to add missing programming languages.
 | 31 | XML | 
 | 32 | XSL | 
 | 74 | YAML | 
-| 38 | Zig | NextLanguage = 111; Steps add a new language: 1. Copy-paste the "NextLanguage = N" line above 2. Increment "NextLanguage = N" to "NextLanguage = N+1" 3. Replace "NextLanguage = N" with the name of the new language. 4. Move the new language to the correct line above using alphabetical order 5. (optional) Add a brief comment behind the language if the name is not self-explanatory
+| 38 | Zig | NextLanguage = 112; Steps add a new language: 1. Copy-paste the "NextLanguage = N" line above 2. Increment "NextLanguage = N" to "NextLanguage = N+1" 3. Replace "NextLanguage = N" with the name of the new language. 4. Move the new language to the correct line above using alphabetical order 5. (optional) Add a brief comment behind the language if the name is not self-explanatory
 
 
 ### PositionEncoding

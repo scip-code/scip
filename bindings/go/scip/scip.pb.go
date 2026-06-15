@@ -655,6 +655,7 @@ const (
 	Language_OCaml               Language = 41
 	Language_Objective_C         Language = 36
 	Language_Objective_CPP       Language = 37
+	Language_Odin                Language = 111 // https://odin-lang.org/
 	Language_Pascal              Language = 99
 	Language_PHP                 Language = 19
 	Language_PLSQL               Language = 70
@@ -770,6 +771,7 @@ var (
 		41:  "OCaml",
 		36:  "Objective_C",
 		37:  "Objective_CPP",
+		111: "Odin",
 		99:  "Pascal",
 		19:  "PHP",
 		70:  "PLSQL",
@@ -882,6 +884,7 @@ var (
 		"OCaml":               41,
 		"Objective_C":         36,
 		"Objective_CPP":       37,
+		"Odin":                111,
 		"Pascal":              99,
 		"PHP":                 19,
 		"PLSQL":               70,
@@ -3119,7 +3122,7 @@ const file_scip_proto_rawDesc = "" +
 	"\x18UnspecifiedDiagnosticTag\x10\x00\x12\x0f\n" +
 	"\vUnnecessary\x10\x01\x12\x0e\n" +
 	"\n" +
-	"Deprecated\x10\x02*\x9b\n" +
+	"Deprecated\x10\x02*\xa5\n" +
 	"\n" +
 	"\bLanguage\x12\x17\n" +
 	"\x13UnspecifiedLanguage\x10\x00\x12\b\n" +
@@ -3205,7 +3208,8 @@ const file_scip_proto_rawDesc = "" +
 	"\x03Nix\x10M\x12\t\n" +
 	"\x05OCaml\x10)\x12\x0f\n" +
 	"\vObjective_C\x10$\x12\x11\n" +
-	"\rObjective_CPP\x10%\x12\n" +
+	"\rObjective_CPP\x10%\x12\b\n" +
+	"\x04Odin\x10o\x12\n" +
 	"\n" +
 	"\x06Pascal\x10c\x12\a\n" +
 	"\x03PHP\x10\x13\x12\t\n" +

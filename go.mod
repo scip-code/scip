@@ -11,7 +11,7 @@ require (
 	github.com/montanaflynn/stats v0.9.0
 	github.com/scip-code/scip/bindings/go/scip v0.0.0-00010101000000-000000000000
 	github.com/stretchr/testify v1.11.1
-	github.com/urfave/cli/v3 v3.9.0
+	github.com/urfave/cli/v3 v3.10.0
 	google.golang.org/protobuf v1.36.11
 	zombiezen.com/go/sqlite v1.4.2
 )

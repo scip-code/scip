@@ -11,7 +11,9 @@ permissions:
 
 jobs:
   proto-review:
-    # `pull_request_review` is still read-only on forks
+    # `pull_request_review` is read-only on forks; otherwise the workflow would
+    # use a GitHub token without the necessary permissions. Restart the failed
+    # workflow once all approvals are gathered.
     if: >-
       github.event_name == 'pull_request_target' ||
       github.event.pull_request.head.repo.full_name == github.repository

@@ -100,23 +100,10 @@ func FormatSnapshot(
 	enclosingByEndLine := enclosingRangesByEndLine(enclosingRanges)
 
 	// syntheticDefinitions maps a "parent" symbol to the SymbolInformation
-	// entries that declare a definition relationship on it (i.e. symbols whose
-	// definition is synthesized at the parent's definition site). These are
-	// rendered as additional `synthetic_definition` occurrences underneath the
-	// parent definition occurrence.
-	syntheticDefinitions := map[string][]*scip.SymbolInformation{}
-	for _, info := range document.Symbols {
-		for _, rel := range info.Relationships {
-			if rel.IsDefinition {
-				syntheticDefinitions[rel.Symbol] = append(syntheticDefinitions[rel.Symbol], info)
-			}
-		}
-	}
-	for _, infos := range syntheticDefinitions {
-		sort.SliceStable(infos, func(i, j int) bool {
-			return infos[i].Symbol < infos[j].Symbol
-		})
-	}
+	// entries whose definition is synthesized at the parent's definition site.
+	// These are rendered as additional `synthetic_definition` occurrences
+	// underneath the parent definition occurrence.
+	syntheticDefinitions := syntheticDefinitionsByParent(document.Symbols)
 
 	// formatOccurrence renders a single occurrence and its associated metadata.
 	// When synthetic is non-nil, the occurrence is rendered as a
@@ -135,17 +122,10 @@ func FormatSnapshot(
 			b.WriteRune(' ')
 		}
 
-		markerCount := pos.End.Character - pos.Start.Character
-		if !pos.IsSingleLine() {
-			// Multiline occurrences are anchored to their start line and the
-			// markers extend to the end of that line. The end position is
-			// reported via the `<lineDelta>:<endCharacter>` suffix below.
-			markerCount = int32(len(renderedLine)) - pos.Start.Character
-		}
-		if markerCount < 1 {
-			// SCIP allows empty ranges; always render at least one marker.
-			markerCount = 1
-		}
+		// Multiline occurrences are anchored to their start line and the
+		// markers extend to the end of that line. The end position is reported
+		// via the `<lineDelta>:<endCharacter>` suffix below.
+		markerCount := markerLength(pos, renderedLine)
 		for c := int32(0); c < markerCount; c++ {
 			b.WriteByte(marker)
 		}
@@ -238,8 +218,7 @@ func FormatSnapshot(
 			b.WriteString("\n")
 		}
 
-		line = strings.TrimSuffix(line, "\r")
-		renderedLine := strings.ReplaceAll(line, "\t", " ")
+		renderedLine := renderLine(line)
 		b.WriteString(strings.Repeat(" ", len(commentSyntax)))
 		b.WriteString(renderedLine)
 		b.WriteString("\n")
@@ -402,4 +381,47 @@ func enclosingRangesByEndLine(ranges []enclosingRange) map[int32][]enclosingRang
 		})
 	}
 	return result
+}
+
+// syntheticDefinitionsByParent maps a "parent" symbol to the SymbolInformation
+// entries that declare a definition relationship on it (i.e. symbols whose
+// definition is synthesized at the parent's definition site). The slices are
+// sorted by symbol for deterministic output. This is shared by the snapshot
+// formatter and the `scip test` runner so the two cannot drift apart.
+func syntheticDefinitionsByParent(symbols []*scip.SymbolInformation) map[string][]*scip.SymbolInformation {
+	result := map[string][]*scip.SymbolInformation{}
+	for _, info := range symbols {
+		for _, rel := range info.Relationships {
+			if rel.IsDefinition {
+				result[rel.Symbol] = append(result[rel.Symbol], info)
+			}
+		}
+	}
+	for _, infos := range result {
+		sort.SliceStable(infos, func(i, j int) bool {
+			return infos[i].Symbol < infos[j].Symbol
+		})
+	}
+	return result
+}
+
+// renderLine normalizes a source line for snapshot/test rendering by trimming a
+// trailing carriage return and expanding tabs to single spaces.
+func renderLine(line string) string {
+	return strings.ReplaceAll(strings.TrimSuffix(line, "\r"), "\t", " ")
+}
+
+// markerLength returns the number of caret/underscore markers used to underline
+// an occurrence. Single-line occurrences are underlined exactly; multiline
+// occurrences are underlined from their start column to the end of the rendered
+// start line. SCIP allows empty ranges, so at least one marker is always drawn.
+func markerLength(pos scip.Range, renderedStartLine string) int32 {
+	length := pos.End.Character - pos.Start.Character
+	if !pos.IsSingleLine() {
+		length = int32(len(renderedStartLine)) - pos.Start.Character
+	}
+	if length < 1 {
+		length = 1
+	}
+	return length
 }

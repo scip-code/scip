@@ -63,7 +63,7 @@ func snapshotTestSources(t *testing.T, outputDirectory string, obtainedSnapshots
 			if *updateSnapshots {
 				err = os.MkdirAll(filepath.Dir(outputFile), 0755)
 				require.Nil(t, err)
-				err = os.WriteFile(outputFile, []byte(obtained), 0755)
+				err = os.WriteFile(outputFile, []byte(obtained), 0644)
 				require.Nil(t, err)
 			} else {
 				edits := myers.ComputeEdits(span.URIFromPath(outputFile), string(expected), obtained)

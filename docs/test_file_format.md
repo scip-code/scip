@@ -68,7 +68,7 @@ end position is not checked.
 ```js
 const value = compute(
   //          ^^^^^^^ reference scip-typescript npm test_package 1.0.0 lib/`test.js`/compute(). 1:1
-  arg,
+  arg
 )
 ```
 

@@ -13,7 +13,7 @@ jobs:
     outputs:
       version: ${{ steps.resolve.outputs.version }}
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
         with:
           ref: main
       - id: resolve
@@ -34,7 +34,7 @@ jobs:
     outputs:
       version: ${{ needs.setup.outputs.version }}
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
         with:
           ref: main
 
@@ -86,7 +86,7 @@ jobs:
     needs: publish
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
         with:
           ref: v${{ needs.publish.outputs.version }}
       - uses: DeterminateSystems/nix-installer-action@v22
@@ -108,7 +108,7 @@ jobs:
     needs: publish
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
         with:
           ref: v${{ needs.publish.outputs.version }}
       - uses: DeterminateSystems/nix-installer-action@v22
@@ -137,7 +137,7 @@ jobs:
     # Central) means worst-case ~60 min.
     timeout-minutes: 90
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
         with:
           ref: v${{ needs.publish.outputs.version }}
 
@@ -175,7 +175,7 @@ jobs:
       contents: read
       id-token: write # npm trusted-publishing OIDC
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
         with:
           ref: v${{ needs.publish.outputs.version }}
       - uses: actions/setup-node@v6
@@ -228,7 +228,7 @@ jobs:
     runs-on: ${{ matrix.runner }}
 
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
         with:
           ref: v${{ needs.publish.outputs.version }}
       - uses: actions/setup-go@v6
@@ -267,7 +267,7 @@ jobs:
     permissions:
       contents: write
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - name: Mark release as non-draft
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

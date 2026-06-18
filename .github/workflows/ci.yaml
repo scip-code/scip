@@ -51,7 +51,7 @@ jobs:
           private-key: ${{ secrets.RENOVATE_FIX_APP_PRIVATE_KEY }}
 
       - if: steps.filter.outputs.relevant == 'true'
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           ref: ${{ github.event.pull_request.head.ref }}
           # Pushing under the App identity (not GITHUB_TOKEN) makes
@@ -124,7 +124,7 @@ jobs:
       checks: ${{ steps.checks.outputs.result }}
       packages: ${{ steps.packages.outputs.result }}
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - uses: DeterminateSystems/nix-installer-action@v22
       - id: checks
         run: |
@@ -145,7 +145,7 @@ jobs:
       matrix:
         check: ${{ fromJSON(needs.list.outputs.checks) }}
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - uses: DeterminateSystems/nix-installer-action@v22
       - uses: DeterminateSystems/magic-nix-cache-action@v14
         with:
@@ -159,7 +159,7 @@ jobs:
       matrix:
         package: ${{ fromJSON(needs.list.outputs.packages) }}
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - uses: DeterminateSystems/nix-installer-action@v22
       - uses: DeterminateSystems/magic-nix-cache-action@v14
         with:

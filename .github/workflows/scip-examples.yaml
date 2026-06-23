@@ -75,7 +75,7 @@ jobs:
 
       - name: Cache Maven dependencies
         if: ${{ matrix.target.scip_binary == 'scip-java' }}
-        uses: actions/cache@v5
+        uses: actions/cache@v6
         with:
           path: ~/.m2/repository
           key: ${{ runner.os }}-maven-${{ matrix.target.repository }}-${{ github.run_id }}

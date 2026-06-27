@@ -49,7 +49,7 @@ For more details about indexers,
 see the [Sourcegraph documentation](https://docs.sourcegraph.com/code_navigation/references/indexers).
 
 Other tools which use SCIP include the [Sourcegraph CLI](https://github.com/sourcegraph/src-cli),
-and the SCIP CLI in this repo.
+the SCIP CLI in this repo, and [scip-cli](https://github.com/flesler/scip-cli) — a fast Python CLI for querying SCIP indexes via SQLite.
 
 ## Installing the `scip` CLI
 

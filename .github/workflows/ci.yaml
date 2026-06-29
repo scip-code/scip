@@ -118,7 +118,10 @@ jobs:
     # resulting `pull_request synchronize` triggers a fresh CI run that
     # validates the corrected SHA, and branch protection on the PR
     # HEAD prevents merging until that fresh run reports success.
-    if: always() && needs.fix.outputs.pushed != 'true'
+    if: >-
+      always() &&
+      (needs.fix.result == 'success' || needs.fix.result == 'skipped') &&
+      needs.fix.outputs.pushed != 'true'
     runs-on: ubuntu-latest
     outputs:
       checks: ${{ steps.checks.outputs.result }}
@@ -140,6 +143,7 @@ jobs:
 
   checks:
     needs: list
+    if: always() && needs.list.result == 'success'
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -154,6 +158,7 @@ jobs:
 
   packages:
     needs: list
+    if: always() && needs.list.result == 'success'
     runs-on: ubuntu-latest
     strategy:
       matrix:

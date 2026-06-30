@@ -1568,6 +1568,7 @@ data Language
     Luau |
     Justfile |
     Nickel |
+    Odin |
     Language'Unrecognized !Language'UnrecognizedValue
   deriving stock (Prelude.Show, Prelude.Eq, Prelude.Ord)
 instance Data.ProtoLens.MessageEnum Language where
@@ -1681,6 +1682,7 @@ instance Data.ProtoLens.MessageEnum Language where
   maybeToEnum 108 = Prelude.Just Luau
   maybeToEnum 109 = Prelude.Just Justfile
   maybeToEnum 110 = Prelude.Just Nickel
+  maybeToEnum 111 = Prelude.Just Odin
   maybeToEnum k
     = Prelude.Just
         (Language'Unrecognized
@@ -1751,6 +1753,7 @@ instance Data.ProtoLens.MessageEnum Language where
   showEnum OCaml = "OCaml"
   showEnum Objective_C = "Objective_C"
   showEnum Objective_CPP = "Objective_CPP"
+  showEnum Odin = "Odin"
   showEnum Pascal = "Pascal"
   showEnum PHP = "PHP"
   showEnum PLSQL = "PLSQL"
@@ -1865,6 +1868,7 @@ instance Data.ProtoLens.MessageEnum Language where
     | (Prelude.==) k "OCaml" = Prelude.Just OCaml
     | (Prelude.==) k "Objective_C" = Prelude.Just Objective_C
     | (Prelude.==) k "Objective_CPP" = Prelude.Just Objective_CPP
+    | (Prelude.==) k "Odin" = Prelude.Just Odin
     | (Prelude.==) k "Pascal" = Prelude.Just Pascal
     | (Prelude.==) k "PHP" = Prelude.Just PHP
     | (Prelude.==) k "PLSQL" = Prelude.Just PLSQL
@@ -1913,7 +1917,7 @@ instance Data.ProtoLens.MessageEnum Language where
     = (Prelude.>>=) (Text.Read.readMaybe k) Data.ProtoLens.maybeToEnum
 instance Prelude.Bounded Language where
   minBound = UnspecifiedLanguage
-  maxBound = Nickel
+  maxBound = Odin
 instance Prelude.Enum Language where
   toEnum k__
     = Prelude.maybe
@@ -2031,11 +2035,12 @@ instance Prelude.Enum Language where
   fromEnum Luau = 108
   fromEnum Justfile = 109
   fromEnum Nickel = 110
+  fromEnum Odin = 111
   fromEnum (Language'Unrecognized (Language'UnrecognizedValue k))
     = Prelude.fromIntegral k
-  succ Nickel
+  succ Odin
     = Prelude.error
-        "Language.succ: bad argument Nickel. This value would be out of bounds."
+        "Language.succ: bad argument Odin. This value would be out of bounds."
   succ UnspecifiedLanguage = CSharp
   succ CSharp = Swift
   succ Swift = Dart
@@ -2145,6 +2150,7 @@ instance Prelude.Enum Language where
   succ Slang = Luau
   succ Luau = Justfile
   succ Justfile = Nickel
+  succ Nickel = Odin
   succ (Language'Unrecognized _)
     = Prelude.error "Language.succ: bad argument: unrecognized value"
   pred UnspecifiedLanguage
@@ -2259,6 +2265,7 @@ instance Prelude.Enum Language where
   pred Luau = Slang
   pred Justfile = Luau
   pred Nickel = Justfile
+  pred Odin = Nickel
   pred (Language'Unrecognized _)
     = Prelude.error "Language.pred: bad argument: unrecognized value"
   enumFrom = Data.ProtoLens.Message.Enum.messageEnumFrom
@@ -7314,7 +7321,7 @@ packedFileDescriptor
     \\CANUnspecifiedDiagnosticTag\DLE\NUL\DC2\SI\n\
     \\vUnnecessary\DLE\SOH\DC2\SO\n\
     \\n\
-    \Deprecated\DLE\STX*\155\n\
+    \Deprecated\DLE\STX*\165\n\
     \\n\
     \\bLanguage\DC2\ETB\n\
     \\DC3UnspecifiedLanguage\DLE\NUL\DC2\b\n\
@@ -7400,7 +7407,8 @@ packedFileDescriptor
     \\ETXNix\DLEM\DC2\t\n\
     \\ENQOCaml\DLE)\DC2\SI\n\
     \\vObjective_C\DLE$\DC2\DC1\n\
-    \\rObjective_CPP\DLE%\DC2\n\
+    \\rObjective_CPP\DLE%\DC2\b\n\
+    \\EOTOdin\DLEo\DC2\n\
     \\n\
     \\ACKPascal\DLEc\DC2\a\n\
     \\ETXPHP\DLE\DC3\DC2\t\n\
@@ -7455,9 +7463,9 @@ packedFileDescriptor
     \\ETXXSL\DLE \DC2\b\n\
     \\EOTYAML\DLEJ\DC2\a\n\
     \\ETXZig\DLE&BN\n\
-    \\DC2org.scip_code.scipB\tScipProtoP\SOHZ+github.com/scip-code/scip/bindings/go/scip/J\194\213\STX\n\
+    \\DC2org.scip_code.scipB\tScipProtoP\SOHZ+github.com/scip-code/scip/bindings/go/scip/J\135\214\STX\n\
     \\a\DC2\ENQ\n\
-    \\NUL\192\a\SOH\n\
+    \\NUL\193\a\SOH\n\
     \\130\EOT\n\
     \\SOH\f\DC2\ETX\n\
     \\NUL\DC22\247\ETX An index contains one or more pieces of information about a given piece of\n\
@@ -9715,7 +9723,7 @@ packedFileDescriptor
     \\r\n\
     \\ENQ\ENQ\ACK\STX\STX\STX\DC2\EOT\193\ACK\SI\DLE\n\
     \\208\ETX\n\
-    \\STX\ENQ\a\DC2\ACK\202\ACK\NUL\192\a\SOH\SUB\193\ETX Language standardises names of common programming languages that can be used\n\
+    \\STX\ENQ\a\DC2\ACK\202\ACK\NUL\193\a\SOH\SUB\193\ETX Language standardises names of common programming languages that can be used\n\
     \ for the `Document.language` field. The primary purpose of this enum is to\n\
     \ prevent a situation where we have a single programming language ends up with\n\
     \ multiple string representations. For example, the C++ language uses the name\n\
@@ -10147,94 +10155,94 @@ packedFileDescriptor
     \\r\n\
     \\ENQ\ENQ\a\STXA\STX\DC2\EOT\140\a\DC2\DC4\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXB\SOH\DC2\EOT\141\a\STX\b\n\
+    \\ENQ\ENQ\a\STXB\SOH\DC2\EOT\141\a\STX\ACK\n\
+    \%\n\
+    \\EOT\ENQ\a\STXB\DC2\EOT\141\a\STX\r\"\ETB https://odin-lang.org/\n\
+    \\r\n\
+    \\ENQ\ENQ\a\STXB\STX\DC2\EOT\141\a\t\f\n\
+    \\r\n\
+    \\ENQ\ENQ\a\STXC\SOH\DC2\EOT\142\a\STX\b\n\
     \\f\n\
-    \\EOT\ENQ\a\STXB\DC2\EOT\141\a\STX\SO\n\
+    \\EOT\ENQ\a\STXC\DC2\EOT\142\a\STX\SO\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXB\STX\DC2\EOT\141\a\v\r\n\
+    \\ENQ\ENQ\a\STXC\STX\DC2\EOT\142\a\v\r\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXC\SOH\DC2\EOT\142\a\STX\ENQ\n\
+    \\ENQ\ENQ\a\STXD\SOH\DC2\EOT\143\a\STX\ENQ\n\
     \\f\n\
-    \\EOT\ENQ\a\STXC\DC2\EOT\142\a\STX\v\n\
+    \\EOT\ENQ\a\STXD\DC2\EOT\143\a\STX\v\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXC\STX\DC2\EOT\142\a\b\n\
+    \\ENQ\ENQ\a\STXD\STX\DC2\EOT\143\a\b\n\
     \\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXD\SOH\DC2\EOT\143\a\STX\a\n\
+    \\ENQ\ENQ\a\STXE\SOH\DC2\EOT\144\a\STX\a\n\
     \\f\n\
-    \\EOT\ENQ\a\STXD\DC2\EOT\143\a\STX\r\n\
+    \\EOT\ENQ\a\STXE\DC2\EOT\144\a\STX\r\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXD\STX\DC2\EOT\143\a\n\
+    \\ENQ\ENQ\a\STXE\STX\DC2\EOT\144\a\n\
     \\f\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXE\SOH\DC2\EOT\144\a\STX\ACK\n\
+    \\ENQ\ENQ\a\STXF\SOH\DC2\EOT\145\a\STX\ACK\n\
     \\f\n\
-    \\EOT\ENQ\a\STXE\DC2\EOT\144\a\STX\f\n\
+    \\EOT\ENQ\a\STXF\DC2\EOT\145\a\STX\f\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXE\STX\DC2\EOT\144\a\t\v\n\
+    \\ENQ\ENQ\a\STXF\STX\DC2\EOT\145\a\t\v\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXF\SOH\DC2\EOT\145\a\STX\f\n\
+    \\ENQ\ENQ\a\STXG\SOH\DC2\EOT\146\a\STX\f\n\
     \\f\n\
-    \\EOT\ENQ\a\STXF\DC2\EOT\145\a\STX\DC2\n\
+    \\EOT\ENQ\a\STXG\DC2\EOT\146\a\STX\DC2\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXF\STX\DC2\EOT\145\a\SI\DC1\n\
+    \\ENQ\ENQ\a\STXG\STX\DC2\EOT\146\a\SI\DC1\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXG\SOH\DC2\EOT\146\a\STX\b\n\
+    \\ENQ\ENQ\a\STXH\SOH\DC2\EOT\147\a\STX\b\n\
     \\f\n\
-    \\EOT\ENQ\a\STXG\DC2\EOT\146\a\STX\SO\n\
+    \\EOT\ENQ\a\STXH\DC2\EOT\147\a\STX\SO\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXG\STX\DC2\EOT\146\a\v\r\n\
+    \\ENQ\ENQ\a\STXH\STX\DC2\EOT\147\a\v\r\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXH\SOH\DC2\EOT\147\a\STX\n\
+    \\ENQ\ENQ\a\STXI\SOH\DC2\EOT\148\a\STX\n\
     \\n\
     \\f\n\
-    \\EOT\ENQ\a\STXH\DC2\EOT\147\a\STX\DC1\n\
+    \\EOT\ENQ\a\STXI\DC2\EOT\148\a\STX\DC1\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXH\STX\DC2\EOT\147\a\r\DLE\n\
+    \\ENQ\ENQ\a\STXI\STX\DC2\EOT\148\a\r\DLE\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXI\SOH\DC2\EOT\148\a\STX\b\n\
+    \\ENQ\ENQ\a\STXJ\SOH\DC2\EOT\149\a\STX\b\n\
     \\f\n\
-    \\EOT\ENQ\a\STXI\DC2\EOT\148\a\STX\SO\n\
+    \\EOT\ENQ\a\STXJ\DC2\EOT\149\a\STX\SO\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXI\STX\DC2\EOT\148\a\v\r\n\
+    \\ENQ\ENQ\a\STXJ\STX\DC2\EOT\149\a\v\r\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXJ\SOH\DC2\EOT\149\a\STX\ETX\n\
+    \\ENQ\ENQ\a\STXK\SOH\DC2\EOT\150\a\STX\ETX\n\
     \\f\n\
-    \\EOT\ENQ\a\STXJ\DC2\EOT\149\a\STX\t\n\
+    \\EOT\ENQ\a\STXK\DC2\EOT\150\a\STX\t\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXJ\STX\DC2\EOT\149\a\ACK\b\n\
+    \\ENQ\ENQ\a\STXK\STX\DC2\EOT\150\a\ACK\b\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXK\SOH\DC2\EOT\150\a\STX\b\n\
+    \\ENQ\ENQ\a\STXL\SOH\DC2\EOT\151\a\STX\b\n\
     \\f\n\
-    \\EOT\ENQ\a\STXK\DC2\EOT\150\a\STX\SO\n\
+    \\EOT\ENQ\a\STXL\DC2\EOT\151\a\STX\SO\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXK\STX\DC2\EOT\150\a\v\r\n\
+    \\ENQ\ENQ\a\STXL\STX\DC2\EOT\151\a\v\r\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXL\SOH\DC2\EOT\151\a\STX\ACK\n\
+    \\ENQ\ENQ\a\STXM\SOH\DC2\EOT\152\a\STX\ACK\n\
     \\f\n\
-    \\EOT\ENQ\a\STXL\DC2\EOT\151\a\STX\f\n\
+    \\EOT\ENQ\a\STXM\DC2\EOT\152\a\STX\f\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXL\STX\DC2\EOT\151\a\t\v\n\
-    \\r\n\
-    \\ENQ\ENQ\a\STXM\SOH\DC2\EOT\152\a\STX\a\n\
-    \\f\n\
-    \\EOT\ENQ\a\STXM\DC2\EOT\152\a\STX\r\n\
-    \\r\n\
-    \\ENQ\ENQ\a\STXM\STX\DC2\EOT\152\a\n\
-    \\f\n\
+    \\ENQ\ENQ\a\STXM\STX\DC2\EOT\152\a\t\v\n\
     \\r\n\
     \\ENQ\ENQ\a\STXN\SOH\DC2\EOT\153\a\STX\a\n\
-    \1\n\
-    \\EOT\ENQ\a\STXN\DC2\EOT\153\a\STX\SO\"# Internal language for testing SCIP\n\
+    \\f\n\
+    \\EOT\ENQ\a\STXN\DC2\EOT\153\a\STX\r\n\
     \\r\n\
     \\ENQ\ENQ\a\STXN\STX\DC2\EOT\153\a\n\
-    \\r\n\
-    \\r\n\
-    \\ENQ\ENQ\a\STXO\SOH\DC2\EOT\154\a\STX\ACK\n\
     \\f\n\
-    \\EOT\ENQ\a\STXO\DC2\EOT\154\a\STX\f\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXO\STX\DC2\EOT\154\a\t\v\n\
+    \\ENQ\ENQ\a\STXO\SOH\DC2\EOT\154\a\STX\a\n\
+    \1\n\
+    \\EOT\ENQ\a\STXO\DC2\EOT\154\a\STX\SO\"# Internal language for testing SCIP\n\
+    \\r\n\
+    \\ENQ\ENQ\a\STXO\STX\DC2\EOT\154\a\n\
+    \\r\n\
     \\r\n\
     \\ENQ\ENQ\a\STXP\SOH\DC2\EOT\155\a\STX\ACK\n\
     \\f\n\
@@ -10248,25 +10256,24 @@ packedFileDescriptor
     \\r\n\
     \\ENQ\ENQ\a\STXQ\STX\DC2\EOT\156\a\t\v\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXR\SOH\DC2\EOT\157\a\STX\ENQ\n\
+    \\ENQ\ENQ\a\STXR\SOH\DC2\EOT\157\a\STX\ACK\n\
     \\f\n\
-    \\EOT\ENQ\a\STXR\DC2\EOT\157\a\STX\v\n\
+    \\EOT\ENQ\a\STXR\DC2\EOT\157\a\STX\f\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXR\STX\DC2\EOT\157\a\b\n\
+    \\ENQ\ENQ\a\STXR\STX\DC2\EOT\157\a\t\v\n\
+    \\r\n\
+    \\ENQ\ENQ\a\STXS\SOH\DC2\EOT\158\a\STX\ENQ\n\
+    \\f\n\
+    \\EOT\ENQ\a\STXS\DC2\EOT\158\a\STX\v\n\
+    \\r\n\
+    \\ENQ\ENQ\a\STXS\STX\DC2\EOT\158\a\b\n\
     \\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXS\SOH\DC2\EOT\158\a\STX\ACK\n\
+    \\ENQ\ENQ\a\STXT\SOH\DC2\EOT\159\a\STX\ACK\n\
     \\f\n\
-    \\EOT\ENQ\a\STXS\DC2\EOT\158\a\STX\f\n\
+    \\EOT\ENQ\a\STXT\DC2\EOT\159\a\STX\f\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXS\STX\DC2\EOT\158\a\t\v\n\
-    \\r\n\
-    \\ENQ\ENQ\a\STXT\SOH\DC2\EOT\159\a\STX\ENQ\n\
-    \\f\n\
-    \\EOT\ENQ\a\STXT\DC2\EOT\159\a\STX\v\n\
-    \\r\n\
-    \\ENQ\ENQ\a\STXT\STX\DC2\EOT\159\a\b\n\
-    \\n\
+    \\ENQ\ENQ\a\STXT\STX\DC2\EOT\159\a\t\v\n\
     \\r\n\
     \\ENQ\ENQ\a\STXU\SOH\DC2\EOT\160\a\STX\ENQ\n\
     \\f\n\
@@ -10275,138 +10282,138 @@ packedFileDescriptor
     \\ENQ\ENQ\a\STXU\STX\DC2\EOT\160\a\b\n\
     \\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXV\SOH\DC2\EOT\161\a\STX\ACK\n\
+    \\ENQ\ENQ\a\STXV\SOH\DC2\EOT\161\a\STX\ENQ\n\
     \\f\n\
-    \\EOT\ENQ\a\STXV\DC2\EOT\161\a\STX\f\n\
+    \\EOT\ENQ\a\STXV\DC2\EOT\161\a\STX\v\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXV\STX\DC2\EOT\161\a\t\v\n\
+    \\ENQ\ENQ\a\STXV\STX\DC2\EOT\161\a\b\n\
+    \\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXW\SOH\DC2\EOT\162\a\STX\a\n\
+    \\ENQ\ENQ\a\STXW\SOH\DC2\EOT\162\a\STX\ACK\n\
     \\f\n\
     \\EOT\ENQ\a\STXW\DC2\EOT\162\a\STX\f\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXW\STX\DC2\EOT\162\a\n\
+    \\ENQ\ENQ\a\STXW\STX\DC2\EOT\162\a\t\v\n\
+    \\r\n\
+    \\ENQ\ENQ\a\STXX\SOH\DC2\EOT\163\a\STX\a\n\
+    \\f\n\
+    \\EOT\ENQ\a\STXX\DC2\EOT\163\a\STX\f\n\
+    \\r\n\
+    \\ENQ\ENQ\a\STXX\STX\DC2\EOT\163\a\n\
     \\v\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXX\SOH\DC2\EOT\163\a\STX\b\n\
+    \\ENQ\ENQ\a\STXY\SOH\DC2\EOT\164\a\STX\b\n\
     \\f\n\
-    \\EOT\ENQ\a\STXX\DC2\EOT\163\a\STX\SO\n\
+    \\EOT\ENQ\a\STXY\DC2\EOT\164\a\STX\SO\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXX\STX\DC2\EOT\163\a\v\r\n\
+    \\ENQ\ENQ\a\STXY\STX\DC2\EOT\164\a\v\r\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXY\SOH\DC2\EOT\164\a\STX\r\n\
+    \\ENQ\ENQ\a\STXZ\SOH\DC2\EOT\165\a\STX\r\n\
     \\DC3\n\
-    \\EOT\ENQ\a\STXY\DC2\EOT\164\a\STX\DC3\"\ENQ Bash\n\
+    \\EOT\ENQ\a\STXZ\DC2\EOT\165\a\STX\DC3\"\ENQ Bash\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXY\STX\DC2\EOT\164\a\DLE\DC2\n\
+    \\ENQ\ENQ\a\STXZ\STX\DC2\EOT\165\a\DLE\DC2\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXZ\SOH\DC2\EOT\165\a\STX\t\n\
+    \\ENQ\ENQ\a\STX[\SOH\DC2\EOT\166\a\STX\t\n\
     \\f\n\
-    \\EOT\ENQ\a\STXZ\DC2\EOT\165\a\STX\SI\n\
+    \\EOT\ENQ\a\STX[\DC2\EOT\166\a\STX\SI\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXZ\STX\DC2\EOT\165\a\f\SO\n\
+    \\ENQ\ENQ\a\STX[\STX\DC2\EOT\166\a\f\SO\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX[\SOH\DC2\EOT\166\a\STX\a\n\
+    \\ENQ\ENQ\a\STX\\\SOH\DC2\EOT\167\a\STX\a\n\
     \\f\n\
-    \\EOT\ENQ\a\STX[\DC2\EOT\166\a\STX\SO\n\
+    \\EOT\ENQ\a\STX\\\DC2\EOT\167\a\STX\SO\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX[\STX\DC2\EOT\166\a\n\
+    \\ENQ\ENQ\a\STX\\\STX\DC2\EOT\167\a\n\
     \\r\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX\\\SOH\DC2\EOT\167\a\STX\n\
+    \\ENQ\ENQ\a\STX]\SOH\DC2\EOT\168\a\STX\n\
     \\n\
     \\f\n\
-    \\EOT\ENQ\a\STX\\\DC2\EOT\167\a\STX\DLE\n\
+    \\EOT\ENQ\a\STX]\DC2\EOT\168\a\STX\DLE\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX\\\STX\DC2\EOT\167\a\r\SI\n\
+    \\ENQ\ENQ\a\STX]\STX\DC2\EOT\168\a\r\SI\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX]\SOH\DC2\EOT\168\a\STX\b\n\
+    \\ENQ\ENQ\a\STX^\SOH\DC2\EOT\169\a\STX\b\n\
     \\f\n\
-    \\EOT\ENQ\a\STX]\DC2\EOT\168\a\STX\SI\n\
+    \\EOT\ENQ\a\STX^\DC2\EOT\169\a\STX\SI\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX]\STX\DC2\EOT\168\a\v\SO\n\
+    \\ENQ\ENQ\a\STX^\STX\DC2\EOT\169\a\v\SO\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX^\SOH\DC2\EOT\169\a\STX\a\n\
-    \\f\n\
-    \\EOT\ENQ\a\STX^\DC2\EOT\169\a\STX\f\n\
-    \\r\n\
-    \\ENQ\ENQ\a\STX^\STX\DC2\EOT\169\a\n\
-    \\v\n\
-    \\r\n\
-    \\ENQ\ENQ\a\STX_\SOH\DC2\EOT\170\a\STX\ENQ\n\
+    \\ENQ\ENQ\a\STX_\SOH\DC2\EOT\170\a\STX\a\n\
     \\f\n\
     \\EOT\ENQ\a\STX_\DC2\EOT\170\a\STX\f\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX_\STX\DC2\EOT\170\a\b\v\n\
+    \\ENQ\ENQ\a\STX_\STX\DC2\EOT\170\a\n\
+    \\v\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX`\SOH\DC2\EOT\171\a\STX\ACK\n\
+    \\ENQ\ENQ\a\STX`\SOH\DC2\EOT\171\a\STX\ENQ\n\
     \\f\n\
     \\EOT\ENQ\a\STX`\DC2\EOT\171\a\STX\f\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX`\STX\DC2\EOT\171\a\t\v\n\
+    \\ENQ\ENQ\a\STX`\STX\DC2\EOT\171\a\b\v\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXa\SOH\DC2\EOT\172\a\STX\ENQ\n\
+    \\ENQ\ENQ\a\STXa\SOH\DC2\EOT\172\a\STX\ACK\n\
     \\f\n\
-    \\EOT\ENQ\a\STXa\DC2\EOT\172\a\STX\v\n\
+    \\EOT\ENQ\a\STXa\DC2\EOT\172\a\STX\f\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXa\STX\DC2\EOT\172\a\b\n\
+    \\ENQ\ENQ\a\STXa\STX\DC2\EOT\172\a\t\v\n\
+    \\r\n\
+    \\ENQ\ENQ\a\STXb\SOH\DC2\EOT\173\a\STX\ENQ\n\
+    \\f\n\
+    \\EOT\ENQ\a\STXb\DC2\EOT\173\a\STX\v\n\
+    \\r\n\
+    \\ENQ\ENQ\a\STXb\STX\DC2\EOT\173\a\b\n\
     \\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXb\SOH\DC2\EOT\173\a\STX\b\n\
+    \\ENQ\ENQ\a\STXc\SOH\DC2\EOT\174\a\STX\b\n\
     \\f\n\
-    \\EOT\ENQ\a\STXb\DC2\EOT\173\a\STX\SI\n\
+    \\EOT\ENQ\a\STXc\DC2\EOT\174\a\STX\SI\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXb\STX\DC2\EOT\173\a\v\SO\n\
+    \\ENQ\ENQ\a\STXc\STX\DC2\EOT\174\a\v\SO\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXc\SOH\DC2\EOT\174\a\STX\f\n\
+    \\ENQ\ENQ\a\STXd\SOH\DC2\EOT\175\a\STX\f\n\
     \\f\n\
-    \\EOT\ENQ\a\STXc\DC2\EOT\174\a\STX\DC2\n\
+    \\EOT\ENQ\a\STXd\DC2\EOT\175\a\STX\DC2\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXc\STX\DC2\EOT\174\a\SI\DC1\n\
+    \\ENQ\ENQ\a\STXd\STX\DC2\EOT\175\a\SI\DC1\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXd\SOH\DC2\EOT\175\a\STX\DC1\n\
+    \\ENQ\ENQ\a\STXe\SOH\DC2\EOT\176\a\STX\DC1\n\
     \\f\n\
-    \\EOT\ENQ\a\STXd\DC2\EOT\175\a\STX\ETB\n\
+    \\EOT\ENQ\a\STXe\DC2\EOT\176\a\STX\ETB\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXd\STX\DC2\EOT\175\a\DC4\SYN\n\
+    \\ENQ\ENQ\a\STXe\STX\DC2\EOT\176\a\DC4\SYN\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXe\SOH\DC2\EOT\176\a\STX\t\n\
+    \\ENQ\ENQ\a\STXf\SOH\DC2\EOT\177\a\STX\t\n\
     \\f\n\
-    \\EOT\ENQ\a\STXe\DC2\EOT\176\a\STX\DLE\n\
+    \\EOT\ENQ\a\STXf\DC2\EOT\177\a\STX\DLE\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXe\STX\DC2\EOT\176\a\f\SI\n\
+    \\ENQ\ENQ\a\STXf\STX\DC2\EOT\177\a\f\SI\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXf\SOH\DC2\EOT\177\a\STX\ACK\n\
+    \\ENQ\ENQ\a\STXg\SOH\DC2\EOT\178\a\STX\ACK\n\
     \\f\n\
-    \\EOT\ENQ\a\STXf\DC2\EOT\177\a\STX\r\n\
+    \\EOT\ENQ\a\STXg\DC2\EOT\178\a\STX\r\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXf\STX\DC2\EOT\177\a\t\f\n\
+    \\ENQ\ENQ\a\STXg\STX\DC2\EOT\178\a\t\f\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXg\SOH\DC2\EOT\178\a\STX\r\n\
+    \\ENQ\ENQ\a\STXh\SOH\DC2\EOT\179\a\STX\r\n\
     \\f\n\
-    \\EOT\ENQ\a\STXg\DC2\EOT\178\a\STX\DC3\n\
+    \\EOT\ENQ\a\STXh\DC2\EOT\179\a\STX\DC3\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXg\STX\DC2\EOT\178\a\DLE\DC2\n\
+    \\ENQ\ENQ\a\STXh\STX\DC2\EOT\179\a\DLE\DC2\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXh\SOH\DC2\EOT\179\a\STX\ENQ\n\
+    \\ENQ\ENQ\a\STXi\SOH\DC2\EOT\180\a\STX\ENQ\n\
     \\f\n\
-    \\EOT\ENQ\a\STXh\DC2\EOT\179\a\STX\v\n\
+    \\EOT\ENQ\a\STXi\DC2\EOT\180\a\STX\v\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXh\STX\DC2\EOT\179\a\b\n\
+    \\ENQ\ENQ\a\STXi\STX\DC2\EOT\180\a\b\n\
     \\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXi\SOH\DC2\EOT\180\a\STX\t\n\
+    \\ENQ\ENQ\a\STXj\SOH\DC2\EOT\181\a\STX\t\n\
     \\f\n\
-    \\EOT\ENQ\a\STXi\DC2\EOT\180\a\STX\SI\n\
+    \\EOT\ENQ\a\STXj\DC2\EOT\181\a\STX\SI\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXi\STX\DC2\EOT\180\a\f\SO\n\
-    \\r\n\
-    \\ENQ\ENQ\a\STXj\SOH\DC2\EOT\181\a\STX\ENQ\n\
-    \\f\n\
-    \\EOT\ENQ\a\STXj\DC2\EOT\181\a\STX\v\n\
-    \\r\n\
-    \\ENQ\ENQ\a\STXj\STX\DC2\EOT\181\a\b\n\
-    \\n\
+    \\ENQ\ENQ\a\STXj\STX\DC2\EOT\181\a\f\SO\n\
     \\r\n\
     \\ENQ\ENQ\a\STXk\SOH\DC2\EOT\182\a\STX\ENQ\n\
     \\f\n\
@@ -10415,15 +10422,22 @@ packedFileDescriptor
     \\ENQ\ENQ\a\STXk\STX\DC2\EOT\182\a\b\n\
     \\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXl\SOH\DC2\EOT\183\a\STX\ACK\n\
+    \\ENQ\ENQ\a\STXl\SOH\DC2\EOT\183\a\STX\ENQ\n\
     \\f\n\
-    \\EOT\ENQ\a\STXl\DC2\EOT\183\a\STX\f\n\
+    \\EOT\ENQ\a\STXl\DC2\EOT\183\a\STX\v\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXl\STX\DC2\EOT\183\a\t\v\n\
+    \\ENQ\ENQ\a\STXl\STX\DC2\EOT\183\a\b\n\
+    \\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXm\SOH\DC2\EOT\184\a\STX\ENQ\n\
+    \\ENQ\ENQ\a\STXm\SOH\DC2\EOT\184\a\STX\ACK\n\
+    \\f\n\
+    \\EOT\ENQ\a\STXm\DC2\EOT\184\a\STX\f\n\
+    \\r\n\
+    \\ENQ\ENQ\a\STXm\STX\DC2\EOT\184\a\t\v\n\
+    \\r\n\
+    \\ENQ\ENQ\a\STXn\SOH\DC2\EOT\185\a\STX\ENQ\n\
     \\147\ETX\n\
-    \\EOT\ENQ\a\STXm\DC2\EOT\184\a\STX\v\"\132\ETX NextLanguage = 111;\n\
+    \\EOT\ENQ\a\STXn\DC2\EOT\185\a\STX\v\"\132\ETX NextLanguage = 112;\n\
     \ Steps add a new language:\n\
     \ 1. Copy-paste the \"NextLanguage = N\" line above\n\
     \ 2. Increment \"NextLanguage = N\" to \"NextLanguage = N+1\"\n\
@@ -10432,5 +10446,5 @@ packedFileDescriptor
     \ 5. (optional) Add a brief comment behind the language if the name is not self-explanatory\n\
     \\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXm\STX\DC2\EOT\184\a\b\n\
+    \\ENQ\ENQ\a\STXn\STX\DC2\EOT\185\a\b\n\
     \b\ACKproto3"

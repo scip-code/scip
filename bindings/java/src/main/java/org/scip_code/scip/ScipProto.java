@@ -249,7 +249,7 @@ public final class ScipProto extends com.google.protobuf.GeneratedFile {
       "nspecifiedSeverity\020\000\022\t\n\005Error\020\001\022\013\n\007Warni" +
       "ng\020\002\022\017\n\013Information\020\003\022\010\n\004Hint\020\004*N\n\rDiagn" +
       "osticTag\022\034\n\030UnspecifiedDiagnosticTag\020\000\022\017" +
-      "\n\013Unnecessary\020\001\022\016\n\nDeprecated\020\002*\233\n\n\010Lang" +
+      "\n\013Unnecessary\020\001\022\016\n\nDeprecated\020\002*\245\n\n\010Lang" +
       "uage\022\027\n\023UnspecifiedLanguage\020\000\022\010\n\004ABAP\020<\022" +
       "\010\n\004Apex\020`\022\007\n\003APL\0201\022\007\n\003Ada\020\'\022\010\n\004Agda\020-\022\014\n" +
       "\010AsciiDoc\020V\022\014\n\010Assembly\020:\022\007\n\003Awk\020B\022\007\n\003Ba" +
@@ -270,21 +270,21 @@ public final class ScipProto extends com.google.protobuf.GeneratedFile {
       "\020\014\022\010\n\004Luau\020l\022\014\n\010Makefile\020O\022\014\n\010Markdown\020T" +
       "\022\n\n\006Matlab\0204\022\n\n\006Nickel\020n\022\007\n\003Nix\020M\022\t\n\005OCa" +
       "ml\020)\022\017\n\013Objective_C\020$\022\021\n\rObjective_CPP\020%" +
-      "\022\n\n\006Pascal\020c\022\007\n\003PHP\020\023\022\t\n\005PLSQL\020F\022\010\n\004Perl" +
-      "\020\r\022\016\n\nPowerShell\020C\022\n\n\006Prolog\020G\022\014\n\010Protob" +
-      "uf\020d\022\n\n\006Python\020\017\022\005\n\001R\0206\022\n\n\006Racket\020\013\022\010\n\004R" +
-      "aku\020\016\022\t\n\005Razor\020>\022\t\n\005Repro\020f\022\010\n\004ReST\020U\022\010\n" +
-      "\004Ruby\020\020\022\010\n\004Rust\020(\022\007\n\003SAS\020=\022\010\n\004SCSS\020\035\022\007\n\003" +
-      "SML\020+\022\007\n\003SQL\020E\022\010\n\004Sass\020\034\022\t\n\005Scala\020\005\022\n\n\006S" +
-      "cheme\020\n\022\017\n\013ShellScript\020@\022\013\n\007Skylark\020N\022\t\n" +
-      "\005Slang\020k\022\014\n\010Solidity\020_\022\n\n\006Svelte\020j\022\t\n\005Sw" +
-      "ift\020\002\022\007\n\003Tcl\020e\022\010\n\004TOML\020I\022\007\n\003TeX\020R\022\n\n\006Thr" +
-      "ift\020g\022\016\n\nTypeScript\020\027\022\023\n\017TypeScriptReact" +
-      "\020^\022\013\n\007Verilog\020h\022\010\n\004VHDL\020i\022\017\n\013VisualBasic" +
-      "\020?\022\007\n\003Vue\020\031\022\013\n\007Wolfram\0205\022\007\n\003XML\020\037\022\007\n\003XSL" +
-      "\020 \022\010\n\004YAML\020J\022\007\n\003Zig\020&BN\n\022org.scip_code.s" +
-      "cipB\tScipProtoP\001Z+github.com/scip-code/s" +
-      "cip/bindings/go/scip/b\006proto3"
+      "\022\010\n\004Odin\020o\022\n\n\006Pascal\020c\022\007\n\003PHP\020\023\022\t\n\005PLSQL" +
+      "\020F\022\010\n\004Perl\020\r\022\016\n\nPowerShell\020C\022\n\n\006Prolog\020G" +
+      "\022\014\n\010Protobuf\020d\022\n\n\006Python\020\017\022\005\n\001R\0206\022\n\n\006Rac" +
+      "ket\020\013\022\010\n\004Raku\020\016\022\t\n\005Razor\020>\022\t\n\005Repro\020f\022\010\n" +
+      "\004ReST\020U\022\010\n\004Ruby\020\020\022\010\n\004Rust\020(\022\007\n\003SAS\020=\022\010\n\004" +
+      "SCSS\020\035\022\007\n\003SML\020+\022\007\n\003SQL\020E\022\010\n\004Sass\020\034\022\t\n\005Sc" +
+      "ala\020\005\022\n\n\006Scheme\020\n\022\017\n\013ShellScript\020@\022\013\n\007Sk" +
+      "ylark\020N\022\t\n\005Slang\020k\022\014\n\010Solidity\020_\022\n\n\006Svel" +
+      "te\020j\022\t\n\005Swift\020\002\022\007\n\003Tcl\020e\022\010\n\004TOML\020I\022\007\n\003Te" +
+      "X\020R\022\n\n\006Thrift\020g\022\016\n\nTypeScript\020\027\022\023\n\017TypeS" +
+      "criptReact\020^\022\013\n\007Verilog\020h\022\010\n\004VHDL\020i\022\017\n\013V" +
+      "isualBasic\020?\022\007\n\003Vue\020\031\022\013\n\007Wolfram\0205\022\007\n\003XM" +
+      "L\020\037\022\007\n\003XSL\020 \022\010\n\004YAML\020J\022\007\n\003Zig\020&BN\n\022org.s" +
+      "cip_code.scipB\tScipProtoP\001Z+github.com/s" +
+      "cip-code/scip/bindings/go/scip/b\006proto3"
     };
     descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,

@@ -293,6 +293,14 @@ public enum Language
    */
   Objective_CPP(37),
   /**
+   * <pre>
+   * https://odin-lang.org/
+   * </pre>
+   *
+   * <code>Odin = 111;</code>
+   */
+  Odin(111),
+  /**
    * <code>Pascal = 99;</code>
    */
   Pascal(99),
@@ -474,7 +482,7 @@ public enum Language
   YAML(74),
   /**
    * <pre>
-   * NextLanguage = 111;
+   * NextLanguage = 112;
    * Steps add a new language:
    * 1. Copy-paste the "NextLanguage = N" line above
    * 2. Increment "NextLanguage = N" to "NextLanguage = N+1"
@@ -771,6 +779,14 @@ public enum Language
    */
   public static final int Objective_CPP_VALUE = 37;
   /**
+   * <pre>
+   * https://odin-lang.org/
+   * </pre>
+   *
+   * <code>Odin = 111;</code>
+   */
+  public static final int Odin_VALUE = 111;
+  /**
    * <code>Pascal = 99;</code>
    */
   public static final int Pascal_VALUE = 99;
@@ -952,7 +968,7 @@ public enum Language
   public static final int YAML_VALUE = 74;
   /**
    * <pre>
-   * NextLanguage = 111;
+   * NextLanguage = 112;
    * Steps add a new language:
    * 1. Copy-paste the "NextLanguage = N" line above
    * 2. Increment "NextLanguage = N" to "NextLanguage = N+1"
@@ -1056,6 +1072,7 @@ public enum Language
       case 41: return OCaml;
       case 36: return Objective_C;
       case 37: return Objective_CPP;
+      case 111: return Odin;
       case 99: return Pascal;
       case 19: return PHP;
       case 70: return PLSQL;

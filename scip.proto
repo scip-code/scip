@@ -907,6 +907,7 @@ enum Language {
   OCaml = 41;
   Objective_C = 36;
   Objective_CPP = 37;
+  Odin = 111; // https://odin-lang.org/
   Pascal = 99;
   PHP = 19;
   PLSQL = 70;
@@ -951,7 +952,7 @@ enum Language {
   XSL = 32;
   YAML = 74;
   Zig = 38;
-  // NextLanguage = 111;
+  // NextLanguage = 112;
   // Steps add a new language:
   // 1. Copy-paste the "NextLanguage = N" line above
   // 2. Increment "NextLanguage = N" to "NextLanguage = N+1"

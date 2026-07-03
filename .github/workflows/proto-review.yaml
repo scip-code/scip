@@ -1,7 +1,7 @@
 name: SCIP protocol review
 
 on:
-  pull_request:
+  pull_request_target:
     paths: [scip.proto]
   pull_request_review:
 
@@ -11,6 +11,12 @@ permissions:
 
 jobs:
   proto-review:
+    # `pull_request_review` is read-only on forks; otherwise the workflow would
+    # use a GitHub token without the necessary permissions. Restart the failed
+    # workflow once all approvals are gathered.
+    if: >-
+      github.event_name == 'pull_request_target' ||
+      github.event.pull_request.head.repo.full_name == github.repository
     runs-on: ubuntu-latest
     steps:
       - uses: Automattic/action-required-review@v5

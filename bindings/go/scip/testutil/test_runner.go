@@ -8,6 +8,7 @@ import (
 	"os"
 	"path/filepath"
 	"slices"
+	"strconv"
 	"strings"
 
 	"github.com/fatih/color"
@@ -71,6 +72,8 @@ func RunTests(
 		failures := []string{}
 		successCount := 0
 
+		syntheticDefinitions := syntheticDefinitionsByParent(document.Symbols)
+
 		lines := strings.Split(string(data), "\n")
 		for lineNumber := 0; lineNumber < len(lines); lineNumber++ {
 			testCasesAtLine, usedLines := testCasesForLine(lineNumber, lines, commentSyntax)
@@ -81,7 +84,12 @@ func RunTests(
 				continue
 			}
 
-			attributes := attributesForOccurrencesAtLine(lineNumber, document.Occurrences)
+			attributes := attributesForOccurrencesAtLine(
+				lineNumber,
+				renderLine(lines[lineNumber]),
+				document.Occurrences,
+				syntheticDefinitions,
+			)
 			for _, testCase := range testCasesAtLine {
 				filteredAttrs := filterAttributesForTestCase(testCase, attributes)
 				if !testCase.checkAll(filteredAttrs) {
@@ -149,15 +157,37 @@ type symbolAttribute struct {
 	// each line should be considered a "newline", and is used for multiline
 	// comments (in documentation), and diagnostic information
 	additionalData []string
+
+	// hasEndPosition is true when this attribute describes a multiline
+	// occurrence and the end position fields below are populated.
+	hasEndPosition bool
+
+	// endLineDelta is the number of lines between the occurrence's start and end
+	// line (always > 0 when hasEndPosition is true).
+	endLineDelta int
+
+	// endCharacter is the occurrence's end character on its end line.
+	endCharacter int
+}
+
+// displayData renders the attribute's data for failure messages, appending the
+// `<lineDelta>:<endCharacter>` suffix for multiline occurrences so the output
+// matches the `scip snapshot` representation.
+func (a symbolAttribute) displayData() string {
+	if a.hasEndPosition {
+		return fmt.Sprintf("%s %d:%d", a.data, a.endLineDelta, a.endCharacter)
+	}
+	return a.data
 }
 
 type symbolAttributeKind string
 
 const (
-	definitionAttrKind        symbolAttributeKind = "definition"
-	referenceAttrKind         symbolAttributeKind = "reference"
-	forwardDefinitionAttrKind symbolAttributeKind = "forward_definition"
-	diagnosticAttrKind        symbolAttributeKind = "diagnostic"
+	definitionAttrKind          symbolAttributeKind = "definition"
+	referenceAttrKind           symbolAttributeKind = "reference"
+	forwardDefinitionAttrKind   symbolAttributeKind = "forward_definition"
+	syntheticDefinitionAttrKind symbolAttributeKind = "synthetic_definition"
+	diagnosticAttrKind          symbolAttributeKind = "diagnostic"
 )
 
 func symbolAttributeKindFromStr(str string) symbolAttributeKind {
@@ -168,6 +198,8 @@ func symbolAttributeKindFromStr(str string) symbolAttributeKind {
 		return referenceAttrKind
 	case "forward_definition":
 		return forwardDefinitionAttrKind
+	case "synthetic_definition":
+		return syntheticDefinitionAttrKind
 	case "diagnostic":
 		return diagnosticAttrKind
 	default:
@@ -204,7 +236,13 @@ func testCasesForLine(lineNumber int, lines []string, commentSyntax string) ([]s
 		if !strings.HasPrefix(strings.TrimSpace(line), commentSyntax) {
 			break
 		}
-		testCase := parseTestCase(line, lines[i+1:], commentSyntax)
+		testCase, ok := parseTestCase(line, lines[i+1:], commentSyntax)
+		if !ok {
+			// Non-assertion comment line (e.g. snapshot metadata): consume and
+			// ignore it, but keep scanning the rest of the comment block.
+			usedLines += 1
+			continue
+		}
 
 		testLines = append(testLines, testCase)
 		i += len(testCase.attribute.additionalData)
@@ -224,79 +262,186 @@ func filterAttributesForTestCase(testCase symbolAttributeTestCase, attributes []
 	return filteredAttrs
 }
 
-func attributesForOccurrencesAtLine(lineNumber int, occurrences []*scip.Occurrence) []symbolAttribute {
+// attributeForRange builds a symbolAttribute for the given occurrence range,
+// computing the marker length (and end position for multiline ranges) the same
+// way the snapshot formatter does.
+func attributeForRange(pos scip.Range, renderedLine string, kind symbolAttributeKind, data string) symbolAttribute {
+	attr := symbolAttribute{
+		start:          int(pos.Start.Character),
+		length:         int(markerLength(pos, renderedLine)),
+		kind:           kind,
+		data:           data,
+		additionalData: []string{},
+	}
+	if !pos.IsSingleLine() {
+		attr.hasEndPosition = true
+		attr.endLineDelta = int(pos.End.Line - pos.Start.Line)
+		attr.endCharacter = int(pos.End.Character)
+	}
+	return attr
+}
+
+func attributesForOccurrencesAtLine(
+	lineNumber int,
+	renderedLine string,
+	occurrences []*scip.Occurrence,
+	syntheticDefinitions map[string][]*scip.SymbolInformation,
+) []symbolAttribute {
 	result := []symbolAttribute{}
 	for _, occ := range occurrences {
 		pos, ok := occ.SourceRange()
 		if !ok {
 			continue
 		}
-		if pos.Start.Line == int32(lineNumber) {
-			start := int(pos.Start.Character)
-			length := int(pos.End.Character - pos.Start.Character)
+		if pos.Start.Line != int32(lineNumber) {
+			continue
+		}
 
-			kind := referenceAttrKind
-			if scip.SymbolRole_Definition.Matches(occ) {
-				kind = definitionAttrKind
-			} else if scip.SymbolRole_ForwardDefinition.Matches(occ) {
-				kind = forwardDefinitionAttrKind
-			}
-			result = append(result, symbolAttribute{
-				start:          start,
-				length:         length,
-				kind:           kind,
-				data:           occ.Symbol,
-				additionalData: []string{},
-			})
+		isDefinition := scip.SymbolRole_Definition.Matches(occ)
+		kind := referenceAttrKind
+		if isDefinition {
+			kind = definitionAttrKind
+		} else if scip.SymbolRole_ForwardDefinition.Matches(occ) {
+			kind = forwardDefinitionAttrKind
+		}
+		result = append(result, attributeForRange(pos, renderedLine, kind, occ.Symbol))
 
-			for _, diagnostic := range occ.Diagnostics {
-				result = append(result, symbolAttribute{
-					start:  start,
-					length: length,
-					kind:   diagnosticAttrKind,
-					data:   diagnostic.Severity.String(),
-					additionalData: []string{
-						diagnostic.Message,
-					},
-				})
+		for _, diagnostic := range occ.Diagnostics {
+			diag := attributeForRange(pos, renderedLine, diagnosticAttrKind, diagnostic.Severity.String())
+			diag.additionalData = []string{diagnostic.Message}
+			result = append(result, diag)
+		}
+
+		// Synthetic definitions are projected onto a real definition's range,
+		// mirroring the `scip snapshot` output.
+		if isDefinition {
+			for _, synthetic := range syntheticDefinitions[occ.Symbol] {
+				result = append(result, attributeForRange(pos, renderedLine, syntheticDefinitionAttrKind, synthetic.Symbol))
 			}
 		}
 	}
 	return result
 }
 
-func parseTestCase(line string, leadingLines []string, commentSyntax string) symbolAttributeTestCase {
-	start := 0
-	length := 0
-	enforceLength := false
+type rangeMarker byte
 
-	if strings.Contains(line, "<-") {
-		// if the test line selects via `<-`, treat the symbol selection
-		// as the location of the commentSyntax
-		start = strings.Index(line, commentSyntax)
-		line = strings.Replace(line, "<-", "", 1)
-	} else {
-		// otherwise treat the start as the first `^`
-		start = strings.Index(line, "^")
+const (
+	caretMarker      rangeMarker = '^'
+	underscoreMarker rangeMarker = '_'
+)
 
-		// a single `^` dictates no length enforcement
-		// anything more signifies length should be verified
-		if strings.Contains(line, "^^") {
-			enforceLength = true
-			length = strings.Count(line, "^")
-		}
-		line = strings.ReplaceAll(line, "^", "")
+type rangeSelection struct {
+	start         int
+	length        int
+	enforceLength bool
+	marker        rangeMarker
+	// content is the test line with the comment prefix and range markers removed.
+	content string
+}
+
+// parseRangeSelection extracts the range-selection portion of a test comment
+// line. Ranges are selected with `<-`, a run of `^` (caret), or a run of `_`
+// (underscore, used by `synthetic_definition`). It returns ok=false for comment
+// lines that contain no range selection, such as snapshot metadata detail lines
+// (`kind`, `display_name`, `enclosing_symbol`, `relationship`, `>` ...), which
+// the test runner ignores rather than asserts.
+func parseRangeSelection(line, commentSyntax string) (rangeSelection, bool) {
+	commentIdx := strings.Index(line, commentSyntax)
+	if commentIdx < 0 {
+		return rangeSelection{}, false
+	}
+	body := line[commentIdx+len(commentSyntax):]
+	trimmed := strings.TrimLeft(body, " \t")
+	leading := len(body) - len(trimmed)
+
+	// `<-` selects the character above the first comment character, similar to
+	// Sublime Text syntax tests.
+	if strings.HasPrefix(trimmed, "<-") {
+		return rangeSelection{
+			start:   commentIdx,
+			marker:  caretMarker,
+			content: strings.TrimPrefix(trimmed, "<-"),
+		}, true
 	}
 
-	// remove the comment prefix & whitespace
-	line = strings.TrimSpace(strings.Replace(line, commentSyntax, "", 1))
+	if trimmed == "" {
+		return rangeSelection{}, false
+	}
+	marker := rangeMarker(trimmed[0])
+	if marker != caretMarker && marker != underscoreMarker {
+		return rangeSelection{}, false
+	}
 
-	// the type of the symbol should be the first word
-	// this is "definition", "reference", "documentation", "diagnostic", etc..
-	kindStr := strings.Split(line, " ")[0]
+	// Count only the contiguous marker run. This matters because `_` also
+	// appears inside kinds like `synthetic_definition` and `forward_definition`.
+	runLen := 0
+	for runLen < len(trimmed) && rangeMarker(trimmed[runLen]) == marker {
+		runLen++
+	}
 
-	// the data is everything except the type
-	data := strings.TrimSpace(strings.Replace(line, kindStr, "", 1))
+	sel := rangeSelection{
+		start:   commentIdx + len(commentSyntax) + leading,
+		marker:  marker,
+		content: trimmed[runLen:],
+	}
+	// A single marker ignores length; two or more enforce it.
+	if runLen >= 2 {
+		sel.enforceLength = true
+		sel.length = runLen
+	}
+	return sel, true
+}
+
+// parseMultilineSuffix splits a trailing `<lineDelta>:<endCharacter>` token off
+// of the test data. The suffix is only recognized when lineDelta > 0, matching
+// the multiline occurrences emitted by `scip snapshot`.
+func parseMultilineSuffix(data string) (rest string, endLineDelta int, endCharacter int, ok bool) {
+	fields := strings.Fields(data)
+	if len(fields) == 0 {
+		return data, 0, 0, false
+	}
+	last := fields[len(fields)-1]
+	colon := strings.IndexByte(last, ':')
+	if colon <= 0 || colon == len(last)-1 {
+		return data, 0, 0, false
+	}
+	lineDelta, err1 := strconv.Atoi(last[:colon])
+	endChar, err2 := strconv.Atoi(last[colon+1:])
+	if err1 != nil || err2 != nil || lineDelta <= 0 || endChar < 0 {
+		return data, 0, 0, false
+	}
+	rest = strings.TrimSpace(strings.TrimSuffix(data, last))
+	return rest, lineDelta, endChar, true
+}
+
+// parseTestCase parses a single test comment line. It returns ok=false for
+// comment lines that are not assertions (e.g. snapshot metadata detail lines),
+// which the caller skips.
+func parseTestCase(line string, leadingLines []string, commentSyntax string) (symbolAttributeTestCase, bool) {
+	sel, ok := parseRangeSelection(line, commentSyntax)
+	if !ok {
+		return symbolAttributeTestCase{}, false
+	}
+
+	content := strings.TrimSpace(sel.content)
+	fields := strings.Fields(content)
+	if len(fields) == 0 {
+		// A range marker with no kind is not a valid test case; ignore it.
+		return symbolAttributeTestCase{}, false
+	}
+
+	// the type of the symbol is the first word, e.g. "definition", "reference",
+	// "synthetic_definition", "forward_definition", "diagnostic".
+	kindStr := fields[0]
+	kind := symbolAttributeKindFromStr(kindStr)
+
+	if sel.marker == underscoreMarker && kind != syntheticDefinitionAttrKind {
+		panic(fmt.Sprintf("'_' range marker is only valid for synthetic_definition, got %q", kindStr))
+	}
+
+	// the data is everything after the type, minus any multiline suffix
+	data := strings.TrimSpace(strings.TrimPrefix(content, kindStr))
+	data, endLineDelta, endCharacter, hasEndPosition := parseMultilineSuffix(data)
 
 	additionalData := []string{}
 	for i := range leadingLines {
@@ -321,14 +466,17 @@ func parseTestCase(line string, leadingLines []string, commentSyntax string) sym
 
 	return symbolAttributeTestCase{
 		attribute: symbolAttribute{
-			kind:           symbolAttributeKindFromStr(kindStr),
-			start:          start,
-			length:         length,
+			kind:           kind,
+			start:          sel.start,
+			length:         sel.length,
 			data:           data,
 			additionalData: additionalData,
+			hasEndPosition: hasEndPosition,
+			endLineDelta:   endLineDelta,
+			endCharacter:   endCharacter,
 		},
-		enforceLength: enforceLength,
-	}
+		enforceLength: sel.enforceLength,
+	}, true
 }
 
 func (s symbolAttributeTestCase) checkAll(attributes []symbolAttribute) bool {
@@ -357,13 +505,27 @@ func (s symbolAttributeTestCase) check(attr symbolAttribute) bool {
 
 	// check if symbols are equal, a `.` character in the testCaseSymbol is considered
 	// a wildcard, and matches the correlating group
-	testCaseSymbolParts := strings.Split(s.attribute.data, " ")
-	attrSymbolParts := strings.Split(attr.data, " ")
+	testCaseSymbolParts := strings.Fields(s.attribute.data)
+	attrSymbolParts := strings.Fields(attr.data)
+	if len(testCaseSymbolParts) != len(attrSymbolParts) {
+		return false
+	}
 	for i, testCaseSymbolPart := range testCaseSymbolParts {
 		if testCaseSymbolPart == "." {
 			continue
 		}
 		if testCaseSymbolPart != attrSymbolParts[i] {
+			return false
+		}
+	}
+
+	// when the test specifies a multiline end position (`<lineDelta>:<endChar>`),
+	// require the occurrence to match it. Tests that omit the suffix do not
+	// constrain the end position.
+	if s.attribute.hasEndPosition {
+		if !attr.hasEndPosition ||
+			s.attribute.endLineDelta != attr.endLineDelta ||
+			s.attribute.endCharacter != attr.endCharacter {
 			return false
 		}
 	}
@@ -382,7 +544,7 @@ func (s symbolAttributeTestCase) check(attr symbolAttribute) bool {
 func formatFailure(lineNumber int, testCase symbolAttributeTestCase, attributesAtLine []symbolAttribute) string {
 	failureDesc := []string{
 		fmt.Sprintf("Failure [Ln: %d, Col: %d]", lineNumber+1, testCase.attribute.start),
-		fmt.Sprintf("  Expected: '%s %s'", testCase.attribute.kind, testCase.attribute.data),
+		fmt.Sprintf("  Expected: '%s %s'", testCase.attribute.kind, testCase.attribute.displayData()),
 	}
 	for _, add := range testCase.attribute.additionalData {
 		failureDesc = append(failureDesc, indent(fmt.Sprintf("'%s'", add), 12))
@@ -403,7 +565,7 @@ func formatFailure(lineNumber int, testCase symbolAttributeTestCase, attributesA
 				prefix += "  "
 			}
 
-			failureDesc = append(failureDesc, fmt.Sprintf("  %s '%s %s'", prefix, attr.kind, attr.data))
+			failureDesc = append(failureDesc, fmt.Sprintf("  %s '%s %s'", prefix, attr.kind, attr.displayData()))
 			for _, add := range attr.additionalData {
 				failureDesc = append(failureDesc, indent(fmt.Sprintf("'%s'", add), 12))
 			}

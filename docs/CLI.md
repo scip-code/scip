@@ -18,7 +18,7 @@ USAGE:
    scip [global options] [command [command options]]
 
 VERSION:
-   v0.8.1
+   v0.9.0
 
 DESCRIPTION:
    For more details, see the project README at:
@@ -122,7 +122,7 @@ DESCRIPTION:
    matches that specified in human-readable test files, using syntax
    similar to the 'snapshot' subcommand. Test file syntax reference:
 
-       https://github.com/scip-code/scip/blob/v0.8.1
+       https://github.com/scip-code/scip/blob/v0.9.0
    /docs/test_file_format.md
 
    The test files are located based on the relative_path field

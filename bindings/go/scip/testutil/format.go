@@ -98,6 +98,114 @@ func FormatSnapshot(
 	enclosingRanges := enclosingRanges(document.Occurrences)
 	enclosingByStartLine := enclosingRangesByStartLine(enclosingRanges)
 	enclosingByEndLine := enclosingRangesByEndLine(enclosingRanges)
+
+	// syntheticDefinitions maps a "parent" symbol to the SymbolInformation
+	// entries whose definition is synthesized at the parent's definition site.
+	// These are rendered as additional `synthetic_definition` occurrences
+	// underneath the parent definition occurrence.
+	syntheticDefinitions := syntheticDefinitionsByParent(document.Symbols)
+
+	// formatOccurrence renders a single occurrence and its associated metadata.
+	// When synthetic is non-nil, the occurrence is rendered as a
+	// `synthetic_definition` for synthetic.Symbol, reusing occ's source range.
+	formatOccurrence := func(occ *scip.Occurrence, synthetic *scip.SymbolInformation, renderedLine string) {
+		pos, _ := occ.SourceRange()
+		isDefinition := scip.SymbolRole_Definition.Matches(occ)
+
+		marker := byte('^')
+		if synthetic != nil {
+			marker = '_'
+		}
+
+		b.WriteString(commentSyntax)
+		for indent := int32(0); indent < pos.Start.Character; indent++ {
+			b.WriteRune(' ')
+		}
+
+		// Multiline occurrences are anchored to their start line and the
+		// markers extend to the end of that line. The end position is reported
+		// via the `<lineDelta>:<endCharacter>` suffix below.
+		markerCount := markerLength(pos, renderedLine)
+		for c := int32(0); c < markerCount; c++ {
+			b.WriteByte(marker)
+		}
+
+		b.WriteRune(' ')
+		role := "reference"
+		switch {
+		case synthetic != nil:
+			role = "synthetic_definition"
+		case isDefinition:
+			role = "definition"
+		case scip.SymbolRole_ForwardDefinition.Matches(occ):
+			role = "forward_definition"
+		}
+		b.WriteString(role)
+		b.WriteRune(' ')
+		symbol := occ.Symbol
+		if synthetic != nil {
+			symbol = synthetic.Symbol
+		}
+		b.WriteString(formatSymbol(symbol))
+		if !pos.IsSingleLine() {
+			fmt.Fprintf(&b, " %d:%d", pos.End.Line-pos.Start.Line, pos.End.Character)
+		}
+
+		prefix := "\n" + commentSyntax + strings.Repeat(" ", int(pos.Start.Character+markerCount)+1)
+
+		// Override documentation and diagnostics are occurrence-level, so they
+		// are only rendered for the real occurrence, not synthetic copies.
+		if synthetic == nil && len(occ.OverrideDocumentation) > 0 {
+			writeDocumentation(&b, occ.OverrideDocumentation[0], prefix, true)
+		}
+
+		info := synthetic
+		if info == nil {
+			info = symtab[occ.Symbol]
+		}
+		if info != nil && isDefinition {
+			if info.Kind != scip.SymbolInformation_UnspecifiedKind {
+				b.WriteString(prefix)
+				b.WriteString("kind ")
+				b.WriteString(info.Kind.String())
+			}
+
+			if info.DisplayName != "" {
+				b.WriteString(prefix)
+				b.WriteString("display_name ")
+				b.WriteString(info.DisplayName)
+			}
+
+			if info.SignatureDocumentation != nil && info.SignatureDocumentation.Text != "" {
+				b.WriteString(prefix)
+				b.WriteString("signature_documentation")
+				writeMultiline(&b, prefix, info.SignatureDocumentation.Text)
+			}
+
+			if info.EnclosingSymbol != "" {
+				b.WriteString(prefix)
+				b.WriteString("enclosing_symbol ")
+				b.WriteString(formatSymbol(info.EnclosingSymbol))
+			}
+
+			for _, documentation := range info.Documentation {
+				// At least get the first line of documentation if there is leading whitespace
+				documentation = strings.TrimSpace(documentation)
+				writeDocumentation(&b, documentation, prefix, false)
+			}
+
+			writeRelationships(&b, info.Relationships, prefix, formatSymbol)
+		}
+
+		if synthetic == nil {
+			for _, diagnostic := range occ.Diagnostics {
+				writeDiagnostic(&b, prefix, diagnostic)
+			}
+		}
+
+		b.WriteString("\n")
+	}
+
 	i := 0
 	for lineNumber, line := range strings.Split(string(data), "\n") {
 		for _, er := range enclosingByStartLine[int32(lineNumber)] {
@@ -110,9 +218,9 @@ func FormatSnapshot(
 			b.WriteString("\n")
 		}
 
-		line = strings.TrimSuffix(line, "\r")
+		renderedLine := renderLine(line)
 		b.WriteString(strings.Repeat(" ", len(commentSyntax)))
-		b.WriteString(strings.ReplaceAll(line, "\t", " "))
+		b.WriteString(renderedLine)
 		b.WriteString("\n")
 		for i < len(document.Occurrences) {
 			occ := document.Occurrences[i]
@@ -120,71 +228,12 @@ func FormatSnapshot(
 			if pos.Start.Line != int32(lineNumber) {
 				break
 			}
-			if !pos.IsSingleLine() {
-				i++
-				continue
-			}
-			b.WriteString(commentSyntax)
-			for indent := int32(0); indent < pos.Start.Character; indent++ {
-				b.WriteRune(' ')
-			}
-			length := pos.End.Character - pos.Start.Character
-			for caret := int32(0); caret < length; caret++ {
-				b.WriteRune('^')
-			}
-			b.WriteRune(' ')
-			role := "reference"
-			isDefinition := scip.SymbolRole_Definition.Matches(occ)
-			if isDefinition {
-				role = "definition"
-			} else if scip.SymbolRole_ForwardDefinition.Matches(occ) {
-				role = "forward_definition"
-			}
-			b.WriteString(role)
-			b.WriteRune(' ')
-			b.WriteString(formatSymbol(occ.Symbol))
-
-			prefix := "\n" + commentSyntax + strings.Repeat(" ", int(pos.End.Character)+1)
-
-			hasOverrideDocumentation := len(occ.OverrideDocumentation) > 0
-			if hasOverrideDocumentation {
-				documentation := occ.OverrideDocumentation[0]
-				writeDocumentation(&b, documentation, prefix, true)
-			}
-
-			if info, ok := symtab[occ.Symbol]; ok && isDefinition {
-				if info.Kind != scip.SymbolInformation_UnspecifiedKind {
-					b.WriteString(prefix)
-					b.WriteString("kind ")
-					b.WriteString(info.Kind.String())
+			formatOccurrence(occ, nil, renderedLine)
+			if scip.SymbolRole_Definition.Matches(occ) {
+				for _, synthetic := range syntheticDefinitions[occ.Symbol] {
+					formatOccurrence(occ, synthetic, renderedLine)
 				}
-
-				if info.DisplayName != "" {
-					b.WriteString(prefix)
-					b.WriteString("display_name ")
-					b.WriteString(info.DisplayName)
-				}
-
-				if info.SignatureDocumentation != nil && info.SignatureDocumentation.Text != "" {
-					b.WriteString(prefix)
-					b.WriteString("signature_documentation")
-					writeMultiline(&b, prefix, info.SignatureDocumentation.Text)
-				}
-
-				for _, documentation := range info.Documentation {
-					// At least get the first line of documentation if there is leading whitespace
-					documentation = strings.TrimSpace(documentation)
-					writeDocumentation(&b, documentation, prefix, false)
-				}
-
-				writeRelationships(&b, info.Relationships, prefix, formatSymbol)
 			}
-
-			for _, diagnostic := range occ.Diagnostics {
-				writeDiagnostic(&b, prefix, diagnostic)
-			}
-
-			b.WriteString("\n")
 			i++
 		}
 		for _, er := range enclosingByEndLine[int32(lineNumber)] {
@@ -256,6 +305,9 @@ func writeRelationships(
 		}
 		if relationship.IsTypeDefinition {
 			b.WriteString(" type_definition")
+		}
+		if relationship.IsDefinition {
+			b.WriteString(" definition")
 		}
 	}
 }
@@ -329,4 +381,47 @@ func enclosingRangesByEndLine(ranges []enclosingRange) map[int32][]enclosingRang
 		})
 	}
 	return result
+}
+
+// syntheticDefinitionsByParent maps a "parent" symbol to the SymbolInformation
+// entries that declare a definition relationship on it (i.e. symbols whose
+// definition is synthesized at the parent's definition site). The slices are
+// sorted by symbol for deterministic output. This is shared by the snapshot
+// formatter and the `scip test` runner so the two cannot drift apart.
+func syntheticDefinitionsByParent(symbols []*scip.SymbolInformation) map[string][]*scip.SymbolInformation {
+	result := map[string][]*scip.SymbolInformation{}
+	for _, info := range symbols {
+		for _, rel := range info.Relationships {
+			if rel.IsDefinition {
+				result[rel.Symbol] = append(result[rel.Symbol], info)
+			}
+		}
+	}
+	for _, infos := range result {
+		sort.SliceStable(infos, func(i, j int) bool {
+			return infos[i].Symbol < infos[j].Symbol
+		})
+	}
+	return result
+}
+
+// renderLine normalizes a source line for snapshot/test rendering by trimming a
+// trailing carriage return and expanding tabs to single spaces.
+func renderLine(line string) string {
+	return strings.ReplaceAll(strings.TrimSuffix(line, "\r"), "\t", " ")
+}
+
+// markerLength returns the number of caret/underscore markers used to underline
+// an occurrence. Single-line occurrences are underlined exactly; multiline
+// occurrences are underlined from their start column to the end of the rendered
+// start line. SCIP allows empty ranges, so at least one marker is always drawn.
+func markerLength(pos scip.Range, renderedStartLine string) int32 {
+	length := pos.End.Character - pos.Start.Character
+	if !pos.IsSingleLine() {
+		length = int32(len(renderedStartLine)) - pos.Start.Character
+	}
+	if length < 1 {
+		length = 1
+	}
+	return length
 }

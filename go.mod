@@ -7,11 +7,11 @@ replace github.com/scip-code/scip/bindings/go/scip => ./bindings/go/scip
 require (
 	github.com/hhatto/gocloc v0.7.0
 	github.com/k0kubun/pp/v3 v3.5.1
-	github.com/klauspost/compress v1.18.6
+	github.com/klauspost/compress v1.19.0
 	github.com/montanaflynn/stats v0.9.0
 	github.com/scip-code/scip/bindings/go/scip v0.0.0-00010101000000-000000000000
 	github.com/stretchr/testify v1.11.1
-	github.com/urfave/cli/v3 v3.10.0
+	github.com/urfave/cli/v3 v3.10.1
 	google.golang.org/protobuf v1.36.11
 	zombiezen.com/go/sqlite v1.4.2
 )

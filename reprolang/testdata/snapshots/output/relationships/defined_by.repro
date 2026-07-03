@@ -7,6 +7,9 @@
 #           ^^^^^ definition defined_by.repro/C1_f.
 #                 documentation
 #                 > signature of C1_f.
+#           _____ synthetic_definition defined_by.repro/C1_f.
+#                 relationship defined_by.repro/C1_f. definition
+#                 relationship defined_by.repro/M_f. reference
  
  reference C2_f.
 #          ^^^^^ reference defined_by.repro/C1_f.

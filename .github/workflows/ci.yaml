@@ -51,7 +51,7 @@ jobs:
           private-key: ${{ secrets.RENOVATE_FIX_APP_PRIVATE_KEY }}
 
       - if: steps.filter.outputs.relevant == 'true'
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           ref: ${{ github.event.pull_request.head.ref }}
           # Pushing under the App identity (not GITHUB_TOKEN) makes
@@ -118,13 +118,16 @@ jobs:
     # resulting `pull_request synchronize` triggers a fresh CI run that
     # validates the corrected SHA, and branch protection on the PR
     # HEAD prevents merging until that fresh run reports success.
-    if: always() && needs.fix.outputs.pushed != 'true'
+    if: >-
+      always() &&
+      (needs.fix.result == 'success' || needs.fix.result == 'skipped') &&
+      needs.fix.outputs.pushed != 'true'
     runs-on: ubuntu-latest
     outputs:
       checks: ${{ steps.checks.outputs.result }}
       packages: ${{ steps.packages.outputs.result }}
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - uses: DeterminateSystems/nix-installer-action@v22
       - id: checks
         run: |
@@ -140,12 +143,13 @@ jobs:
 
   checks:
     needs: list
+    if: always() && needs.list.result == 'success'
     runs-on: ubuntu-latest
     strategy:
       matrix:
         check: ${{ fromJSON(needs.list.outputs.checks) }}
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - uses: DeterminateSystems/nix-installer-action@v22
       - uses: DeterminateSystems/magic-nix-cache-action@v14
         with:
@@ -154,12 +158,13 @@ jobs:
 
   packages:
     needs: list
+    if: always() && needs.list.result == 'success'
     runs-on: ubuntu-latest
     strategy:
       matrix:
         package: ${{ fromJSON(needs.list.outputs.packages) }}
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - uses: DeterminateSystems/nix-installer-action@v22
       - uses: DeterminateSystems/magic-nix-cache-action@v14
         with:

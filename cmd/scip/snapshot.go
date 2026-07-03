@@ -86,7 +86,7 @@ func snapshotMain(flags snapshotFlags) error {
 		if err != nil {
 			return err
 		}
-		err = os.WriteFile(outputPath, []byte(snapshot.Text), 0755)
+		err = os.WriteFile(outputPath, []byte(snapshot.Text), 0644)
 		if err != nil {
 			return err
 		}

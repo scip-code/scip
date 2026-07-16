@@ -231,7 +231,7 @@ jobs:
       - uses: actions/checkout@v7
         with:
           ref: v${{ needs.publish.outputs.version }}
-      - uses: actions/setup-go@v6
+      - uses: actions/setup-go@v7
         with:
           go-version-file: go.mod
       - name: Build

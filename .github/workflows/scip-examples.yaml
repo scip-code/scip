@@ -70,7 +70,7 @@ jobs:
 
       - name: Install Go
         if: ${{ matrix.target.scip_binary == 'scip-go' }}
-        uses: actions/setup-go@v6
+        uses: actions/setup-go@v7
         with: { go-version-file: 'go.mod' }
 
       - name: Cache Maven dependencies

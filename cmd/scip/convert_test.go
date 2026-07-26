@@ -9,6 +9,7 @@ import (
 
 	"github.com/klauspost/compress/zstd"
 	"github.com/stretchr/testify/require"
+	"google.golang.org/protobuf/proto"
 	"zombiezen.com/go/sqlite"
 	"zombiezen.com/go/sqlite/sqlitex"
 
@@ -40,6 +41,7 @@ func TestConvert_SmokeTest(t *testing.T) {
 		{"documents", checkDocuments},
 		{"symbols", checkSymbols},
 		{"occurrences", checkOccurrences},
+		{"relationships", checkRelationships},
 	}
 
 	for _, check := range checks {
@@ -51,15 +53,24 @@ func TestConvert_SmokeTest(t *testing.T) {
 
 func testIndex1() *scip.Index {
 	pkg1S1Sym := "scip-go go . . pkg1/S1#"
+	pkg1I1Sym := "scip-go go . . pkg1/I1#"
 	return &scip.Index{
 		Documents: []*scip.Document{
 			{
 				RelativePath: "a.go",
 				Occurrences: []*scip.Occurrence{
 					{Symbol: pkg1S1Sym, Range: []int32{10, 3, 6}, SymbolRoles: int32(scip.SymbolRole_Definition)},
+					{Symbol: pkg1I1Sym, Range: []int32{20, 3, 6}, SymbolRoles: int32(scip.SymbolRole_Definition)},
 				},
 				Symbols: []*scip.SymbolInformation{
-					{Symbol: pkg1S1Sym},
+					// S1 implements I1 — exercises the relationships column.
+					{
+						Symbol: pkg1S1Sym,
+						Relationships: []*scip.Relationship{
+							{Symbol: pkg1I1Sym, IsImplementation: true},
+						},
+					},
+					{Symbol: pkg1I1Sym},
 				},
 			},
 			{
@@ -172,4 +183,74 @@ type occurrenceData struct {
 	Symbol       string
 	Role         int32
 	Range        scip.Range
+}
+
+// checkRelationships asserts SymbolInformation.relationships survives the
+// round-trip into global_symbols.relationships, and that symbols without
+// relationships store NULL rather than a compressed empty message. The column
+// is declared in the schema, so a converter that never writes it yields a
+// database that queries cleanly while reporting every symbol as having no
+// relationships.
+func checkRelationships(t *testing.T, index *scip.Index, db *sqlite.Conn) {
+	expected := map[string][]*scip.Relationship{}
+	for _, doc := range index.Documents {
+		for _, sym := range doc.Symbols {
+			if len(sym.Relationships) > 0 {
+				expected[sym.Symbol] = sym.Relationships
+			}
+		}
+	}
+	require.NotEmpty(t, expected, "fixture must exercise at least one relationship")
+
+	decoder, err := zstd.NewReader(nil)
+	require.NoError(t, err)
+	defer decoder.Close()
+
+	found := map[string][]*scip.Relationship{}
+	query := "SELECT symbol, relationships FROM global_symbols WHERE relationships IS NOT NULL"
+	err = sqlitex.ExecuteTransient(db, query, &sqlitex.ExecOptions{
+		ResultFunc: func(stmt *sqlite.Stmt) error {
+			symbol := stmt.ColumnText(0)
+			blob := make([]byte, stmt.ColumnLen(1))
+			stmt.ColumnBytes(1, blob)
+
+			raw, err := decoder.DecodeAll(blob, nil)
+			if err != nil {
+				return err
+			}
+			var info scip.SymbolInformation
+			if err := proto.Unmarshal(raw, &info); err != nil {
+				return err
+			}
+			found[symbol] = info.Relationships
+			return nil
+		},
+	})
+	require.NoError(t, err)
+
+	require.Len(t, found, len(expected))
+	for symbol, want := range expected {
+		got, ok := found[symbol]
+		require.True(t, ok, "no relationships stored for %s", symbol)
+		require.Len(t, got, len(want))
+		for i := range want {
+			require.Equal(t, want[i].Symbol, got[i].Symbol)
+			require.Equal(t, want[i].IsImplementation, got[i].IsImplementation)
+		}
+	}
+
+	// Symbols carrying no relationships must be NULL, not an empty frame:
+	// insertGlobalSymbols is also called with synthetic SymbolInformation
+	// values that only have a Symbol.
+	var nullCount int
+	err = sqlitex.ExecuteTransient(db,
+		"SELECT COUNT(*) FROM global_symbols WHERE relationships IS NULL",
+		&sqlitex.ExecOptions{
+			ResultFunc: func(stmt *sqlite.Stmt) error {
+				nullCount = stmt.ColumnInt(0)
+				return nil
+			},
+		})
+	require.NoError(t, err)
+	require.Greater(t, nullCount, 0, "symbols without relationships must store NULL")
 }

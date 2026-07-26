@@ -420,12 +420,33 @@ func (c *Converter) insertEnclosingRangeData(symbolToID map[string]int64, occs [
 	return nil
 }
 
+// marshalRelationships serializes a symbol's relationships for the
+// global_symbols.relationships column, framed the same way Chunk.toDBFormat
+// frames chunks.occurrences: a zstd-compressed wrapper message rather than a
+// bare repeated field, so the blob stays self-describing.
+func (c *Converter) marshalRelationships(rels []*scip.Relationship) ([]byte, error) {
+	blob, err := proto.Marshal(&scip.SymbolInformation{Relationships: rels})
+	if err != nil {
+		return nil, fmt.Errorf("failed to serialize relationships: %w", err)
+	}
+
+	var buf bytes.Buffer
+	c.zstdWriter.Reset(&buf)
+	if _, err = c.zstdWriter.Write(blob); err != nil {
+		return nil, fmt.Errorf("compression error: %w", err)
+	}
+	if err = c.zstdWriter.Close(); err != nil {
+		return nil, fmt.Errorf("flushing encoder: %w", err)
+	}
+	return buf.Bytes(), nil
+}
+
 func (c *Converter) insertGlobalSymbols(symbol *scip.SymbolInformation) (symbolID int64, err error) {
 	documentation := strings.Join(symbol.Documentation, "\n")
 
 	insertStmt, err := c.conn.Prepare(
-		`INSERT INTO global_symbols (symbol, display_name, kind, documentation, enclosing_symbol)
-		VALUES (?, ?, ?, ?, ?)
+		`INSERT INTO global_symbols (symbol, display_name, kind, documentation, enclosing_symbol, relationships)
+		VALUES (?, ?, ?, ?, ?, ?)
 		ON CONFLICT(symbol) DO NOTHING
 		RETURNING id`)
 	if err != nil {
@@ -452,6 +473,19 @@ func (c *Converter) insertGlobalSymbols(symbol *scip.SymbolInformation) (symbolI
 		insertStmt.BindNull(5)
 	} else {
 		insertStmt.BindText(5, symbol.EnclosingSymbol)
+	}
+	// Bind NULL rather than an empty frame when there are no relationships:
+	// insertGlobalSymbols is also called with synthetic SymbolInformation
+	// values carrying only a Symbol, and a compressed empty message would make
+	// "no relationships" indistinguishable from "present but empty".
+	if len(symbol.Relationships) == 0 {
+		insertStmt.BindNull(6)
+	} else {
+		relationshipsBlob, err := c.marshalRelationships(symbol.Relationships)
+		if err != nil {
+			return 0, err
+		}
+		insertStmt.BindBytes(6, relationshipsBlob)
 	}
 
 	if _, err = insertStmt.Step(); err != nil {

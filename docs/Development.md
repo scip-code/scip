@@ -10,7 +10,7 @@
 
 - [bindings/](./bindings/): Contains a mix of generated and hand-written
   bindings for different languages.
-  - The TypeScript, Rust and Haskell bindings are auto-generated.
+  - The TypeScript, Rust, Haskell, JVM and .NET bindings are auto-generated.
   - The Go bindings include protoc-generated code as well as extra
     functionality. This is used by the CLI below as well as the
     [Sourcegraph CLI](https://github.com/sourcegraph/src-cli).
@@ -82,17 +82,19 @@ go test ./cmd/scip -update-snapshots
 
 Update the version in `cmd/scip/version.txt`, `bindings/rust/Cargo.toml`,
 `bindings/rust/Cargo.lock`, `bindings/java/pom.xml`, `bindings/kotlin/pom.xml`,
-and `docs/CLI.md`, then land a commit with those changes. The
-[jvm-bindings workflow](/.github/workflows/jvm-bindings.yaml) fails the PR
-if the two `pom.xml` versions don't match `cmd/scip/version.txt`.
+`bindings/dotnet/Scip.csproj`, and `docs/CLI.md`, then land a commit with those
+changes. The [jvm-bindings workflow](/.github/workflows/jvm-bindings.yaml)
+fails the PR if the two `pom.xml` versions don't match `cmd/scip/version.txt`,
+and the [dotnet-bindings workflow](/.github/workflows/dotnet-bindings.yaml)
+does the same for `Scip.csproj`.
 
 After the commit is on `main`, trigger the
 [release workflow](/.github/workflows/release.yaml) from the
 Actions tab on GitHub, providing the version number (e.g. `0.7.0`).
 The workflow will validate version.txt, create and push tags, create a draft
 GitHub release (with auto-generated notes), publish the Rust crate, publish the
-Java/Kotlin bindings to Maven Central, build and upload CLI binaries, and
-finally mark the release as non-draft.
+Java/Kotlin bindings to Maven Central, publish the .NET bindings to NuGet,
+build and upload CLI binaries, and finally mark the release as non-draft.
 
 ### JVM bindings publishing
 
@@ -114,3 +116,21 @@ Required GitHub Actions secrets:
 deploy uses `<waitUntil>published</waitUntil>` (~10–30 min) before the
 Kotlin deploy runs. Publications are irreversible — bad releases are
 fixed by bumping `cmd/scip/version.txt`.
+
+### .NET bindings publishing
+
+The .NET bindings are published to [nuget.org](https://www.nuget.org) as the
+`Scip` package by the `publish-dotnet-bindings` job in the release workflow,
+which packs the project through `nix develop` so the SDK matches the
+`dotnet-bindings` check.
+
+Required GitHub Actions secret:
+
+| Secret          | Source                                                                                   |
+| --------------- | ---------------------------------------------------------------------------------------- |
+| `NUGET_API_KEY` | An API key scoped to push the `Scip` package, from https://www.nuget.org/account/apikeys |
+
+The first publication also has to create the package id, so the key needs the
+"Push new packages and package versions" scope until `Scip` exists. NuGet
+publications are irreversible (versions can be unlisted, not deleted), so bad
+releases are fixed by bumping `cmd/scip/version.txt`.

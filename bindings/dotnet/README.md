@@ -26,5 +26,14 @@ foreach (var document in index.Documents)
 }
 ```
 
+## Naming
+
+The `scip.Descriptor` message is generated as `Scip.SymbolDescriptor`: C#
+rejects a class whose member has the same name as the class itself, and every
+generated message carries a static `Descriptor` property. The name matches the
+schema's own comments and the [scip-dotnet] indexer. Nothing else is renamed,
+and the Protobuf descriptor still reports `scip.Descriptor`.
+
 [SCIP Code Intelligence Protocol]: https://github.com/scip-code/scip
+[scip-dotnet]: https://github.com/sourcegraph/scip-dotnet
 [`Google.Protobuf`]: https://www.nuget.org/packages/Google.Protobuf

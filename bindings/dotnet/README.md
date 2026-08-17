@@ -15,9 +15,12 @@ is installed transitively.
 
 ```csharp
 using Scip;
+// Alias `Scip.Index`, which is ambiguous with `System.Index` under
+// implicit usings.
+using ScipIndex = Scip.Index;
 
 using var stream = File.OpenRead("index.scip");
-var index = Index.Parser.ParseFrom(stream);
+var index = ScipIndex.Parser.ParseFrom(stream);
 
 Console.WriteLine(index.Metadata.ProjectRoot);
 foreach (var document in index.Documents)

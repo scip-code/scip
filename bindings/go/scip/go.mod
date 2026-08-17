@@ -12,7 +12,7 @@ require (
 require (
 	github.com/google/go-cmp v0.7.0
 	github.com/google/gofuzz v1.2.0
-	github.com/stretchr/testify v1.11.1
+	github.com/stretchr/testify v1.12.0
 	pgregory.net/rapid v1.3.0
 )
 

@@ -10,7 +10,7 @@ require (
 	github.com/klauspost/compress v1.19.2
 	github.com/montanaflynn/stats v0.12.3
 	github.com/scip-code/scip/bindings/go/scip v0.0.0-00010101000000-000000000000
-	github.com/stretchr/testify v1.11.1
+	github.com/stretchr/testify v1.12.0
 	github.com/urfave/cli/v3 v3.11.0
 	google.golang.org/protobuf v1.36.12
 	zombiezen.com/go/sqlite v1.4.2

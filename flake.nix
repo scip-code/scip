@@ -115,6 +115,7 @@
             with pkgs;
             [
               cargo
+              dotnetCorePackages.sdk_10_0
               go
               nodejs
               rustc

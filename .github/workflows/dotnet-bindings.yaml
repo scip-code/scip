@@ -1,0 +1,44 @@
+name: .NET bindings
+
+# The Nix `dotnet-bindings` check already builds and packs this project with
+# the pinned SDK. This workflow covers the toolchain a contributor without
+# Nix uses, and annotates the exact file when the package version drifts
+# from cmd/scip/version.txt.
+
+on:
+  pull_request:
+    paths:
+      - bindings/dotnet/**
+      - cmd/scip/version.txt
+      - scip.proto
+      - .github/workflows/dotnet-bindings.yaml
+
+permissions:
+  contents: read
+
+concurrency:
+  group: dotnet-bindings-${{ github.head_ref || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: '10.0.x'
+
+      - name: Validate Scip.csproj version matches cmd/scip/version.txt
+        run: |
+          set -euo pipefail
+          expected=$(cat cmd/scip/version.txt)
+          actual=$(dotnet msbuild bindings/dotnet/Scip.csproj -getProperty:Version)
+          if [ "$actual" != "$expected" ]; then
+            echo "::error file=bindings/dotnet/Scip.csproj::version is '$actual', expected '$expected'"
+            exit 1
+          fi
+
+      - name: Pack the Scip package
+        run: dotnet pack -c Release bindings/dotnet/Scip.csproj

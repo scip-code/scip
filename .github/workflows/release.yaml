@@ -104,6 +104,34 @@ jobs:
           fi
         working-directory: bindings/rust
 
+  publish-dotnet-bindings:
+    needs: publish
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: v${{ needs.publish.outputs.version }}
+      - uses: DeterminateSystems/nix-installer-action@v22
+      - uses: DeterminateSystems/magic-nix-cache-action@v14
+        with:
+          use-flakehub: "disabled"
+      # LICENSE and README.md are packed into the nupkg; LICENSE is a symlink
+      # in-tree (matches bindings/{haskell,rust,typescript}) and dotnet pack
+      # follows it, so no materialization step is needed.
+      - name: Pack
+        working-directory: bindings/dotnet
+        run: nix develop -c dotnet pack -c Release
+      - name: Publish to NuGet
+        working-directory: bindings/dotnet
+        # --skip-duplicate keeps re-runs of a partially failed release green;
+        # NuGet publications are irreversible, like the other registries here.
+        run: |
+          nix develop -c dotnet nuget push \
+            'bin/Release/Scip.${{ needs.publish.outputs.version }}.nupkg' \
+            --source https://api.nuget.org/v3/index.json \
+            --api-key '${{ secrets.NUGET_API_KEY }}' \
+            --skip-duplicate
+
   publish-haskell-bindings:
     needs: publish
     runs-on: ubuntu-latest
@@ -262,7 +290,7 @@ jobs:
           gh release upload "$TAG" "$ASSET.tar.gz" "$ASSET.tar.gz.sha256" --clobber
 
   finalize-release:
-    needs: [publish, release-crate, publish-haskell-bindings, build-go-binaries, publish-jvm-bindings, publish-npm]
+    needs: [publish, release-crate, publish-dotnet-bindings, publish-haskell-bindings, build-go-binaries, publish-jvm-bindings, publish-npm]
     runs-on: ubuntu-latest
     permissions:
       contents: write

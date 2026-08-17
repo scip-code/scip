@@ -78,6 +78,23 @@
               text = ''
                 buf generate
                 goimports -w ./bindings/go/scip/scip.pb.go
+                # protoc's C# backend emits `class Descriptor` containing a
+                # static `Descriptor` property, which C# rejects (CS0542:
+                # member names cannot be the same as their enclosing type).
+                # Rename the generated class - not the Protobuf message, so
+                # the descriptor pool still says `scip.Descriptor` - to
+                # SymbolDescriptor, the name used both by scip.proto's own
+                # comments and by the existing scip-dotnet bindings.
+                sed -i -E \
+                  -e 's/global::Scip\.Descriptor\b/global::Scip.SymbolDescriptor/g' \
+                  -e 's/\bclass Descriptor\b/class SymbolDescriptor/' \
+                  -e 's/<Descriptor>/<SymbolDescriptor>/g' \
+                  -e 's/\bnew Descriptor\(/new SymbolDescriptor(/g' \
+                  -e 's/\bpublic Descriptor\b/public SymbolDescriptor/g' \
+                  -e 's/\bDescriptor other\b/SymbolDescriptor other/g' \
+                  -e 's/\bas Descriptor\)/as SymbolDescriptor)/' \
+                  -e 's/\bthe Descriptor message type\b/the SymbolDescriptor message type/' \
+                  ./bindings/dotnet/src/Scip.cs
                 prettier --write --list-different '**/*.{ts,js(on)?,md,yml}'
               '';
             };

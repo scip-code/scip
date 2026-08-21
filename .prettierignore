@@ -2,5 +2,7 @@ reprolang/target
 reprolang/src/grammar.json
 reprolang/src/node-types.json
 bindings/typescript
+bindings/dotnet/bin
+bindings/dotnet/obj
 docs/scip.md
 .bin

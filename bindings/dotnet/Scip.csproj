@@ -1,0 +1,48 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <!--
+      The generated code is plain data types with no framework-specific API
+      surface, so netstandard2.0 costs nothing and reaches the widest set of
+      consumers: .NET Framework 4.6.1+, Mono/Unity and every .NET (Core)
+      release. Google.Protobuf ships a netstandard2.0 assembly too.
+    -->
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <AssemblyName>Scip</AssemblyName>
+    <RootNamespace>Scip</RootNamespace>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <PackageId>Scip</PackageId>
+    <!-- Must match cmd/scip/version.txt (enforced by .github/workflows/dotnet-bindings.yaml). -->
+    <Version>0.9.0</Version>
+    <Description>
+      Generated .NET bindings for the Semantic Code Intelligence Protocol (SCIP).
+    </Description>
+    <Authors>SCIP Maintainers</Authors>
+    <Company>scip-code</Company>
+    <PackageProjectUrl>https://github.com/scip-code/scip</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/scip-code/scip.git</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageTags>scip;protobuf;code-intelligence;code-navigation</PackageTags>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!--
+      Must match the protoc version used for code generation (see flake.nix).
+      The C# runtime is versioned 3.MAJOR.MINOR against protoc's MAJOR.MINOR,
+      so protoc 34.x pairs with Google.Protobuf 3.34.x. Generated code only
+      needs the runtime to be at least as new as the compiler that emitted it.
+    -->
+    <PackageReference Include="Google.Protobuf" Version="3.34.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="README.md" Pack="true" PackagePath="" />
+    <None Include="LICENSE" Pack="true" PackagePath="" />
+  </ItemGroup>
+
+</Project>

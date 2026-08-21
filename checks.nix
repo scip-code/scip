@@ -44,6 +44,35 @@
     installPhase = "touch $out";
   };
 
+  dotnet-bindings =
+    let
+      csprojVersion = builtins.head (
+        builtins.match ".*<Version>([^<]+)</Version>.*" (builtins.readFile ./bindings/dotnet/Scip.csproj)
+      );
+    in
+    assert pkgs.lib.assertMsg (
+      csprojVersion == version
+    ) "Version mismatch in bindings/dotnet/Scip.csproj: expected ${version}, got ${csprojVersion}";
+    pkgs.buildDotnetModule {
+      pname = "scip-bindings-dotnet";
+      inherit version;
+      src = ./bindings/dotnet;
+      projectFile = "Scip.csproj";
+      # Regenerate with:
+      #   nix build .#checks.x86_64-linux.dotnet-bindings.passthru.fetch-deps
+      #   ./result bindings/dotnet/deps.json
+      nugetDeps = ./bindings/dotnet/deps.json;
+      dotnet-sdk = pkgs.dotnetCorePackages.sdk_10_0;
+      # A library has nothing to publish; the nupkg is the artifact.
+      dontPublish = true;
+      packNupkg = true;
+      # LICENSE is a symlink to the repository root (matches
+      # bindings/{haskell,rust,typescript}) and packing follows it.
+      prePatch = ''
+        cp --remove-destination ${./LICENSE} LICENSE
+      '';
+    };
+
   go-bindings = pkgs.buildGoModule {
     pname = "scip-bindings-go";
     inherit version;

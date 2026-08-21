@@ -11,8 +11,8 @@
   "packageRules": [
     {
       "description": "Bump manually in lock-step with flake.nix's protoc.",
-      "matchManagers": ["maven"],
-      "matchPackageNames": ["com.google.protobuf:*"],
+      "matchManagers": ["maven", "nuget"],
+      "matchPackageNames": ["com.google.protobuf:*", "Google.Protobuf"],
       "enabled": false
     },
     {

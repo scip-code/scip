@@ -8,7 +8,7 @@ require (
 	github.com/hhatto/gocloc v0.7.0
 	github.com/k0kubun/pp/v3 v3.5.2
 	github.com/klauspost/compress v1.19.2
-	github.com/montanaflynn/stats v0.12.4
+	github.com/montanaflynn/stats v0.12.5
 	github.com/scip-code/scip/bindings/go/scip v0.0.0-00010101000000-000000000000
 	github.com/stretchr/testify v1.12.1
 	github.com/urfave/cli/v3 v3.11.0

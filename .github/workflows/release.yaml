@@ -107,6 +107,9 @@ jobs:
   publish-dotnet-bindings:
     needs: publish
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write # NuGet trusted-publishing OIDC
     steps:
       - uses: actions/checkout@v7
         with:
@@ -121,6 +124,17 @@ jobs:
       - name: Pack
         working-directory: bindings/dotnet
         run: nix develop -c dotnet pack -c Release
+      # Trusted publishing: exchange this job's GitHub OIDC token for a
+      # short-lived nuget.org API key, so no long-lived secret exists. The
+      # trust policy on nuget.org must name this repository and this workflow
+      # file (`release.yaml`, no environment); `user` is the nuget.org account
+      # that owns the policy - a profile name, not an email. The key expires
+      # after an hour, so this step stays immediately before the push.
+      # See docs/Development.md for the nuget.org side of the setup.
+      - uses: NuGet/login@v1
+        id: nuget-login
+        with:
+          user: ${{ secrets.NUGET_USER }}
       - name: Publish to NuGet
         working-directory: bindings/dotnet
         # --skip-duplicate keeps re-runs of a partially failed release green;
@@ -129,7 +143,7 @@ jobs:
           nix develop -c dotnet nuget push \
             'bin/Release/Scip.${{ needs.publish.outputs.version }}.nupkg' \
             --source https://api.nuget.org/v3/index.json \
-            --api-key '${{ secrets.NUGET_API_KEY }}' \
+            --api-key '${{ steps.nuget-login.outputs.NUGET_API_KEY }}' \
             --skip-duplicate
 
   publish-haskell-bindings:

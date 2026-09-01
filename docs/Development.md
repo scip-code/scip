@@ -124,13 +124,34 @@ The .NET bindings are published to [nuget.org](https://www.nuget.org) as the
 which packs the project through `nix develop` so the SDK matches the
 `dotnet-bindings` check.
 
+The job authenticates with
+[trusted publishing](https://learn.microsoft.com/en-us/nuget/nuget-org/trusted-publishing)
+rather than a stored API key: it asks GitHub for an OIDC token
+(`permissions: id-token: write`) and `NuGet/login` exchanges that token for an
+API key that expires after an hour. Nothing long-lived has to be rotated, which
+matters because nuget.org now caps manually created keys at 30 days.
+
+On nuget.org, under your username → Trusted Publishing, add a policy:
+
+| Field            | Value                                                         |
+| ---------------- | ------------------------------------------------------------- |
+| Policy owner     | the user or organization that owns the `Scip` package         |
+| Repository owner | `scip-code`                                                   |
+| Repository       | `scip`                                                        |
+| Workflow file    | `release.yaml` (file name only, no `.github/workflows/` path) |
+| Environment      | leave empty; the job uses no environment                      |
+
+A policy covers every package its owner owns, so it works for the first
+publication, which creates the `Scip` package id. Policies on private
+repositories start out temporarily active for 7 days and become permanent on
+the first successful publish, which is when nuget.org learns the GitHub
+repository and owner IDs.
+
 Required GitHub Actions secret:
 
-| Secret          | Source                                                                                   |
-| --------------- | ---------------------------------------------------------------------------------------- |
-| `NUGET_API_KEY` | An API key scoped to push the `Scip` package, from https://www.nuget.org/account/apikeys |
+| Secret       | Source                                                                      |
+| ------------ | --------------------------------------------------------------------------- |
+| `NUGET_USER` | The nuget.org username (profile name, not email) that owns the trust policy |
 
-The first publication also has to create the package id, so the key needs the
-"Push new packages and package versions" scope until `Scip` exists. NuGet
-publications are irreversible (versions can be unlisted, not deleted), so bad
-releases are fixed by bumping `cmd/scip/version.txt`.
+NuGet publications are irreversible (versions can be unlisted, not deleted), so
+bad releases are fixed by bumping `cmd/scip/version.txt`.

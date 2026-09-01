@@ -7,11 +7,6 @@ name: .NET bindings
 
 on:
   pull_request:
-    paths:
-      - bindings/dotnet/**
-      - cmd/scip/version.txt
-      - scip.proto
-      - .github/workflows/dotnet-bindings.yaml
 
 permissions:
   contents: read

@@ -146,7 +146,7 @@
       pname = "scip-bindings-typescript";
       inherit version;
       src = ./bindings/typescript;
-      npmDepsHash = "sha256-hLncSM2iXLVl3F489w3iSunHZ2+QG1jf16E47qRg+dk=";
+      npmDepsHash = "sha256-wa2Qh3FfCo01ew8vA4w5snd1wb1jQv/GaVR+vjiIrYI=";
       buildPhase = ''
         runHook preBuild
         npm run build

@@ -78,13 +78,23 @@
               text = ''
                 buf generate
                 goimports -w ./bindings/go/scip/scip.pb.go
+
                 # protoc's C# backend emits `class Descriptor` containing a
                 # static `Descriptor` property, which C# rejects (CS0542:
-                # member names cannot be the same as their enclosing type).
-                # Rename the generated class - not the Protobuf message, so
-                # the descriptor pool still says `scip.Descriptor` - to
-                # SymbolDescriptor, the name used both by scip.proto's own
-                # comments and by the existing scip-dotnet bindings.
+                # member names cannot be the same as their enclosing type),
+                # so the generated class has to be renamed. The Protobuf
+                # message keeps its name: `scip.Descriptor` is what the
+                # descriptor pool, `Any` type URLs and canonical JSON say in
+                # every other binding, so renaming the message in a copy of
+                # scip.proto - what sourcegraph/scip-dotnet does - would buy
+                # a tidier generator at the price of a C# binding that
+                # disagrees with the protocol. SymbolDescriptor is the name
+                # scip.proto's own comments already use.
+                if ! grep -qE '^message Descriptor \{' ./scip.proto; then
+                  echo 'scip.proto no longer declares a message named Descriptor: the C# rename below is stale.' >&2
+                  exit 1
+                fi
+                before=$(sed -E 's/\bSymbolDescriptor\b/Descriptor/g' ./bindings/dotnet/src/Scip.cs)
                 sed -i -E \
                   -e 's/global::Scip\.Descriptor\b/global::Scip.SymbolDescriptor/g' \
                   -e 's/\bclass Descriptor\b/class SymbolDescriptor/' \
@@ -95,6 +105,19 @@
                   -e 's/\bas Descriptor\)/as SymbolDescriptor)/' \
                   -e 's/\bthe Descriptor message type\b/the SymbolDescriptor message type/' \
                   ./bindings/dotnet/src/Scip.cs
+                # Those expressions have to add up to exactly a rename.
+                # Folding SymbolDescriptor back to Descriptor on both sides
+                # must give the same text, so anything else they touched
+                # fails here. An occurrence they miss fails in the
+                # `dotnet-bindings` check instead, where the file no longer
+                # compiles.
+                after=$(sed -E 's/\bSymbolDescriptor\b/Descriptor/g' ./bindings/dotnet/src/Scip.cs)
+                if [ "$before" != "$after" ]; then
+                  echo 'The Descriptor -> SymbolDescriptor rewrite changed more than that identifier.' >&2
+                  echo 'protoc emits a shape the expressions in flake.nix no longer match; fix them there.' >&2
+                  exit 1
+                fi
+
                 prettier --write --list-different '**/*.{ts,js(on)?,md,yml}'
               '';
             };

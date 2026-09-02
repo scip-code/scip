@@ -8,9 +8,9 @@ require (
 	github.com/hhatto/gocloc v0.7.0
 	github.com/k0kubun/pp/v3 v3.5.2
 	github.com/klauspost/compress v1.19.2
-	github.com/montanaflynn/stats v0.12.3
+	github.com/montanaflynn/stats v0.12.5
 	github.com/scip-code/scip/bindings/go/scip v0.0.0-00010101000000-000000000000
-	github.com/stretchr/testify v1.12.0
+	github.com/stretchr/testify v1.12.1
 	github.com/urfave/cli/v3 v3.11.0
 	google.golang.org/protobuf v1.36.12
 	zombiezen.com/go/sqlite v1.4.2
@@ -29,10 +29,10 @@ require (
 	github.com/remyoudompheng/bigfft v0.0.0-20230129092748-24d4a6f8daec // indirect
 	github.com/sourcegraph/beaut v0.0.0-20240611013027-627e4c25335a // indirect
 	github.com/spf13/afero v1.10.0 // indirect
+	go.yaml.in/yaml/v3 v3.0.5 // indirect
 	golang.org/x/exp v0.0.0-20250408133849-7e4ce0ab07d0 // indirect
 	golang.org/x/sys v0.42.0 // indirect
 	golang.org/x/text v0.38.0 // indirect
-	gopkg.in/yaml.v3 v3.0.1 // indirect
 	modernc.org/libc v1.65.7 // indirect
 	modernc.org/mathutil v1.7.1 // indirect
 	modernc.org/memory v1.11.0 // indirect

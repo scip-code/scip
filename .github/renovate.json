@@ -1,6 +1,7 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": ["config:recommended"],
+  "automerge": true,
   "rebaseWhen": "behind-base-branch",
   "gitIgnoredAuthors": [
     "41898282+github-actions[bot]@users.noreply.github.com"

@@ -16,7 +16,7 @@
   <PropertyGroup>
     <PackageId>Scip</PackageId>
     <!-- Must match cmd/scip/version.txt (enforced by .github/workflows/dotnet-bindings.yaml). -->
-    <Version>0.9.0</Version>
+    <Version>0.10.0</Version>
     <Description>
       Generated .NET bindings for the Semantic Code Intelligence Protocol (SCIP).
     </Description>

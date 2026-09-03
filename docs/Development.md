@@ -80,21 +80,18 @@ go test ./cmd/scip -update-snapshots
 
 ## Release a new version
 
-Update the version in `cmd/scip/version.txt`, `bindings/rust/Cargo.toml`,
-`bindings/rust/Cargo.lock`, `bindings/java/pom.xml`, `bindings/kotlin/pom.xml`,
-`bindings/dotnet/Scip.csproj`, and `docs/CLI.md`, then land a commit with those
-changes. The [jvm-bindings workflow](/.github/workflows/jvm-bindings.yaml)
-fails the PR if the two `pom.xml` versions don't match `cmd/scip/version.txt`,
-and the [dotnet-bindings workflow](/.github/workflows/dotnet-bindings.yaml)
-does the same for `Scip.csproj`.
+Update the version in `cmd/scip/version.txt` and all package manifests and
+lockfiles under `bindings/`, as well as `reprolang/package.json` and
+`docs/CLI.md`, then land a commit with those changes. CI validates that the
+package versions match `cmd/scip/version.txt`.
 
-After the commit is on `main`, trigger the
-[release workflow](/.github/workflows/release.yaml) from the
-Actions tab on GitHub, providing the version number (e.g. `0.7.0`).
-The workflow will validate version.txt, create and push tags, create a draft
-GitHub release (with auto-generated notes), publish the Rust crate, publish the
-Java/Kotlin bindings to Maven Central, publish the .NET bindings to NuGet,
-build and upload CLI binaries, and finally mark the release as non-draft.
+When the commit reaches `main`, the change to `cmd/scip/version.txt`
+automatically triggers the [release workflow](/.github/workflows/release.yaml).
+The workflow validates the version, creates and pushes tags, creates a draft
+GitHub release (with auto-generated notes), publishes all language bindings,
+builds and uploads CLI binaries, and finally marks the release as non-draft.
+Manual dispatch re-runs the version currently on `main`; it does not accept a
+version input.
 
 ### JVM bindings publishing
 

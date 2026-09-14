@@ -25,7 +25,7 @@
             inherit version;
 
             src = ./.;
-            vendorHash = "sha256-2WQXiaK6qmBjlwo5svpBbo7V0gt3MmDX5KtNIhARxgg=";
+            vendorHash = "sha256-iJZC1rLR0I437Awvpv7EPsbaeNKAW4UMndjZxY7cXlo=";
             proxyVendor = true;
 
             subPackages = [ "cmd/scip" ];

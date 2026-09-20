@@ -10,7 +10,7 @@
 
 - [bindings/](./bindings/): Contains a mix of generated and hand-written
   bindings for different languages.
-  - The TypeScript, Rust and Haskell bindings are auto-generated.
+  - The TypeScript, Rust, Haskell, JVM and .NET bindings are auto-generated.
   - The Go bindings include protoc-generated code as well as extra
     functionality. This is used by the CLI below as well as the
     [Sourcegraph CLI](https://github.com/sourcegraph/src-cli).
@@ -80,19 +80,18 @@ go test ./cmd/scip -update-snapshots
 
 ## Release a new version
 
-Update the version in `cmd/scip/version.txt`, `bindings/rust/Cargo.toml`,
-`bindings/rust/Cargo.lock`, `bindings/java/pom.xml`, `bindings/kotlin/pom.xml`,
-and `docs/CLI.md`, then land a commit with those changes. The
-[jvm-bindings workflow](/.github/workflows/jvm-bindings.yaml) fails the PR
-if the two `pom.xml` versions don't match `cmd/scip/version.txt`.
+Update the version in `cmd/scip/version.txt` and all package manifests and
+lockfiles under `bindings/`, as well as `reprolang/package.json` and
+`docs/CLI.md`, then land a commit with those changes. CI validates that the
+package versions match `cmd/scip/version.txt`.
 
-After the commit is on `main`, trigger the
-[release workflow](/.github/workflows/release.yaml) from the
-Actions tab on GitHub, providing the version number (e.g. `0.7.0`).
-The workflow will validate version.txt, create and push tags, create a draft
-GitHub release (with auto-generated notes), publish the Rust crate, publish the
-Java/Kotlin bindings to Maven Central, build and upload CLI binaries, and
-finally mark the release as non-draft.
+When the commit reaches `main`, the change to `cmd/scip/version.txt`
+automatically triggers the [release workflow](/.github/workflows/release.yaml).
+The workflow validates the version, creates and pushes tags, creates a draft
+GitHub release (with auto-generated notes), publishes all language bindings,
+builds and uploads CLI binaries, and finally marks the release as non-draft.
+Manual dispatch re-runs the version currently on `main`; it does not accept a
+version input.
 
 ### JVM bindings publishing
 
@@ -114,3 +113,42 @@ Required GitHub Actions secrets:
 deploy uses `<waitUntil>published</waitUntil>` (~10–30 min) before the
 Kotlin deploy runs. Publications are irreversible — bad releases are
 fixed by bumping `cmd/scip/version.txt`.
+
+### .NET bindings publishing
+
+The .NET bindings are published to [nuget.org](https://www.nuget.org) as the
+`Scip` package by the `publish-dotnet-bindings` job in the release workflow,
+which packs the project through `nix develop` so the SDK matches the
+`dotnet-bindings` check.
+
+The job authenticates with
+[trusted publishing](https://learn.microsoft.com/en-us/nuget/nuget-org/trusted-publishing)
+rather than a stored API key: it asks GitHub for an OIDC token
+(`permissions: id-token: write`) and `NuGet/login` exchanges that token for an
+API key that expires after an hour. Nothing long-lived has to be rotated, which
+matters because nuget.org now caps manually created keys at 30 days.
+
+On nuget.org, under your username → Trusted Publishing, add a policy:
+
+| Field            | Value                                                         |
+| ---------------- | ------------------------------------------------------------- |
+| Policy owner     | the user or organization that owns the `Scip` package         |
+| Repository owner | `scip-code`                                                   |
+| Repository       | `scip`                                                        |
+| Workflow file    | `release.yaml` (file name only, no `.github/workflows/` path) |
+| Environment      | leave empty; the job uses no environment                      |
+
+A policy covers every package its owner owns, so it works for the first
+publication, which creates the `Scip` package id. Policies on private
+repositories start out temporarily active for 7 days and become permanent on
+the first successful publish, which is when nuget.org learns the GitHub
+repository and owner IDs.
+
+Required GitHub Actions secret:
+
+| Secret       | Source                                                                      |
+| ------------ | --------------------------------------------------------------------------- |
+| `NUGET_USER` | The nuget.org username (profile name, not email) that owns the trust policy |
+
+NuGet publications are irreversible (versions can be unlisted, not deleted), so
+bad releases are fixed by bumping `cmd/scip/version.txt`.

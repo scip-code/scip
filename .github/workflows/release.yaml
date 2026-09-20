@@ -89,8 +89,8 @@ jobs:
       - uses: actions/checkout@v7
         with:
           ref: v${{ needs.publish.outputs.version }}
-      - uses: DeterminateSystems/nix-installer-action@v22
-      - uses: DeterminateSystems/magic-nix-cache-action@v14
+      - uses: DeterminateSystems/nix-installer-action@v23
+      - uses: DeterminateSystems/magic-nix-cache-action@v15
         with:
           use-flakehub: "disabled"
       - name: Publish crate
@@ -104,6 +104,48 @@ jobs:
           fi
         working-directory: bindings/rust
 
+  publish-dotnet-bindings:
+    needs: publish
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write # NuGet trusted-publishing OIDC
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: v${{ needs.publish.outputs.version }}
+      - uses: DeterminateSystems/nix-installer-action@v23
+      - uses: DeterminateSystems/magic-nix-cache-action@v15
+        with:
+          use-flakehub: "disabled"
+      # LICENSE and README.md are packed into the nupkg; LICENSE is a symlink
+      # in-tree (matches bindings/{haskell,rust,typescript}) and dotnet pack
+      # follows it, so no materialization step is needed.
+      - name: Pack
+        working-directory: bindings/dotnet
+        run: nix develop -c dotnet pack -c Release
+      # Trusted publishing: exchange this job's GitHub OIDC token for a
+      # short-lived nuget.org API key, so no long-lived secret exists. The
+      # trust policy on nuget.org must name this repository and this workflow
+      # file (`release.yaml`, no environment); `user` is the nuget.org account
+      # that owns the policy - a profile name, not an email. The key expires
+      # after an hour, so this step stays immediately before the push.
+      # See docs/Development.md for the nuget.org side of the setup.
+      - uses: NuGet/login@v1
+        id: nuget-login
+        with:
+          user: ${{ secrets.NUGET_USER }}
+      - name: Publish to NuGet
+        working-directory: bindings/dotnet
+        # --skip-duplicate keeps re-runs of a partially failed release green;
+        # NuGet publications are irreversible, like the other registries here.
+        run: |
+          nix develop -c dotnet nuget push \
+            'bin/Release/Scip.${{ needs.publish.outputs.version }}.nupkg' \
+            --source https://api.nuget.org/v3/index.json \
+            --api-key '${{ steps.nuget-login.outputs.NUGET_API_KEY }}' \
+            --skip-duplicate
+
   publish-haskell-bindings:
     needs: publish
     runs-on: ubuntu-latest
@@ -111,8 +153,8 @@ jobs:
       - uses: actions/checkout@v7
         with:
           ref: v${{ needs.publish.outputs.version }}
-      - uses: DeterminateSystems/nix-installer-action@v22
-      - uses: DeterminateSystems/magic-nix-cache-action@v14
+      - uses: DeterminateSystems/nix-installer-action@v23
+      - uses: DeterminateSystems/magic-nix-cache-action@v15
         with:
           use-flakehub: "disabled"
       - name: Build sdist
@@ -141,10 +183,10 @@ jobs:
         with:
           ref: v${{ needs.publish.outputs.version }}
 
-      - uses: actions/setup-java@v5
+      - uses: actions/setup-java@v6
         with:
           distribution: temurin
-          java-version: 11
+          java-version: 25.0.4+101.0.LTS
           cache: maven
           server-id: central
           server-username: MAVEN_USERNAME
@@ -262,7 +304,7 @@ jobs:
           gh release upload "$TAG" "$ASSET.tar.gz" "$ASSET.tar.gz.sha256" --clobber
 
   finalize-release:
-    needs: [publish, release-crate, publish-haskell-bindings, build-go-binaries, publish-jvm-bindings, publish-npm]
+    needs: [publish, release-crate, publish-dotnet-bindings, publish-haskell-bindings, build-go-binaries, publish-jvm-bindings, publish-npm]
     runs-on: ubuntu-latest
     permissions:
       contents: write

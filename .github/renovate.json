@@ -1,6 +1,7 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": ["config:recommended"],
+  "automerge": true,
   "rebaseWhen": "behind-base-branch",
   "gitIgnoredAuthors": [
     "41898282+github-actions[bot]@users.noreply.github.com"
@@ -11,8 +12,8 @@
   "packageRules": [
     {
       "description": "Bump manually in lock-step with flake.nix's protoc.",
-      "matchManagers": ["maven"],
-      "matchPackageNames": ["com.google.protobuf:*"],
+      "matchManagers": ["maven", "nuget"],
+      "matchPackageNames": ["com.google.protobuf:*", "Google.Protobuf"],
       "enabled": false
     },
     {

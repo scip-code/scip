@@ -1,12 +1,12 @@
 module github.com/scip-code/scip
 
-go 1.25.0
+go 1.26.0
 
 replace github.com/scip-code/scip/bindings/go/scip => ./bindings/go/scip
 
 require (
 	github.com/hhatto/gocloc v0.7.0
-	github.com/k0kubun/pp/v3 v3.5.2
+	github.com/k0kubun/pp/v3 v3.5.3
 	github.com/klauspost/compress v1.20.1
 	github.com/montanaflynn/stats v0.13.0
 	github.com/scip-code/scip/bindings/go/scip v0.0.0-00010101000000-000000000000
@@ -32,7 +32,7 @@ require (
 	go.yaml.in/yaml/v3 v3.0.5 // indirect
 	golang.org/x/exp v0.0.0-20250408133849-7e4ce0ab07d0 // indirect
 	golang.org/x/sys v0.42.0 // indirect
-	golang.org/x/text v0.38.0 // indirect
+	golang.org/x/text v0.42.0 // indirect
 	modernc.org/libc v1.65.7 // indirect
 	modernc.org/mathutil v1.7.1 // indirect
 	modernc.org/memory v1.11.0 // indirect

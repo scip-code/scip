@@ -43,6 +43,7 @@ Several indexers currently emit SCIP data:
 - [scip-dotnet](https://github.com/sourcegraph/scip-dotnet): C#, Visual Basic
 - [scip-dart](https://github.com/Workiva/scip-dart): Dart
 - [scip-php](https://github.com/davidrjenni/scip-php): PHP
+- [scip-perl](https://github.com/jelmer/scip-perl): Perl
 - [debian-lsp](https://github.com/jelmer/debian-lsp): Debian packaging files
 
 For more details about indexers,

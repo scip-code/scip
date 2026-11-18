@@ -40,6 +40,7 @@ private static final long serialVersionUID = 0L;
     kind_ = 0;
     displayName_ = "";
     enclosingSymbol_ = "";
+    visibility_ = 0;
   }
 
   public static final com.google.protobuf.Descriptors.Descriptor
@@ -1783,6 +1784,40 @@ private static final long serialVersionUID = 0L;
     }
   }
 
+  public static final int VISIBILITY_FIELD_NUMBER = 9;
+  private int visibility_ = 0;
+  /**
+   * <pre>
+   * (optional) The declared visibility of this symbol, see `Visibility`.
+   *
+   * Indexers should leave this field empty when the language has no notion of
+   * visibility for this kind of symbol, for example parameters or type
+   * parameters.
+   * </pre>
+   *
+   * <code>.scip.Visibility visibility = 9 [json_name = "visibility"];</code>
+   * @return The enum numeric value on the wire for visibility.
+   */
+  @java.lang.Override public int getVisibilityValue() {
+    return visibility_;
+  }
+  /**
+   * <pre>
+   * (optional) The declared visibility of this symbol, see `Visibility`.
+   *
+   * Indexers should leave this field empty when the language has no notion of
+   * visibility for this kind of symbol, for example parameters or type
+   * parameters.
+   * </pre>
+   *
+   * <code>.scip.Visibility visibility = 9 [json_name = "visibility"];</code>
+   * @return The visibility.
+   */
+  @java.lang.Override public org.scip_code.scip.Visibility getVisibility() {
+    org.scip_code.scip.Visibility result = org.scip_code.scip.Visibility.forNumber(visibility_);
+    return result == null ? org.scip_code.scip.Visibility.UNRECOGNIZED : result;
+  }
+
   private byte memoizedIsInitialized = -1;
   @java.lang.Override
   public final boolean isInitialized() {
@@ -1817,6 +1852,9 @@ private static final long serialVersionUID = 0L;
     }
     if (!com.google.protobuf.GeneratedMessage.isStringEmpty(enclosingSymbol_)) {
       com.google.protobuf.GeneratedMessage.writeString(output, 8, enclosingSymbol_);
+    }
+    if (visibility_ != org.scip_code.scip.Visibility.UnspecifiedVisibility.getNumber()) {
+      output.writeEnum(9, visibility_);
     }
     getUnknownFields().writeTo(output);
   }
@@ -1861,6 +1899,10 @@ private static final long serialVersionUID = 0L;
     if (!com.google.protobuf.GeneratedMessage.isStringEmpty(enclosingSymbol_)) {
       size += com.google.protobuf.GeneratedMessage.computeStringSize(8, enclosingSymbol_);
     }
+    if (visibility_ != org.scip_code.scip.Visibility.UnspecifiedVisibility.getNumber()) {
+      size += com.google.protobuf.CodedOutputStream
+        .computeEnumSize(9, visibility_);
+    }
     size += getUnknownFields().getSerializedSize();
     memoizedSize = size;
     return size;
@@ -1892,6 +1934,7 @@ private static final long serialVersionUID = 0L;
     }
     if (!getEnclosingSymbol()
         .equals(other.getEnclosingSymbol())) return false;
+    if (visibility_ != other.visibility_) return false;
     if (!getUnknownFields().equals(other.getUnknownFields())) return false;
     return true;
   }
@@ -1923,6 +1966,8 @@ private static final long serialVersionUID = 0L;
     }
     hash = (37 * hash) + ENCLOSING_SYMBOL_FIELD_NUMBER;
     hash = (53 * hash) + getEnclosingSymbol().hashCode();
+    hash = (37 * hash) + VISIBILITY_FIELD_NUMBER;
+    hash = (53 * hash) + visibility_;
     hash = (29 * hash) + getUnknownFields().hashCode();
     memoizedHashCode = hash;
     return hash;
@@ -2084,6 +2129,7 @@ private static final long serialVersionUID = 0L;
         signatureDocumentationBuilder_ = null;
       }
       enclosingSymbol_ = "";
+      visibility_ = 0;
       return this;
     }
 
@@ -2152,6 +2198,9 @@ private static final long serialVersionUID = 0L;
       }
       if (((from_bitField0_ & 0x00000040) != 0)) {
         result.enclosingSymbol_ = enclosingSymbol_;
+      }
+      if (((from_bitField0_ & 0x00000080) != 0)) {
+        result.visibility_ = visibility_;
       }
       result.bitField0_ |= to_bitField0_;
     }
@@ -2225,6 +2274,9 @@ private static final long serialVersionUID = 0L;
         bitField0_ |= 0x00000040;
         onChanged();
       }
+      if (other.visibility_ != 0) {
+        setVisibilityValue(other.getVisibilityValue());
+      }
       this.mergeUnknownFields(other.getUnknownFields());
       onChanged();
       return this;
@@ -2296,6 +2348,11 @@ private static final long serialVersionUID = 0L;
               bitField0_ |= 0x00000040;
               break;
             } // case 66
+            case 72: {
+              visibility_ = input.readEnum();
+              bitField0_ |= 0x00000080;
+              break;
+            } // case 72
             default: {
               if (!super.parseUnknownField(input, extensionRegistry, tag)) {
                 done = true; // was an endgroup tag
@@ -3498,6 +3555,98 @@ private static final long serialVersionUID = 0L;
       checkByteStringIsUtf8(value);
       enclosingSymbol_ = value;
       bitField0_ |= 0x00000040;
+      onChanged();
+      return this;
+    }
+
+    private int visibility_ = 0;
+    /**
+     * <pre>
+     * (optional) The declared visibility of this symbol, see `Visibility`.
+     *
+     * Indexers should leave this field empty when the language has no notion of
+     * visibility for this kind of symbol, for example parameters or type
+     * parameters.
+     * </pre>
+     *
+     * <code>.scip.Visibility visibility = 9 [json_name = "visibility"];</code>
+     * @return The enum numeric value on the wire for visibility.
+     */
+    @java.lang.Override public int getVisibilityValue() {
+      return visibility_;
+    }
+    /**
+     * <pre>
+     * (optional) The declared visibility of this symbol, see `Visibility`.
+     *
+     * Indexers should leave this field empty when the language has no notion of
+     * visibility for this kind of symbol, for example parameters or type
+     * parameters.
+     * </pre>
+     *
+     * <code>.scip.Visibility visibility = 9 [json_name = "visibility"];</code>
+     * @param value The enum numeric value on the wire for visibility to set.
+     * @throws IllegalArgumentException if UNRECOGNIZED is provided.
+     * @return This builder for chaining.
+     */
+    public Builder setVisibilityValue(int value) {
+      visibility_ = value;
+      bitField0_ |= 0x00000080;
+      onChanged();
+      return this;
+    }
+    /**
+     * <pre>
+     * (optional) The declared visibility of this symbol, see `Visibility`.
+     *
+     * Indexers should leave this field empty when the language has no notion of
+     * visibility for this kind of symbol, for example parameters or type
+     * parameters.
+     * </pre>
+     *
+     * <code>.scip.Visibility visibility = 9 [json_name = "visibility"];</code>
+     * @return The visibility.
+     */
+    @java.lang.Override
+    public org.scip_code.scip.Visibility getVisibility() {
+      org.scip_code.scip.Visibility result = org.scip_code.scip.Visibility.forNumber(visibility_);
+      return result == null ? org.scip_code.scip.Visibility.UNRECOGNIZED : result;
+    }
+    /**
+     * <pre>
+     * (optional) The declared visibility of this symbol, see `Visibility`.
+     *
+     * Indexers should leave this field empty when the language has no notion of
+     * visibility for this kind of symbol, for example parameters or type
+     * parameters.
+     * </pre>
+     *
+     * <code>.scip.Visibility visibility = 9 [json_name = "visibility"];</code>
+     * @param value The visibility to set.
+     * @return This builder for chaining.
+     */
+    public Builder setVisibility(org.scip_code.scip.Visibility value) {
+      if (value == null) { throw new NullPointerException(); }
+      bitField0_ |= 0x00000080;
+      visibility_ = value.getNumber();
+      onChanged();
+      return this;
+    }
+    /**
+     * <pre>
+     * (optional) The declared visibility of this symbol, see `Visibility`.
+     *
+     * Indexers should leave this field empty when the language has no notion of
+     * visibility for this kind of symbol, for example parameters or type
+     * parameters.
+     * </pre>
+     *
+     * <code>.scip.Visibility visibility = 9 [json_name = "visibility"];</code>
+     * @return This builder for chaining.
+     */
+    public Builder clearVisibility() {
+      bitField0_ = (bitField0_ & ~0x00000080);
+      visibility_ = 0;
       onChanged();
       return this;
     }

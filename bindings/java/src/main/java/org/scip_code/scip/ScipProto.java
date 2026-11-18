@@ -139,7 +139,7 @@ public final class ScipProto extends com.google.protobuf.GeneratedFile {
       "cal\020\010\022\t\n\005Macro\020\t\032\002\020\001\"\201\001\n\tSignature\022\032\n\010la" +
       "nguage\030\004 \001(\tR\010language\022\022\n\004text\030\005 \001(\tR\004te" +
       "xt\0222\n\013occurrences\030\002 \003(\0132\020.scip.Occurrenc" +
-      "eR\013occurrencesJ\004\010\001\020\002J\004\010\003\020\004J\004\010\006\020\007\"\323\014\n\021Sym" +
+      "eR\013occurrencesJ\004\010\001\020\002J\004\010\003\020\004J\004\010\006\020\007\"\205\r\n\021Sym" +
       "bolInformation\022\026\n\006symbol\030\001 \001(\tR\006symbol\022$" +
       "\n\rdocumentation\030\003 \003(\tR\rdocumentation\0228\n\r" +
       "relationships\030\004 \003(\0132\022.scip.RelationshipR" +
@@ -148,143 +148,147 @@ public final class ScipProto extends com.google.protobuf.GeneratedFile {
       "\030\006 \001(\tR\013displayName\022H\n\027signature_documen" +
       "tation\030\007 \001(\0132\017.scip.SignatureR\026signature" +
       "Documentation\022)\n\020enclosing_symbol\030\010 \001(\tR" +
-      "\017enclosingSymbol\"\373\t\n\004Kind\022\023\n\017Unspecified" +
-      "Kind\020\000\022\022\n\016AbstractMethod\020B\022\014\n\010Accessor\020H" +
-      "\022\t\n\005Array\020\001\022\r\n\tAssertion\020\002\022\022\n\016Associated" +
-      "Type\020\003\022\r\n\tAttribute\020\004\022\t\n\005Axiom\020\005\022\013\n\007Bool" +
-      "ean\020\006\022\t\n\005Class\020\007\022\013\n\007Concept\020V\022\014\n\010Constan" +
-      "t\020\010\022\017\n\013Constructor\020\t\022\014\n\010Contract\020>\022\016\n\nDa" +
-      "taFamily\020\n\022\014\n\010Delegate\020I\022\010\n\004Enum\020\013\022\016\n\nEn" +
-      "umMember\020\014\022\t\n\005Error\020?\022\t\n\005Event\020\r\022\r\n\tExte" +
-      "nsion\020T\022\010\n\004Fact\020\016\022\t\n\005Field\020\017\022\010\n\004File\020\020\022\014" +
-      "\n\010Function\020\021\022\n\n\006Getter\020\022\022\013\n\007Grammar\020\023\022\014\n" +
-      "\010Instance\020\024\022\r\n\tInterface\020\025\022\007\n\003Key\020\026\022\010\n\004L" +
-      "ang\020\027\022\t\n\005Lemma\020\030\022\013\n\007Library\020@\022\t\n\005Macro\020\031" +
-      "\022\n\n\006Method\020\032\022\017\n\013MethodAlias\020J\022\022\n\016MethodR" +
-      "eceiver\020\033\022\027\n\023MethodSpecification\020C\022\013\n\007Me" +
-      "ssage\020\034\022\t\n\005Mixin\020U\022\014\n\010Modifier\020A\022\n\n\006Modu" +
-      "le\020\035\022\r\n\tNamespace\020\036\022\010\n\004Null\020\037\022\n\n\006Number\020" +
-      " \022\n\n\006Object\020!\022\014\n\010Operator\020\"\022\013\n\007Package\020#" +
-      "\022\021\n\rPackageObject\020$\022\r\n\tParameter\020%\022\022\n\016Pa" +
-      "rameterLabel\020&\022\013\n\007Pattern\020\'\022\r\n\tPredicate" +
-      "\020(\022\014\n\010Property\020)\022\014\n\010Protocol\020*\022\022\n\016Protoc" +
-      "olMethod\020D\022\025\n\021PureVirtualMethod\020E\022\017\n\013Qua" +
-      "siquoter\020+\022\021\n\rSelfParameter\020,\022\n\n\006Setter\020" +
-      "-\022\r\n\tSignature\020.\022\022\n\016SingletonClass\020K\022\023\n\017" +
-      "SingletonMethod\020L\022\024\n\020StaticDataMember\020M\022" +
-      "\017\n\013StaticEvent\020N\022\017\n\013StaticField\020O\022\020\n\014Sta" +
-      "ticMethod\020P\022\022\n\016StaticProperty\020Q\022\022\n\016Stati" +
-      "cVariable\020R\022\n\n\006String\0200\022\n\n\006Struct\0201\022\r\n\tS" +
-      "ubscript\020/\022\n\n\006Tactic\0202\022\013\n\007Theorem\0203\022\021\n\rT" +
-      "hisParameter\0204\022\t\n\005Trait\0205\022\017\n\013TraitMethod" +
-      "\020F\022\010\n\004Type\0206\022\r\n\tTypeAlias\0207\022\r\n\tTypeClass" +
-      "\0208\022\023\n\017TypeClassMethod\020G\022\016\n\nTypeFamily\0209\022" +
-      "\021\n\rTypeParameter\020:\022\t\n\005Union\020;\022\t\n\005Value\020<" +
-      "\022\014\n\010Variable\020=\"\311\001\n\014Relationship\022\026\n\006symbo" +
-      "l\030\001 \001(\tR\006symbol\022!\n\014is_reference\030\002 \001(\010R\013i" +
-      "sReference\022+\n\021is_implementation\030\003 \001(\010R\020i" +
-      "sImplementation\022,\n\022is_type_definition\030\004 " +
-      "\001(\010R\020isTypeDefinition\022#\n\ris_definition\030\005" +
-      " \001(\010R\014isDefinition\"s\n\017SingleLineRange\022\022\n" +
-      "\004line\030\001 \001(\005R\004line\022\'\n\017start_character\030\002 \001" +
-      "(\005R\016startCharacter\022#\n\rend_character\030\003 \001(" +
-      "\005R\014endCharacter\"\230\001\n\016MultiLineRange\022\035\n\nst" +
-      "art_line\030\001 \001(\005R\tstartLine\022\'\n\017start_chara" +
-      "cter\030\002 \001(\005R\016startCharacter\022\031\n\010end_line\030\003" +
-      " \001(\005R\007endLine\022#\n\rend_character\030\004 \001(\005R\014en" +
-      "dCharacter\"\210\005\n\nOccurrence\022\030\n\005range\030\001 \003(\005" +
-      "B\002\030\001R\005range\022C\n\021single_line_range\030\010 \001(\0132\025" +
-      ".scip.SingleLineRangeH\000R\017singleLineRange" +
-      "\022@\n\020multi_line_range\030\t \001(\0132\024.scip.MultiL" +
-      "ineRangeH\000R\016multiLineRange\022\026\n\006symbol\030\002 \001" +
-      "(\tR\006symbol\022!\n\014symbol_roles\030\003 \001(\005R\013symbol" +
-      "Roles\0225\n\026override_documentation\030\004 \003(\tR\025o" +
-      "verrideDocumentation\0221\n\013syntax_kind\030\005 \001(" +
-      "\0162\020.scip.SyntaxKindR\nsyntaxKind\0222\n\013diagn" +
-      "ostics\030\006 \003(\0132\020.scip.DiagnosticR\013diagnost" +
-      "ics\022+\n\017enclosing_range\030\007 \003(\005B\002\030\001R\016enclos" +
-      "ingRange\022V\n\033single_line_enclosing_range\030" +
-      "\n \001(\0132\025.scip.SingleLineRangeH\001R\030singleLi" +
-      "neEnclosingRange\022S\n\032multi_line_enclosing" +
-      "_range\030\013 \001(\0132\024.scip.MultiLineRangeH\001R\027mu" +
-      "ltiLineEnclosingRangeB\r\n\013typed_rangeB\027\n\025" +
-      "typed_enclosing_range\"\247\001\n\nDiagnostic\022*\n\010" +
-      "severity\030\001 \001(\0162\016.scip.SeverityR\010severity" +
-      "\022\022\n\004code\030\002 \001(\tR\004code\022\030\n\007message\030\003 \001(\tR\007m" +
-      "essage\022\026\n\006source\030\004 \001(\tR\006source\022\'\n\004tags\030\005" +
-      " \003(\0162\023.scip.DiagnosticTagR\004tags*1\n\017Proto" +
-      "colVersion\022\036\n\032UnspecifiedProtocolVersion" +
-      "\020\000*@\n\014TextEncoding\022\033\n\027UnspecifiedTextEnc" +
-      "oding\020\000\022\010\n\004UTF8\020\001\022\t\n\005UTF16\020\002*\244\001\n\020Positio" +
-      "nEncoding\022\037\n\033UnspecifiedPositionEncoding" +
-      "\020\000\022#\n\037UTF8CodeUnitOffsetFromLineStart\020\001\022" +
-      "$\n UTF16CodeUnitOffsetFromLineStart\020\002\022$\n" +
-      " UTF32CodeUnitOffsetFromLineStart\020\003*\224\001\n\n" +
-      "SymbolRole\022\031\n\025UnspecifiedSymbolRole\020\000\022\016\n" +
-      "\nDefinition\020\001\022\n\n\006Import\020\002\022\017\n\013WriteAccess" +
-      "\020\004\022\016\n\nReadAccess\020\010\022\r\n\tGenerated\020\020\022\010\n\004Tes" +
-      "t\020 \022\025\n\021ForwardDefinition\020@*\352\006\n\nSyntaxKin" +
-      "d\022\031\n\025UnspecifiedSyntaxKind\020\000\022\013\n\007Comment\020" +
-      "\001\022\030\n\024PunctuationDelimiter\020\002\022\026\n\022Punctuati" +
-      "onBracket\020\003\022\013\n\007Keyword\020\004\022\031\n\021IdentifierKe" +
-      "yword\020\004\032\002\010\001\022\026\n\022IdentifierOperator\020\005\022\016\n\nI" +
-      "dentifier\020\006\022\025\n\021IdentifierBuiltin\020\007\022\022\n\016Id" +
-      "entifierNull\020\010\022\026\n\022IdentifierConstant\020\t\022\033" +
-      "\n\027IdentifierMutableGlobal\020\n\022\027\n\023Identifie" +
-      "rParameter\020\013\022\023\n\017IdentifierLocal\020\014\022\026\n\022Ide" +
-      "ntifierShadowed\020\r\022\027\n\023IdentifierNamespace" +
-      "\020\016\022\030\n\020IdentifierModule\020\016\032\002\010\001\022\026\n\022Identifi" +
-      "erFunction\020\017\022 \n\034IdentifierFunctionDefini" +
-      "tion\020\020\022\023\n\017IdentifierMacro\020\021\022\035\n\031Identifie" +
-      "rMacroDefinition\020\022\022\022\n\016IdentifierType\020\023\022\031" +
-      "\n\025IdentifierBuiltinType\020\024\022\027\n\023IdentifierA" +
-      "ttribute\020\025\022\017\n\013RegexEscape\020\026\022\021\n\rRegexRepe" +
-      "ated\020\027\022\021\n\rRegexWildcard\020\030\022\022\n\016RegexDelimi" +
-      "ter\020\031\022\r\n\tRegexJoin\020\032\022\021\n\rStringLiteral\020\033\022" +
-      "\027\n\023StringLiteralEscape\020\034\022\030\n\024StringLitera" +
-      "lSpecial\020\035\022\024\n\020StringLiteralKey\020\036\022\024\n\020Char" +
-      "acterLiteral\020\037\022\022\n\016NumericLiteral\020 \022\022\n\016Bo" +
-      "oleanLiteral\020!\022\007\n\003Tag\020\"\022\020\n\014TagAttribute\020" +
-      "#\022\020\n\014TagDelimiter\020$\032\002\020\001*V\n\010Severity\022\027\n\023U" +
-      "nspecifiedSeverity\020\000\022\t\n\005Error\020\001\022\013\n\007Warni" +
-      "ng\020\002\022\017\n\013Information\020\003\022\010\n\004Hint\020\004*N\n\rDiagn" +
-      "osticTag\022\034\n\030UnspecifiedDiagnosticTag\020\000\022\017" +
-      "\n\013Unnecessary\020\001\022\016\n\nDeprecated\020\002*\245\n\n\010Lang" +
-      "uage\022\027\n\023UnspecifiedLanguage\020\000\022\010\n\004ABAP\020<\022" +
-      "\010\n\004Apex\020`\022\007\n\003APL\0201\022\007\n\003Ada\020\'\022\010\n\004Agda\020-\022\014\n" +
-      "\010AsciiDoc\020V\022\014\n\010Assembly\020:\022\007\n\003Awk\020B\022\007\n\003Ba" +
-      "t\020D\022\n\n\006BibTeX\020Q\022\005\n\001C\020\"\022\t\n\005COBOL\020;\022\007\n\003CPP" +
-      "\020#\022\007\n\003CSS\020\032\022\n\n\006CSharp\020\001\022\013\n\007Clojure\020\010\022\020\n\014" +
-      "Coffeescript\020\025\022\016\n\nCommonLisp\020\t\022\007\n\003Coq\020/\022" +
-      "\010\n\004CUDA\020a\022\010\n\004Dart\020\003\022\n\n\006Delphi\0209\022\010\n\004Diff\020" +
-      "X\022\016\n\nDockerfile\020P\022\n\n\006Dyalog\0202\022\n\n\006Elixir\020" +
-      "\021\022\n\n\006Erlang\020\022\022\n\n\006FSharp\020*\022\010\n\004Fish\020A\022\010\n\004F" +
-      "low\020\030\022\013\n\007Fortran\0208\022\016\n\nGit_Commit\020[\022\016\n\nGi" +
-      "t_Config\020Y\022\016\n\nGit_Rebase\020\\\022\006\n\002Go\020!\022\013\n\007Gr" +
-      "aphQL\020b\022\n\n\006Groovy\020\007\022\010\n\004HTML\020\036\022\010\n\004Hack\020\024\022" +
-      "\016\n\nHandlebars\020Z\022\013\n\007Haskell\020,\022\t\n\005Idris\020.\022" +
-      "\007\n\003Ini\020H\022\005\n\001J\0203\022\010\n\004JSON\020K\022\010\n\004Java\020\006\022\016\n\nJ" +
-      "avaScript\020\026\022\023\n\017JavaScriptReact\020]\022\013\n\007Json" +
-      "net\020L\022\t\n\005Julia\0207\022\014\n\010Justfile\020m\022\n\n\006Kotlin" +
-      "\020\004\022\t\n\005LaTeX\020S\022\010\n\004Lean\0200\022\010\n\004Less\020\033\022\007\n\003Lua" +
-      "\020\014\022\010\n\004Luau\020l\022\014\n\010Makefile\020O\022\014\n\010Markdown\020T" +
-      "\022\n\n\006Matlab\0204\022\n\n\006Nickel\020n\022\007\n\003Nix\020M\022\t\n\005OCa" +
-      "ml\020)\022\017\n\013Objective_C\020$\022\021\n\rObjective_CPP\020%" +
-      "\022\010\n\004Odin\020o\022\n\n\006Pascal\020c\022\007\n\003PHP\020\023\022\t\n\005PLSQL" +
-      "\020F\022\010\n\004Perl\020\r\022\016\n\nPowerShell\020C\022\n\n\006Prolog\020G" +
-      "\022\014\n\010Protobuf\020d\022\n\n\006Python\020\017\022\005\n\001R\0206\022\n\n\006Rac" +
-      "ket\020\013\022\010\n\004Raku\020\016\022\t\n\005Razor\020>\022\t\n\005Repro\020f\022\010\n" +
-      "\004ReST\020U\022\010\n\004Ruby\020\020\022\010\n\004Rust\020(\022\007\n\003SAS\020=\022\010\n\004" +
-      "SCSS\020\035\022\007\n\003SML\020+\022\007\n\003SQL\020E\022\010\n\004Sass\020\034\022\t\n\005Sc" +
-      "ala\020\005\022\n\n\006Scheme\020\n\022\017\n\013ShellScript\020@\022\013\n\007Sk" +
-      "ylark\020N\022\t\n\005Slang\020k\022\014\n\010Solidity\020_\022\n\n\006Svel" +
-      "te\020j\022\t\n\005Swift\020\002\022\007\n\003Tcl\020e\022\010\n\004TOML\020I\022\007\n\003Te" +
-      "X\020R\022\n\n\006Thrift\020g\022\016\n\nTypeScript\020\027\022\023\n\017TypeS" +
-      "criptReact\020^\022\013\n\007Verilog\020h\022\010\n\004VHDL\020i\022\017\n\013V" +
-      "isualBasic\020?\022\007\n\003Vue\020\031\022\013\n\007Wolfram\0205\022\007\n\003XM" +
-      "L\020\037\022\007\n\003XSL\020 \022\010\n\004YAML\020J\022\007\n\003Zig\020&BN\n\022org.s" +
-      "cip_code.scipB\tScipProtoP\001Z+github.com/s" +
-      "cip-code/scip/bindings/go/scip/b\006proto3"
+      "\017enclosingSymbol\0220\n\nvisibility\030\t \001(\0162\020.s" +
+      "cip.VisibilityR\nvisibility\"\373\t\n\004Kind\022\023\n\017U" +
+      "nspecifiedKind\020\000\022\022\n\016AbstractMethod\020B\022\014\n\010" +
+      "Accessor\020H\022\t\n\005Array\020\001\022\r\n\tAssertion\020\002\022\022\n\016" +
+      "AssociatedType\020\003\022\r\n\tAttribute\020\004\022\t\n\005Axiom" +
+      "\020\005\022\013\n\007Boolean\020\006\022\t\n\005Class\020\007\022\013\n\007Concept\020V\022" +
+      "\014\n\010Constant\020\010\022\017\n\013Constructor\020\t\022\014\n\010Contra" +
+      "ct\020>\022\016\n\nDataFamily\020\n\022\014\n\010Delegate\020I\022\010\n\004En" +
+      "um\020\013\022\016\n\nEnumMember\020\014\022\t\n\005Error\020?\022\t\n\005Event" +
+      "\020\r\022\r\n\tExtension\020T\022\010\n\004Fact\020\016\022\t\n\005Field\020\017\022\010" +
+      "\n\004File\020\020\022\014\n\010Function\020\021\022\n\n\006Getter\020\022\022\013\n\007Gr" +
+      "ammar\020\023\022\014\n\010Instance\020\024\022\r\n\tInterface\020\025\022\007\n\003" +
+      "Key\020\026\022\010\n\004Lang\020\027\022\t\n\005Lemma\020\030\022\013\n\007Library\020@\022" +
+      "\t\n\005Macro\020\031\022\n\n\006Method\020\032\022\017\n\013MethodAlias\020J\022" +
+      "\022\n\016MethodReceiver\020\033\022\027\n\023MethodSpecificati" +
+      "on\020C\022\013\n\007Message\020\034\022\t\n\005Mixin\020U\022\014\n\010Modifier" +
+      "\020A\022\n\n\006Module\020\035\022\r\n\tNamespace\020\036\022\010\n\004Null\020\037\022" +
+      "\n\n\006Number\020 \022\n\n\006Object\020!\022\014\n\010Operator\020\"\022\013\n" +
+      "\007Package\020#\022\021\n\rPackageObject\020$\022\r\n\tParamet" +
+      "er\020%\022\022\n\016ParameterLabel\020&\022\013\n\007Pattern\020\'\022\r\n" +
+      "\tPredicate\020(\022\014\n\010Property\020)\022\014\n\010Protocol\020*" +
+      "\022\022\n\016ProtocolMethod\020D\022\025\n\021PureVirtualMetho" +
+      "d\020E\022\017\n\013Quasiquoter\020+\022\021\n\rSelfParameter\020,\022" +
+      "\n\n\006Setter\020-\022\r\n\tSignature\020.\022\022\n\016SingletonC" +
+      "lass\020K\022\023\n\017SingletonMethod\020L\022\024\n\020StaticDat" +
+      "aMember\020M\022\017\n\013StaticEvent\020N\022\017\n\013StaticFiel" +
+      "d\020O\022\020\n\014StaticMethod\020P\022\022\n\016StaticProperty\020" +
+      "Q\022\022\n\016StaticVariable\020R\022\n\n\006String\0200\022\n\n\006Str" +
+      "uct\0201\022\r\n\tSubscript\020/\022\n\n\006Tactic\0202\022\013\n\007Theo" +
+      "rem\0203\022\021\n\rThisParameter\0204\022\t\n\005Trait\0205\022\017\n\013T" +
+      "raitMethod\020F\022\010\n\004Type\0206\022\r\n\tTypeAlias\0207\022\r\n" +
+      "\tTypeClass\0208\022\023\n\017TypeClassMethod\020G\022\016\n\nTyp" +
+      "eFamily\0209\022\021\n\rTypeParameter\020:\022\t\n\005Union\020;\022" +
+      "\t\n\005Value\020<\022\014\n\010Variable\020=\"\311\001\n\014Relationshi" +
+      "p\022\026\n\006symbol\030\001 \001(\tR\006symbol\022!\n\014is_referenc" +
+      "e\030\002 \001(\010R\013isReference\022+\n\021is_implementatio" +
+      "n\030\003 \001(\010R\020isImplementation\022,\n\022is_type_def" +
+      "inition\030\004 \001(\010R\020isTypeDefinition\022#\n\ris_de" +
+      "finition\030\005 \001(\010R\014isDefinition\"s\n\017SingleLi" +
+      "neRange\022\022\n\004line\030\001 \001(\005R\004line\022\'\n\017start_cha" +
+      "racter\030\002 \001(\005R\016startCharacter\022#\n\rend_char" +
+      "acter\030\003 \001(\005R\014endCharacter\"\230\001\n\016MultiLineR" +
+      "ange\022\035\n\nstart_line\030\001 \001(\005R\tstartLine\022\'\n\017s" +
+      "tart_character\030\002 \001(\005R\016startCharacter\022\031\n\010" +
+      "end_line\030\003 \001(\005R\007endLine\022#\n\rend_character" +
+      "\030\004 \001(\005R\014endCharacter\"\210\005\n\nOccurrence\022\030\n\005r" +
+      "ange\030\001 \003(\005B\002\030\001R\005range\022C\n\021single_line_ran" +
+      "ge\030\010 \001(\0132\025.scip.SingleLineRangeH\000R\017singl" +
+      "eLineRange\022@\n\020multi_line_range\030\t \001(\0132\024.s" +
+      "cip.MultiLineRangeH\000R\016multiLineRange\022\026\n\006" +
+      "symbol\030\002 \001(\tR\006symbol\022!\n\014symbol_roles\030\003 \001" +
+      "(\005R\013symbolRoles\0225\n\026override_documentatio" +
+      "n\030\004 \003(\tR\025overrideDocumentation\0221\n\013syntax" +
+      "_kind\030\005 \001(\0162\020.scip.SyntaxKindR\nsyntaxKin" +
+      "d\0222\n\013diagnostics\030\006 \003(\0132\020.scip.Diagnostic" +
+      "R\013diagnostics\022+\n\017enclosing_range\030\007 \003(\005B\002" +
+      "\030\001R\016enclosingRange\022V\n\033single_line_enclos" +
+      "ing_range\030\n \001(\0132\025.scip.SingleLineRangeH\001" +
+      "R\030singleLineEnclosingRange\022S\n\032multi_line" +
+      "_enclosing_range\030\013 \001(\0132\024.scip.MultiLineR" +
+      "angeH\001R\027multiLineEnclosingRangeB\r\n\013typed" +
+      "_rangeB\027\n\025typed_enclosing_range\"\247\001\n\nDiag" +
+      "nostic\022*\n\010severity\030\001 \001(\0162\016.scip.Severity" +
+      "R\010severity\022\022\n\004code\030\002 \001(\tR\004code\022\030\n\007messag" +
+      "e\030\003 \001(\tR\007message\022\026\n\006source\030\004 \001(\tR\006source" +
+      "\022\'\n\004tags\030\005 \003(\0162\023.scip.DiagnosticTagR\004tag" +
+      "s*1\n\017ProtocolVersion\022\036\n\032UnspecifiedProto" +
+      "colVersion\020\000*@\n\014TextEncoding\022\033\n\027Unspecif" +
+      "iedTextEncoding\020\000\022\010\n\004UTF8\020\001\022\t\n\005UTF16\020\002*\244" +
+      "\001\n\020PositionEncoding\022\037\n\033UnspecifiedPositi" +
+      "onEncoding\020\000\022#\n\037UTF8CodeUnitOffsetFromLi" +
+      "neStart\020\001\022$\n UTF16CodeUnitOffsetFromLine" +
+      "Start\020\002\022$\n UTF32CodeUnitOffsetFromLineSt" +
+      "art\020\003*c\n\nVisibility\022\031\n\025UnspecifiedVisibi" +
+      "lity\020\000\022\n\n\006Public\020\001\022\r\n\tProtected\020\002\022\013\n\007Pri" +
+      "vate\020\003\022\022\n\016PackagePrivate\020\004*\224\001\n\nSymbolRol" +
+      "e\022\031\n\025UnspecifiedSymbolRole\020\000\022\016\n\nDefiniti" +
+      "on\020\001\022\n\n\006Import\020\002\022\017\n\013WriteAccess\020\004\022\016\n\nRea" +
+      "dAccess\020\010\022\r\n\tGenerated\020\020\022\010\n\004Test\020 \022\025\n\021Fo" +
+      "rwardDefinition\020@*\352\006\n\nSyntaxKind\022\031\n\025Unsp" +
+      "ecifiedSyntaxKind\020\000\022\013\n\007Comment\020\001\022\030\n\024Punc" +
+      "tuationDelimiter\020\002\022\026\n\022PunctuationBracket" +
+      "\020\003\022\013\n\007Keyword\020\004\022\031\n\021IdentifierKeyword\020\004\032\002" +
+      "\010\001\022\026\n\022IdentifierOperator\020\005\022\016\n\nIdentifier" +
+      "\020\006\022\025\n\021IdentifierBuiltin\020\007\022\022\n\016IdentifierN" +
+      "ull\020\010\022\026\n\022IdentifierConstant\020\t\022\033\n\027Identif" +
+      "ierMutableGlobal\020\n\022\027\n\023IdentifierParamete" +
+      "r\020\013\022\023\n\017IdentifierLocal\020\014\022\026\n\022IdentifierSh" +
+      "adowed\020\r\022\027\n\023IdentifierNamespace\020\016\022\030\n\020Ide" +
+      "ntifierModule\020\016\032\002\010\001\022\026\n\022IdentifierFunctio" +
+      "n\020\017\022 \n\034IdentifierFunctionDefinition\020\020\022\023\n" +
+      "\017IdentifierMacro\020\021\022\035\n\031IdentifierMacroDef" +
+      "inition\020\022\022\022\n\016IdentifierType\020\023\022\031\n\025Identif" +
+      "ierBuiltinType\020\024\022\027\n\023IdentifierAttribute\020" +
+      "\025\022\017\n\013RegexEscape\020\026\022\021\n\rRegexRepeated\020\027\022\021\n" +
+      "\rRegexWildcard\020\030\022\022\n\016RegexDelimiter\020\031\022\r\n\t" +
+      "RegexJoin\020\032\022\021\n\rStringLiteral\020\033\022\027\n\023String" +
+      "LiteralEscape\020\034\022\030\n\024StringLiteralSpecial\020" +
+      "\035\022\024\n\020StringLiteralKey\020\036\022\024\n\020CharacterLite" +
+      "ral\020\037\022\022\n\016NumericLiteral\020 \022\022\n\016BooleanLite" +
+      "ral\020!\022\007\n\003Tag\020\"\022\020\n\014TagAttribute\020#\022\020\n\014TagD" +
+      "elimiter\020$\032\002\020\001*V\n\010Severity\022\027\n\023Unspecifie" +
+      "dSeverity\020\000\022\t\n\005Error\020\001\022\013\n\007Warning\020\002\022\017\n\013I" +
+      "nformation\020\003\022\010\n\004Hint\020\004*N\n\rDiagnosticTag\022" +
+      "\034\n\030UnspecifiedDiagnosticTag\020\000\022\017\n\013Unneces" +
+      "sary\020\001\022\016\n\nDeprecated\020\002*\245\n\n\010Language\022\027\n\023U" +
+      "nspecifiedLanguage\020\000\022\010\n\004ABAP\020<\022\010\n\004Apex\020`" +
+      "\022\007\n\003APL\0201\022\007\n\003Ada\020\'\022\010\n\004Agda\020-\022\014\n\010AsciiDoc" +
+      "\020V\022\014\n\010Assembly\020:\022\007\n\003Awk\020B\022\007\n\003Bat\020D\022\n\n\006Bi" +
+      "bTeX\020Q\022\005\n\001C\020\"\022\t\n\005COBOL\020;\022\007\n\003CPP\020#\022\007\n\003CSS" +
+      "\020\032\022\n\n\006CSharp\020\001\022\013\n\007Clojure\020\010\022\020\n\014Coffeescr" +
+      "ipt\020\025\022\016\n\nCommonLisp\020\t\022\007\n\003Coq\020/\022\010\n\004CUDA\020a" +
+      "\022\010\n\004Dart\020\003\022\n\n\006Delphi\0209\022\010\n\004Diff\020X\022\016\n\nDock" +
+      "erfile\020P\022\n\n\006Dyalog\0202\022\n\n\006Elixir\020\021\022\n\n\006Erla" +
+      "ng\020\022\022\n\n\006FSharp\020*\022\010\n\004Fish\020A\022\010\n\004Flow\020\030\022\013\n\007" +
+      "Fortran\0208\022\016\n\nGit_Commit\020[\022\016\n\nGit_Config\020" +
+      "Y\022\016\n\nGit_Rebase\020\\\022\006\n\002Go\020!\022\013\n\007GraphQL\020b\022\n" +
+      "\n\006Groovy\020\007\022\010\n\004HTML\020\036\022\010\n\004Hack\020\024\022\016\n\nHandle" +
+      "bars\020Z\022\013\n\007Haskell\020,\022\t\n\005Idris\020.\022\007\n\003Ini\020H\022" +
+      "\005\n\001J\0203\022\010\n\004JSON\020K\022\010\n\004Java\020\006\022\016\n\nJavaScript" +
+      "\020\026\022\023\n\017JavaScriptReact\020]\022\013\n\007Jsonnet\020L\022\t\n\005" +
+      "Julia\0207\022\014\n\010Justfile\020m\022\n\n\006Kotlin\020\004\022\t\n\005LaT" +
+      "eX\020S\022\010\n\004Lean\0200\022\010\n\004Less\020\033\022\007\n\003Lua\020\014\022\010\n\004Lua" +
+      "u\020l\022\014\n\010Makefile\020O\022\014\n\010Markdown\020T\022\n\n\006Matla" +
+      "b\0204\022\n\n\006Nickel\020n\022\007\n\003Nix\020M\022\t\n\005OCaml\020)\022\017\n\013O" +
+      "bjective_C\020$\022\021\n\rObjective_CPP\020%\022\010\n\004Odin\020" +
+      "o\022\n\n\006Pascal\020c\022\007\n\003PHP\020\023\022\t\n\005PLSQL\020F\022\010\n\004Per" +
+      "l\020\r\022\016\n\nPowerShell\020C\022\n\n\006Prolog\020G\022\014\n\010Proto" +
+      "buf\020d\022\n\n\006Python\020\017\022\005\n\001R\0206\022\n\n\006Racket\020\013\022\010\n\004" +
+      "Raku\020\016\022\t\n\005Razor\020>\022\t\n\005Repro\020f\022\010\n\004ReST\020U\022\010" +
+      "\n\004Ruby\020\020\022\010\n\004Rust\020(\022\007\n\003SAS\020=\022\010\n\004SCSS\020\035\022\007\n" +
+      "\003SML\020+\022\007\n\003SQL\020E\022\010\n\004Sass\020\034\022\t\n\005Scala\020\005\022\n\n\006" +
+      "Scheme\020\n\022\017\n\013ShellScript\020@\022\013\n\007Skylark\020N\022\t" +
+      "\n\005Slang\020k\022\014\n\010Solidity\020_\022\n\n\006Svelte\020j\022\t\n\005S" +
+      "wift\020\002\022\007\n\003Tcl\020e\022\010\n\004TOML\020I\022\007\n\003TeX\020R\022\n\n\006Th" +
+      "rift\020g\022\016\n\nTypeScript\020\027\022\023\n\017TypeScriptReac" +
+      "t\020^\022\013\n\007Verilog\020h\022\010\n\004VHDL\020i\022\017\n\013VisualBasi" +
+      "c\020?\022\007\n\003Vue\020\031\022\013\n\007Wolfram\0205\022\007\n\003XML\020\037\022\007\n\003XS" +
+      "L\020 \022\010\n\004YAML\020J\022\007\n\003Zig\020&BN\n\022org.scip_code." +
+      "scipB\tScipProtoP\001Z+github.com/scip-code/" +
+      "scip/bindings/go/scip/b\006proto3"
     };
     descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
@@ -343,7 +347,7 @@ public final class ScipProto extends com.google.protobuf.GeneratedFile {
     internal_static_scip_SymbolInformation_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessage.FieldAccessorTable(
         internal_static_scip_SymbolInformation_descriptor,
-        new java.lang.String[] { "Symbol", "Documentation", "Relationships", "Kind", "DisplayName", "SignatureDocumentation", "EnclosingSymbol", });
+        new java.lang.String[] { "Symbol", "Documentation", "Relationships", "Kind", "DisplayName", "SignatureDocumentation", "EnclosingSymbol", "Visibility", });
     internal_static_scip_Relationship_descriptor =
       getDescriptor().getMessageType(9);
     internal_static_scip_Relationship_fieldAccessorTable = new

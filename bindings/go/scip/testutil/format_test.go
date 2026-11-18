@@ -49,6 +49,7 @@ func TestFormatSnapshotFeatures(t *testing.T) {
 			{
 				Symbol:          "local foo",
 				Kind:            scip.SymbolInformation_Namespace,
+				Visibility:      scip.Visibility_Public,
 				DisplayName:     "foo",
 				EnclosingSymbol: "local root",
 			},
@@ -69,6 +70,7 @@ func TestFormatSnapshotFeatures(t *testing.T) {
 	// enclosing_symbol is rendered through the symbol formatter.
 	require.Contains(t, snapshot, "//        ^^^ definition local foo")
 	require.Contains(t, snapshot, "enclosing_symbol local root")
+	require.Contains(t, snapshot, "visibility Public")
 
 	// Synthetic definition: distinct child symbol, underscore markers, and the
 	// is_definition relationship rendered as "definition".

@@ -460,6 +460,47 @@ message SymbolInformation {
   // outside the document, not by the capability to find the enclosing
   // symbol.
   string enclosing_symbol = 8;
+  // (optional) The declared visibility of this symbol, see `Visibility`.
+  //
+  // Indexers should leave this field empty when the language has no notion of
+  // visibility for this kind of symbol, for example parameters or type
+  // parameters.
+  Visibility visibility = 9;
+}
+
+// Visibility describes who may access a symbol according to the access rules of
+// its language, as declared in the source code or implied by the language's
+// defaults (for example, Java members without a modifier are package-private,
+// while TypeScript class members without a modifier are public).
+//
+// The value describes the symbol's own declaration. It does not account for
+// the visibility of enclosing symbols: a public method of a private class is
+// still `Public`. Consumers that need to know whether a symbol is reachable from
+// outside its package can combine this field with the visibility of the
+// enclosing symbols.
+//
+// When an access modifier does not map exactly to one of the values below,
+// indexers should pick the value that best describes access from outside the
+// declaring package. For example, C# `protected internal` is `Protected`, and
+// C# `private protected` is `Package`.
+enum Visibility {
+  UnspecifiedVisibility = 0;
+  // Accessible wherever the enclosing symbol is accessible. For example:
+  // `public` in Java, C#, Kotlin and TypeScript, TypeScript and JavaScript
+  // module members that are exported, Go exported identifiers and Rust `pub`.
+  Public = 1;
+  // Accessible from the declaring type and its subtypes. For example:
+  // `protected` in Java, C#, Kotlin, TypeScript and PHP.
+  Protected = 2;
+  // Accessible only from the declaring type, file or module. For example:
+  // `private` in Java, C#, Kotlin and TypeScript, ECMAScript `#private` class
+  // members, TypeScript and JavaScript module members that are not exported,
+  // and Rust items without `pub`.
+  Private = 3;
+  // Accessible from the declaring package, module, assembly or crate. For
+  // example: Java members without an access modifier, Go unexported
+  // identifiers, `internal` in C# and Kotlin, and Rust `pub(crate)`.
+  PackagePrivate = 4;
 }
 
 message Relationship {

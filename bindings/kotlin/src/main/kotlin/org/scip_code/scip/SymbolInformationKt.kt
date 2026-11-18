@@ -480,6 +480,46 @@ public object SymbolInformationKt {
     public fun clearEnclosingSymbol() {
       _builder.clearEnclosingSymbol()
     }
+
+    /**
+     * ```
+     * (optional) The declared visibility of this symbol, see `Visibility`.
+     *
+     * Indexers should leave this field empty when the language has no notion of
+     * visibility for this kind of symbol, for example parameters or type
+     * parameters.
+     * ```
+     *
+     * `.scip.Visibility visibility = 9 [json_name = "visibility"];`
+     */
+    public var visibility: org.scip_code.scip.Visibility
+      @kotlin.jvm.JvmName("getVisibility")
+        get() = _builder.visibility
+      @kotlin.jvm.JvmName("setVisibility")
+        set(value) {
+        _builder.visibility = value
+      }
+    public var visibilityValue: kotlin.Int
+      @kotlin.jvm.JvmName("getVisibilityValue")
+        get() = _builder.visibilityValue
+      @kotlin.jvm.JvmName("setVisibilityValue")
+        set(value) {
+        _builder.visibilityValue = value
+      }
+    /**
+     * ```
+     * (optional) The declared visibility of this symbol, see `Visibility`.
+     *
+     * Indexers should leave this field empty when the language has no notion of
+     * visibility for this kind of symbol, for example parameters or type
+     * parameters.
+     * ```
+     *
+     * `.scip.Visibility visibility = 9 [json_name = "visibility"];`
+     */
+    public fun clearVisibility() {
+      _builder.clearVisibility()
+    }
   }
 }
 @kotlin.jvm.JvmSynthetic

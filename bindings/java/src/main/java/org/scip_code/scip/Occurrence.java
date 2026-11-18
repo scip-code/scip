@@ -188,7 +188,7 @@ private static final long serialVersionUID = 0L;
    *
    * <code>repeated int32 range = 1 [json_name = "range", deprecated = true];</code>
    * @deprecated scip.Occurrence.range is deprecated.
-   *     See scip.proto;l=708
+   *     See scip.proto;l=749
    * @return A list containing the range.
    */
   @java.lang.Override
@@ -218,7 +218,7 @@ private static final long serialVersionUID = 0L;
    *
    * <code>repeated int32 range = 1 [json_name = "range", deprecated = true];</code>
    * @deprecated scip.Occurrence.range is deprecated.
-   *     See scip.proto;l=708
+   *     See scip.proto;l=749
    * @return The count of range.
    */
   @java.lang.Deprecated public int getRangeCount() {
@@ -246,7 +246,7 @@ private static final long serialVersionUID = 0L;
    *
    * <code>repeated int32 range = 1 [json_name = "range", deprecated = true];</code>
    * @deprecated scip.Occurrence.range is deprecated.
-   *     See scip.proto;l=708
+   *     See scip.proto;l=749
    * @param index The index of the element to return.
    * @return The range at the given index.
    */
@@ -587,7 +587,7 @@ private static final long serialVersionUID = 0L;
    *
    * <code>repeated int32 enclosing_range = 7 [json_name = "enclosingRange", deprecated = true];</code>
    * @deprecated scip.Occurrence.enclosing_range is deprecated.
-   *     See scip.proto;l=744
+   *     See scip.proto;l=785
    * @return A list containing the enclosingRange.
    */
   @java.lang.Override
@@ -604,7 +604,7 @@ private static final long serialVersionUID = 0L;
    *
    * <code>repeated int32 enclosing_range = 7 [json_name = "enclosingRange", deprecated = true];</code>
    * @deprecated scip.Occurrence.enclosing_range is deprecated.
-   *     See scip.proto;l=744
+   *     See scip.proto;l=785
    * @return The count of enclosingRange.
    */
   @java.lang.Deprecated public int getEnclosingRangeCount() {
@@ -619,7 +619,7 @@ private static final long serialVersionUID = 0L;
    *
    * <code>repeated int32 enclosing_range = 7 [json_name = "enclosingRange", deprecated = true];</code>
    * @deprecated scip.Occurrence.enclosing_range is deprecated.
-   *     See scip.proto;l=744
+   *     See scip.proto;l=785
    * @param index The index of the element to return.
    * @return The enclosingRange at the given index.
    */
@@ -1541,7 +1541,7 @@ private static final long serialVersionUID = 0L;
      *
      * <code>repeated int32 range = 1 [json_name = "range", deprecated = true];</code>
      * @deprecated scip.Occurrence.range is deprecated.
-     *     See scip.proto;l=708
+     *     See scip.proto;l=749
      * @return A list containing the range.
      */
     @java.lang.Deprecated public java.util.List<java.lang.Integer>
@@ -1571,7 +1571,7 @@ private static final long serialVersionUID = 0L;
      *
      * <code>repeated int32 range = 1 [json_name = "range", deprecated = true];</code>
      * @deprecated scip.Occurrence.range is deprecated.
-     *     See scip.proto;l=708
+     *     See scip.proto;l=749
      * @return The count of range.
      */
     @java.lang.Deprecated public int getRangeCount() {
@@ -1599,7 +1599,7 @@ private static final long serialVersionUID = 0L;
      *
      * <code>repeated int32 range = 1 [json_name = "range", deprecated = true];</code>
      * @deprecated scip.Occurrence.range is deprecated.
-     *     See scip.proto;l=708
+     *     See scip.proto;l=749
      * @param index The index of the element to return.
      * @return The range at the given index.
      */
@@ -1628,7 +1628,7 @@ private static final long serialVersionUID = 0L;
      *
      * <code>repeated int32 range = 1 [json_name = "range", deprecated = true];</code>
      * @deprecated scip.Occurrence.range is deprecated.
-     *     See scip.proto;l=708
+     *     See scip.proto;l=749
      * @param index The index to set the value at.
      * @param value The range to set.
      * @return This builder for chaining.
@@ -1664,7 +1664,7 @@ private static final long serialVersionUID = 0L;
      *
      * <code>repeated int32 range = 1 [json_name = "range", deprecated = true];</code>
      * @deprecated scip.Occurrence.range is deprecated.
-     *     See scip.proto;l=708
+     *     See scip.proto;l=749
      * @param value The range to add.
      * @return This builder for chaining.
      */
@@ -1698,7 +1698,7 @@ private static final long serialVersionUID = 0L;
      *
      * <code>repeated int32 range = 1 [json_name = "range", deprecated = true];</code>
      * @deprecated scip.Occurrence.range is deprecated.
-     *     See scip.proto;l=708
+     *     See scip.proto;l=749
      * @param values The range to add.
      * @return This builder for chaining.
      */
@@ -1733,7 +1733,7 @@ private static final long serialVersionUID = 0L;
      *
      * <code>repeated int32 range = 1 [json_name = "range", deprecated = true];</code>
      * @deprecated scip.Occurrence.range is deprecated.
-     *     See scip.proto;l=708
+     *     See scip.proto;l=749
      * @return This builder for chaining.
      */
     @java.lang.Deprecated public Builder clearRange() {
@@ -2853,7 +2853,7 @@ private static final long serialVersionUID = 0L;
      *
      * <code>repeated int32 enclosing_range = 7 [json_name = "enclosingRange", deprecated = true];</code>
      * @deprecated scip.Occurrence.enclosing_range is deprecated.
-     *     See scip.proto;l=744
+     *     See scip.proto;l=785
      * @return A list containing the enclosingRange.
      */
     @java.lang.Deprecated public java.util.List<java.lang.Integer>
@@ -2870,7 +2870,7 @@ private static final long serialVersionUID = 0L;
      *
      * <code>repeated int32 enclosing_range = 7 [json_name = "enclosingRange", deprecated = true];</code>
      * @deprecated scip.Occurrence.enclosing_range is deprecated.
-     *     See scip.proto;l=744
+     *     See scip.proto;l=785
      * @return The count of enclosingRange.
      */
     @java.lang.Deprecated public int getEnclosingRangeCount() {
@@ -2885,7 +2885,7 @@ private static final long serialVersionUID = 0L;
      *
      * <code>repeated int32 enclosing_range = 7 [json_name = "enclosingRange", deprecated = true];</code>
      * @deprecated scip.Occurrence.enclosing_range is deprecated.
-     *     See scip.proto;l=744
+     *     See scip.proto;l=785
      * @param index The index of the element to return.
      * @return The enclosingRange at the given index.
      */
@@ -2901,7 +2901,7 @@ private static final long serialVersionUID = 0L;
      *
      * <code>repeated int32 enclosing_range = 7 [json_name = "enclosingRange", deprecated = true];</code>
      * @deprecated scip.Occurrence.enclosing_range is deprecated.
-     *     See scip.proto;l=744
+     *     See scip.proto;l=785
      * @param index The index to set the value at.
      * @param value The enclosingRange to set.
      * @return This builder for chaining.
@@ -2924,7 +2924,7 @@ private static final long serialVersionUID = 0L;
      *
      * <code>repeated int32 enclosing_range = 7 [json_name = "enclosingRange", deprecated = true];</code>
      * @deprecated scip.Occurrence.enclosing_range is deprecated.
-     *     See scip.proto;l=744
+     *     See scip.proto;l=785
      * @param value The enclosingRange to add.
      * @return This builder for chaining.
      */
@@ -2945,7 +2945,7 @@ private static final long serialVersionUID = 0L;
      *
      * <code>repeated int32 enclosing_range = 7 [json_name = "enclosingRange", deprecated = true];</code>
      * @deprecated scip.Occurrence.enclosing_range is deprecated.
-     *     See scip.proto;l=744
+     *     See scip.proto;l=785
      * @param values The enclosingRange to add.
      * @return This builder for chaining.
      */
@@ -2967,7 +2967,7 @@ private static final long serialVersionUID = 0L;
      *
      * <code>repeated int32 enclosing_range = 7 [json_name = "enclosingRange", deprecated = true];</code>
      * @deprecated scip.Occurrence.enclosing_range is deprecated.
-     *     See scip.proto;l=744
+     *     See scip.proto;l=785
      * @return This builder for chaining.
      */
     @java.lang.Deprecated public Builder clearEnclosingRange() {

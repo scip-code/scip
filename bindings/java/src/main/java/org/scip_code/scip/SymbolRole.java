@@ -233,7 +233,7 @@ public enum SymbolRole
   }
   public static com.google.protobuf.Descriptors.EnumDescriptor
       getDescriptor() {
-    return org.scip_code.scip.ScipProto.getDescriptor().getEnumType(3);
+    return org.scip_code.scip.ScipProto.getDescriptor().getEnumType(4);
   }
 
   private static final SymbolRole[] VALUES = values();

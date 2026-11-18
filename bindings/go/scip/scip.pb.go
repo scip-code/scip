@@ -196,6 +196,88 @@ func (PositionEncoding) EnumDescriptor() ([]byte, []int) {
 	return file_scip_proto_rawDescGZIP(), []int{2}
 }
 
+// Visibility describes who may access a symbol according to the access rules of
+// its language, as declared in the source code or implied by the language's
+// defaults (for example, Java members without a modifier are package-private,
+// while TypeScript class members without a modifier are public).
+//
+// The value describes the symbol's own declaration. It does not account for
+// the visibility of enclosing symbols: a public method of a private class is
+// still `Public`. Consumers that need to know whether a symbol is reachable from
+// outside its package can combine this field with the visibility of the
+// enclosing symbols.
+//
+// When an access modifier does not map exactly to one of the values below,
+// indexers should pick the value that best describes access from outside the
+// declaring package. For example, C# `protected internal` is `Protected`, and
+// C# `private protected` is `Package`.
+type Visibility int32
+
+const (
+	Visibility_UnspecifiedVisibility Visibility = 0
+	// Accessible wherever the enclosing symbol is accessible. For example:
+	// `public` in Java, C#, Kotlin and TypeScript, TypeScript and JavaScript
+	// module members that are exported, Go exported identifiers and Rust `pub`.
+	Visibility_Public Visibility = 1
+	// Accessible from the declaring type and its subtypes. For example:
+	// `protected` in Java, C#, Kotlin, TypeScript and PHP.
+	Visibility_Protected Visibility = 2
+	// Accessible only from the declaring type, file or module. For example:
+	// `private` in Java, C#, Kotlin and TypeScript, ECMAScript `#private` class
+	// members, TypeScript and JavaScript module members that are not exported,
+	// and Rust items without `pub`.
+	Visibility_Private Visibility = 3
+	// Accessible from the declaring package, module, assembly or crate. For
+	// example: Java members without an access modifier, Go unexported
+	// identifiers, `internal` in C# and Kotlin, and Rust `pub(crate)`.
+	Visibility_PackagePrivate Visibility = 4
+)
+
+// Enum value maps for Visibility.
+var (
+	Visibility_name = map[int32]string{
+		0: "UnspecifiedVisibility",
+		1: "Public",
+		2: "Protected",
+		3: "Private",
+		4: "PackagePrivate",
+	}
+	Visibility_value = map[string]int32{
+		"UnspecifiedVisibility": 0,
+		"Public":                1,
+		"Protected":             2,
+		"Private":               3,
+		"PackagePrivate":        4,
+	}
+)
+
+func (x Visibility) Enum() *Visibility {
+	p := new(Visibility)
+	*p = x
+	return p
+}
+
+func (x Visibility) String() string {
+	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
+}
+
+func (Visibility) Descriptor() protoreflect.EnumDescriptor {
+	return file_scip_proto_enumTypes[3].Descriptor()
+}
+
+func (Visibility) Type() protoreflect.EnumType {
+	return &file_scip_proto_enumTypes[3]
+}
+
+func (x Visibility) Number() protoreflect.EnumNumber {
+	return protoreflect.EnumNumber(x)
+}
+
+// Deprecated: Use Visibility.Descriptor instead.
+func (Visibility) EnumDescriptor() ([]byte, []int) {
+	return file_scip_proto_rawDescGZIP(), []int{3}
+}
+
 // SymbolRole declares what "role" a symbol has in an occurrence. A role is
 // encoded as a bitset where each bit represents a different role. For example,
 // to determine if the `Import` role is set, test whether the second bit of the
@@ -262,11 +344,11 @@ func (x SymbolRole) String() string {
 }
 
 func (SymbolRole) Descriptor() protoreflect.EnumDescriptor {
-	return file_scip_proto_enumTypes[3].Descriptor()
+	return file_scip_proto_enumTypes[4].Descriptor()
 }
 
 func (SymbolRole) Type() protoreflect.EnumType {
-	return &file_scip_proto_enumTypes[3]
+	return &file_scip_proto_enumTypes[4]
 }
 
 func (x SymbolRole) Number() protoreflect.EnumNumber {
@@ -275,7 +357,7 @@ func (x SymbolRole) Number() protoreflect.EnumNumber {
 
 // Deprecated: Use SymbolRole.Descriptor instead.
 func (SymbolRole) EnumDescriptor() ([]byte, []int) {
-	return file_scip_proto_rawDescGZIP(), []int{3}
+	return file_scip_proto_rawDescGZIP(), []int{4}
 }
 
 type SyntaxKind int32
@@ -460,11 +542,11 @@ func (x SyntaxKind) String() string {
 }
 
 func (SyntaxKind) Descriptor() protoreflect.EnumDescriptor {
-	return file_scip_proto_enumTypes[4].Descriptor()
+	return file_scip_proto_enumTypes[5].Descriptor()
 }
 
 func (SyntaxKind) Type() protoreflect.EnumType {
-	return &file_scip_proto_enumTypes[4]
+	return &file_scip_proto_enumTypes[5]
 }
 
 func (x SyntaxKind) Number() protoreflect.EnumNumber {
@@ -473,7 +555,7 @@ func (x SyntaxKind) Number() protoreflect.EnumNumber {
 
 // Deprecated: Use SyntaxKind.Descriptor instead.
 func (SyntaxKind) EnumDescriptor() ([]byte, []int) {
-	return file_scip_proto_rawDescGZIP(), []int{4}
+	return file_scip_proto_rawDescGZIP(), []int{5}
 }
 
 type Severity int32
@@ -515,11 +597,11 @@ func (x Severity) String() string {
 }
 
 func (Severity) Descriptor() protoreflect.EnumDescriptor {
-	return file_scip_proto_enumTypes[5].Descriptor()
+	return file_scip_proto_enumTypes[6].Descriptor()
 }
 
 func (Severity) Type() protoreflect.EnumType {
-	return &file_scip_proto_enumTypes[5]
+	return &file_scip_proto_enumTypes[6]
 }
 
 func (x Severity) Number() protoreflect.EnumNumber {
@@ -528,7 +610,7 @@ func (x Severity) Number() protoreflect.EnumNumber {
 
 // Deprecated: Use Severity.Descriptor instead.
 func (Severity) EnumDescriptor() ([]byte, []int) {
-	return file_scip_proto_rawDescGZIP(), []int{5}
+	return file_scip_proto_rawDescGZIP(), []int{6}
 }
 
 type DiagnosticTag int32
@@ -564,11 +646,11 @@ func (x DiagnosticTag) String() string {
 }
 
 func (DiagnosticTag) Descriptor() protoreflect.EnumDescriptor {
-	return file_scip_proto_enumTypes[6].Descriptor()
+	return file_scip_proto_enumTypes[7].Descriptor()
 }
 
 func (DiagnosticTag) Type() protoreflect.EnumType {
-	return &file_scip_proto_enumTypes[6]
+	return &file_scip_proto_enumTypes[7]
 }
 
 func (x DiagnosticTag) Number() protoreflect.EnumNumber {
@@ -577,7 +659,7 @@ func (x DiagnosticTag) Number() protoreflect.EnumNumber {
 
 // Deprecated: Use DiagnosticTag.Descriptor instead.
 func (DiagnosticTag) EnumDescriptor() ([]byte, []int) {
-	return file_scip_proto_rawDescGZIP(), []int{6}
+	return file_scip_proto_rawDescGZIP(), []int{7}
 }
 
 // Language standardises names of common programming languages that can be used
@@ -943,11 +1025,11 @@ func (x Language) String() string {
 }
 
 func (Language) Descriptor() protoreflect.EnumDescriptor {
-	return file_scip_proto_enumTypes[7].Descriptor()
+	return file_scip_proto_enumTypes[8].Descriptor()
 }
 
 func (Language) Type() protoreflect.EnumType {
-	return &file_scip_proto_enumTypes[7]
+	return &file_scip_proto_enumTypes[8]
 }
 
 func (x Language) Number() protoreflect.EnumNumber {
@@ -956,7 +1038,7 @@ func (x Language) Number() protoreflect.EnumNumber {
 
 // Deprecated: Use Language.Descriptor instead.
 func (Language) EnumDescriptor() ([]byte, []int) {
-	return file_scip_proto_rawDescGZIP(), []int{7}
+	return file_scip_proto_rawDescGZIP(), []int{8}
 }
 
 type Descriptor_Suffix int32
@@ -1023,11 +1105,11 @@ func (x Descriptor_Suffix) String() string {
 }
 
 func (Descriptor_Suffix) Descriptor() protoreflect.EnumDescriptor {
-	return file_scip_proto_enumTypes[8].Descriptor()
+	return file_scip_proto_enumTypes[9].Descriptor()
 }
 
 func (Descriptor_Suffix) Type() protoreflect.EnumType {
-	return &file_scip_proto_enumTypes[8]
+	return &file_scip_proto_enumTypes[9]
 }
 
 func (x Descriptor_Suffix) Number() protoreflect.EnumNumber {
@@ -1389,11 +1471,11 @@ func (x SymbolInformation_Kind) String() string {
 }
 
 func (SymbolInformation_Kind) Descriptor() protoreflect.EnumDescriptor {
-	return file_scip_proto_enumTypes[9].Descriptor()
+	return file_scip_proto_enumTypes[10].Descriptor()
 }
 
 func (SymbolInformation_Kind) Type() protoreflect.EnumType {
-	return &file_scip_proto_enumTypes[9]
+	return &file_scip_proto_enumTypes[10]
 }
 
 func (x SymbolInformation_Kind) Number() protoreflect.EnumNumber {
@@ -2085,8 +2167,14 @@ type SymbolInformation struct {
 	// outside the document, not by the capability to find the enclosing
 	// symbol.
 	EnclosingSymbol string `protobuf:"bytes,8,opt,name=enclosing_symbol,json=enclosingSymbol,proto3" json:"enclosing_symbol,omitempty"`
-	unknownFields   protoimpl.UnknownFields
-	sizeCache       protoimpl.SizeCache
+	// (optional) The declared visibility of this symbol, see `Visibility`.
+	//
+	// Indexers should leave this field empty when the language has no notion of
+	// visibility for this kind of symbol, for example parameters or type
+	// parameters.
+	Visibility    Visibility `protobuf:"varint,9,opt,name=visibility,proto3,enum=scip.Visibility" json:"visibility,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
 }
 
 func (x *SymbolInformation) Reset() {
@@ -2166,6 +2254,13 @@ func (x *SymbolInformation) GetEnclosingSymbol() string {
 		return x.EnclosingSymbol
 	}
 	return ""
+}
+
+func (x *SymbolInformation) GetVisibility() Visibility {
+	if x != nil {
+		return x.Visibility
+	}
+	return Visibility_UnspecifiedVisibility
 }
 
 type Relationship struct {
@@ -2896,7 +2991,7 @@ const file_scip_proto_rawDesc = "" +
 	"\tSignature\x12\x1a\n" +
 	"\blanguage\x18\x04 \x01(\tR\blanguage\x12\x12\n" +
 	"\x04text\x18\x05 \x01(\tR\x04text\x122\n" +
-	"\voccurrences\x18\x02 \x03(\v2\x10.scip.OccurrenceR\voccurrencesJ\x04\b\x01\x10\x02J\x04\b\x03\x10\x04J\x04\b\x06\x10\a\"\xd3\f\n" +
+	"\voccurrences\x18\x02 \x03(\v2\x10.scip.OccurrenceR\voccurrencesJ\x04\b\x01\x10\x02J\x04\b\x03\x10\x04J\x04\b\x06\x10\a\"\x85\r\n" +
 	"\x11SymbolInformation\x12\x16\n" +
 	"\x06symbol\x18\x01 \x01(\tR\x06symbol\x12$\n" +
 	"\rdocumentation\x18\x03 \x03(\tR\rdocumentation\x128\n" +
@@ -2904,7 +2999,10 @@ const file_scip_proto_rawDesc = "" +
 	"\x04kind\x18\x05 \x01(\x0e2\x1c.scip.SymbolInformation.KindR\x04kind\x12!\n" +
 	"\fdisplay_name\x18\x06 \x01(\tR\vdisplayName\x12H\n" +
 	"\x17signature_documentation\x18\a \x01(\v2\x0f.scip.SignatureR\x16signatureDocumentation\x12)\n" +
-	"\x10enclosing_symbol\x18\b \x01(\tR\x0fenclosingSymbol\"\xfb\t\n" +
+	"\x10enclosing_symbol\x18\b \x01(\tR\x0fenclosingSymbol\x120\n" +
+	"\n" +
+	"visibility\x18\t \x01(\x0e2\x10.scip.VisibilityR\n" +
+	"visibility\"\xfb\t\n" +
 	"\x04Kind\x12\x13\n" +
 	"\x0fUnspecifiedKind\x10\x00\x12\x12\n" +
 	"\x0eAbstractMethod\x10B\x12\f\n" +
@@ -3055,7 +3153,15 @@ const file_scip_proto_rawDesc = "" +
 	"\x1bUnspecifiedPositionEncoding\x10\x00\x12#\n" +
 	"\x1fUTF8CodeUnitOffsetFromLineStart\x10\x01\x12$\n" +
 	" UTF16CodeUnitOffsetFromLineStart\x10\x02\x12$\n" +
-	" UTF32CodeUnitOffsetFromLineStart\x10\x03*\x94\x01\n" +
+	" UTF32CodeUnitOffsetFromLineStart\x10\x03*c\n" +
+	"\n" +
+	"Visibility\x12\x19\n" +
+	"\x15UnspecifiedVisibility\x10\x00\x12\n" +
+	"\n" +
+	"\x06Public\x10\x01\x12\r\n" +
+	"\tProtected\x10\x02\x12\v\n" +
+	"\aPrivate\x10\x03\x12\x12\n" +
+	"\x0ePackagePrivate\x10\x04*\x94\x01\n" +
 	"\n" +
 	"SymbolRole\x12\x19\n" +
 	"\x15UnspecifiedSymbolRole\x10\x00\x12\x0e\n" +
@@ -3278,64 +3384,66 @@ func file_scip_proto_rawDescGZIP() []byte {
 	return file_scip_proto_rawDescData
 }
 
-var file_scip_proto_enumTypes = make([]protoimpl.EnumInfo, 10)
+var file_scip_proto_enumTypes = make([]protoimpl.EnumInfo, 11)
 var file_scip_proto_msgTypes = make([]protoimpl.MessageInfo, 14)
 var file_scip_proto_goTypes = []any{
 	(ProtocolVersion)(0),        // 0: scip.ProtocolVersion
 	(TextEncoding)(0),           // 1: scip.TextEncoding
 	(PositionEncoding)(0),       // 2: scip.PositionEncoding
-	(SymbolRole)(0),             // 3: scip.SymbolRole
-	(SyntaxKind)(0),             // 4: scip.SyntaxKind
-	(Severity)(0),               // 5: scip.Severity
-	(DiagnosticTag)(0),          // 6: scip.DiagnosticTag
-	(Language)(0),               // 7: scip.Language
-	(Descriptor_Suffix)(0),      // 8: scip.Descriptor.Suffix
-	(SymbolInformation_Kind)(0), // 9: scip.SymbolInformation.Kind
-	(*Index)(nil),               // 10: scip.Index
-	(*Metadata)(nil),            // 11: scip.Metadata
-	(*ToolInfo)(nil),            // 12: scip.ToolInfo
-	(*Document)(nil),            // 13: scip.Document
-	(*Symbol)(nil),              // 14: scip.Symbol
-	(*Package)(nil),             // 15: scip.Package
-	(*Descriptor)(nil),          // 16: scip.Descriptor
-	(*Signature)(nil),           // 17: scip.Signature
-	(*SymbolInformation)(nil),   // 18: scip.SymbolInformation
-	(*Relationship)(nil),        // 19: scip.Relationship
-	(*SingleLineRange)(nil),     // 20: scip.SingleLineRange
-	(*MultiLineRange)(nil),      // 21: scip.MultiLineRange
-	(*Occurrence)(nil),          // 22: scip.Occurrence
-	(*Diagnostic)(nil),          // 23: scip.Diagnostic
+	(Visibility)(0),             // 3: scip.Visibility
+	(SymbolRole)(0),             // 4: scip.SymbolRole
+	(SyntaxKind)(0),             // 5: scip.SyntaxKind
+	(Severity)(0),               // 6: scip.Severity
+	(DiagnosticTag)(0),          // 7: scip.DiagnosticTag
+	(Language)(0),               // 8: scip.Language
+	(Descriptor_Suffix)(0),      // 9: scip.Descriptor.Suffix
+	(SymbolInformation_Kind)(0), // 10: scip.SymbolInformation.Kind
+	(*Index)(nil),               // 11: scip.Index
+	(*Metadata)(nil),            // 12: scip.Metadata
+	(*ToolInfo)(nil),            // 13: scip.ToolInfo
+	(*Document)(nil),            // 14: scip.Document
+	(*Symbol)(nil),              // 15: scip.Symbol
+	(*Package)(nil),             // 16: scip.Package
+	(*Descriptor)(nil),          // 17: scip.Descriptor
+	(*Signature)(nil),           // 18: scip.Signature
+	(*SymbolInformation)(nil),   // 19: scip.SymbolInformation
+	(*Relationship)(nil),        // 20: scip.Relationship
+	(*SingleLineRange)(nil),     // 21: scip.SingleLineRange
+	(*MultiLineRange)(nil),      // 22: scip.MultiLineRange
+	(*Occurrence)(nil),          // 23: scip.Occurrence
+	(*Diagnostic)(nil),          // 24: scip.Diagnostic
 }
 var file_scip_proto_depIdxs = []int32{
-	11, // 0: scip.Index.metadata:type_name -> scip.Metadata
-	13, // 1: scip.Index.documents:type_name -> scip.Document
-	18, // 2: scip.Index.external_symbols:type_name -> scip.SymbolInformation
+	12, // 0: scip.Index.metadata:type_name -> scip.Metadata
+	14, // 1: scip.Index.documents:type_name -> scip.Document
+	19, // 2: scip.Index.external_symbols:type_name -> scip.SymbolInformation
 	0,  // 3: scip.Metadata.version:type_name -> scip.ProtocolVersion
-	12, // 4: scip.Metadata.tool_info:type_name -> scip.ToolInfo
+	13, // 4: scip.Metadata.tool_info:type_name -> scip.ToolInfo
 	1,  // 5: scip.Metadata.text_document_encoding:type_name -> scip.TextEncoding
-	22, // 6: scip.Document.occurrences:type_name -> scip.Occurrence
-	18, // 7: scip.Document.symbols:type_name -> scip.SymbolInformation
+	23, // 6: scip.Document.occurrences:type_name -> scip.Occurrence
+	19, // 7: scip.Document.symbols:type_name -> scip.SymbolInformation
 	2,  // 8: scip.Document.position_encoding:type_name -> scip.PositionEncoding
-	15, // 9: scip.Symbol.package:type_name -> scip.Package
-	16, // 10: scip.Symbol.descriptors:type_name -> scip.Descriptor
-	8,  // 11: scip.Descriptor.suffix:type_name -> scip.Descriptor.Suffix
-	22, // 12: scip.Signature.occurrences:type_name -> scip.Occurrence
-	19, // 13: scip.SymbolInformation.relationships:type_name -> scip.Relationship
-	9,  // 14: scip.SymbolInformation.kind:type_name -> scip.SymbolInformation.Kind
-	17, // 15: scip.SymbolInformation.signature_documentation:type_name -> scip.Signature
-	20, // 16: scip.Occurrence.single_line_range:type_name -> scip.SingleLineRange
-	21, // 17: scip.Occurrence.multi_line_range:type_name -> scip.MultiLineRange
-	4,  // 18: scip.Occurrence.syntax_kind:type_name -> scip.SyntaxKind
-	23, // 19: scip.Occurrence.diagnostics:type_name -> scip.Diagnostic
-	20, // 20: scip.Occurrence.single_line_enclosing_range:type_name -> scip.SingleLineRange
-	21, // 21: scip.Occurrence.multi_line_enclosing_range:type_name -> scip.MultiLineRange
-	5,  // 22: scip.Diagnostic.severity:type_name -> scip.Severity
-	6,  // 23: scip.Diagnostic.tags:type_name -> scip.DiagnosticTag
-	24, // [24:24] is the sub-list for method output_type
-	24, // [24:24] is the sub-list for method input_type
-	24, // [24:24] is the sub-list for extension type_name
-	24, // [24:24] is the sub-list for extension extendee
-	0,  // [0:24] is the sub-list for field type_name
+	16, // 9: scip.Symbol.package:type_name -> scip.Package
+	17, // 10: scip.Symbol.descriptors:type_name -> scip.Descriptor
+	9,  // 11: scip.Descriptor.suffix:type_name -> scip.Descriptor.Suffix
+	23, // 12: scip.Signature.occurrences:type_name -> scip.Occurrence
+	20, // 13: scip.SymbolInformation.relationships:type_name -> scip.Relationship
+	10, // 14: scip.SymbolInformation.kind:type_name -> scip.SymbolInformation.Kind
+	18, // 15: scip.SymbolInformation.signature_documentation:type_name -> scip.Signature
+	3,  // 16: scip.SymbolInformation.visibility:type_name -> scip.Visibility
+	21, // 17: scip.Occurrence.single_line_range:type_name -> scip.SingleLineRange
+	22, // 18: scip.Occurrence.multi_line_range:type_name -> scip.MultiLineRange
+	5,  // 19: scip.Occurrence.syntax_kind:type_name -> scip.SyntaxKind
+	24, // 20: scip.Occurrence.diagnostics:type_name -> scip.Diagnostic
+	21, // 21: scip.Occurrence.single_line_enclosing_range:type_name -> scip.SingleLineRange
+	22, // 22: scip.Occurrence.multi_line_enclosing_range:type_name -> scip.MultiLineRange
+	6,  // 23: scip.Diagnostic.severity:type_name -> scip.Severity
+	7,  // 24: scip.Diagnostic.tags:type_name -> scip.DiagnosticTag
+	25, // [25:25] is the sub-list for method output_type
+	25, // [25:25] is the sub-list for method input_type
+	25, // [25:25] is the sub-list for extension type_name
+	25, // [25:25] is the sub-list for extension extendee
+	0,  // [0:25] is the sub-list for field type_name
 }
 
 func init() { file_scip_proto_init() }
@@ -3354,7 +3462,7 @@ func file_scip_proto_init() {
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_scip_proto_rawDesc), len(file_scip_proto_rawDesc)),
-			NumEnums:      10,
+			NumEnums:      11,
 			NumMessages:   14,
 			NumExtensions: 0,
 			NumServices:   0,

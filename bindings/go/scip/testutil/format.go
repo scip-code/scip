@@ -170,6 +170,12 @@ func FormatSnapshot(
 				b.WriteString(info.Kind.String())
 			}
 
+			if info.Visibility != scip.Visibility_UnspecifiedVisibility {
+				b.WriteString(prefix)
+				b.WriteString("visibility ")
+				b.WriteString(info.Visibility.String())
+			}
+
 			if info.DisplayName != "" {
 				b.WriteString(prefix)
 				b.WriteString("display_name ")

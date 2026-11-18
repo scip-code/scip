@@ -124,7 +124,7 @@ public enum Severity
   }
   public static com.google.protobuf.Descriptors.EnumDescriptor
       getDescriptor() {
-    return org.scip_code.scip.ScipProto.getDescriptor().getEnumType(5);
+    return org.scip_code.scip.ScipProto.getDescriptor().getEnumType(6);
   }
 
   private static final Severity[] VALUES = values();

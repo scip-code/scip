@@ -20,7 +20,7 @@ require (
 	github.com/mattn/go-isatty v0.0.20 // indirect
 	github.com/mattn/go-pointer v0.0.1 // indirect
 	github.com/nightlyone/lockfile v1.0.0 // indirect
-	github.com/sourcegraph/beaut v0.0.0-20240611013027-627e4c25335a // indirect
+	github.com/sourcegraph/beaut v0.0.0-20261111132315-09cb7452b181 // indirect
 	go.yaml.in/yaml/v3 v3.0.5 // indirect
 	golang.org/x/mod v0.33.0 // indirect
 	golang.org/x/sync v0.19.0 // indirect

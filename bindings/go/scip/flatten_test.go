@@ -65,6 +65,9 @@ func compareSymbol(a, b *SymbolInformation) bool {
 	if a.Kind != b.Kind {
 		return false
 	}
+	if a.Visibility != b.Visibility {
+		return false
+	}
 	if a.DisplayName != b.DisplayName {
 		return false
 	}

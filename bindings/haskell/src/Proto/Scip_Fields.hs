@@ -474,3 +474,9 @@ version ::
   (Prelude.Functor f, Data.ProtoLens.Field.HasField s "version" a) =>
   Lens.Family2.LensLike' f s a
 version = Data.ProtoLens.Field.field @"version"
+visibility ::
+  forall f s a.
+  (Prelude.Functor f,
+   Data.ProtoLens.Field.HasField s "visibility" a) =>
+  Lens.Family2.LensLike' f s a
+visibility = Data.ProtoLens.Field.field @"visibility"

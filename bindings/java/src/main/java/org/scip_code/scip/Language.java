@@ -1147,7 +1147,7 @@ public enum Language
   }
   public static com.google.protobuf.Descriptors.EnumDescriptor
       getDescriptor() {
-    return org.scip_code.scip.ScipProto.getDescriptor().getEnumType(7);
+    return org.scip_code.scip.ScipProto.getDescriptor().getEnumType(8);
   }
 
   private static final Language[] VALUES = values();

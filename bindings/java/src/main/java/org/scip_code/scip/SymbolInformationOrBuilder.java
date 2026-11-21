@@ -289,4 +289,31 @@ public interface SymbolInformationOrBuilder extends
    */
   com.google.protobuf.ByteString
       getEnclosingSymbolBytes();
+
+  /**
+   * <pre>
+   * (optional) The declared visibility of this symbol, see `Visibility`.
+   *
+   * Indexers should leave this field empty when the language has no notion of
+   * visibility for this kind of symbol, for example parameters or type
+   * parameters.
+   * </pre>
+   *
+   * <code>.scip.Visibility visibility = 9 [json_name = "visibility"];</code>
+   * @return The enum numeric value on the wire for visibility.
+   */
+  int getVisibilityValue();
+  /**
+   * <pre>
+   * (optional) The declared visibility of this symbol, see `Visibility`.
+   *
+   * Indexers should leave this field empty when the language has no notion of
+   * visibility for this kind of symbol, for example parameters or type
+   * parameters.
+   * </pre>
+   *
+   * <code>.scip.Visibility visibility = 9 [json_name = "visibility"];</code>
+   * @return The visibility.
+   */
+  org.scip_code.scip.Visibility getVisibility();
 }

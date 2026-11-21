@@ -32,7 +32,7 @@ public interface OccurrenceOrBuilder extends
    *
    * <code>repeated int32 range = 1 [json_name = "range", deprecated = true];</code>
    * @deprecated scip.Occurrence.range is deprecated.
-   *     See scip.proto;l=708
+   *     See scip.proto;l=749
    * @return A list containing the range.
    */
   @java.lang.Deprecated java.util.List<java.lang.Integer> getRangeList();
@@ -58,7 +58,7 @@ public interface OccurrenceOrBuilder extends
    *
    * <code>repeated int32 range = 1 [json_name = "range", deprecated = true];</code>
    * @deprecated scip.Occurrence.range is deprecated.
-   *     See scip.proto;l=708
+   *     See scip.proto;l=749
    * @return The count of range.
    */
   @java.lang.Deprecated int getRangeCount();
@@ -84,7 +84,7 @@ public interface OccurrenceOrBuilder extends
    *
    * <code>repeated int32 range = 1 [json_name = "range", deprecated = true];</code>
    * @deprecated scip.Occurrence.range is deprecated.
-   *     See scip.proto;l=708
+   *     See scip.proto;l=749
    * @param index The index of the element to return.
    * @return The range at the given index.
    */
@@ -318,7 +318,7 @@ public interface OccurrenceOrBuilder extends
    *
    * <code>repeated int32 enclosing_range = 7 [json_name = "enclosingRange", deprecated = true];</code>
    * @deprecated scip.Occurrence.enclosing_range is deprecated.
-   *     See scip.proto;l=744
+   *     See scip.proto;l=785
    * @return A list containing the enclosingRange.
    */
   @java.lang.Deprecated java.util.List<java.lang.Integer> getEnclosingRangeList();
@@ -331,7 +331,7 @@ public interface OccurrenceOrBuilder extends
    *
    * <code>repeated int32 enclosing_range = 7 [json_name = "enclosingRange", deprecated = true];</code>
    * @deprecated scip.Occurrence.enclosing_range is deprecated.
-   *     See scip.proto;l=744
+   *     See scip.proto;l=785
    * @return The count of enclosingRange.
    */
   @java.lang.Deprecated int getEnclosingRangeCount();
@@ -344,7 +344,7 @@ public interface OccurrenceOrBuilder extends
    *
    * <code>repeated int32 enclosing_range = 7 [json_name = "enclosingRange", deprecated = true];</code>
    * @deprecated scip.Occurrence.enclosing_range is deprecated.
-   *     See scip.proto;l=744
+   *     See scip.proto;l=785
    * @param index The index of the element to return.
    * @return The enclosingRange at the given index.
    */

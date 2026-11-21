@@ -24,7 +24,8 @@ module Proto.Scip (
         SymbolRole(..), SymbolRole(), SymbolRole'UnrecognizedValue,
         SyntaxKind(..), SyntaxKind(IdentifierKeyword, IdentifierModule),
         SyntaxKind'UnrecognizedValue, TextEncoding(..), TextEncoding(),
-        TextEncoding'UnrecognizedValue, ToolInfo()
+        TextEncoding'UnrecognizedValue, ToolInfo(), Visibility(..),
+        Visibility(), Visibility'UnrecognizedValue
     ) where
 import qualified Data.ProtoLens.Runtime.Control.DeepSeq as Control.DeepSeq
 import qualified Data.ProtoLens.Runtime.Data.ProtoLens.Prism as Data.ProtoLens.Prism
@@ -5044,7 +5045,8 @@ instance Control.DeepSeq.NFData Symbol where
          * 'Proto.Scip_Fields.displayName' @:: Lens' SymbolInformation Data.Text.Text@
          * 'Proto.Scip_Fields.signatureDocumentation' @:: Lens' SymbolInformation Signature@
          * 'Proto.Scip_Fields.maybe'signatureDocumentation' @:: Lens' SymbolInformation (Prelude.Maybe Signature)@
-         * 'Proto.Scip_Fields.enclosingSymbol' @:: Lens' SymbolInformation Data.Text.Text@ -}
+         * 'Proto.Scip_Fields.enclosingSymbol' @:: Lens' SymbolInformation Data.Text.Text@
+         * 'Proto.Scip_Fields.visibility' @:: Lens' SymbolInformation Visibility@ -}
 data SymbolInformation
   = SymbolInformation'_constructor {_SymbolInformation'symbol :: !Data.Text.Text,
                                     _SymbolInformation'documentation :: !(Data.Vector.Vector Data.Text.Text),
@@ -5053,6 +5055,7 @@ data SymbolInformation
                                     _SymbolInformation'displayName :: !Data.Text.Text,
                                     _SymbolInformation'signatureDocumentation :: !(Prelude.Maybe Signature),
                                     _SymbolInformation'enclosingSymbol :: !Data.Text.Text,
+                                    _SymbolInformation'visibility :: !Visibility,
                                     _SymbolInformation'_unknownFields :: !Data.ProtoLens.FieldSet}
   deriving stock (Prelude.Eq, Prelude.Ord)
 instance Prelude.Show SymbolInformation where
@@ -5137,6 +5140,13 @@ instance Data.ProtoLens.Field.HasField SymbolInformation "enclosingSymbol" Data.
            _SymbolInformation'enclosingSymbol
            (\ x__ y__ -> x__ {_SymbolInformation'enclosingSymbol = y__}))
         Prelude.id
+instance Data.ProtoLens.Field.HasField SymbolInformation "visibility" Visibility where
+  fieldOf _
+    = (Prelude..)
+        (Lens.Family2.Unchecked.lens
+           _SymbolInformation'visibility
+           (\ x__ y__ -> x__ {_SymbolInformation'visibility = y__}))
+        Prelude.id
 instance Data.ProtoLens.Message SymbolInformation where
   messageName _ = Data.Text.pack "scip.SymbolInformation"
   packedMessageDescriptor _
@@ -5148,7 +5158,10 @@ instance Data.ProtoLens.Message SymbolInformation where
       \\EOTkind\CAN\ENQ \SOH(\SO2\FS.scip.SymbolInformation.KindR\EOTkind\DC2!\n\
       \\fdisplay_name\CAN\ACK \SOH(\tR\vdisplayName\DC2H\n\
       \\ETBsignature_documentation\CAN\a \SOH(\v2\SI.scip.SignatureR\SYNsignatureDocumentation\DC2)\n\
-      \\DLEenclosing_symbol\CAN\b \SOH(\tR\SIenclosingSymbol\"\251\t\n\
+      \\DLEenclosing_symbol\CAN\b \SOH(\tR\SIenclosingSymbol\DC20\n\
+      \\n\
+      \visibility\CAN\t \SOH(\SO2\DLE.scip.VisibilityR\n\
+      \visibility\"\251\t\n\
       \\EOTKind\DC2\DC3\n\
       \\SIUnspecifiedKind\DLE\NUL\DC2\DC2\n\
       \\SOAbstractMethod\DLEB\DC2\f\n\
@@ -5312,6 +5325,15 @@ instance Data.ProtoLens.Message SymbolInformation where
                  Data.ProtoLens.Optional
                  (Data.ProtoLens.Field.field @"enclosingSymbol")) ::
               Data.ProtoLens.FieldDescriptor SymbolInformation
+        visibility__field_descriptor
+          = Data.ProtoLens.FieldDescriptor
+              "visibility"
+              (Data.ProtoLens.ScalarField Data.ProtoLens.EnumField ::
+                 Data.ProtoLens.FieldTypeDescriptor Visibility)
+              (Data.ProtoLens.PlainField
+                 Data.ProtoLens.Optional
+                 (Data.ProtoLens.Field.field @"visibility")) ::
+              Data.ProtoLens.FieldDescriptor SymbolInformation
       in
         Data.Map.fromList
           [(Data.ProtoLens.Tag 1, symbol__field_descriptor),
@@ -5320,7 +5342,8 @@ instance Data.ProtoLens.Message SymbolInformation where
            (Data.ProtoLens.Tag 5, kind__field_descriptor),
            (Data.ProtoLens.Tag 6, displayName__field_descriptor),
            (Data.ProtoLens.Tag 7, signatureDocumentation__field_descriptor),
-           (Data.ProtoLens.Tag 8, enclosingSymbol__field_descriptor)]
+           (Data.ProtoLens.Tag 8, enclosingSymbol__field_descriptor),
+           (Data.ProtoLens.Tag 9, visibility__field_descriptor)]
   unknownFields
     = Lens.Family2.Unchecked.lens
         _SymbolInformation'_unknownFields
@@ -5334,6 +5357,7 @@ instance Data.ProtoLens.Message SymbolInformation where
          _SymbolInformation'displayName = Data.ProtoLens.fieldDefault,
          _SymbolInformation'signatureDocumentation = Prelude.Nothing,
          _SymbolInformation'enclosingSymbol = Data.ProtoLens.fieldDefault,
+         _SymbolInformation'visibility = Data.ProtoLens.fieldDefault,
          _SymbolInformation'_unknownFields = []}
   parseMessage
     = let
@@ -5441,6 +5465,17 @@ instance Data.ProtoLens.Message SymbolInformation where
                                 loop
                                   (Lens.Family2.set
                                      (Data.ProtoLens.Field.field @"enclosingSymbol") y x)
+                                  mutable'documentation mutable'relationships
+                        72
+                          -> do y <- (Data.ProtoLens.Encoding.Bytes.<?>)
+                                       (Prelude.fmap
+                                          Prelude.toEnum
+                                          (Prelude.fmap
+                                             Prelude.fromIntegral
+                                             Data.ProtoLens.Encoding.Bytes.getVarInt))
+                                       "visibility"
+                                loop
+                                  (Lens.Family2.set (Data.ProtoLens.Field.field @"visibility") y x)
                                   mutable'documentation mutable'relationships
                         wire
                           -> do !y <- Data.ProtoLens.Encoding.Wire.parseTaggedValueFromWire
@@ -5570,8 +5605,24 @@ instance Data.ProtoLens.Message SymbolInformation where
                                                          (Data.ByteString.length bs)))
                                                    (Data.ProtoLens.Encoding.Bytes.putBytes bs))
                                            Data.Text.Encoding.encodeUtf8 _v))
-                               (Data.ProtoLens.Encoding.Wire.buildFieldSet
-                                  (Lens.Family2.view Data.ProtoLens.unknownFields _x))))))))
+                               ((Data.Monoid.<>)
+                                  (let
+                                     _v
+                                       = Lens.Family2.view
+                                           (Data.ProtoLens.Field.field @"visibility") _x
+                                   in
+                                     if (Prelude.==) _v Data.ProtoLens.fieldDefault then
+                                         Data.Monoid.mempty
+                                     else
+                                         (Data.Monoid.<>)
+                                           (Data.ProtoLens.Encoding.Bytes.putVarInt 72)
+                                           ((Prelude..)
+                                              ((Prelude..)
+                                                 Data.ProtoLens.Encoding.Bytes.putVarInt
+                                                 Prelude.fromIntegral)
+                                              Prelude.fromEnum _v))
+                                  (Data.ProtoLens.Encoding.Wire.buildFieldSet
+                                     (Lens.Family2.view Data.ProtoLens.unknownFields _x)))))))))
 instance Control.DeepSeq.NFData SymbolInformation where
   rnf
     = \ x__
@@ -5590,7 +5641,9 @@ instance Control.DeepSeq.NFData SymbolInformation where
                             (Control.DeepSeq.deepseq
                                (_SymbolInformation'signatureDocumentation x__)
                                (Control.DeepSeq.deepseq
-                                  (_SymbolInformation'enclosingSymbol x__) ())))))))
+                                  (_SymbolInformation'enclosingSymbol x__)
+                                  (Control.DeepSeq.deepseq
+                                     (_SymbolInformation'visibility x__) ()))))))))
 newtype SymbolInformation'Kind'UnrecognizedValue
   = SymbolInformation'Kind'UnrecognizedValue Data.Int.Int32
   deriving stock (Prelude.Eq, Prelude.Ord, Prelude.Show)
@@ -7041,6 +7094,86 @@ instance Control.DeepSeq.NFData ToolInfo where
                 (Control.DeepSeq.deepseq
                    (_ToolInfo'version x__)
                    (Control.DeepSeq.deepseq (_ToolInfo'arguments x__) ())))
+newtype Visibility'UnrecognizedValue
+  = Visibility'UnrecognizedValue Data.Int.Int32
+  deriving stock (Prelude.Eq, Prelude.Ord, Prelude.Show)
+data Visibility
+  = UnspecifiedVisibility |
+    Public |
+    Protected |
+    Private |
+    PackagePrivate |
+    Visibility'Unrecognized !Visibility'UnrecognizedValue
+  deriving stock (Prelude.Show, Prelude.Eq, Prelude.Ord)
+instance Data.ProtoLens.MessageEnum Visibility where
+  maybeToEnum 0 = Prelude.Just UnspecifiedVisibility
+  maybeToEnum 1 = Prelude.Just Public
+  maybeToEnum 2 = Prelude.Just Protected
+  maybeToEnum 3 = Prelude.Just Private
+  maybeToEnum 4 = Prelude.Just PackagePrivate
+  maybeToEnum k
+    = Prelude.Just
+        (Visibility'Unrecognized
+           (Visibility'UnrecognizedValue (Prelude.fromIntegral k)))
+  showEnum UnspecifiedVisibility = "UnspecifiedVisibility"
+  showEnum Public = "Public"
+  showEnum Protected = "Protected"
+  showEnum Private = "Private"
+  showEnum PackagePrivate = "PackagePrivate"
+  showEnum (Visibility'Unrecognized (Visibility'UnrecognizedValue k))
+    = Prelude.show k
+  readEnum k
+    | (Prelude.==) k "UnspecifiedVisibility"
+    = Prelude.Just UnspecifiedVisibility
+    | (Prelude.==) k "Public" = Prelude.Just Public
+    | (Prelude.==) k "Protected" = Prelude.Just Protected
+    | (Prelude.==) k "Private" = Prelude.Just Private
+    | (Prelude.==) k "PackagePrivate" = Prelude.Just PackagePrivate
+    | Prelude.otherwise
+    = (Prelude.>>=) (Text.Read.readMaybe k) Data.ProtoLens.maybeToEnum
+instance Prelude.Bounded Visibility where
+  minBound = UnspecifiedVisibility
+  maxBound = PackagePrivate
+instance Prelude.Enum Visibility where
+  toEnum k__
+    = Prelude.maybe
+        (Prelude.error
+           ((Prelude.++)
+              "toEnum: unknown value for enum Visibility: " (Prelude.show k__)))
+        Prelude.id (Data.ProtoLens.maybeToEnum k__)
+  fromEnum UnspecifiedVisibility = 0
+  fromEnum Public = 1
+  fromEnum Protected = 2
+  fromEnum Private = 3
+  fromEnum PackagePrivate = 4
+  fromEnum (Visibility'Unrecognized (Visibility'UnrecognizedValue k))
+    = Prelude.fromIntegral k
+  succ PackagePrivate
+    = Prelude.error
+        "Visibility.succ: bad argument PackagePrivate. This value would be out of bounds."
+  succ UnspecifiedVisibility = Public
+  succ Public = Protected
+  succ Protected = Private
+  succ Private = PackagePrivate
+  succ (Visibility'Unrecognized _)
+    = Prelude.error "Visibility.succ: bad argument: unrecognized value"
+  pred UnspecifiedVisibility
+    = Prelude.error
+        "Visibility.pred: bad argument UnspecifiedVisibility. This value would be out of bounds."
+  pred Public = UnspecifiedVisibility
+  pred Protected = Public
+  pred Private = Protected
+  pred PackagePrivate = Private
+  pred (Visibility'Unrecognized _)
+    = Prelude.error "Visibility.pred: bad argument: unrecognized value"
+  enumFrom = Data.ProtoLens.Message.Enum.messageEnumFrom
+  enumFromTo = Data.ProtoLens.Message.Enum.messageEnumFromTo
+  enumFromThen = Data.ProtoLens.Message.Enum.messageEnumFromThen
+  enumFromThenTo = Data.ProtoLens.Message.Enum.messageEnumFromThenTo
+instance Data.ProtoLens.FieldDefault Visibility where
+  fieldDefault = UnspecifiedVisibility
+instance Control.DeepSeq.NFData Visibility where
+  rnf x__ = Prelude.seq x__ ()
 packedFileDescriptor :: Data.ByteString.ByteString
 packedFileDescriptor
   = "\n\
@@ -7095,7 +7228,7 @@ packedFileDescriptor
     \\tSignature\DC2\SUB\n\
     \\blanguage\CAN\EOT \SOH(\tR\blanguage\DC2\DC2\n\
     \\EOTtext\CAN\ENQ \SOH(\tR\EOTtext\DC22\n\
-    \\voccurrences\CAN\STX \ETX(\v2\DLE.scip.OccurrenceR\voccurrencesJ\EOT\b\SOH\DLE\STXJ\EOT\b\ETX\DLE\EOTJ\EOT\b\ACK\DLE\a\"\211\f\n\
+    \\voccurrences\CAN\STX \ETX(\v2\DLE.scip.OccurrenceR\voccurrencesJ\EOT\b\SOH\DLE\STXJ\EOT\b\ETX\DLE\EOTJ\EOT\b\ACK\DLE\a\"\133\r\n\
     \\DC1SymbolInformation\DC2\SYN\n\
     \\ACKsymbol\CAN\SOH \SOH(\tR\ACKsymbol\DC2$\n\
     \\rdocumentation\CAN\ETX \ETX(\tR\rdocumentation\DC28\n\
@@ -7103,7 +7236,10 @@ packedFileDescriptor
     \\EOTkind\CAN\ENQ \SOH(\SO2\FS.scip.SymbolInformation.KindR\EOTkind\DC2!\n\
     \\fdisplay_name\CAN\ACK \SOH(\tR\vdisplayName\DC2H\n\
     \\ETBsignature_documentation\CAN\a \SOH(\v2\SI.scip.SignatureR\SYNsignatureDocumentation\DC2)\n\
-    \\DLEenclosing_symbol\CAN\b \SOH(\tR\SIenclosingSymbol\"\251\t\n\
+    \\DLEenclosing_symbol\CAN\b \SOH(\tR\SIenclosingSymbol\DC20\n\
+    \\n\
+    \visibility\CAN\t \SOH(\SO2\DLE.scip.VisibilityR\n\
+    \visibility\"\251\t\n\
     \\EOTKind\DC2\DC3\n\
     \\SIUnspecifiedKind\DLE\NUL\DC2\DC2\n\
     \\SOAbstractMethod\DLEB\DC2\f\n\
@@ -7254,7 +7390,15 @@ packedFileDescriptor
     \\ESCUnspecifiedPositionEncoding\DLE\NUL\DC2#\n\
     \\USUTF8CodeUnitOffsetFromLineStart\DLE\SOH\DC2$\n\
     \ UTF16CodeUnitOffsetFromLineStart\DLE\STX\DC2$\n\
-    \ UTF32CodeUnitOffsetFromLineStart\DLE\ETX*\148\SOH\n\
+    \ UTF32CodeUnitOffsetFromLineStart\DLE\ETX*c\n\
+    \\n\
+    \Visibility\DC2\EM\n\
+    \\NAKUnspecifiedVisibility\DLE\NUL\DC2\n\
+    \\n\
+    \\ACKPublic\DLE\SOH\DC2\r\n\
+    \\tProtected\DLE\STX\DC2\v\n\
+    \\aPrivate\DLE\ETX\DC2\DC2\n\
+    \\SOPackagePrivate\DLE\EOT*\148\SOH\n\
     \\n\
     \SymbolRole\DC2\EM\n\
     \\NAKUnspecifiedSymbolRole\DLE\NUL\DC2\SO\n\
@@ -7463,9 +7607,9 @@ packedFileDescriptor
     \\ETXXSL\DLE \DC2\b\n\
     \\EOTYAML\DLEJ\DC2\a\n\
     \\ETXZig\DLE&BN\n\
-    \\DC2org.scip_code.scipB\tScipProtoP\SOHZ+github.com/scip-code/scip/bindings/go/scip/J\135\214\STX\n\
+    \\DC2org.scip_code.scipB\tScipProtoP\SOHZ+github.com/scip-code/scip/bindings/go/scip/J\190\231\STX\n\
     \\a\DC2\ENQ\n\
-    \\NUL\193\a\SOH\n\
+    \\NUL\234\a\SOH\n\
     \\130\EOT\n\
     \\SOH\f\DC2\ETX\n\
     \\NUL\DC22\247\ETX An index contains one or more pieces of information about a given piece of\n\
@@ -8097,7 +8241,7 @@ packedFileDescriptor
     \\r\n\
     \\ENQ\EOT\a\t\STX\STX\DC2\EOT\247\SOH\DC1\DC2\n\
     \\131\SOH\n\
-    \\STX\EOT\b\DC2\ACK\252\SOH\NUL\206\ETX\SOH\SUBu SymbolInformation defines metadata about a symbol, such as the symbol's\n\
+    \\STX\EOT\b\DC2\ACK\252\SOH\NUL\212\ETX\SOH\SUBu SymbolInformation defines metadata about a symbol, such as the symbol's\n\
     \ docstring or what package it's defined it.\n\
     \\n\
     \\v\n\
@@ -8820,22 +8964,96 @@ packedFileDescriptor
     \\ENQ\EOT\b\STX\ACK\SOH\DC2\EOT\205\ETX\t\EM\n\
     \\r\n\
     \\ENQ\EOT\b\STX\ACK\ETX\DC2\EOT\205\ETX\FS\GS\n\
-    \\f\n\
-    \\STX\EOT\t\DC2\ACK\208\ETX\NUL\132\EOT\SOH\n\
+    \\r\n\
+    \\ENQ\EOT\b\STX\a\ACK\DC2\EOT\211\ETX\STX\f\n\
+    \\242\SOH\n\
+    \\EOT\EOT\b\STX\a\DC2\EOT\211\ETX\STX\FS\SUB\227\SOH (optional) The declared visibility of this symbol, see `Visibility`.\n\
+    \\n\
+    \ Indexers should leave this field empty when the language has no notion of\n\
+    \ visibility for this kind of symbol, for example parameters or type\n\
+    \ parameters.\n\
+    \\n\
+    \\r\n\
+    \\ENQ\EOT\b\STX\a\SOH\DC2\EOT\211\ETX\r\ETB\n\
+    \\r\n\
+    \\ENQ\EOT\b\STX\a\ETX\DC2\EOT\211\ETX\SUB\ESC\n\
+    \\131\a\n\
+    \\STX\ENQ\ETX\DC2\ACK\229\ETX\NUL\247\ETX\SOH\SUB\244\ACK Visibility describes who may access a symbol according to the access rules of\n\
+    \ its language, as declared in the source code or implied by the language's\n\
+    \ defaults (for example, Java members without a modifier are package-private,\n\
+    \ while TypeScript class members without a modifier are public).\n\
+    \\n\
+    \ The value describes the symbol's own declaration. It does not account for\n\
+    \ the visibility of enclosing symbols: a public method of a private class is\n\
+    \ still `Public`. Consumers that need to know whether a symbol is reachable from\n\
+    \ outside its package can combine this field with the visibility of the\n\
+    \ enclosing symbols.\n\
+    \\n\
+    \ When an access modifier does not map exactly to one of the values below,\n\
+    \ indexers should pick the value that best describes access from outside the\n\
+    \ declaring package. For example, C# `protected internal` is `Protected`, and\n\
+    \ C# `private protected` is `Package`.\n\
+    \\n\
     \\v\n\
-    \\ETX\EOT\t\SOH\DC2\EOT\208\ETX\b\DC4\n\
+    \\ETX\ENQ\ETX\SOH\DC2\EOT\229\ETX\ENQ\SI\n\
     \\r\n\
-    \\ENQ\EOT\t\STX\NUL\ENQ\DC2\EOT\209\ETX\STX\b\n\
+    \\ENQ\ENQ\ETX\STX\NUL\SOH\DC2\EOT\230\ETX\STX\ETB\n\
     \\f\n\
-    \\EOT\EOT\t\STX\NUL\DC2\EOT\209\ETX\STX\DC4\n\
+    \\EOT\ENQ\ETX\STX\NUL\DC2\EOT\230\ETX\STX\FS\n\
     \\r\n\
-    \\ENQ\EOT\t\STX\NUL\SOH\DC2\EOT\209\ETX\t\SI\n\
+    \\ENQ\ENQ\ETX\STX\NUL\STX\DC2\EOT\230\ETX\SUB\ESC\n\
     \\r\n\
-    \\ENQ\EOT\t\STX\NUL\ETX\DC2\EOT\209\ETX\DC2\DC3\n\
+    \\ENQ\ENQ\ETX\STX\SOH\SOH\DC2\EOT\234\ETX\STX\b\n\
+    \\232\SOH\n\
+    \\EOT\ENQ\ETX\STX\SOH\DC2\EOT\234\ETX\STX\r\SUB\217\SOH Accessible wherever the enclosing symbol is accessible. For example:\n\
+    \ `public` in Java, C#, Kotlin and TypeScript, TypeScript and JavaScript\n\
+    \ module members that are exported, Go exported identifiers and Rust `pub`.\n\
+    \\n\
     \\r\n\
-    \\ENQ\EOT\t\STX\SOH\ENQ\DC2\EOT\234\ETX\STX\ACK\n\
+    \\ENQ\ENQ\ETX\STX\SOH\STX\DC2\EOT\234\ETX\v\f\n\
+    \\r\n\
+    \\ENQ\ENQ\ETX\STX\STX\SOH\DC2\EOT\237\ETX\STX\v\n\
+    \\135\SOH\n\
+    \\EOT\ENQ\ETX\STX\STX\DC2\EOT\237\ETX\STX\DLE\SUBy Accessible from the declaring type and its subtypes. For example:\n\
+    \ `protected` in Java, C#, Kotlin, TypeScript and PHP.\n\
+    \\n\
+    \\r\n\
+    \\ENQ\ENQ\ETX\STX\STX\STX\DC2\EOT\237\ETX\SO\SI\n\
+    \\r\n\
+    \\ENQ\ENQ\ETX\STX\ETX\SOH\DC2\EOT\242\ETX\STX\t\n\
+    \\138\STX\n\
+    \\EOT\ENQ\ETX\STX\ETX\DC2\EOT\242\ETX\STX\SO\SUB\251\SOH Accessible only from the declaring type, file or module. For example:\n\
+    \ `private` in Java, C#, Kotlin and TypeScript, ECMAScript `#private` class\n\
+    \ members, TypeScript and JavaScript module members that are not exported,\n\
+    \ and Rust items without `pub`.\n\
+    \\n\
+    \\r\n\
+    \\ENQ\ENQ\ETX\STX\ETX\STX\DC2\EOT\242\ETX\f\r\n\
+    \\r\n\
+    \\ENQ\ENQ\ETX\STX\EOT\SOH\DC2\EOT\246\ETX\STX\DLE\n\
+    \\217\SOH\n\
+    \\EOT\ENQ\ETX\STX\EOT\DC2\EOT\246\ETX\STX\NAK\SUB\202\SOH Accessible from the declaring package, module, assembly or crate. For\n\
+    \ example: Java members without an access modifier, Go unexported\n\
+    \ identifiers, `internal` in C# and Kotlin, and Rust `pub(crate)`.\n\
+    \\n\
+    \\r\n\
+    \\ENQ\ENQ\ETX\STX\EOT\STX\DC2\EOT\246\ETX\DC3\DC4\n\
+    \\f\n\
+    \\STX\EOT\t\DC2\ACK\249\ETX\NUL\173\EOT\SOH\n\
+    \\v\n\
+    \\ETX\EOT\t\SOH\DC2\EOT\249\ETX\b\DC4\n\
+    \\r\n\
+    \\ENQ\EOT\t\STX\NUL\ENQ\DC2\EOT\250\ETX\STX\b\n\
+    \\f\n\
+    \\EOT\EOT\t\STX\NUL\DC2\EOT\250\ETX\STX\DC4\n\
+    \\r\n\
+    \\ENQ\EOT\t\STX\NUL\SOH\DC2\EOT\250\ETX\t\SI\n\
+    \\r\n\
+    \\ENQ\EOT\t\STX\NUL\ETX\DC2\EOT\250\ETX\DC2\DC3\n\
+    \\r\n\
+    \\ENQ\EOT\t\STX\SOH\ENQ\DC2\EOT\147\EOT\STX\ACK\n\
     \\222\b\n\
-    \\EOT\EOT\t\STX\SOH\DC2\EOT\234\ETX\STX\CAN\SUB\207\b When resolving \"Find references\", this field documents what other symbols\n\
+    \\EOT\EOT\t\STX\SOH\DC2\EOT\147\EOT\STX\CAN\SUB\207\b When resolving \"Find references\", this field documents what other symbols\n\
     \ should be included together with this symbol. For example, consider the\n\
     \ following TypeScript code that defines two symbols `Animal#sound()` and\n\
     \ `Dog#sound()`:\n\
@@ -8861,13 +9079,13 @@ packedFileDescriptor
     \ `Animal#sound()` method as well.\n\
     \\n\
     \\r\n\
-    \\ENQ\EOT\t\STX\SOH\SOH\DC2\EOT\234\ETX\a\DC3\n\
+    \\ENQ\EOT\t\STX\SOH\SOH\DC2\EOT\147\EOT\a\DC3\n\
     \\r\n\
-    \\ENQ\EOT\t\STX\SOH\ETX\DC2\EOT\234\ETX\SYN\ETB\n\
+    \\ENQ\EOT\t\STX\SOH\ETX\DC2\EOT\147\EOT\SYN\ETB\n\
     \\r\n\
-    \\ENQ\EOT\t\STX\STX\ENQ\DC2\EOT\243\ETX\STX\ACK\n\
+    \\ENQ\EOT\t\STX\STX\ENQ\DC2\EOT\156\EOT\STX\ACK\n\
     \\238\ETX\n\
-    \\EOT\EOT\t\STX\STX\DC2\EOT\243\ETX\STX\GS\SUB\223\ETX Similar to `is_reference` but for \"Find implementations\".\n\
+    \\EOT\EOT\t\STX\STX\DC2\EOT\156\EOT\STX\GS\SUB\223\ETX Similar to `is_reference` but for \"Find implementations\".\n\
     \ It's common for `is_implementation` and `is_reference` to both be true but\n\
     \ it's not always the case.\n\
     \ In the TypeScript example above, observe that `Dog#` has an\n\
@@ -8877,22 +9095,22 @@ packedFileDescriptor
     \ implementations\" on the \"Animal#\" symbol.\n\
     \\n\
     \\r\n\
-    \\ENQ\EOT\t\STX\STX\SOH\DC2\EOT\243\ETX\a\CAN\n\
+    \\ENQ\EOT\t\STX\STX\SOH\DC2\EOT\156\EOT\a\CAN\n\
     \\r\n\
-    \\ENQ\EOT\t\STX\STX\ETX\DC2\EOT\243\ETX\ESC\FS\n\
+    \\ENQ\EOT\t\STX\STX\ETX\DC2\EOT\156\EOT\ESC\FS\n\
     \\r\n\
-    \\ENQ\EOT\t\STX\ETX\ENQ\DC2\EOT\245\ETX\STX\ACK\n\
+    \\ENQ\EOT\t\STX\ETX\ENQ\DC2\EOT\158\EOT\STX\ACK\n\
     \P\n\
-    \\EOT\EOT\t\STX\ETX\DC2\EOT\245\ETX\STX\RS\SUBB Similar to `references_symbols` but for \"Go to type definition\".\n\
+    \\EOT\EOT\t\STX\ETX\DC2\EOT\158\EOT\STX\RS\SUBB Similar to `references_symbols` but for \"Go to type definition\".\n\
     \\n\
     \\r\n\
-    \\ENQ\EOT\t\STX\ETX\SOH\DC2\EOT\245\ETX\a\EM\n\
+    \\ENQ\EOT\t\STX\ETX\SOH\DC2\EOT\158\EOT\a\EM\n\
     \\r\n\
-    \\ENQ\EOT\t\STX\ETX\ETX\DC2\EOT\245\ETX\FS\GS\n\
+    \\ENQ\EOT\t\STX\ETX\ETX\DC2\EOT\158\EOT\FS\GS\n\
     \\r\n\
-    \\ENQ\EOT\t\STX\EOT\ENQ\DC2\EOT\130\EOT\STX\ACK\n\
+    \\ENQ\EOT\t\STX\EOT\ENQ\DC2\EOT\171\EOT\STX\ACK\n\
     \\216\ENQ\n\
-    \\EOT\EOT\t\STX\EOT\DC2\EOT\130\EOT\STX\EM\SUB\134\ENQ Allows overriding the behavior of \"Go to definition\" and \"Find references\"\n\
+    \\EOT\EOT\t\STX\EOT\DC2\EOT\171\EOT\STX\EM\SUB\134\ENQ Allows overriding the behavior of \"Go to definition\" and \"Find references\"\n\
     \ for symbols which do not have a definition of their own or could\n\
     \ potentially have multiple definitions.\n\
     \\n\
@@ -8907,377 +9125,377 @@ packedFileDescriptor
     \\"A Update registerInverseRelationships on adding a new field here.\n\
     \\n\
     \\r\n\
-    \\ENQ\EOT\t\STX\EOT\SOH\DC2\EOT\130\EOT\a\DC4\n\
+    \\ENQ\EOT\t\STX\EOT\SOH\DC2\EOT\171\EOT\a\DC4\n\
     \\r\n\
-    \\ENQ\EOT\t\STX\EOT\ETX\DC2\EOT\130\EOT\ETB\CAN\n\
+    \\ENQ\EOT\t\STX\EOT\ETX\DC2\EOT\171\EOT\ETB\CAN\n\
     \\136\ETX\n\
-    \\STX\ENQ\ETX\DC2\ACK\139\EOT\NUL\161\EOT\SOH\SUB\249\STX SymbolRole declares what \"role\" a symbol has in an occurrence. A role is\n\
+    \\STX\ENQ\EOT\DC2\ACK\180\EOT\NUL\202\EOT\SOH\SUB\249\STX SymbolRole declares what \"role\" a symbol has in an occurrence. A role is\n\
     \ encoded as a bitset where each bit represents a different role. For example,\n\
     \ to determine if the `Import` role is set, test whether the second bit of the\n\
     \ enum value is defined. In pseudocode, this can be implemented with the\n\
     \ logic: `const isImportRole = (role.value & SymbolRole.Import.value) > 0`.\n\
     \\n\
     \\v\n\
-    \\ETX\ENQ\ETX\SOH\DC2\EOT\139\EOT\ENQ\SI\n\
+    \\ETX\ENQ\EOT\SOH\DC2\EOT\180\EOT\ENQ\SI\n\
     \\r\n\
-    \\ENQ\ENQ\ETX\STX\NUL\SOH\DC2\EOT\142\EOT\STX\ETB\n\
+    \\ENQ\ENQ\EOT\STX\NUL\SOH\DC2\EOT\183\EOT\STX\ETB\n\
     \v\n\
-    \\EOT\ENQ\ETX\STX\NUL\DC2\EOT\142\EOT\STX\FS\SUBh This case is not meant to be used; it only exists to avoid an error\n\
+    \\EOT\ENQ\EOT\STX\NUL\DC2\EOT\183\EOT\STX\FS\SUBh This case is not meant to be used; it only exists to avoid an error\n\
     \ from the Protobuf code generator.\n\
     \\n\
     \\r\n\
-    \\ENQ\ENQ\ETX\STX\NUL\STX\DC2\EOT\142\EOT\SUB\ESC\n\
+    \\ENQ\ENQ\EOT\STX\NUL\STX\DC2\EOT\183\EOT\SUB\ESC\n\
     \\r\n\
-    \\ENQ\ENQ\ETX\STX\SOH\SOH\DC2\EOT\144\EOT\STX\f\n\
+    \\ENQ\ENQ\EOT\STX\SOH\SOH\DC2\EOT\185\EOT\STX\f\n\
     \T\n\
-    \\EOT\ENQ\ETX\STX\SOH\DC2\EOT\144\EOT\STX\DC3\SUBF Is the symbol defined here? If not, then this is a symbol reference.\n\
+    \\EOT\ENQ\EOT\STX\SOH\DC2\EOT\185\EOT\STX\DC3\SUBF Is the symbol defined here? If not, then this is a symbol reference.\n\
     \\n\
     \\r\n\
-    \\ENQ\ENQ\ETX\STX\SOH\STX\DC2\EOT\144\EOT\SI\DC2\n\
+    \\ENQ\ENQ\EOT\STX\SOH\STX\DC2\EOT\185\EOT\SI\DC2\n\
     \\r\n\
-    \\ENQ\ENQ\ETX\STX\STX\SOH\DC2\EOT\146\EOT\STX\b\n\
+    \\ENQ\ENQ\EOT\STX\STX\SOH\DC2\EOT\187\EOT\STX\b\n\
     \,\n\
-    \\EOT\ENQ\ETX\STX\STX\DC2\EOT\146\EOT\STX\SI\SUB\RS Is the symbol imported here?\n\
+    \\EOT\ENQ\EOT\STX\STX\DC2\EOT\187\EOT\STX\SI\SUB\RS Is the symbol imported here?\n\
     \\n\
     \\r\n\
-    \\ENQ\ENQ\ETX\STX\STX\STX\DC2\EOT\146\EOT\v\SO\n\
+    \\ENQ\ENQ\EOT\STX\STX\STX\DC2\EOT\187\EOT\v\SO\n\
     \\r\n\
-    \\ENQ\ENQ\ETX\STX\ETX\SOH\DC2\EOT\148\EOT\STX\r\n\
+    \\ENQ\ENQ\EOT\STX\ETX\SOH\DC2\EOT\189\EOT\STX\r\n\
     \+\n\
-    \\EOT\ENQ\ETX\STX\ETX\DC2\EOT\148\EOT\STX\DC4\SUB\GS Is the symbol written here?\n\
+    \\EOT\ENQ\EOT\STX\ETX\DC2\EOT\189\EOT\STX\DC4\SUB\GS Is the symbol written here?\n\
     \\n\
     \\r\n\
-    \\ENQ\ENQ\ETX\STX\ETX\STX\DC2\EOT\148\EOT\DLE\DC3\n\
+    \\ENQ\ENQ\EOT\STX\ETX\STX\DC2\EOT\189\EOT\DLE\DC3\n\
     \\r\n\
-    \\ENQ\ENQ\ETX\STX\EOT\SOH\DC2\EOT\150\EOT\STX\f\n\
+    \\ENQ\ENQ\EOT\STX\EOT\SOH\DC2\EOT\191\EOT\STX\f\n\
     \(\n\
-    \\EOT\ENQ\ETX\STX\EOT\DC2\EOT\150\EOT\STX\DC3\SUB\SUB Is the symbol read here?\n\
+    \\EOT\ENQ\EOT\STX\EOT\DC2\EOT\191\EOT\STX\DC3\SUB\SUB Is the symbol read here?\n\
     \\n\
     \\r\n\
-    \\ENQ\ENQ\ETX\STX\EOT\STX\DC2\EOT\150\EOT\SI\DC2\n\
+    \\ENQ\ENQ\EOT\STX\EOT\STX\DC2\EOT\191\EOT\SI\DC2\n\
     \\r\n\
-    \\ENQ\ENQ\ETX\STX\ENQ\SOH\DC2\EOT\152\EOT\STX\v\n\
+    \\ENQ\ENQ\EOT\STX\ENQ\SOH\DC2\EOT\193\EOT\STX\v\n\
     \0\n\
-    \\EOT\ENQ\ETX\STX\ENQ\DC2\EOT\152\EOT\STX\DC3\SUB\" Is the symbol in generated code?\n\
+    \\EOT\ENQ\EOT\STX\ENQ\DC2\EOT\193\EOT\STX\DC3\SUB\" Is the symbol in generated code?\n\
     \\n\
     \\r\n\
-    \\ENQ\ENQ\ETX\STX\ENQ\STX\DC2\EOT\152\EOT\SO\DC2\n\
+    \\ENQ\ENQ\EOT\STX\ENQ\STX\DC2\EOT\193\EOT\SO\DC2\n\
     \\r\n\
-    \\ENQ\ENQ\ETX\STX\ACK\SOH\DC2\EOT\154\EOT\STX\ACK\n\
+    \\ENQ\ENQ\EOT\STX\ACK\SOH\DC2\EOT\195\EOT\STX\ACK\n\
     \+\n\
-    \\EOT\ENQ\ETX\STX\ACK\DC2\EOT\154\EOT\STX\SO\SUB\GS Is the symbol in test code?\n\
+    \\EOT\ENQ\EOT\STX\ACK\DC2\EOT\195\EOT\STX\SO\SUB\GS Is the symbol in test code?\n\
     \\n\
     \\r\n\
-    \\ENQ\ENQ\ETX\STX\ACK\STX\DC2\EOT\154\EOT\t\r\n\
+    \\ENQ\ENQ\EOT\STX\ACK\STX\DC2\EOT\195\EOT\t\r\n\
     \\r\n\
-    \\ENQ\ENQ\ETX\STX\a\SOH\DC2\EOT\160\EOT\STX\DC3\n\
+    \\ENQ\ENQ\EOT\STX\a\SOH\DC2\EOT\201\EOT\STX\DC3\n\
     \\237\SOH\n\
-    \\EOT\ENQ\ETX\STX\a\DC2\EOT\160\EOT\STX\ESC\SUB\222\SOH Is this a signature for a symbol that is defined elsewhere?\n\
+    \\EOT\ENQ\EOT\STX\a\DC2\EOT\201\EOT\STX\ESC\SUB\222\SOH Is this a signature for a symbol that is defined elsewhere?\n\
     \\n\
     \ Applies to forward declarations for languages like C, C++\n\
     \ and Objective-C, as well as `val` declarations in interface\n\
     \ files in languages like SML and OCaml.\n\
     \\n\
     \\r\n\
-    \\ENQ\ENQ\ETX\STX\a\STX\DC2\EOT\160\EOT\SYN\SUB\n\
+    \\ENQ\ENQ\EOT\STX\a\STX\DC2\EOT\201\EOT\SYN\SUB\n\
     \\f\n\
-    \\STX\ENQ\EOT\DC2\ACK\163\EOT\NUL\128\ENQ\SOH\n\
+    \\STX\ENQ\ENQ\DC2\ACK\204\EOT\NUL\169\ENQ\SOH\n\
     \\v\n\
-    \\ETX\ENQ\EOT\SOH\DC2\EOT\163\EOT\ENQ\SI\n\
+    \\ETX\ENQ\ENQ\SOH\DC2\EOT\204\EOT\ENQ\SI\n\
     \\v\n\
-    \\ETX\ENQ\EOT\ETX\DC2\EOT\164\EOT\STX\FS\n\
+    \\ETX\ENQ\ENQ\ETX\DC2\EOT\205\EOT\STX\FS\n\
     \\f\n\
-    \\EOT\ENQ\EOT\ETX\STX\DC2\EOT\164\EOT\STX\FS\n\
+    \\EOT\ENQ\ENQ\ETX\STX\DC2\EOT\205\EOT\STX\FS\n\
     \\r\n\
-    \\ENQ\ENQ\EOT\STX\NUL\SOH\DC2\EOT\166\EOT\STX\ETB\n\
+    \\ENQ\ENQ\ENQ\STX\NUL\SOH\DC2\EOT\207\EOT\STX\ETB\n\
     \\f\n\
-    \\EOT\ENQ\EOT\STX\NUL\DC2\EOT\166\EOT\STX\FS\n\
+    \\EOT\ENQ\ENQ\STX\NUL\DC2\EOT\207\EOT\STX\FS\n\
     \\r\n\
-    \\ENQ\ENQ\EOT\STX\NUL\STX\DC2\EOT\166\EOT\SUB\ESC\n\
+    \\ENQ\ENQ\ENQ\STX\NUL\STX\DC2\EOT\207\EOT\SUB\ESC\n\
     \\r\n\
-    \\ENQ\ENQ\EOT\STX\SOH\SOH\DC2\EOT\169\EOT\STX\t\n\
+    \\ENQ\ENQ\ENQ\STX\SOH\SOH\DC2\EOT\210\EOT\STX\t\n\
     \;\n\
-    \\EOT\ENQ\EOT\STX\SOH\DC2\EOT\169\EOT\STX\SO\SUB- Comment, including comment markers and text\n\
+    \\EOT\ENQ\ENQ\STX\SOH\DC2\EOT\210\EOT\STX\SO\SUB- Comment, including comment markers and text\n\
     \\n\
     \\r\n\
-    \\ENQ\ENQ\EOT\STX\SOH\STX\DC2\EOT\169\EOT\f\r\n\
+    \\ENQ\ENQ\ENQ\STX\SOH\STX\DC2\EOT\210\EOT\f\r\n\
     \\r\n\
-    \\ENQ\ENQ\EOT\STX\STX\SOH\DC2\EOT\172\EOT\STX\SYN\n\
+    \\ENQ\ENQ\ENQ\STX\STX\SOH\DC2\EOT\213\EOT\STX\SYN\n\
     \\ESC\n\
-    \\EOT\ENQ\EOT\STX\STX\DC2\EOT\172\EOT\STX\ESC\SUB\r `;` `.` `,`\n\
+    \\EOT\ENQ\ENQ\STX\STX\DC2\EOT\213\EOT\STX\ESC\SUB\r `;` `.` `,`\n\
     \\n\
     \\r\n\
-    \\ENQ\ENQ\EOT\STX\STX\STX\DC2\EOT\172\EOT\EM\SUB\n\
+    \\ENQ\ENQ\ENQ\STX\STX\STX\DC2\EOT\213\EOT\EM\SUB\n\
     \\r\n\
-    \\ENQ\ENQ\EOT\STX\ETX\SOH\DC2\EOT\174\EOT\STX\DC4\n\
+    \\ENQ\ENQ\ENQ\STX\ETX\SOH\DC2\EOT\215\EOT\STX\DC4\n\
     \2\n\
-    \\EOT\ENQ\EOT\STX\ETX\DC2\EOT\174\EOT\STX\EM\SUB$ (), {}, [] when used syntactically\n\
+    \\EOT\ENQ\ENQ\STX\ETX\DC2\EOT\215\EOT\STX\EM\SUB$ (), {}, [] when used syntactically\n\
     \\n\
     \\r\n\
-    \\ENQ\ENQ\EOT\STX\ETX\STX\DC2\EOT\174\EOT\ETB\CAN\n\
+    \\ENQ\ENQ\ENQ\STX\ETX\STX\DC2\EOT\215\EOT\ETB\CAN\n\
     \\r\n\
-    \\ENQ\ENQ\EOT\STX\EOT\SOH\DC2\EOT\177\EOT\STX\t\n\
+    \\ENQ\ENQ\ENQ\STX\EOT\SOH\DC2\EOT\218\EOT\STX\t\n\
     \5\n\
-    \\EOT\ENQ\EOT\STX\EOT\DC2\EOT\177\EOT\STX\SO\SUB' `if`, `else`, `return`, `class`, etc.\n\
+    \\EOT\ENQ\ENQ\STX\EOT\DC2\EOT\218\EOT\STX\SO\SUB' `if`, `else`, `return`, `class`, etc.\n\
     \\n\
     \\r\n\
-    \\ENQ\ENQ\EOT\STX\EOT\STX\DC2\EOT\177\EOT\f\r\n\
+    \\ENQ\ENQ\ENQ\STX\EOT\STX\DC2\EOT\218\EOT\f\r\n\
     \\r\n\
-    \\ENQ\ENQ\EOT\STX\ENQ\SOH\DC2\EOT\178\EOT\STX\DC3\n\
+    \\ENQ\ENQ\ENQ\STX\ENQ\SOH\DC2\EOT\219\EOT\STX\DC3\n\
     \\f\n\
-    \\EOT\ENQ\EOT\STX\ENQ\DC2\EOT\178\EOT\STX,\n\
+    \\EOT\ENQ\ENQ\STX\ENQ\DC2\EOT\219\EOT\STX,\n\
     \\r\n\
-    \\ENQ\ENQ\EOT\STX\ENQ\STX\DC2\EOT\178\EOT\SYN\ETB\n\
+    \\ENQ\ENQ\ENQ\STX\ENQ\STX\DC2\EOT\219\EOT\SYN\ETB\n\
     \\r\n\
-    \\ENQ\ENQ\EOT\STX\ENQ\ETX\DC2\EOT\178\EOT\CAN+\n\
+    \\ENQ\ENQ\ENQ\STX\ENQ\ETX\DC2\EOT\219\EOT\CAN+\n\
     \\SO\n\
-    \\ACK\ENQ\EOT\STX\ENQ\ETX\SOH\DC2\EOT\178\EOT\EM*\n\
+    \\ACK\ENQ\ENQ\STX\ENQ\ETX\SOH\DC2\EOT\219\EOT\EM*\n\
     \\r\n\
-    \\ENQ\ENQ\EOT\STX\ACK\SOH\DC2\EOT\181\EOT\STX\DC4\n\
+    \\ENQ\ENQ\ENQ\STX\ACK\SOH\DC2\EOT\222\EOT\STX\DC4\n\
     \\RS\n\
-    \\EOT\ENQ\EOT\STX\ACK\DC2\EOT\181\EOT\STX\EM\SUB\DLE `+`, `*`, etc.\n\
+    \\EOT\ENQ\ENQ\STX\ACK\DC2\EOT\222\EOT\STX\EM\SUB\DLE `+`, `*`, etc.\n\
     \\n\
     \\r\n\
-    \\ENQ\ENQ\EOT\STX\ACK\STX\DC2\EOT\181\EOT\ETB\CAN\n\
+    \\ENQ\ENQ\ENQ\STX\ACK\STX\DC2\EOT\222\EOT\ETB\CAN\n\
     \\r\n\
-    \\ENQ\ENQ\EOT\STX\a\SOH\DC2\EOT\184\EOT\STX\f\n\
+    \\ENQ\ENQ\ENQ\STX\a\SOH\DC2\EOT\225\EOT\STX\f\n\
     \X\n\
-    \\EOT\ENQ\EOT\STX\a\DC2\EOT\184\EOT\STX\DC1\SUBJ non-specific catch-all for any identifier not better described elsewhere\n\
+    \\EOT\ENQ\ENQ\STX\a\DC2\EOT\225\EOT\STX\DC1\SUBJ non-specific catch-all for any identifier not better described elsewhere\n\
     \\n\
     \\r\n\
-    \\ENQ\ENQ\EOT\STX\a\STX\DC2\EOT\184\EOT\SI\DLE\n\
+    \\ENQ\ENQ\ENQ\STX\a\STX\DC2\EOT\225\EOT\SI\DLE\n\
     \\r\n\
-    \\ENQ\ENQ\EOT\STX\b\SOH\DC2\EOT\186\EOT\STX\DC3\n\
+    \\ENQ\ENQ\ENQ\STX\b\SOH\DC2\EOT\227\EOT\STX\DC3\n\
     \N\n\
-    \\EOT\ENQ\EOT\STX\b\DC2\EOT\186\EOT\STX\CAN\SUB@ Identifiers builtin to the language: `min`, `print` in Python.\n\
+    \\EOT\ENQ\ENQ\STX\b\DC2\EOT\227\EOT\STX\CAN\SUB@ Identifiers builtin to the language: `min`, `print` in Python.\n\
     \\n\
     \\r\n\
-    \\ENQ\ENQ\EOT\STX\b\STX\DC2\EOT\186\EOT\SYN\ETB\n\
+    \\ENQ\ENQ\ENQ\STX\b\STX\DC2\EOT\227\EOT\SYN\ETB\n\
     \\r\n\
-    \\ENQ\ENQ\EOT\STX\t\SOH\DC2\EOT\188\EOT\STX\DLE\n\
+    \\ENQ\ENQ\ENQ\STX\t\SOH\DC2\EOT\229\EOT\STX\DLE\n\
     \[\n\
-    \\EOT\ENQ\EOT\STX\t\DC2\EOT\188\EOT\STX\NAK\SUBM Identifiers representing `null`-like values: `None` in Python, `nil` in Go.\n\
+    \\EOT\ENQ\ENQ\STX\t\DC2\EOT\229\EOT\STX\NAK\SUBM Identifiers representing `null`-like values: `None` in Python, `nil` in Go.\n\
     \\n\
     \\r\n\
-    \\ENQ\ENQ\EOT\STX\t\STX\DC2\EOT\188\EOT\DC3\DC4\n\
+    \\ENQ\ENQ\ENQ\STX\t\STX\DC2\EOT\229\EOT\DC3\DC4\n\
     \\r\n\
-    \\ENQ\ENQ\EOT\STX\n\
-    \\SOH\DC2\EOT\190\EOT\STX\DC4\n\
+    \\ENQ\ENQ\ENQ\STX\n\
+    \\SOH\DC2\EOT\231\EOT\STX\DC4\n\
     \.\n\
-    \\EOT\ENQ\EOT\STX\n\
-    \\DC2\EOT\190\EOT\STX\EM\SUB  `xyz` in `const xyz = \"hello\"`\n\
+    \\EOT\ENQ\ENQ\STX\n\
+    \\DC2\EOT\231\EOT\STX\EM\SUB  `xyz` in `const xyz = \"hello\"`\n\
     \\n\
     \\r\n\
-    \\ENQ\ENQ\EOT\STX\n\
-    \\STX\DC2\EOT\190\EOT\ETB\CAN\n\
+    \\ENQ\ENQ\ENQ\STX\n\
+    \\STX\DC2\EOT\231\EOT\ETB\CAN\n\
     \\r\n\
-    \\ENQ\ENQ\EOT\STX\v\SOH\DC2\EOT\192\EOT\STX\EM\n\
+    \\ENQ\ENQ\ENQ\STX\v\SOH\DC2\EOT\233\EOT\STX\EM\n\
     \'\n\
-    \\EOT\ENQ\EOT\STX\v\DC2\EOT\192\EOT\STX\US\SUB\EM `var X = \"hello\"` in Go\n\
+    \\EOT\ENQ\ENQ\STX\v\DC2\EOT\233\EOT\STX\US\SUB\EM `var X = \"hello\"` in Go\n\
     \\n\
     \\r\n\
-    \\ENQ\ENQ\EOT\STX\v\STX\DC2\EOT\192\EOT\FS\RS\n\
+    \\ENQ\ENQ\ENQ\STX\v\STX\DC2\EOT\233\EOT\FS\RS\n\
     \\r\n\
-    \\ENQ\ENQ\EOT\STX\f\SOH\DC2\EOT\194\EOT\STX\NAK\n\
+    \\ENQ\ENQ\ENQ\STX\f\SOH\DC2\EOT\235\EOT\STX\NAK\n\
     \3\n\
-    \\EOT\ENQ\EOT\STX\f\DC2\EOT\194\EOT\STX\ESC\SUB% Parameter definition and references\n\
+    \\EOT\ENQ\ENQ\STX\f\DC2\EOT\235\EOT\STX\ESC\SUB% Parameter definition and references\n\
     \\n\
     \\r\n\
-    \\ENQ\ENQ\EOT\STX\f\STX\DC2\EOT\194\EOT\CAN\SUB\n\
+    \\ENQ\ENQ\ENQ\STX\f\STX\DC2\EOT\235\EOT\CAN\SUB\n\
     \\r\n\
-    \\ENQ\ENQ\EOT\STX\r\SOH\DC2\EOT\196\EOT\STX\DC1\n\
+    \\ENQ\ENQ\ENQ\STX\r\SOH\DC2\EOT\237\EOT\STX\DC1\n\
     \X\n\
-    \\EOT\ENQ\EOT\STX\r\DC2\EOT\196\EOT\STX\ETB\SUBJ Identifiers for variable definitions and references within a local scope\n\
+    \\EOT\ENQ\ENQ\STX\r\DC2\EOT\237\EOT\STX\ETB\SUBJ Identifiers for variable definitions and references within a local scope\n\
     \\n\
     \\r\n\
-    \\ENQ\ENQ\EOT\STX\r\STX\DC2\EOT\196\EOT\DC4\SYN\n\
+    \\ENQ\ENQ\ENQ\STX\r\STX\DC2\EOT\237\EOT\DC4\SYN\n\
     \\r\n\
-    \\ENQ\ENQ\EOT\STX\SO\SOH\DC2\EOT\198\EOT\STX\DC4\n\
+    \\ENQ\ENQ\ENQ\STX\SO\SOH\DC2\EOT\239\EOT\STX\DC4\n\
     \K\n\
-    \\EOT\ENQ\EOT\STX\SO\DC2\EOT\198\EOT\STX\SUB\SUB= Identifiers that shadow other identifiers in an outer scope\n\
+    \\EOT\ENQ\ENQ\STX\SO\DC2\EOT\239\EOT\STX\SUB\SUB= Identifiers that shadow other identifiers in an outer scope\n\
     \\n\
     \\r\n\
-    \\ENQ\ENQ\EOT\STX\SO\STX\DC2\EOT\198\EOT\ETB\EM\n\
+    \\ENQ\ENQ\ENQ\STX\SO\STX\DC2\EOT\239\EOT\ETB\EM\n\
     \\r\n\
-    \\ENQ\ENQ\EOT\STX\SI\SOH\DC2\EOT\203\EOT\STX\NAK\n\
+    \\ENQ\ENQ\ENQ\STX\SI\SOH\DC2\EOT\244\EOT\STX\NAK\n\
     \\205\SOH\n\
-    \\EOT\ENQ\EOT\STX\SI\DC2\EOT\203\EOT\STX\ESC\SUB\190\SOH Identifier representing a unit of code abstraction and/or namespacing.\n\
+    \\EOT\ENQ\ENQ\STX\SI\DC2\EOT\244\EOT\STX\ESC\SUB\190\SOH Identifier representing a unit of code abstraction and/or namespacing.\n\
     \\n\
     \ NOTE: This corresponds to a package in Go and JVM languages,\n\
     \ and a module in languages like Python and JavaScript.\n\
     \\n\
     \\r\n\
-    \\ENQ\ENQ\EOT\STX\SI\STX\DC2\EOT\203\EOT\CAN\SUB\n\
+    \\ENQ\ENQ\ENQ\STX\SI\STX\DC2\EOT\244\EOT\CAN\SUB\n\
     \\r\n\
-    \\ENQ\ENQ\EOT\STX\DLE\SOH\DC2\EOT\204\EOT\STX\DC2\n\
+    \\ENQ\ENQ\ENQ\STX\DLE\SOH\DC2\EOT\245\EOT\STX\DC2\n\
     \\f\n\
-    \\EOT\ENQ\EOT\STX\DLE\DC2\EOT\204\EOT\STX,\n\
+    \\EOT\ENQ\ENQ\STX\DLE\DC2\EOT\245\EOT\STX,\n\
     \\r\n\
-    \\ENQ\ENQ\EOT\STX\DLE\STX\DC2\EOT\204\EOT\NAK\ETB\n\
+    \\ENQ\ENQ\ENQ\STX\DLE\STX\DC2\EOT\245\EOT\NAK\ETB\n\
     \\r\n\
-    \\ENQ\ENQ\EOT\STX\DLE\ETX\DC2\EOT\204\EOT\CAN+\n\
+    \\ENQ\ENQ\ENQ\STX\DLE\ETX\DC2\EOT\245\EOT\CAN+\n\
     \\SO\n\
-    \\ACK\ENQ\EOT\STX\DLE\ETX\SOH\DC2\EOT\204\EOT\EM*\n\
+    \\ACK\ENQ\ENQ\STX\DLE\ETX\SOH\DC2\EOT\245\EOT\EM*\n\
     \\r\n\
-    \\ENQ\ENQ\EOT\STX\DC1\SOH\DC2\EOT\207\EOT\STX\DC4\n\
+    \\ENQ\ENQ\ENQ\STX\DC1\SOH\DC2\EOT\248\EOT\STX\DC4\n\
     \4\n\
-    \\EOT\ENQ\EOT\STX\DC1\DC2\EOT\207\EOT\STX\SUB\SUB& Function references, including calls\n\
+    \\EOT\ENQ\ENQ\STX\DC1\DC2\EOT\248\EOT\STX\SUB\SUB& Function references, including calls\n\
     \\n\
     \\r\n\
-    \\ENQ\ENQ\EOT\STX\DC1\STX\DC2\EOT\207\EOT\ETB\EM\n\
+    \\ENQ\ENQ\ENQ\STX\DC1\STX\DC2\EOT\248\EOT\ETB\EM\n\
     \\r\n\
-    \\ENQ\ENQ\EOT\STX\DC2\SOH\DC2\EOT\209\EOT\STX\RS\n\
+    \\ENQ\ENQ\ENQ\STX\DC2\SOH\DC2\EOT\250\EOT\STX\RS\n\
     \(\n\
-    \\EOT\ENQ\EOT\STX\DC2\DC2\EOT\209\EOT\STX$\SUB\SUB Function definition only\n\
+    \\EOT\ENQ\ENQ\STX\DC2\DC2\EOT\250\EOT\STX$\SUB\SUB Function definition only\n\
     \\n\
     \\r\n\
-    \\ENQ\ENQ\EOT\STX\DC2\STX\DC2\EOT\209\EOT!#\n\
+    \\ENQ\ENQ\ENQ\STX\DC2\STX\DC2\EOT\250\EOT!#\n\
     \\r\n\
-    \\ENQ\ENQ\EOT\STX\DC3\SOH\DC2\EOT\212\EOT\STX\DC1\n\
+    \\ENQ\ENQ\ENQ\STX\DC3\SOH\DC2\EOT\253\EOT\STX\DC1\n\
     \7\n\
-    \\EOT\ENQ\EOT\STX\DC3\DC2\EOT\212\EOT\STX\ETB\SUB) Macro references, including invocations\n\
+    \\EOT\ENQ\ENQ\STX\DC3\DC2\EOT\253\EOT\STX\ETB\SUB) Macro references, including invocations\n\
     \\n\
     \\r\n\
-    \\ENQ\ENQ\EOT\STX\DC3\STX\DC2\EOT\212\EOT\DC4\SYN\n\
+    \\ENQ\ENQ\ENQ\STX\DC3\STX\DC2\EOT\253\EOT\DC4\SYN\n\
     \\r\n\
-    \\ENQ\ENQ\EOT\STX\DC4\SOH\DC2\EOT\214\EOT\STX\ESC\n\
+    \\ENQ\ENQ\ENQ\STX\DC4\SOH\DC2\EOT\255\EOT\STX\ESC\n\
     \%\n\
-    \\EOT\ENQ\EOT\STX\DC4\DC2\EOT\214\EOT\STX!\SUB\ETB Macro definition only\n\
+    \\EOT\ENQ\ENQ\STX\DC4\DC2\EOT\255\EOT\STX!\SUB\ETB Macro definition only\n\
     \\n\
     \\r\n\
-    \\ENQ\ENQ\EOT\STX\DC4\STX\DC2\EOT\214\EOT\RS \n\
+    \\ENQ\ENQ\ENQ\STX\DC4\STX\DC2\EOT\255\EOT\RS \n\
     \\r\n\
-    \\ENQ\ENQ\EOT\STX\NAK\SOH\DC2\EOT\217\EOT\STX\DLE\n\
+    \\ENQ\ENQ\ENQ\STX\NAK\SOH\DC2\EOT\130\ENQ\STX\DLE\n\
     \!\n\
-    \\EOT\ENQ\EOT\STX\NAK\DC2\EOT\217\EOT\STX\SYN\SUB\DC3 non-builtin types\n\
+    \\EOT\ENQ\ENQ\STX\NAK\DC2\EOT\130\ENQ\STX\SYN\SUB\DC3 non-builtin types\n\
     \\n\
     \\r\n\
-    \\ENQ\ENQ\EOT\STX\NAK\STX\DC2\EOT\217\EOT\DC3\NAK\n\
+    \\ENQ\ENQ\ENQ\STX\NAK\STX\DC2\EOT\130\ENQ\DC3\NAK\n\
     \\r\n\
-    \\ENQ\ENQ\EOT\STX\SYN\SOH\DC2\EOT\219\EOT\STX\ETB\n\
+    \\ENQ\ENQ\ENQ\STX\SYN\SOH\DC2\EOT\132\ENQ\STX\ETB\n\
     \K\n\
-    \\EOT\ENQ\EOT\STX\SYN\DC2\EOT\219\EOT\STX\GS\SUB= builtin types only, such as `str` for Python or `int` in Go\n\
+    \\EOT\ENQ\ENQ\STX\SYN\DC2\EOT\132\ENQ\STX\GS\SUB= builtin types only, such as `str` for Python or `int` in Go\n\
     \\n\
     \\r\n\
-    \\ENQ\ENQ\EOT\STX\SYN\STX\DC2\EOT\219\EOT\SUB\FS\n\
+    \\ENQ\ENQ\ENQ\STX\SYN\STX\DC2\EOT\132\ENQ\SUB\FS\n\
     \\r\n\
-    \\ENQ\ENQ\EOT\STX\ETB\SOH\DC2\EOT\222\EOT\STX\NAK\n\
+    \\ENQ\ENQ\ENQ\STX\ETB\SOH\DC2\EOT\135\ENQ\STX\NAK\n\
     \7\n\
-    \\EOT\ENQ\EOT\STX\ETB\DC2\EOT\222\EOT\STX\ESC\SUB) Python decorators, c-like __attribute__\n\
+    \\EOT\ENQ\ENQ\STX\ETB\DC2\EOT\135\ENQ\STX\ESC\SUB) Python decorators, c-like __attribute__\n\
     \\n\
     \\r\n\
-    \\ENQ\ENQ\EOT\STX\ETB\STX\DC2\EOT\222\EOT\CAN\SUB\n\
+    \\ENQ\ENQ\ENQ\STX\ETB\STX\DC2\EOT\135\ENQ\CAN\SUB\n\
     \\r\n\
-    \\ENQ\ENQ\EOT\STX\CAN\SOH\DC2\EOT\225\EOT\STX\r\n\
+    \\ENQ\ENQ\ENQ\STX\CAN\SOH\DC2\EOT\138\ENQ\STX\r\n\
     \\DC4\n\
-    \\EOT\ENQ\EOT\STX\CAN\DC2\EOT\225\EOT\STX\DC3\SUB\ACK `\\b`\n\
+    \\EOT\ENQ\ENQ\STX\CAN\DC2\EOT\138\ENQ\STX\DC3\SUB\ACK `\\b`\n\
     \\n\
     \\r\n\
-    \\ENQ\ENQ\EOT\STX\CAN\STX\DC2\EOT\225\EOT\DLE\DC2\n\
+    \\ENQ\ENQ\ENQ\STX\CAN\STX\DC2\EOT\138\ENQ\DLE\DC2\n\
     \\r\n\
-    \\ENQ\ENQ\EOT\STX\EM\SOH\DC2\EOT\227\EOT\STX\SI\n\
+    \\ENQ\ENQ\ENQ\STX\EM\SOH\DC2\EOT\140\ENQ\STX\SI\n\
     \\CAN\n\
-    \\EOT\ENQ\EOT\STX\EM\DC2\EOT\227\EOT\STX\NAK\SUB\n\
+    \\EOT\ENQ\ENQ\STX\EM\DC2\EOT\140\ENQ\STX\NAK\SUB\n\
     \ `*`, `+`\n\
     \\n\
     \\r\n\
-    \\ENQ\ENQ\EOT\STX\EM\STX\DC2\EOT\227\EOT\DC2\DC4\n\
+    \\ENQ\ENQ\ENQ\STX\EM\STX\DC2\EOT\140\ENQ\DC2\DC4\n\
     \\r\n\
-    \\ENQ\ENQ\EOT\STX\SUB\SOH\DC2\EOT\229\EOT\STX\SI\n\
+    \\ENQ\ENQ\ENQ\STX\SUB\SOH\DC2\EOT\142\ENQ\STX\SI\n\
     \\DC3\n\
-    \\EOT\ENQ\EOT\STX\SUB\DC2\EOT\229\EOT\STX\NAK\SUB\ENQ `.`\n\
+    \\EOT\ENQ\ENQ\STX\SUB\DC2\EOT\142\ENQ\STX\NAK\SUB\ENQ `.`\n\
     \\n\
     \\r\n\
-    \\ENQ\ENQ\EOT\STX\SUB\STX\DC2\EOT\229\EOT\DC2\DC4\n\
+    \\ENQ\ENQ\ENQ\STX\SUB\STX\DC2\EOT\142\ENQ\DC2\DC4\n\
     \\r\n\
-    \\ENQ\ENQ\EOT\STX\ESC\SOH\DC2\EOT\231\EOT\STX\DLE\n\
+    \\ENQ\ENQ\ENQ\STX\ESC\SOH\DC2\EOT\144\ENQ\STX\DLE\n\
     \\"\n\
-    \\EOT\ENQ\EOT\STX\ESC\DC2\EOT\231\EOT\STX\SYN\SUB\DC4 `(`, `)`, `[`, `]`\n\
+    \\EOT\ENQ\ENQ\STX\ESC\DC2\EOT\144\ENQ\STX\SYN\SUB\DC4 `(`, `)`, `[`, `]`\n\
     \\n\
     \\r\n\
-    \\ENQ\ENQ\EOT\STX\ESC\STX\DC2\EOT\231\EOT\DC3\NAK\n\
+    \\ENQ\ENQ\ENQ\STX\ESC\STX\DC2\EOT\144\ENQ\DC3\NAK\n\
     \\r\n\
-    \\ENQ\ENQ\EOT\STX\FS\SOH\DC2\EOT\233\EOT\STX\v\n\
+    \\ENQ\ENQ\ENQ\STX\FS\SOH\DC2\EOT\146\ENQ\STX\v\n\
     \\CAN\n\
-    \\EOT\ENQ\EOT\STX\FS\DC2\EOT\233\EOT\STX\DC1\SUB\n\
+    \\EOT\ENQ\ENQ\STX\FS\DC2\EOT\146\ENQ\STX\DC1\SUB\n\
     \ `|`, `-`\n\
     \\n\
     \\r\n\
-    \\ENQ\ENQ\EOT\STX\FS\STX\DC2\EOT\233\EOT\SO\DLE\n\
+    \\ENQ\ENQ\ENQ\STX\FS\STX\DC2\EOT\146\ENQ\SO\DLE\n\
     \\r\n\
-    \\ENQ\ENQ\EOT\STX\GS\SOH\DC2\EOT\236\EOT\STX\SI\n\
+    \\ENQ\ENQ\ENQ\STX\GS\SOH\DC2\EOT\149\ENQ\STX\SI\n\
     \0\n\
-    \\EOT\ENQ\EOT\STX\GS\DC2\EOT\236\EOT\STX\NAK\SUB\" Literal strings: \"Hello, world!\"\n\
+    \\EOT\ENQ\ENQ\STX\GS\DC2\EOT\149\ENQ\STX\NAK\SUB\" Literal strings: \"Hello, world!\"\n\
     \\n\
     \\r\n\
-    \\ENQ\ENQ\EOT\STX\GS\STX\DC2\EOT\236\EOT\DC2\DC4\n\
+    \\ENQ\ENQ\ENQ\STX\GS\STX\DC2\EOT\149\ENQ\DC2\DC4\n\
     \\r\n\
-    \\ENQ\ENQ\EOT\STX\RS\SOH\DC2\EOT\238\EOT\STX\NAK\n\
+    \\ENQ\ENQ\ENQ\STX\RS\SOH\DC2\EOT\151\ENQ\STX\NAK\n\
     \-\n\
-    \\EOT\ENQ\EOT\STX\RS\DC2\EOT\238\EOT\STX\ESC\SUB\US non-regex escapes: \"\\t\", \"\\n\"\n\
+    \\EOT\ENQ\ENQ\STX\RS\DC2\EOT\151\ENQ\STX\ESC\SUB\US non-regex escapes: \"\\t\", \"\\n\"\n\
     \\n\
     \\r\n\
-    \\ENQ\ENQ\EOT\STX\RS\STX\DC2\EOT\238\EOT\CAN\SUB\n\
+    \\ENQ\ENQ\ENQ\STX\RS\STX\DC2\EOT\151\ENQ\CAN\SUB\n\
     \\r\n\
-    \\ENQ\ENQ\EOT\STX\US\SOH\DC2\EOT\240\EOT\STX\SYN\n\
+    \\ENQ\ENQ\ENQ\STX\US\SOH\DC2\EOT\153\ENQ\STX\SYN\n\
     \_\n\
-    \\EOT\ENQ\EOT\STX\US\DC2\EOT\240\EOT\STX\FS\SUBQ datetimes within strings, special words within a string, `{}` in format strings\n\
+    \\EOT\ENQ\ENQ\STX\US\DC2\EOT\153\ENQ\STX\FS\SUBQ datetimes within strings, special words within a string, `{}` in format strings\n\
     \\n\
     \\r\n\
-    \\ENQ\ENQ\EOT\STX\US\STX\DC2\EOT\240\EOT\EM\ESC\n\
+    \\ENQ\ENQ\ENQ\STX\US\STX\DC2\EOT\153\ENQ\EM\ESC\n\
     \\r\n\
-    \\ENQ\ENQ\EOT\STX \SOH\DC2\EOT\242\EOT\STX\DC2\n\
+    \\ENQ\ENQ\ENQ\STX \SOH\DC2\EOT\155\ENQ\STX\DC2\n\
     \G\n\
-    \\EOT\ENQ\EOT\STX \DC2\EOT\242\EOT\STX\CAN\SUB9 \"key\" in { \"key\": \"value\" }, useful for example in JSON\n\
+    \\EOT\ENQ\ENQ\STX \DC2\EOT\155\ENQ\STX\CAN\SUB9 \"key\" in { \"key\": \"value\" }, useful for example in JSON\n\
     \\n\
     \\r\n\
-    \\ENQ\ENQ\EOT\STX \STX\DC2\EOT\242\EOT\NAK\ETB\n\
+    \\ENQ\ENQ\ENQ\STX \STX\DC2\EOT\155\ENQ\NAK\ETB\n\
     \\r\n\
-    \\ENQ\ENQ\EOT\STX!\SOH\DC2\EOT\244\EOT\STX\DC2\n\
+    \\ENQ\ENQ\ENQ\STX!\SOH\DC2\EOT\157\ENQ\STX\DC2\n\
     \V\n\
-    \\EOT\ENQ\EOT\STX!\DC2\EOT\244\EOT\STX\CAN\SUBH 'c' or similar, in languages that differentiate strings and characters\n\
+    \\EOT\ENQ\ENQ\STX!\DC2\EOT\157\ENQ\STX\CAN\SUBH 'c' or similar, in languages that differentiate strings and characters\n\
     \\n\
     \\r\n\
-    \\ENQ\ENQ\EOT\STX!\STX\DC2\EOT\244\EOT\NAK\ETB\n\
+    \\ENQ\ENQ\ENQ\STX!\STX\DC2\EOT\157\ENQ\NAK\ETB\n\
     \\r\n\
-    \\ENQ\ENQ\EOT\STX\"\SOH\DC2\EOT\246\EOT\STX\DLE\n\
+    \\ENQ\ENQ\ENQ\STX\"\SOH\DC2\EOT\159\ENQ\STX\DLE\n\
     \9\n\
-    \\EOT\ENQ\EOT\STX\"\DC2\EOT\246\EOT\STX\SYN\SUB+ Literal numbers, both floats and integers\n\
+    \\EOT\ENQ\ENQ\STX\"\DC2\EOT\159\ENQ\STX\SYN\SUB+ Literal numbers, both floats and integers\n\
     \\n\
     \\r\n\
-    \\ENQ\ENQ\EOT\STX\"\STX\DC2\EOT\246\EOT\DC3\NAK\n\
+    \\ENQ\ENQ\ENQ\STX\"\STX\DC2\EOT\159\ENQ\DC3\NAK\n\
     \\r\n\
-    \\ENQ\ENQ\EOT\STX#\SOH\DC2\EOT\248\EOT\STX\DLE\n\
+    \\ENQ\ENQ\ENQ\STX#\SOH\DC2\EOT\161\ENQ\STX\DLE\n\
     \\US\n\
-    \\EOT\ENQ\EOT\STX#\DC2\EOT\248\EOT\STX\SYN\SUB\DC1 `true`, `false`\n\
+    \\EOT\ENQ\ENQ\STX#\DC2\EOT\161\ENQ\STX\SYN\SUB\DC1 `true`, `false`\n\
     \\n\
     \\r\n\
-    \\ENQ\ENQ\EOT\STX#\STX\DC2\EOT\248\EOT\DC3\NAK\n\
+    \\ENQ\ENQ\ENQ\STX#\STX\DC2\EOT\161\ENQ\DC3\NAK\n\
     \\r\n\
-    \\ENQ\ENQ\EOT\STX$\SOH\DC2\EOT\251\EOT\STX\ENQ\n\
+    \\ENQ\ENQ\ENQ\STX$\SOH\DC2\EOT\164\ENQ\STX\ENQ\n\
     \&\n\
-    \\EOT\ENQ\EOT\STX$\DC2\EOT\251\EOT\STX\v\SUB\CAN Used for XML-like tags\n\
+    \\EOT\ENQ\ENQ\STX$\DC2\EOT\164\ENQ\STX\v\SUB\CAN Used for XML-like tags\n\
     \\n\
     \\r\n\
-    \\ENQ\ENQ\EOT\STX$\STX\DC2\EOT\251\EOT\b\n\
+    \\ENQ\ENQ\ENQ\STX$\STX\DC2\EOT\164\ENQ\b\n\
     \\n\
     \\r\n\
-    \\ENQ\ENQ\EOT\STX%\SOH\DC2\EOT\253\EOT\STX\SO\n\
+    \\ENQ\ENQ\ENQ\STX%\SOH\DC2\EOT\166\ENQ\STX\SO\n\
     \/\n\
-    \\EOT\ENQ\EOT\STX%\DC2\EOT\253\EOT\STX\DC4\SUB! Attribute name in XML-like tags\n\
+    \\EOT\ENQ\ENQ\STX%\DC2\EOT\166\ENQ\STX\DC4\SUB! Attribute name in XML-like tags\n\
     \\n\
     \\r\n\
-    \\ENQ\ENQ\EOT\STX%\STX\DC2\EOT\253\EOT\DC1\DC3\n\
+    \\ENQ\ENQ\ENQ\STX%\STX\DC2\EOT\166\ENQ\DC1\DC3\n\
     \\r\n\
-    \\ENQ\ENQ\EOT\STX&\SOH\DC2\EOT\255\EOT\STX\SO\n\
+    \\ENQ\ENQ\ENQ\STX&\SOH\DC2\EOT\168\ENQ\STX\SO\n\
     \,\n\
-    \\EOT\ENQ\EOT\STX&\DC2\EOT\255\EOT\STX\DC4\SUB\RS Delimiters for XML-like tags\n\
+    \\EOT\ENQ\ENQ\STX&\DC2\EOT\168\ENQ\STX\DC4\SUB\RS Delimiters for XML-like tags\n\
     \\n\
     \\r\n\
-    \\ENQ\ENQ\EOT\STX&\STX\DC2\EOT\255\EOT\DC1\DC3\n\
+    \\ENQ\ENQ\ENQ\STX&\STX\DC2\EOT\168\ENQ\DC1\DC3\n\
     \\239\STX\n\
     \\STX\EOT\n\
-    \\DC2\ACK\136\ENQ\NUL\140\ENQ\SOH\SUB\224\STX SingleLineRange represents a half-open [start, end) range within a single line.\n\
+    \\DC2\ACK\177\ENQ\NUL\181\ENQ\SOH\SUB\224\STX SingleLineRange represents a half-open [start, end) range within a single line.\n\
     \\n\
     \ Line numbers and characters are always 0-based. Make sure to increment them\n\
     \ before displaying in an editor-like UI because editors conventionally use\n\
@@ -9286,45 +9504,45 @@ packedFileDescriptor
     \\n\
     \\v\n\
     \\ETX\EOT\n\
-    \\SOH\DC2\EOT\136\ENQ\b\ETB\n\
+    \\SOH\DC2\EOT\177\ENQ\b\ETB\n\
     \\r\n\
     \\ENQ\EOT\n\
-    \\STX\NUL\ENQ\DC2\EOT\137\ENQ\STX\a\n\
+    \\STX\NUL\ENQ\DC2\EOT\178\ENQ\STX\a\n\
     \\f\n\
     \\EOT\EOT\n\
-    \\STX\NUL\DC2\EOT\137\ENQ\STX\DC1\n\
+    \\STX\NUL\DC2\EOT\178\ENQ\STX\DC1\n\
     \\r\n\
     \\ENQ\EOT\n\
-    \\STX\NUL\SOH\DC2\EOT\137\ENQ\b\f\n\
+    \\STX\NUL\SOH\DC2\EOT\178\ENQ\b\f\n\
     \\r\n\
     \\ENQ\EOT\n\
-    \\STX\NUL\ETX\DC2\EOT\137\ENQ\SI\DLE\n\
+    \\STX\NUL\ETX\DC2\EOT\178\ENQ\SI\DLE\n\
     \\r\n\
     \\ENQ\EOT\n\
-    \\STX\SOH\ENQ\DC2\EOT\138\ENQ\STX\a\n\
+    \\STX\SOH\ENQ\DC2\EOT\179\ENQ\STX\a\n\
     \\f\n\
     \\EOT\EOT\n\
-    \\STX\SOH\DC2\EOT\138\ENQ\STX\FS\n\
+    \\STX\SOH\DC2\EOT\179\ENQ\STX\FS\n\
     \\r\n\
     \\ENQ\EOT\n\
-    \\STX\SOH\SOH\DC2\EOT\138\ENQ\b\ETB\n\
+    \\STX\SOH\SOH\DC2\EOT\179\ENQ\b\ETB\n\
     \\r\n\
     \\ENQ\EOT\n\
-    \\STX\SOH\ETX\DC2\EOT\138\ENQ\SUB\ESC\n\
+    \\STX\SOH\ETX\DC2\EOT\179\ENQ\SUB\ESC\n\
     \\r\n\
     \\ENQ\EOT\n\
-    \\STX\STX\ENQ\DC2\EOT\139\ENQ\STX\a\n\
+    \\STX\STX\ENQ\DC2\EOT\180\ENQ\STX\a\n\
     \\f\n\
     \\EOT\EOT\n\
-    \\STX\STX\DC2\EOT\139\ENQ\STX\SUB\n\
+    \\STX\STX\DC2\EOT\180\ENQ\STX\SUB\n\
     \\r\n\
     \\ENQ\EOT\n\
-    \\STX\STX\SOH\DC2\EOT\139\ENQ\b\NAK\n\
+    \\STX\STX\SOH\DC2\EOT\180\ENQ\b\NAK\n\
     \\r\n\
     \\ENQ\EOT\n\
-    \\STX\STX\ETX\DC2\EOT\139\ENQ\CAN\EM\n\
+    \\STX\STX\ETX\DC2\EOT\180\ENQ\CAN\EM\n\
     \\182\EOT\n\
-    \\STX\EOT\v\DC2\ACK\152\ENQ\NUL\157\ENQ\SOH\SUB\167\EOT MultiLineRange represents a half-open [start, end) range spanning multiple lines.\n\
+    \\STX\EOT\v\DC2\ACK\193\ENQ\NUL\198\ENQ\SOH\SUB\167\EOT MultiLineRange represents a half-open [start, end) range spanning multiple lines.\n\
     \\n\
     \ Line numbers and characters are always 0-based. Make sure to increment them\n\
     \ before displaying in an editor-like UI because editors conventionally use\n\
@@ -9336,41 +9554,41 @@ packedFileDescriptor
     \ range happens to fit on a single line.\n\
     \\n\
     \\v\n\
-    \\ETX\EOT\v\SOH\DC2\EOT\152\ENQ\b\SYN\n\
+    \\ETX\EOT\v\SOH\DC2\EOT\193\ENQ\b\SYN\n\
     \\r\n\
-    \\ENQ\EOT\v\STX\NUL\ENQ\DC2\EOT\153\ENQ\STX\a\n\
+    \\ENQ\EOT\v\STX\NUL\ENQ\DC2\EOT\194\ENQ\STX\a\n\
     \\f\n\
-    \\EOT\EOT\v\STX\NUL\DC2\EOT\153\ENQ\STX\ETB\n\
+    \\EOT\EOT\v\STX\NUL\DC2\EOT\194\ENQ\STX\ETB\n\
     \\r\n\
-    \\ENQ\EOT\v\STX\NUL\SOH\DC2\EOT\153\ENQ\b\DC2\n\
+    \\ENQ\EOT\v\STX\NUL\SOH\DC2\EOT\194\ENQ\b\DC2\n\
     \\r\n\
-    \\ENQ\EOT\v\STX\NUL\ETX\DC2\EOT\153\ENQ\NAK\SYN\n\
+    \\ENQ\EOT\v\STX\NUL\ETX\DC2\EOT\194\ENQ\NAK\SYN\n\
     \\r\n\
-    \\ENQ\EOT\v\STX\SOH\ENQ\DC2\EOT\154\ENQ\STX\a\n\
+    \\ENQ\EOT\v\STX\SOH\ENQ\DC2\EOT\195\ENQ\STX\a\n\
     \\f\n\
-    \\EOT\EOT\v\STX\SOH\DC2\EOT\154\ENQ\STX\FS\n\
+    \\EOT\EOT\v\STX\SOH\DC2\EOT\195\ENQ\STX\FS\n\
     \\r\n\
-    \\ENQ\EOT\v\STX\SOH\SOH\DC2\EOT\154\ENQ\b\ETB\n\
+    \\ENQ\EOT\v\STX\SOH\SOH\DC2\EOT\195\ENQ\b\ETB\n\
     \\r\n\
-    \\ENQ\EOT\v\STX\SOH\ETX\DC2\EOT\154\ENQ\SUB\ESC\n\
+    \\ENQ\EOT\v\STX\SOH\ETX\DC2\EOT\195\ENQ\SUB\ESC\n\
     \\r\n\
-    \\ENQ\EOT\v\STX\STX\ENQ\DC2\EOT\155\ENQ\STX\a\n\
+    \\ENQ\EOT\v\STX\STX\ENQ\DC2\EOT\196\ENQ\STX\a\n\
     \\f\n\
-    \\EOT\EOT\v\STX\STX\DC2\EOT\155\ENQ\STX\NAK\n\
+    \\EOT\EOT\v\STX\STX\DC2\EOT\196\ENQ\STX\NAK\n\
     \\r\n\
-    \\ENQ\EOT\v\STX\STX\SOH\DC2\EOT\155\ENQ\b\DLE\n\
+    \\ENQ\EOT\v\STX\STX\SOH\DC2\EOT\196\ENQ\b\DLE\n\
     \\r\n\
-    \\ENQ\EOT\v\STX\STX\ETX\DC2\EOT\155\ENQ\DC3\DC4\n\
+    \\ENQ\EOT\v\STX\STX\ETX\DC2\EOT\196\ENQ\DC3\DC4\n\
     \\r\n\
-    \\ENQ\EOT\v\STX\ETX\ENQ\DC2\EOT\156\ENQ\STX\a\n\
+    \\ENQ\EOT\v\STX\ETX\ENQ\DC2\EOT\197\ENQ\STX\a\n\
     \\f\n\
-    \\EOT\EOT\v\STX\ETX\DC2\EOT\156\ENQ\STX\SUB\n\
+    \\EOT\EOT\v\STX\ETX\DC2\EOT\197\ENQ\STX\SUB\n\
     \\r\n\
-    \\ENQ\EOT\v\STX\ETX\SOH\DC2\EOT\156\ENQ\b\NAK\n\
+    \\ENQ\EOT\v\STX\ETX\SOH\DC2\EOT\197\ENQ\b\NAK\n\
     \\r\n\
-    \\ENQ\EOT\v\STX\ETX\ETX\DC2\EOT\156\ENQ\CAN\EM\n\
+    \\ENQ\EOT\v\STX\ETX\ETX\DC2\EOT\197\ENQ\CAN\EM\n\
     \\228\a\n\
-    \\STX\EOT\f\DC2\ACK\179\ENQ\NUL\165\ACK\SOH\SUB\213\a Occurrence associates a source position with a symbol and/or highlighting\n\
+    \\STX\EOT\f\DC2\ACK\220\ENQ\NUL\206\ACK\SOH\SUB\213\a Occurrence associates a source position with a symbol and/or highlighting\n\
     \ information.\n\
     \\n\
     \ If possible, indexers should try to bundle logically related information\n\
@@ -9392,12 +9610,12 @@ packedFileDescriptor
     \ available and fall back to the `repeated int32` form otherwise.\n\
     \\n\
     \\v\n\
-    \\ETX\EOT\f\SOH\DC2\EOT\179\ENQ\b\DC2\n\
+    \\ETX\EOT\f\SOH\DC2\EOT\220\ENQ\b\DC2\n\
     \\r\n\
-    \\ENQ\EOT\f\STX\NUL\EOT\DC2\EOT\196\ENQ\STX\n\
+    \\ENQ\EOT\f\STX\NUL\EOT\DC2\EOT\237\ENQ\STX\n\
     \\n\
     \\187\a\n\
-    \\EOT\EOT\f\STX\NUL\DC2\EOT\196\ENQ\STX/\SUB\172\a Deprecated: Use `single_line_range` or `multi_line_range` instead.\n\
+    \\EOT\EOT\f\STX\NUL\DC2\EOT\237\ENQ\STX/\SUB\172\a Deprecated: Use `single_line_range` or `multi_line_range` instead.\n\
     \\n\
     \ Half-open [start, end) range. Must be exactly three or four elements:\n\
     \ - Three elements: `[startLine, startCharacter, endCharacter]` (single-line)\n\
@@ -9415,17 +9633,17 @@ packedFileDescriptor
     \ because ranges are only a fraction of a typical index payload.\n\
     \\n\
     \\r\n\
-    \\ENQ\EOT\f\STX\NUL\ENQ\DC2\EOT\196\ENQ\v\DLE\n\
+    \\ENQ\EOT\f\STX\NUL\ENQ\DC2\EOT\237\ENQ\v\DLE\n\
     \\r\n\
-    \\ENQ\EOT\f\STX\NUL\SOH\DC2\EOT\196\ENQ\DC1\SYN\n\
+    \\ENQ\EOT\f\STX\NUL\SOH\DC2\EOT\237\ENQ\DC1\SYN\n\
     \\r\n\
-    \\ENQ\EOT\f\STX\NUL\ETX\DC2\EOT\196\ENQ\EM\SUB\n\
+    \\ENQ\EOT\f\STX\NUL\ETX\DC2\EOT\237\ENQ\EM\SUB\n\
     \\r\n\
-    \\ENQ\EOT\f\STX\NUL\b\DC2\EOT\196\ENQ\ESC.\n\
+    \\ENQ\EOT\f\STX\NUL\b\DC2\EOT\237\ENQ\ESC.\n\
     \\SO\n\
-    \\ACK\EOT\f\STX\NUL\b\ETX\DC2\EOT\196\ENQ\FS-\n\
+    \\ACK\EOT\f\STX\NUL\b\ETX\DC2\EOT\237\ENQ\FS-\n\
     \\236\SOH\n\
-    \\EOT\EOT\f\b\NUL\DC2\ACK\204\ENQ\STX\209\ENQ\ETX\SUB\219\SOH Half-open [start, end) source range of this occurrence.\n\
+    \\EOT\EOT\f\b\NUL\DC2\ACK\245\ENQ\STX\250\ENQ\ETX\SUB\219\SOH Half-open [start, end) source range of this occurrence.\n\
     \\n\
     \ It is allowed for the range to be empty (i.e. start==end).\n\
     \\n\
@@ -9433,50 +9651,50 @@ packedFileDescriptor
     \ `typed_range` takes precedence.\n\
     \\n\
     \\r\n\
-    \\ENQ\EOT\f\b\NUL\SOH\DC2\EOT\204\ENQ\b\DC3\n\
+    \\ENQ\EOT\f\b\NUL\SOH\DC2\EOT\245\ENQ\b\DC3\n\
     \\r\n\
-    \\ENQ\EOT\f\STX\SOH\ACK\DC2\EOT\206\ENQ\EOT\DC3\n\
+    \\ENQ\EOT\f\STX\SOH\ACK\DC2\EOT\247\ENQ\EOT\DC3\n\
     \-\n\
-    \\EOT\EOT\f\STX\SOH\DC2\EOT\206\ENQ\EOT*\SUB\US Range spanning a single line.\n\
+    \\EOT\EOT\f\STX\SOH\DC2\EOT\247\ENQ\EOT*\SUB\US Range spanning a single line.\n\
     \\n\
     \\r\n\
-    \\ENQ\EOT\f\STX\SOH\SOH\DC2\EOT\206\ENQ\DC4%\n\
+    \\ENQ\EOT\f\STX\SOH\SOH\DC2\EOT\247\ENQ\DC4%\n\
     \\r\n\
-    \\ENQ\EOT\f\STX\SOH\ETX\DC2\EOT\206\ENQ()\n\
+    \\ENQ\EOT\f\STX\SOH\ETX\DC2\EOT\247\ENQ()\n\
     \\r\n\
-    \\ENQ\EOT\f\STX\STX\ACK\DC2\EOT\208\ENQ\EOT\DC2\n\
+    \\ENQ\EOT\f\STX\STX\ACK\DC2\EOT\249\ENQ\EOT\DC2\n\
     \.\n\
-    \\EOT\EOT\f\STX\STX\DC2\EOT\208\ENQ\EOT(\SUB  Range spanning multiple lines.\n\
+    \\EOT\EOT\f\STX\STX\DC2\EOT\249\ENQ\EOT(\SUB  Range spanning multiple lines.\n\
     \\n\
     \\r\n\
-    \\ENQ\EOT\f\STX\STX\SOH\DC2\EOT\208\ENQ\DC3#\n\
+    \\ENQ\EOT\f\STX\STX\SOH\DC2\EOT\249\ENQ\DC3#\n\
     \\r\n\
-    \\ENQ\EOT\f\STX\STX\ETX\DC2\EOT\208\ENQ&'\n\
+    \\ENQ\EOT\f\STX\STX\ETX\DC2\EOT\249\ENQ&'\n\
     \\r\n\
-    \\ENQ\EOT\f\STX\ETX\ENQ\DC2\EOT\212\ENQ\STX\b\n\
+    \\ENQ\EOT\f\STX\ETX\ENQ\DC2\EOT\253\ENQ\STX\b\n\
     \\138\SOH\n\
-    \\EOT\EOT\f\STX\ETX\DC2\EOT\212\ENQ\STX\DC4\SUB| (optional) The symbol that appears at this position. See\n\
+    \\EOT\EOT\f\STX\ETX\DC2\EOT\253\ENQ\STX\DC4\SUB| (optional) The symbol that appears at this position. See\n\
     \ `SymbolInformation.symbol` for how to format symbols as strings.\n\
     \\n\
     \\r\n\
-    \\ENQ\EOT\f\STX\ETX\SOH\DC2\EOT\212\ENQ\t\SI\n\
+    \\ENQ\EOT\f\STX\ETX\SOH\DC2\EOT\253\ENQ\t\SI\n\
     \\r\n\
-    \\ENQ\EOT\f\STX\ETX\ETX\DC2\EOT\212\ENQ\DC2\DC3\n\
+    \\ENQ\EOT\f\STX\ETX\ETX\DC2\EOT\253\ENQ\DC2\DC3\n\
     \\r\n\
-    \\ENQ\EOT\f\STX\EOT\ENQ\DC2\EOT\215\ENQ\STX\a\n\
+    \\ENQ\EOT\f\STX\EOT\ENQ\DC2\EOT\128\ACK\STX\a\n\
     \\151\SOH\n\
-    \\EOT\EOT\f\STX\EOT\DC2\EOT\215\ENQ\STX\EM\SUB\136\SOH (optional) Bitset containing `SymbolRole`s in this occurrence.\n\
+    \\EOT\EOT\f\STX\EOT\DC2\EOT\128\ACK\STX\EM\SUB\136\SOH (optional) Bitset containing `SymbolRole`s in this occurrence.\n\
     \ See `SymbolRole`'s documentation for how to read and write this field.\n\
     \\n\
     \\r\n\
-    \\ENQ\EOT\f\STX\EOT\SOH\DC2\EOT\215\ENQ\b\DC4\n\
+    \\ENQ\EOT\f\STX\EOT\SOH\DC2\EOT\128\ACK\b\DC4\n\
     \\r\n\
-    \\ENQ\EOT\f\STX\EOT\ETX\DC2\EOT\215\ENQ\ETB\CAN\n\
+    \\ENQ\EOT\f\STX\EOT\ETX\DC2\EOT\128\ACK\ETB\CAN\n\
     \\r\n\
-    \\ENQ\EOT\f\STX\ENQ\EOT\DC2\EOT\224\ENQ\STX\n\
+    \\ENQ\EOT\f\STX\ENQ\EOT\DC2\EOT\137\ACK\STX\n\
     \\n\
     \\241\ETX\n\
-    \\EOT\EOT\f\STX\ENQ\DC2\EOT\224\ENQ\STX-\SUB\226\ETX (optional) CommonMark-formatted documentation for this specific range. If\n\
+    \\EOT\EOT\f\STX\ENQ\DC2\EOT\137\ACK\STX-\SUB\226\ETX (optional) CommonMark-formatted documentation for this specific range. If\n\
     \ empty, the `Symbol.documentation` field is used instead. One example\n\
     \ where this field might be useful is when the symbol represents a generic\n\
     \ function (with abstract type parameters such as `List<T>`) and at this\n\
@@ -9486,52 +9704,52 @@ packedFileDescriptor
     \ which commonly allow for type-changing assignment.\n\
     \\n\
     \\r\n\
-    \\ENQ\EOT\f\STX\ENQ\ENQ\DC2\EOT\224\ENQ\v\DC1\n\
+    \\ENQ\EOT\f\STX\ENQ\ENQ\DC2\EOT\137\ACK\v\DC1\n\
     \\r\n\
-    \\ENQ\EOT\f\STX\ENQ\SOH\DC2\EOT\224\ENQ\DC2(\n\
+    \\ENQ\EOT\f\STX\ENQ\SOH\DC2\EOT\137\ACK\DC2(\n\
     \\r\n\
-    \\ENQ\EOT\f\STX\ENQ\ETX\DC2\EOT\224\ENQ+,\n\
+    \\ENQ\EOT\f\STX\ENQ\ETX\DC2\EOT\137\ACK+,\n\
     \\r\n\
-    \\ENQ\EOT\f\STX\ACK\ACK\DC2\EOT\226\ENQ\STX\f\n\
+    \\ENQ\EOT\f\STX\ACK\ACK\DC2\EOT\139\ACK\STX\f\n\
     \X\n\
-    \\EOT\EOT\f\STX\ACK\DC2\EOT\226\ENQ\STX\GS\SUBJ (optional) What syntax highlighting class should be used for this range?\n\
+    \\EOT\EOT\f\STX\ACK\DC2\EOT\139\ACK\STX\GS\SUBJ (optional) What syntax highlighting class should be used for this range?\n\
     \\n\
     \\r\n\
-    \\ENQ\EOT\f\STX\ACK\SOH\DC2\EOT\226\ENQ\r\CAN\n\
+    \\ENQ\EOT\f\STX\ACK\SOH\DC2\EOT\139\ACK\r\CAN\n\
     \\r\n\
-    \\ENQ\EOT\f\STX\ACK\ETX\DC2\EOT\226\ENQ\ESC\FS\n\
+    \\ENQ\EOT\f\STX\ACK\ETX\DC2\EOT\139\ACK\ESC\FS\n\
     \\r\n\
-    \\ENQ\EOT\f\STX\a\EOT\DC2\EOT\228\ENQ\STX\n\
+    \\ENQ\EOT\f\STX\a\EOT\DC2\EOT\141\ACK\STX\n\
     \\n\
     \W\n\
-    \\EOT\EOT\f\STX\a\DC2\EOT\228\ENQ\STX&\SUBI (optional) Diagnostics that have been reported for this specific range.\n\
+    \\EOT\EOT\f\STX\a\DC2\EOT\141\ACK\STX&\SUBI (optional) Diagnostics that have been reported for this specific range.\n\
     \\n\
     \\r\n\
-    \\ENQ\EOT\f\STX\a\ACK\DC2\EOT\228\ENQ\v\NAK\n\
+    \\ENQ\EOT\f\STX\a\ACK\DC2\EOT\141\ACK\v\NAK\n\
     \\r\n\
-    \\ENQ\EOT\f\STX\a\SOH\DC2\EOT\228\ENQ\SYN!\n\
+    \\ENQ\EOT\f\STX\a\SOH\DC2\EOT\141\ACK\SYN!\n\
     \\r\n\
-    \\ENQ\EOT\f\STX\a\ETX\DC2\EOT\228\ENQ$%\n\
+    \\ENQ\EOT\f\STX\a\ETX\DC2\EOT\141\ACK$%\n\
     \\r\n\
-    \\ENQ\EOT\f\STX\b\EOT\DC2\EOT\232\ENQ\STX\n\
+    \\ENQ\EOT\f\STX\b\EOT\DC2\EOT\145\ACK\STX\n\
     \\n\
     \\139\SOH\n\
-    \\EOT\EOT\f\STX\b\DC2\EOT\232\ENQ\STX9\SUB} Deprecated: Use `typed_enclosing_range` instead.\n\
+    \\EOT\EOT\f\STX\b\DC2\EOT\145\ACK\STX9\SUB} Deprecated: Use `typed_enclosing_range` instead.\n\
     \\n\
     \ Uses the same `repeated int32` encoding as the deprecated `range` field.\n\
     \\n\
     \\r\n\
-    \\ENQ\EOT\f\STX\b\ENQ\DC2\EOT\232\ENQ\v\DLE\n\
+    \\ENQ\EOT\f\STX\b\ENQ\DC2\EOT\145\ACK\v\DLE\n\
     \\r\n\
-    \\ENQ\EOT\f\STX\b\SOH\DC2\EOT\232\ENQ\DC1 \n\
+    \\ENQ\EOT\f\STX\b\SOH\DC2\EOT\145\ACK\DC1 \n\
     \\r\n\
-    \\ENQ\EOT\f\STX\b\ETX\DC2\EOT\232\ENQ#$\n\
+    \\ENQ\EOT\f\STX\b\ETX\DC2\EOT\145\ACK#$\n\
     \\r\n\
-    \\ENQ\EOT\f\STX\b\b\DC2\EOT\232\ENQ%8\n\
+    \\ENQ\EOT\f\STX\b\b\DC2\EOT\145\ACK%8\n\
     \\SO\n\
-    \\ACK\EOT\f\STX\b\b\ETX\DC2\EOT\232\ENQ&7\n\
+    \\ACK\EOT\f\STX\b\b\ETX\DC2\EOT\145\ACK&7\n\
     \\220\SO\n\
-    \\EOT\EOT\f\b\SOH\DC2\ACK\159\ACK\STX\164\ACK\ETX\SUB\203\SO (optional) Half-open source range of the nearest non-trivial enclosing AST\n\
+    \\EOT\EOT\f\b\SOH\DC2\ACK\200\ACK\STX\205\ACK\ETX\SUB\203\SO (optional) Half-open source range of the nearest non-trivial enclosing AST\n\
     \ node. This range must enclose the occurrence range. Example applications:\n\
     \\n\
     \ - Call hierarchies: to determine what symbols are referenced from the body\n\
@@ -9586,144 +9804,144 @@ packedFileDescriptor
     \ field are set, `typed_enclosing_range` takes precedence.\n\
     \\n\
     \\r\n\
-    \\ENQ\EOT\f\b\SOH\SOH\DC2\EOT\159\ACK\b\GS\n\
+    \\ENQ\EOT\f\b\SOH\SOH\DC2\EOT\200\ACK\b\GS\n\
     \\r\n\
-    \\ENQ\EOT\f\STX\t\ACK\DC2\EOT\161\ACK\EOT\DC3\n\
+    \\ENQ\EOT\f\STX\t\ACK\DC2\EOT\202\ACK\EOT\DC3\n\
     \7\n\
-    \\EOT\EOT\f\STX\t\DC2\EOT\161\ACK\EOT5\SUB) Enclosing range spanning a single line.\n\
+    \\EOT\EOT\f\STX\t\DC2\EOT\202\ACK\EOT5\SUB) Enclosing range spanning a single line.\n\
     \\n\
     \\r\n\
-    \\ENQ\EOT\f\STX\t\SOH\DC2\EOT\161\ACK\DC4/\n\
+    \\ENQ\EOT\f\STX\t\SOH\DC2\EOT\202\ACK\DC4/\n\
     \\r\n\
-    \\ENQ\EOT\f\STX\t\ETX\DC2\EOT\161\ACK24\n\
+    \\ENQ\EOT\f\STX\t\ETX\DC2\EOT\202\ACK24\n\
     \\r\n\
     \\ENQ\EOT\f\STX\n\
-    \\ACK\DC2\EOT\163\ACK\EOT\DC2\n\
+    \\ACK\DC2\EOT\204\ACK\EOT\DC2\n\
     \8\n\
     \\EOT\EOT\f\STX\n\
-    \\DC2\EOT\163\ACK\EOT3\SUB* Enclosing range spanning multiple lines.\n\
+    \\DC2\EOT\204\ACK\EOT3\SUB* Enclosing range spanning multiple lines.\n\
     \\n\
     \\r\n\
     \\ENQ\EOT\f\STX\n\
-    \\SOH\DC2\EOT\163\ACK\DC3-\n\
+    \\SOH\DC2\EOT\204\ACK\DC3-\n\
     \\r\n\
     \\ENQ\EOT\f\STX\n\
-    \\ETX\DC2\EOT\163\ACK02\n\
+    \\ETX\DC2\EOT\204\ACK02\n\
     \w\n\
-    \\STX\EOT\r\DC2\ACK\169\ACK\NUL\180\ACK\SOH\SUBi Represents a diagnostic, such as a compiler error or warning, which should be\n\
+    \\STX\EOT\r\DC2\ACK\210\ACK\NUL\221\ACK\SOH\SUBi Represents a diagnostic, such as a compiler error or warning, which should be\n\
     \ reported for a document.\n\
     \\n\
     \\v\n\
-    \\ETX\EOT\r\SOH\DC2\EOT\169\ACK\b\DC2\n\
+    \\ETX\EOT\r\SOH\DC2\EOT\210\ACK\b\DC2\n\
     \\r\n\
-    \\ENQ\EOT\r\STX\NUL\ACK\DC2\EOT\171\ACK\STX\n\
+    \\ENQ\EOT\r\STX\NUL\ACK\DC2\EOT\212\ACK\STX\n\
     \\n\
     \W\n\
-    \\EOT\EOT\r\STX\NUL\DC2\EOT\171\ACK\STX\CAN\SUBI Should this diagnostic be reported as an error, warning, info, or hint?\n\
+    \\EOT\EOT\r\STX\NUL\DC2\EOT\212\ACK\STX\CAN\SUBI Should this diagnostic be reported as an error, warning, info, or hint?\n\
     \\n\
     \\r\n\
-    \\ENQ\EOT\r\STX\NUL\SOH\DC2\EOT\171\ACK\v\DC3\n\
+    \\ENQ\EOT\r\STX\NUL\SOH\DC2\EOT\212\ACK\v\DC3\n\
     \\r\n\
-    \\ENQ\EOT\r\STX\NUL\ETX\DC2\EOT\171\ACK\SYN\ETB\n\
+    \\ENQ\EOT\r\STX\NUL\ETX\DC2\EOT\212\ACK\SYN\ETB\n\
     \\r\n\
-    \\ENQ\EOT\r\STX\SOH\ENQ\DC2\EOT\173\ACK\STX\b\n\
+    \\ENQ\EOT\r\STX\SOH\ENQ\DC2\EOT\214\ACK\STX\b\n\
     \]\n\
-    \\EOT\EOT\r\STX\SOH\DC2\EOT\173\ACK\STX\DC2\SUBO (optional) Code of this diagnostic, which might appear in the user interface.\n\
+    \\EOT\EOT\r\STX\SOH\DC2\EOT\214\ACK\STX\DC2\SUBO (optional) Code of this diagnostic, which might appear in the user interface.\n\
     \\n\
     \\r\n\
-    \\ENQ\EOT\r\STX\SOH\SOH\DC2\EOT\173\ACK\t\r\n\
+    \\ENQ\EOT\r\STX\SOH\SOH\DC2\EOT\214\ACK\t\r\n\
     \\r\n\
-    \\ENQ\EOT\r\STX\SOH\ETX\DC2\EOT\173\ACK\DLE\DC1\n\
+    \\ENQ\EOT\r\STX\SOH\ETX\DC2\EOT\214\ACK\DLE\DC1\n\
     \\r\n\
-    \\ENQ\EOT\r\STX\STX\ENQ\DC2\EOT\175\ACK\STX\b\n\
+    \\ENQ\EOT\r\STX\STX\ENQ\DC2\EOT\216\ACK\STX\b\n\
     \+\n\
-    \\EOT\EOT\r\STX\STX\DC2\EOT\175\ACK\STX\NAK\SUB\GS Message of this diagnostic.\n\
+    \\EOT\EOT\r\STX\STX\DC2\EOT\216\ACK\STX\NAK\SUB\GS Message of this diagnostic.\n\
     \\n\
     \\r\n\
-    \\ENQ\EOT\r\STX\STX\SOH\DC2\EOT\175\ACK\t\DLE\n\
+    \\ENQ\EOT\r\STX\STX\SOH\DC2\EOT\216\ACK\t\DLE\n\
     \\r\n\
-    \\ENQ\EOT\r\STX\STX\ETX\DC2\EOT\175\ACK\DC3\DC4\n\
+    \\ENQ\EOT\r\STX\STX\ETX\DC2\EOT\216\ACK\DC3\DC4\n\
     \\r\n\
-    \\ENQ\EOT\r\STX\ETX\ENQ\DC2\EOT\178\ACK\STX\b\n\
+    \\ENQ\EOT\r\STX\ETX\ENQ\DC2\EOT\219\ACK\STX\b\n\
     \~\n\
-    \\EOT\EOT\r\STX\ETX\DC2\EOT\178\ACK\STX\DC4\SUBp (optional) Human-readable string describing the source of this diagnostic, e.g.\n\
+    \\EOT\EOT\r\STX\ETX\DC2\EOT\219\ACK\STX\DC4\SUBp (optional) Human-readable string describing the source of this diagnostic, e.g.\n\
     \ 'typescript' or 'super lint'.\n\
     \\n\
     \\r\n\
-    \\ENQ\EOT\r\STX\ETX\SOH\DC2\EOT\178\ACK\t\SI\n\
+    \\ENQ\EOT\r\STX\ETX\SOH\DC2\EOT\219\ACK\t\SI\n\
     \\r\n\
-    \\ENQ\EOT\r\STX\ETX\ETX\DC2\EOT\178\ACK\DC2\DC3\n\
+    \\ENQ\EOT\r\STX\ETX\ETX\DC2\EOT\219\ACK\DC2\DC3\n\
     \\r\n\
-    \\ENQ\EOT\r\STX\EOT\EOT\DC2\EOT\179\ACK\STX\n\
+    \\ENQ\EOT\r\STX\EOT\EOT\DC2\EOT\220\ACK\STX\n\
     \\n\
     \\f\n\
-    \\EOT\EOT\r\STX\EOT\DC2\EOT\179\ACK\STX\"\n\
+    \\EOT\EOT\r\STX\EOT\DC2\EOT\220\ACK\STX\"\n\
     \\r\n\
-    \\ENQ\EOT\r\STX\EOT\ACK\DC2\EOT\179\ACK\v\CAN\n\
+    \\ENQ\EOT\r\STX\EOT\ACK\DC2\EOT\220\ACK\v\CAN\n\
     \\r\n\
-    \\ENQ\EOT\r\STX\EOT\SOH\DC2\EOT\179\ACK\EM\GS\n\
+    \\ENQ\EOT\r\STX\EOT\SOH\DC2\EOT\220\ACK\EM\GS\n\
     \\r\n\
-    \\ENQ\EOT\r\STX\EOT\ETX\DC2\EOT\179\ACK !\n\
+    \\ENQ\EOT\r\STX\EOT\ETX\DC2\EOT\220\ACK !\n\
     \\f\n\
-    \\STX\ENQ\ENQ\DC2\ACK\182\ACK\NUL\188\ACK\SOH\n\
+    \\STX\ENQ\ACK\DC2\ACK\223\ACK\NUL\229\ACK\SOH\n\
     \\v\n\
-    \\ETX\ENQ\ENQ\SOH\DC2\EOT\182\ACK\ENQ\r\n\
+    \\ETX\ENQ\ACK\SOH\DC2\EOT\223\ACK\ENQ\r\n\
     \\r\n\
-    \\ENQ\ENQ\ENQ\STX\NUL\SOH\DC2\EOT\183\ACK\STX\NAK\n\
+    \\ENQ\ENQ\ACK\STX\NUL\SOH\DC2\EOT\224\ACK\STX\NAK\n\
     \\f\n\
-    \\EOT\ENQ\ENQ\STX\NUL\DC2\EOT\183\ACK\STX\SUB\n\
+    \\EOT\ENQ\ACK\STX\NUL\DC2\EOT\224\ACK\STX\SUB\n\
     \\r\n\
-    \\ENQ\ENQ\ENQ\STX\NUL\STX\DC2\EOT\183\ACK\CAN\EM\n\
+    \\ENQ\ENQ\ACK\STX\NUL\STX\DC2\EOT\224\ACK\CAN\EM\n\
     \\r\n\
-    \\ENQ\ENQ\ENQ\STX\SOH\SOH\DC2\EOT\184\ACK\STX\a\n\
+    \\ENQ\ENQ\ACK\STX\SOH\SOH\DC2\EOT\225\ACK\STX\a\n\
     \\f\n\
-    \\EOT\ENQ\ENQ\STX\SOH\DC2\EOT\184\ACK\STX\f\n\
+    \\EOT\ENQ\ACK\STX\SOH\DC2\EOT\225\ACK\STX\f\n\
     \\r\n\
-    \\ENQ\ENQ\ENQ\STX\SOH\STX\DC2\EOT\184\ACK\n\
+    \\ENQ\ENQ\ACK\STX\SOH\STX\DC2\EOT\225\ACK\n\
     \\v\n\
     \\r\n\
-    \\ENQ\ENQ\ENQ\STX\STX\SOH\DC2\EOT\185\ACK\STX\t\n\
+    \\ENQ\ENQ\ACK\STX\STX\SOH\DC2\EOT\226\ACK\STX\t\n\
     \\f\n\
-    \\EOT\ENQ\ENQ\STX\STX\DC2\EOT\185\ACK\STX\SO\n\
+    \\EOT\ENQ\ACK\STX\STX\DC2\EOT\226\ACK\STX\SO\n\
     \\r\n\
-    \\ENQ\ENQ\ENQ\STX\STX\STX\DC2\EOT\185\ACK\f\r\n\
+    \\ENQ\ENQ\ACK\STX\STX\STX\DC2\EOT\226\ACK\f\r\n\
     \\r\n\
-    \\ENQ\ENQ\ENQ\STX\ETX\SOH\DC2\EOT\186\ACK\STX\r\n\
+    \\ENQ\ENQ\ACK\STX\ETX\SOH\DC2\EOT\227\ACK\STX\r\n\
     \\f\n\
-    \\EOT\ENQ\ENQ\STX\ETX\DC2\EOT\186\ACK\STX\DC2\n\
+    \\EOT\ENQ\ACK\STX\ETX\DC2\EOT\227\ACK\STX\DC2\n\
     \\r\n\
-    \\ENQ\ENQ\ENQ\STX\ETX\STX\DC2\EOT\186\ACK\DLE\DC1\n\
+    \\ENQ\ENQ\ACK\STX\ETX\STX\DC2\EOT\227\ACK\DLE\DC1\n\
     \\r\n\
-    \\ENQ\ENQ\ENQ\STX\EOT\SOH\DC2\EOT\187\ACK\STX\ACK\n\
+    \\ENQ\ENQ\ACK\STX\EOT\SOH\DC2\EOT\228\ACK\STX\ACK\n\
     \\f\n\
-    \\EOT\ENQ\ENQ\STX\EOT\DC2\EOT\187\ACK\STX\v\n\
+    \\EOT\ENQ\ACK\STX\EOT\DC2\EOT\228\ACK\STX\v\n\
     \\r\n\
-    \\ENQ\ENQ\ENQ\STX\EOT\STX\DC2\EOT\187\ACK\t\n\
+    \\ENQ\ENQ\ACK\STX\EOT\STX\DC2\EOT\228\ACK\t\n\
     \\n\
     \\f\n\
-    \\STX\ENQ\ACK\DC2\ACK\190\ACK\NUL\194\ACK\SOH\n\
+    \\STX\ENQ\a\DC2\ACK\231\ACK\NUL\235\ACK\SOH\n\
     \\v\n\
-    \\ETX\ENQ\ACK\SOH\DC2\EOT\190\ACK\ENQ\DC2\n\
+    \\ETX\ENQ\a\SOH\DC2\EOT\231\ACK\ENQ\DC2\n\
     \\r\n\
-    \\ENQ\ENQ\ACK\STX\NUL\SOH\DC2\EOT\191\ACK\STX\SUB\n\
+    \\ENQ\ENQ\a\STX\NUL\SOH\DC2\EOT\232\ACK\STX\SUB\n\
     \\f\n\
-    \\EOT\ENQ\ACK\STX\NUL\DC2\EOT\191\ACK\STX\US\n\
+    \\EOT\ENQ\a\STX\NUL\DC2\EOT\232\ACK\STX\US\n\
     \\r\n\
-    \\ENQ\ENQ\ACK\STX\NUL\STX\DC2\EOT\191\ACK\GS\RS\n\
+    \\ENQ\ENQ\a\STX\NUL\STX\DC2\EOT\232\ACK\GS\RS\n\
     \\r\n\
-    \\ENQ\ENQ\ACK\STX\SOH\SOH\DC2\EOT\192\ACK\STX\r\n\
+    \\ENQ\ENQ\a\STX\SOH\SOH\DC2\EOT\233\ACK\STX\r\n\
     \\f\n\
-    \\EOT\ENQ\ACK\STX\SOH\DC2\EOT\192\ACK\STX\DC2\n\
+    \\EOT\ENQ\a\STX\SOH\DC2\EOT\233\ACK\STX\DC2\n\
     \\r\n\
-    \\ENQ\ENQ\ACK\STX\SOH\STX\DC2\EOT\192\ACK\DLE\DC1\n\
+    \\ENQ\ENQ\a\STX\SOH\STX\DC2\EOT\233\ACK\DLE\DC1\n\
     \\r\n\
-    \\ENQ\ENQ\ACK\STX\STX\SOH\DC2\EOT\193\ACK\STX\f\n\
+    \\ENQ\ENQ\a\STX\STX\SOH\DC2\EOT\234\ACK\STX\f\n\
     \\f\n\
-    \\EOT\ENQ\ACK\STX\STX\DC2\EOT\193\ACK\STX\DC1\n\
+    \\EOT\ENQ\a\STX\STX\DC2\EOT\234\ACK\STX\DC1\n\
     \\r\n\
-    \\ENQ\ENQ\ACK\STX\STX\STX\DC2\EOT\193\ACK\SI\DLE\n\
+    \\ENQ\ENQ\a\STX\STX\STX\DC2\EOT\234\ACK\SI\DLE\n\
     \\208\ETX\n\
-    \\STX\ENQ\a\DC2\ACK\202\ACK\NUL\193\a\SOH\SUB\193\ETX Language standardises names of common programming languages that can be used\n\
+    \\STX\ENQ\b\DC2\ACK\243\ACK\NUL\234\a\SOH\SUB\193\ETX Language standardises names of common programming languages that can be used\n\
     \ for the `Document.language` field. The primary purpose of this enum is to\n\
     \ prevent a situation where we have a single programming language ends up with\n\
     \ multiple string representations. For example, the C++ language uses the name\n\
@@ -9731,713 +9949,713 @@ packedFileDescriptor
     \ Feel free to send a pull-request to add missing programming languages.\n\
     \\n\
     \\v\n\
-    \\ETX\ENQ\a\SOH\DC2\EOT\202\ACK\ENQ\r\n\
+    \\ETX\ENQ\b\SOH\DC2\EOT\243\ACK\ENQ\r\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX\NUL\SOH\DC2\EOT\203\ACK\STX\NAK\n\
+    \\ENQ\ENQ\b\STX\NUL\SOH\DC2\EOT\244\ACK\STX\NAK\n\
     \\f\n\
-    \\EOT\ENQ\a\STX\NUL\DC2\EOT\203\ACK\STX\SUB\n\
+    \\EOT\ENQ\b\STX\NUL\DC2\EOT\244\ACK\STX\SUB\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX\NUL\STX\DC2\EOT\203\ACK\CAN\EM\n\
+    \\ENQ\ENQ\b\STX\NUL\STX\DC2\EOT\244\ACK\CAN\EM\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX\SOH\SOH\DC2\EOT\204\ACK\STX\ACK\n\
+    \\ENQ\ENQ\b\STX\SOH\SOH\DC2\EOT\245\ACK\STX\ACK\n\
     \\f\n\
-    \\EOT\ENQ\a\STX\SOH\DC2\EOT\204\ACK\STX\f\n\
+    \\EOT\ENQ\b\STX\SOH\DC2\EOT\245\ACK\STX\f\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX\SOH\STX\DC2\EOT\204\ACK\t\v\n\
+    \\ENQ\ENQ\b\STX\SOH\STX\DC2\EOT\245\ACK\t\v\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX\STX\SOH\DC2\EOT\205\ACK\STX\ACK\n\
+    \\ENQ\ENQ\b\STX\STX\SOH\DC2\EOT\246\ACK\STX\ACK\n\
     \\f\n\
-    \\EOT\ENQ\a\STX\STX\DC2\EOT\205\ACK\STX\f\n\
+    \\EOT\ENQ\b\STX\STX\DC2\EOT\246\ACK\STX\f\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX\STX\STX\DC2\EOT\205\ACK\t\v\n\
+    \\ENQ\ENQ\b\STX\STX\STX\DC2\EOT\246\ACK\t\v\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX\ETX\SOH\DC2\EOT\206\ACK\STX\ENQ\n\
+    \\ENQ\ENQ\b\STX\ETX\SOH\DC2\EOT\247\ACK\STX\ENQ\n\
     \\f\n\
-    \\EOT\ENQ\a\STX\ETX\DC2\EOT\206\ACK\STX\v\n\
+    \\EOT\ENQ\b\STX\ETX\DC2\EOT\247\ACK\STX\v\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX\ETX\STX\DC2\EOT\206\ACK\b\n\
+    \\ENQ\ENQ\b\STX\ETX\STX\DC2\EOT\247\ACK\b\n\
     \\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX\EOT\SOH\DC2\EOT\207\ACK\STX\ENQ\n\
+    \\ENQ\ENQ\b\STX\EOT\SOH\DC2\EOT\248\ACK\STX\ENQ\n\
     \\f\n\
-    \\EOT\ENQ\a\STX\EOT\DC2\EOT\207\ACK\STX\v\n\
+    \\EOT\ENQ\b\STX\EOT\DC2\EOT\248\ACK\STX\v\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX\EOT\STX\DC2\EOT\207\ACK\b\n\
+    \\ENQ\ENQ\b\STX\EOT\STX\DC2\EOT\248\ACK\b\n\
     \\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX\ENQ\SOH\DC2\EOT\208\ACK\STX\ACK\n\
+    \\ENQ\ENQ\b\STX\ENQ\SOH\DC2\EOT\249\ACK\STX\ACK\n\
     \\f\n\
-    \\EOT\ENQ\a\STX\ENQ\DC2\EOT\208\ACK\STX\f\n\
+    \\EOT\ENQ\b\STX\ENQ\DC2\EOT\249\ACK\STX\f\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX\ENQ\STX\DC2\EOT\208\ACK\t\v\n\
+    \\ENQ\ENQ\b\STX\ENQ\STX\DC2\EOT\249\ACK\t\v\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX\ACK\SOH\DC2\EOT\209\ACK\STX\n\
+    \\ENQ\ENQ\b\STX\ACK\SOH\DC2\EOT\250\ACK\STX\n\
     \\n\
     \\f\n\
-    \\EOT\ENQ\a\STX\ACK\DC2\EOT\209\ACK\STX\DLE\n\
+    \\EOT\ENQ\b\STX\ACK\DC2\EOT\250\ACK\STX\DLE\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX\ACK\STX\DC2\EOT\209\ACK\r\SI\n\
+    \\ENQ\ENQ\b\STX\ACK\STX\DC2\EOT\250\ACK\r\SI\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX\a\SOH\DC2\EOT\210\ACK\STX\n\
+    \\ENQ\ENQ\b\STX\a\SOH\DC2\EOT\251\ACK\STX\n\
     \\n\
     \\f\n\
-    \\EOT\ENQ\a\STX\a\DC2\EOT\210\ACK\STX\DLE\n\
+    \\EOT\ENQ\b\STX\a\DC2\EOT\251\ACK\STX\DLE\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX\a\STX\DC2\EOT\210\ACK\r\SI\n\
+    \\ENQ\ENQ\b\STX\a\STX\DC2\EOT\251\ACK\r\SI\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX\b\SOH\DC2\EOT\211\ACK\STX\ENQ\n\
+    \\ENQ\ENQ\b\STX\b\SOH\DC2\EOT\252\ACK\STX\ENQ\n\
     \\f\n\
-    \\EOT\ENQ\a\STX\b\DC2\EOT\211\ACK\STX\v\n\
+    \\EOT\ENQ\b\STX\b\DC2\EOT\252\ACK\STX\v\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX\b\STX\DC2\EOT\211\ACK\b\n\
+    \\ENQ\ENQ\b\STX\b\STX\DC2\EOT\252\ACK\b\n\
     \\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX\t\SOH\DC2\EOT\212\ACK\STX\ENQ\n\
+    \\ENQ\ENQ\b\STX\t\SOH\DC2\EOT\253\ACK\STX\ENQ\n\
     \\f\n\
-    \\EOT\ENQ\a\STX\t\DC2\EOT\212\ACK\STX\v\n\
+    \\EOT\ENQ\b\STX\t\DC2\EOT\253\ACK\STX\v\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX\t\STX\DC2\EOT\212\ACK\b\n\
+    \\ENQ\ENQ\b\STX\t\STX\DC2\EOT\253\ACK\b\n\
     \\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX\n\
-    \\SOH\DC2\EOT\213\ACK\STX\b\n\
+    \\ENQ\ENQ\b\STX\n\
+    \\SOH\DC2\EOT\254\ACK\STX\b\n\
     \\f\n\
-    \\EOT\ENQ\a\STX\n\
-    \\DC2\EOT\213\ACK\STX\SO\n\
+    \\EOT\ENQ\b\STX\n\
+    \\DC2\EOT\254\ACK\STX\SO\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX\n\
-    \\STX\DC2\EOT\213\ACK\v\r\n\
+    \\ENQ\ENQ\b\STX\n\
+    \\STX\DC2\EOT\254\ACK\v\r\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX\v\SOH\DC2\EOT\214\ACK\STX\ETX\n\
+    \\ENQ\ENQ\b\STX\v\SOH\DC2\EOT\255\ACK\STX\ETX\n\
     \\f\n\
-    \\EOT\ENQ\a\STX\v\DC2\EOT\214\ACK\STX\t\n\
+    \\EOT\ENQ\b\STX\v\DC2\EOT\255\ACK\STX\t\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX\v\STX\DC2\EOT\214\ACK\ACK\b\n\
+    \\ENQ\ENQ\b\STX\v\STX\DC2\EOT\255\ACK\ACK\b\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX\f\SOH\DC2\EOT\215\ACK\STX\a\n\
+    \\ENQ\ENQ\b\STX\f\SOH\DC2\EOT\128\a\STX\a\n\
     \\f\n\
-    \\EOT\ENQ\a\STX\f\DC2\EOT\215\ACK\STX\r\n\
+    \\EOT\ENQ\b\STX\f\DC2\EOT\128\a\STX\r\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX\f\STX\DC2\EOT\215\ACK\n\
+    \\ENQ\ENQ\b\STX\f\STX\DC2\EOT\128\a\n\
     \\f\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX\r\SOH\DC2\EOT\216\ACK\STX\ENQ\n\
+    \\ENQ\ENQ\b\STX\r\SOH\DC2\EOT\129\a\STX\ENQ\n\
     \G\n\
-    \\EOT\ENQ\a\STX\r\DC2\EOT\216\ACK\STX\v\"9 C++ (the name \"CPP\" was chosen for consistency with LSP)\n\
+    \\EOT\ENQ\b\STX\r\DC2\EOT\129\a\STX\v\"9 C++ (the name \"CPP\" was chosen for consistency with LSP)\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX\r\STX\DC2\EOT\216\ACK\b\n\
+    \\ENQ\ENQ\b\STX\r\STX\DC2\EOT\129\a\b\n\
     \\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX\SO\SOH\DC2\EOT\217\ACK\STX\ENQ\n\
+    \\ENQ\ENQ\b\STX\SO\SOH\DC2\EOT\130\a\STX\ENQ\n\
     \\f\n\
-    \\EOT\ENQ\a\STX\SO\DC2\EOT\217\ACK\STX\v\n\
+    \\EOT\ENQ\b\STX\SO\DC2\EOT\130\a\STX\v\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX\SO\STX\DC2\EOT\217\ACK\b\n\
+    \\ENQ\ENQ\b\STX\SO\STX\DC2\EOT\130\a\b\n\
     \\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX\SI\SOH\DC2\EOT\218\ACK\STX\b\n\
+    \\ENQ\ENQ\b\STX\SI\SOH\DC2\EOT\131\a\STX\b\n\
     \\f\n\
-    \\EOT\ENQ\a\STX\SI\DC2\EOT\218\ACK\STX\r\n\
+    \\EOT\ENQ\b\STX\SI\DC2\EOT\131\a\STX\r\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX\SI\STX\DC2\EOT\218\ACK\v\f\n\
+    \\ENQ\ENQ\b\STX\SI\STX\DC2\EOT\131\a\v\f\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX\DLE\SOH\DC2\EOT\219\ACK\STX\t\n\
+    \\ENQ\ENQ\b\STX\DLE\SOH\DC2\EOT\132\a\STX\t\n\
     \\f\n\
-    \\EOT\ENQ\a\STX\DLE\DC2\EOT\219\ACK\STX\SO\n\
+    \\EOT\ENQ\b\STX\DLE\DC2\EOT\132\a\STX\SO\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX\DLE\STX\DC2\EOT\219\ACK\f\r\n\
+    \\ENQ\ENQ\b\STX\DLE\STX\DC2\EOT\132\a\f\r\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX\DC1\SOH\DC2\EOT\220\ACK\STX\SO\n\
+    \\ENQ\ENQ\b\STX\DC1\SOH\DC2\EOT\133\a\STX\SO\n\
     \\f\n\
-    \\EOT\ENQ\a\STX\DC1\DC2\EOT\220\ACK\STX\DC4\n\
+    \\EOT\ENQ\b\STX\DC1\DC2\EOT\133\a\STX\DC4\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX\DC1\STX\DC2\EOT\220\ACK\DC1\DC3\n\
+    \\ENQ\ENQ\b\STX\DC1\STX\DC2\EOT\133\a\DC1\DC3\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX\DC2\SOH\DC2\EOT\221\ACK\STX\f\n\
+    \\ENQ\ENQ\b\STX\DC2\SOH\DC2\EOT\134\a\STX\f\n\
     \\f\n\
-    \\EOT\ENQ\a\STX\DC2\DC2\EOT\221\ACK\STX\DC1\n\
+    \\EOT\ENQ\b\STX\DC2\DC2\EOT\134\a\STX\DC1\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX\DC2\STX\DC2\EOT\221\ACK\SI\DLE\n\
+    \\ENQ\ENQ\b\STX\DC2\STX\DC2\EOT\134\a\SI\DLE\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX\DC3\SOH\DC2\EOT\222\ACK\STX\ENQ\n\
+    \\ENQ\ENQ\b\STX\DC3\SOH\DC2\EOT\135\a\STX\ENQ\n\
     \\f\n\
-    \\EOT\ENQ\a\STX\DC3\DC2\EOT\222\ACK\STX\v\n\
+    \\EOT\ENQ\b\STX\DC3\DC2\EOT\135\a\STX\v\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX\DC3\STX\DC2\EOT\222\ACK\b\n\
+    \\ENQ\ENQ\b\STX\DC3\STX\DC2\EOT\135\a\b\n\
     \\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX\DC4\SOH\DC2\EOT\223\ACK\STX\ACK\n\
+    \\ENQ\ENQ\b\STX\DC4\SOH\DC2\EOT\136\a\STX\ACK\n\
     \\f\n\
-    \\EOT\ENQ\a\STX\DC4\DC2\EOT\223\ACK\STX\f\n\
+    \\EOT\ENQ\b\STX\DC4\DC2\EOT\136\a\STX\f\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX\DC4\STX\DC2\EOT\223\ACK\t\v\n\
+    \\ENQ\ENQ\b\STX\DC4\STX\DC2\EOT\136\a\t\v\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX\NAK\SOH\DC2\EOT\224\ACK\STX\ACK\n\
+    \\ENQ\ENQ\b\STX\NAK\SOH\DC2\EOT\137\a\STX\ACK\n\
     \\f\n\
-    \\EOT\ENQ\a\STX\NAK\DC2\EOT\224\ACK\STX\v\n\
+    \\EOT\ENQ\b\STX\NAK\DC2\EOT\137\a\STX\v\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX\NAK\STX\DC2\EOT\224\ACK\t\n\
+    \\ENQ\ENQ\b\STX\NAK\STX\DC2\EOT\137\a\t\n\
     \\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX\SYN\SOH\DC2\EOT\225\ACK\STX\b\n\
+    \\ENQ\ENQ\b\STX\SYN\SOH\DC2\EOT\138\a\STX\b\n\
     \\f\n\
-    \\EOT\ENQ\a\STX\SYN\DC2\EOT\225\ACK\STX\SO\n\
+    \\EOT\ENQ\b\STX\SYN\DC2\EOT\138\a\STX\SO\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX\SYN\STX\DC2\EOT\225\ACK\v\r\n\
+    \\ENQ\ENQ\b\STX\SYN\STX\DC2\EOT\138\a\v\r\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX\ETB\SOH\DC2\EOT\226\ACK\STX\ACK\n\
+    \\ENQ\ENQ\b\STX\ETB\SOH\DC2\EOT\139\a\STX\ACK\n\
     \\f\n\
-    \\EOT\ENQ\a\STX\ETB\DC2\EOT\226\ACK\STX\f\n\
+    \\EOT\ENQ\b\STX\ETB\DC2\EOT\139\a\STX\f\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX\ETB\STX\DC2\EOT\226\ACK\t\v\n\
+    \\ENQ\ENQ\b\STX\ETB\STX\DC2\EOT\139\a\t\v\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX\CAN\SOH\DC2\EOT\227\ACK\STX\f\n\
+    \\ENQ\ENQ\b\STX\CAN\SOH\DC2\EOT\140\a\STX\f\n\
     \\f\n\
-    \\EOT\ENQ\a\STX\CAN\DC2\EOT\227\ACK\STX\DC2\n\
+    \\EOT\ENQ\b\STX\CAN\DC2\EOT\140\a\STX\DC2\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX\CAN\STX\DC2\EOT\227\ACK\SI\DC1\n\
+    \\ENQ\ENQ\b\STX\CAN\STX\DC2\EOT\140\a\SI\DC1\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX\EM\SOH\DC2\EOT\228\ACK\STX\b\n\
+    \\ENQ\ENQ\b\STX\EM\SOH\DC2\EOT\141\a\STX\b\n\
     \\f\n\
-    \\EOT\ENQ\a\STX\EM\DC2\EOT\228\ACK\STX\SO\n\
+    \\EOT\ENQ\b\STX\EM\DC2\EOT\141\a\STX\SO\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX\EM\STX\DC2\EOT\228\ACK\v\r\n\
+    \\ENQ\ENQ\b\STX\EM\STX\DC2\EOT\141\a\v\r\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX\SUB\SOH\DC2\EOT\229\ACK\STX\b\n\
+    \\ENQ\ENQ\b\STX\SUB\SOH\DC2\EOT\142\a\STX\b\n\
     \\f\n\
-    \\EOT\ENQ\a\STX\SUB\DC2\EOT\229\ACK\STX\SO\n\
+    \\EOT\ENQ\b\STX\SUB\DC2\EOT\142\a\STX\SO\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX\SUB\STX\DC2\EOT\229\ACK\v\r\n\
+    \\ENQ\ENQ\b\STX\SUB\STX\DC2\EOT\142\a\v\r\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX\ESC\SOH\DC2\EOT\230\ACK\STX\b\n\
+    \\ENQ\ENQ\b\STX\ESC\SOH\DC2\EOT\143\a\STX\b\n\
     \\f\n\
-    \\EOT\ENQ\a\STX\ESC\DC2\EOT\230\ACK\STX\SO\n\
+    \\EOT\ENQ\b\STX\ESC\DC2\EOT\143\a\STX\SO\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX\ESC\STX\DC2\EOT\230\ACK\v\r\n\
+    \\ENQ\ENQ\b\STX\ESC\STX\DC2\EOT\143\a\v\r\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX\FS\SOH\DC2\EOT\231\ACK\STX\b\n\
+    \\ENQ\ENQ\b\STX\FS\SOH\DC2\EOT\144\a\STX\b\n\
     \\f\n\
-    \\EOT\ENQ\a\STX\FS\DC2\EOT\231\ACK\STX\SO\n\
+    \\EOT\ENQ\b\STX\FS\DC2\EOT\144\a\STX\SO\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX\FS\STX\DC2\EOT\231\ACK\v\r\n\
+    \\ENQ\ENQ\b\STX\FS\STX\DC2\EOT\144\a\v\r\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX\GS\SOH\DC2\EOT\232\ACK\STX\ACK\n\
+    \\ENQ\ENQ\b\STX\GS\SOH\DC2\EOT\145\a\STX\ACK\n\
     \\f\n\
-    \\EOT\ENQ\a\STX\GS\DC2\EOT\232\ACK\STX\f\n\
+    \\EOT\ENQ\b\STX\GS\DC2\EOT\145\a\STX\f\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX\GS\STX\DC2\EOT\232\ACK\t\v\n\
+    \\ENQ\ENQ\b\STX\GS\STX\DC2\EOT\145\a\t\v\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX\RS\SOH\DC2\EOT\233\ACK\STX\ACK\n\
+    \\ENQ\ENQ\b\STX\RS\SOH\DC2\EOT\146\a\STX\ACK\n\
     \\f\n\
-    \\EOT\ENQ\a\STX\RS\DC2\EOT\233\ACK\STX\f\n\
+    \\EOT\ENQ\b\STX\RS\DC2\EOT\146\a\STX\f\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX\RS\STX\DC2\EOT\233\ACK\t\v\n\
+    \\ENQ\ENQ\b\STX\RS\STX\DC2\EOT\146\a\t\v\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX\US\SOH\DC2\EOT\234\ACK\STX\t\n\
+    \\ENQ\ENQ\b\STX\US\SOH\DC2\EOT\147\a\STX\t\n\
     \\f\n\
-    \\EOT\ENQ\a\STX\US\DC2\EOT\234\ACK\STX\SI\n\
+    \\EOT\ENQ\b\STX\US\DC2\EOT\147\a\STX\SI\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX\US\STX\DC2\EOT\234\ACK\f\SO\n\
+    \\ENQ\ENQ\b\STX\US\STX\DC2\EOT\147\a\f\SO\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX \SOH\DC2\EOT\235\ACK\STX\f\n\
+    \\ENQ\ENQ\b\STX \SOH\DC2\EOT\148\a\STX\f\n\
     \\f\n\
-    \\EOT\ENQ\a\STX \DC2\EOT\235\ACK\STX\DC2\n\
+    \\EOT\ENQ\b\STX \DC2\EOT\148\a\STX\DC2\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX \STX\DC2\EOT\235\ACK\SI\DC1\n\
+    \\ENQ\ENQ\b\STX \STX\DC2\EOT\148\a\SI\DC1\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX!\SOH\DC2\EOT\236\ACK\STX\f\n\
+    \\ENQ\ENQ\b\STX!\SOH\DC2\EOT\149\a\STX\f\n\
     \\f\n\
-    \\EOT\ENQ\a\STX!\DC2\EOT\236\ACK\STX\DC2\n\
+    \\EOT\ENQ\b\STX!\DC2\EOT\149\a\STX\DC2\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX!\STX\DC2\EOT\236\ACK\SI\DC1\n\
+    \\ENQ\ENQ\b\STX!\STX\DC2\EOT\149\a\SI\DC1\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX\"\SOH\DC2\EOT\237\ACK\STX\f\n\
+    \\ENQ\ENQ\b\STX\"\SOH\DC2\EOT\150\a\STX\f\n\
     \\f\n\
-    \\EOT\ENQ\a\STX\"\DC2\EOT\237\ACK\STX\DC2\n\
+    \\EOT\ENQ\b\STX\"\DC2\EOT\150\a\STX\DC2\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX\"\STX\DC2\EOT\237\ACK\SI\DC1\n\
+    \\ENQ\ENQ\b\STX\"\STX\DC2\EOT\150\a\SI\DC1\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX#\SOH\DC2\EOT\238\ACK\STX\EOT\n\
+    \\ENQ\ENQ\b\STX#\SOH\DC2\EOT\151\a\STX\EOT\n\
     \\f\n\
-    \\EOT\ENQ\a\STX#\DC2\EOT\238\ACK\STX\n\
+    \\EOT\ENQ\b\STX#\DC2\EOT\151\a\STX\n\
     \\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX#\STX\DC2\EOT\238\ACK\a\t\n\
+    \\ENQ\ENQ\b\STX#\STX\DC2\EOT\151\a\a\t\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX$\SOH\DC2\EOT\239\ACK\STX\t\n\
+    \\ENQ\ENQ\b\STX$\SOH\DC2\EOT\152\a\STX\t\n\
     \\f\n\
-    \\EOT\ENQ\a\STX$\DC2\EOT\239\ACK\STX\SI\n\
+    \\EOT\ENQ\b\STX$\DC2\EOT\152\a\STX\SI\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX$\STX\DC2\EOT\239\ACK\f\SO\n\
+    \\ENQ\ENQ\b\STX$\STX\DC2\EOT\152\a\f\SO\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX%\SOH\DC2\EOT\240\ACK\STX\b\n\
+    \\ENQ\ENQ\b\STX%\SOH\DC2\EOT\153\a\STX\b\n\
     \\f\n\
-    \\EOT\ENQ\a\STX%\DC2\EOT\240\ACK\STX\r\n\
+    \\EOT\ENQ\b\STX%\DC2\EOT\153\a\STX\r\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX%\STX\DC2\EOT\240\ACK\v\f\n\
+    \\ENQ\ENQ\b\STX%\STX\DC2\EOT\153\a\v\f\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX&\SOH\DC2\EOT\241\ACK\STX\ACK\n\
+    \\ENQ\ENQ\b\STX&\SOH\DC2\EOT\154\a\STX\ACK\n\
     \\f\n\
-    \\EOT\ENQ\a\STX&\DC2\EOT\241\ACK\STX\f\n\
+    \\EOT\ENQ\b\STX&\DC2\EOT\154\a\STX\f\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX&\STX\DC2\EOT\241\ACK\t\v\n\
+    \\ENQ\ENQ\b\STX&\STX\DC2\EOT\154\a\t\v\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX'\SOH\DC2\EOT\242\ACK\STX\ACK\n\
+    \\ENQ\ENQ\b\STX'\SOH\DC2\EOT\155\a\STX\ACK\n\
     \\f\n\
-    \\EOT\ENQ\a\STX'\DC2\EOT\242\ACK\STX\f\n\
+    \\EOT\ENQ\b\STX'\DC2\EOT\155\a\STX\f\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX'\STX\DC2\EOT\242\ACK\t\v\n\
+    \\ENQ\ENQ\b\STX'\STX\DC2\EOT\155\a\t\v\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX(\SOH\DC2\EOT\243\ACK\STX\f\n\
+    \\ENQ\ENQ\b\STX(\SOH\DC2\EOT\156\a\STX\f\n\
     \\f\n\
-    \\EOT\ENQ\a\STX(\DC2\EOT\243\ACK\STX\DC2\n\
+    \\EOT\ENQ\b\STX(\DC2\EOT\156\a\STX\DC2\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX(\STX\DC2\EOT\243\ACK\SI\DC1\n\
+    \\ENQ\ENQ\b\STX(\STX\DC2\EOT\156\a\SI\DC1\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX)\SOH\DC2\EOT\244\ACK\STX\t\n\
+    \\ENQ\ENQ\b\STX)\SOH\DC2\EOT\157\a\STX\t\n\
     \\f\n\
-    \\EOT\ENQ\a\STX)\DC2\EOT\244\ACK\STX\SI\n\
+    \\EOT\ENQ\b\STX)\DC2\EOT\157\a\STX\SI\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX)\STX\DC2\EOT\244\ACK\f\SO\n\
+    \\ENQ\ENQ\b\STX)\STX\DC2\EOT\157\a\f\SO\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX*\SOH\DC2\EOT\245\ACK\STX\a\n\
+    \\ENQ\ENQ\b\STX*\SOH\DC2\EOT\158\a\STX\a\n\
     \\f\n\
-    \\EOT\ENQ\a\STX*\DC2\EOT\245\ACK\STX\r\n\
+    \\EOT\ENQ\b\STX*\DC2\EOT\158\a\STX\r\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX*\STX\DC2\EOT\245\ACK\n\
+    \\ENQ\ENQ\b\STX*\STX\DC2\EOT\158\a\n\
     \\f\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX+\SOH\DC2\EOT\246\ACK\STX\ENQ\n\
+    \\ENQ\ENQ\b\STX+\SOH\DC2\EOT\159\a\STX\ENQ\n\
     \\f\n\
-    \\EOT\ENQ\a\STX+\DC2\EOT\246\ACK\STX\v\n\
+    \\EOT\ENQ\b\STX+\DC2\EOT\159\a\STX\v\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX+\STX\DC2\EOT\246\ACK\b\n\
+    \\ENQ\ENQ\b\STX+\STX\DC2\EOT\159\a\b\n\
     \\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX,\SOH\DC2\EOT\247\ACK\STX\ETX\n\
+    \\ENQ\ENQ\b\STX,\SOH\DC2\EOT\160\a\STX\ETX\n\
     \\f\n\
-    \\EOT\ENQ\a\STX,\DC2\EOT\247\ACK\STX\t\n\
+    \\EOT\ENQ\b\STX,\DC2\EOT\160\a\STX\t\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX,\STX\DC2\EOT\247\ACK\ACK\b\n\
+    \\ENQ\ENQ\b\STX,\STX\DC2\EOT\160\a\ACK\b\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX-\SOH\DC2\EOT\248\ACK\STX\ACK\n\
+    \\ENQ\ENQ\b\STX-\SOH\DC2\EOT\161\a\STX\ACK\n\
     \\f\n\
-    \\EOT\ENQ\a\STX-\DC2\EOT\248\ACK\STX\f\n\
+    \\EOT\ENQ\b\STX-\DC2\EOT\161\a\STX\f\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX-\STX\DC2\EOT\248\ACK\t\v\n\
+    \\ENQ\ENQ\b\STX-\STX\DC2\EOT\161\a\t\v\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX.\SOH\DC2\EOT\249\ACK\STX\ACK\n\
+    \\ENQ\ENQ\b\STX.\SOH\DC2\EOT\162\a\STX\ACK\n\
     \\f\n\
-    \\EOT\ENQ\a\STX.\DC2\EOT\249\ACK\STX\v\n\
+    \\EOT\ENQ\b\STX.\DC2\EOT\162\a\STX\v\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX.\STX\DC2\EOT\249\ACK\t\n\
+    \\ENQ\ENQ\b\STX.\STX\DC2\EOT\162\a\t\n\
     \\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX/\SOH\DC2\EOT\250\ACK\STX\f\n\
+    \\ENQ\ENQ\b\STX/\SOH\DC2\EOT\163\a\STX\f\n\
     \\f\n\
-    \\EOT\ENQ\a\STX/\DC2\EOT\250\ACK\STX\DC2\n\
+    \\EOT\ENQ\b\STX/\DC2\EOT\163\a\STX\DC2\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX/\STX\DC2\EOT\250\ACK\SI\DC1\n\
+    \\ENQ\ENQ\b\STX/\STX\DC2\EOT\163\a\SI\DC1\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX0\SOH\DC2\EOT\251\ACK\STX\DC1\n\
+    \\ENQ\ENQ\b\STX0\SOH\DC2\EOT\164\a\STX\DC1\n\
     \\f\n\
-    \\EOT\ENQ\a\STX0\DC2\EOT\251\ACK\STX\ETB\n\
+    \\EOT\ENQ\b\STX0\DC2\EOT\164\a\STX\ETB\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX0\STX\DC2\EOT\251\ACK\DC4\SYN\n\
+    \\ENQ\ENQ\b\STX0\STX\DC2\EOT\164\a\DC4\SYN\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX1\SOH\DC2\EOT\252\ACK\STX\t\n\
+    \\ENQ\ENQ\b\STX1\SOH\DC2\EOT\165\a\STX\t\n\
     \\f\n\
-    \\EOT\ENQ\a\STX1\DC2\EOT\252\ACK\STX\SI\n\
+    \\EOT\ENQ\b\STX1\DC2\EOT\165\a\STX\SI\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX1\STX\DC2\EOT\252\ACK\f\SO\n\
+    \\ENQ\ENQ\b\STX1\STX\DC2\EOT\165\a\f\SO\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX2\SOH\DC2\EOT\253\ACK\STX\a\n\
+    \\ENQ\ENQ\b\STX2\SOH\DC2\EOT\166\a\STX\a\n\
     \\f\n\
-    \\EOT\ENQ\a\STX2\DC2\EOT\253\ACK\STX\r\n\
+    \\EOT\ENQ\b\STX2\DC2\EOT\166\a\STX\r\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX2\STX\DC2\EOT\253\ACK\n\
+    \\ENQ\ENQ\b\STX2\STX\DC2\EOT\166\a\n\
     \\f\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX3\SOH\DC2\EOT\254\ACK\STX\n\
+    \\ENQ\ENQ\b\STX3\SOH\DC2\EOT\167\a\STX\n\
     \\n\
     \\f\n\
-    \\EOT\ENQ\a\STX3\DC2\EOT\254\ACK\STX\DC1\n\
+    \\EOT\ENQ\b\STX3\DC2\EOT\167\a\STX\DC1\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX3\STX\DC2\EOT\254\ACK\r\DLE\n\
+    \\ENQ\ENQ\b\STX3\STX\DC2\EOT\167\a\r\DLE\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX4\SOH\DC2\EOT\255\ACK\STX\b\n\
+    \\ENQ\ENQ\b\STX4\SOH\DC2\EOT\168\a\STX\b\n\
     \\f\n\
-    \\EOT\ENQ\a\STX4\DC2\EOT\255\ACK\STX\r\n\
+    \\EOT\ENQ\b\STX4\DC2\EOT\168\a\STX\r\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX4\STX\DC2\EOT\255\ACK\v\f\n\
+    \\ENQ\ENQ\b\STX4\STX\DC2\EOT\168\a\v\f\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX5\SOH\DC2\EOT\128\a\STX\a\n\
+    \\ENQ\ENQ\b\STX5\SOH\DC2\EOT\169\a\STX\a\n\
     \\f\n\
-    \\EOT\ENQ\a\STX5\DC2\EOT\128\a\STX\r\n\
+    \\EOT\ENQ\b\STX5\DC2\EOT\169\a\STX\r\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX5\STX\DC2\EOT\128\a\n\
+    \\ENQ\ENQ\b\STX5\STX\DC2\EOT\169\a\n\
     \\f\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX6\SOH\DC2\EOT\129\a\STX\ACK\n\
+    \\ENQ\ENQ\b\STX6\SOH\DC2\EOT\170\a\STX\ACK\n\
     \\f\n\
-    \\EOT\ENQ\a\STX6\DC2\EOT\129\a\STX\f\n\
+    \\EOT\ENQ\b\STX6\DC2\EOT\170\a\STX\f\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX6\STX\DC2\EOT\129\a\t\v\n\
+    \\ENQ\ENQ\b\STX6\STX\DC2\EOT\170\a\t\v\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX7\SOH\DC2\EOT\130\a\STX\ACK\n\
+    \\ENQ\ENQ\b\STX7\SOH\DC2\EOT\171\a\STX\ACK\n\
     \\f\n\
-    \\EOT\ENQ\a\STX7\DC2\EOT\130\a\STX\f\n\
+    \\EOT\ENQ\b\STX7\DC2\EOT\171\a\STX\f\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX7\STX\DC2\EOT\130\a\t\v\n\
+    \\ENQ\ENQ\b\STX7\STX\DC2\EOT\171\a\t\v\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX8\SOH\DC2\EOT\131\a\STX\ENQ\n\
+    \\ENQ\ENQ\b\STX8\SOH\DC2\EOT\172\a\STX\ENQ\n\
     \\f\n\
-    \\EOT\ENQ\a\STX8\DC2\EOT\131\a\STX\v\n\
+    \\EOT\ENQ\b\STX8\DC2\EOT\172\a\STX\v\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX8\STX\DC2\EOT\131\a\b\n\
+    \\ENQ\ENQ\b\STX8\STX\DC2\EOT\172\a\b\n\
     \\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX9\SOH\DC2\EOT\132\a\STX\ACK\n\
+    \\ENQ\ENQ\b\STX9\SOH\DC2\EOT\173\a\STX\ACK\n\
     \\f\n\
-    \\EOT\ENQ\a\STX9\DC2\EOT\132\a\STX\r\n\
+    \\EOT\ENQ\b\STX9\DC2\EOT\173\a\STX\r\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX9\STX\DC2\EOT\132\a\t\f\n\
+    \\ENQ\ENQ\b\STX9\STX\DC2\EOT\173\a\t\f\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX:\SOH\DC2\EOT\133\a\STX\n\
+    \\ENQ\ENQ\b\STX:\SOH\DC2\EOT\174\a\STX\n\
     \\n\
     \\f\n\
-    \\EOT\ENQ\a\STX:\DC2\EOT\133\a\STX\DLE\n\
+    \\EOT\ENQ\b\STX:\DC2\EOT\174\a\STX\DLE\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX:\STX\DC2\EOT\133\a\r\SI\n\
+    \\ENQ\ENQ\b\STX:\STX\DC2\EOT\174\a\r\SI\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX;\SOH\DC2\EOT\134\a\STX\n\
+    \\ENQ\ENQ\b\STX;\SOH\DC2\EOT\175\a\STX\n\
     \\n\
     \\f\n\
-    \\EOT\ENQ\a\STX;\DC2\EOT\134\a\STX\DLE\n\
+    \\EOT\ENQ\b\STX;\DC2\EOT\175\a\STX\DLE\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX;\STX\DC2\EOT\134\a\r\SI\n\
+    \\ENQ\ENQ\b\STX;\STX\DC2\EOT\175\a\r\SI\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX<\SOH\DC2\EOT\135\a\STX\b\n\
+    \\ENQ\ENQ\b\STX<\SOH\DC2\EOT\176\a\STX\b\n\
     \\f\n\
-    \\EOT\ENQ\a\STX<\DC2\EOT\135\a\STX\SO\n\
+    \\EOT\ENQ\b\STX<\DC2\EOT\176\a\STX\SO\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX<\STX\DC2\EOT\135\a\v\r\n\
+    \\ENQ\ENQ\b\STX<\STX\DC2\EOT\176\a\v\r\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX=\SOH\DC2\EOT\136\a\STX\b\n\
+    \\ENQ\ENQ\b\STX=\SOH\DC2\EOT\177\a\STX\b\n\
     \'\n\
-    \\EOT\ENQ\a\STX=\DC2\EOT\136\a\STX\SI\"\EM https://nickel-lang.org/\n\
+    \\EOT\ENQ\b\STX=\DC2\EOT\177\a\STX\SI\"\EM https://nickel-lang.org/\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX=\STX\DC2\EOT\136\a\v\SO\n\
+    \\ENQ\ENQ\b\STX=\STX\DC2\EOT\177\a\v\SO\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX>\SOH\DC2\EOT\137\a\STX\ENQ\n\
+    \\ENQ\ENQ\b\STX>\SOH\DC2\EOT\178\a\STX\ENQ\n\
     \\f\n\
-    \\EOT\ENQ\a\STX>\DC2\EOT\137\a\STX\v\n\
+    \\EOT\ENQ\b\STX>\DC2\EOT\178\a\STX\v\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX>\STX\DC2\EOT\137\a\b\n\
+    \\ENQ\ENQ\b\STX>\STX\DC2\EOT\178\a\b\n\
     \\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX?\SOH\DC2\EOT\138\a\STX\a\n\
+    \\ENQ\ENQ\b\STX?\SOH\DC2\EOT\179\a\STX\a\n\
     \\f\n\
-    \\EOT\ENQ\a\STX?\DC2\EOT\138\a\STX\r\n\
+    \\EOT\ENQ\b\STX?\DC2\EOT\179\a\STX\r\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX?\STX\DC2\EOT\138\a\n\
+    \\ENQ\ENQ\b\STX?\STX\DC2\EOT\179\a\n\
     \\f\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX@\SOH\DC2\EOT\139\a\STX\r\n\
+    \\ENQ\ENQ\b\STX@\SOH\DC2\EOT\180\a\STX\r\n\
     \\f\n\
-    \\EOT\ENQ\a\STX@\DC2\EOT\139\a\STX\DC3\n\
+    \\EOT\ENQ\b\STX@\DC2\EOT\180\a\STX\DC3\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX@\STX\DC2\EOT\139\a\DLE\DC2\n\
+    \\ENQ\ENQ\b\STX@\STX\DC2\EOT\180\a\DLE\DC2\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXA\SOH\DC2\EOT\140\a\STX\SI\n\
+    \\ENQ\ENQ\b\STXA\SOH\DC2\EOT\181\a\STX\SI\n\
     \\f\n\
-    \\EOT\ENQ\a\STXA\DC2\EOT\140\a\STX\NAK\n\
+    \\EOT\ENQ\b\STXA\DC2\EOT\181\a\STX\NAK\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXA\STX\DC2\EOT\140\a\DC2\DC4\n\
+    \\ENQ\ENQ\b\STXA\STX\DC2\EOT\181\a\DC2\DC4\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXB\SOH\DC2\EOT\141\a\STX\ACK\n\
+    \\ENQ\ENQ\b\STXB\SOH\DC2\EOT\182\a\STX\ACK\n\
     \%\n\
-    \\EOT\ENQ\a\STXB\DC2\EOT\141\a\STX\r\"\ETB https://odin-lang.org/\n\
+    \\EOT\ENQ\b\STXB\DC2\EOT\182\a\STX\r\"\ETB https://odin-lang.org/\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXB\STX\DC2\EOT\141\a\t\f\n\
+    \\ENQ\ENQ\b\STXB\STX\DC2\EOT\182\a\t\f\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXC\SOH\DC2\EOT\142\a\STX\b\n\
+    \\ENQ\ENQ\b\STXC\SOH\DC2\EOT\183\a\STX\b\n\
     \\f\n\
-    \\EOT\ENQ\a\STXC\DC2\EOT\142\a\STX\SO\n\
+    \\EOT\ENQ\b\STXC\DC2\EOT\183\a\STX\SO\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXC\STX\DC2\EOT\142\a\v\r\n\
+    \\ENQ\ENQ\b\STXC\STX\DC2\EOT\183\a\v\r\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXD\SOH\DC2\EOT\143\a\STX\ENQ\n\
+    \\ENQ\ENQ\b\STXD\SOH\DC2\EOT\184\a\STX\ENQ\n\
     \\f\n\
-    \\EOT\ENQ\a\STXD\DC2\EOT\143\a\STX\v\n\
+    \\EOT\ENQ\b\STXD\DC2\EOT\184\a\STX\v\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXD\STX\DC2\EOT\143\a\b\n\
+    \\ENQ\ENQ\b\STXD\STX\DC2\EOT\184\a\b\n\
     \\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXE\SOH\DC2\EOT\144\a\STX\a\n\
+    \\ENQ\ENQ\b\STXE\SOH\DC2\EOT\185\a\STX\a\n\
     \\f\n\
-    \\EOT\ENQ\a\STXE\DC2\EOT\144\a\STX\r\n\
+    \\EOT\ENQ\b\STXE\DC2\EOT\185\a\STX\r\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXE\STX\DC2\EOT\144\a\n\
+    \\ENQ\ENQ\b\STXE\STX\DC2\EOT\185\a\n\
     \\f\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXF\SOH\DC2\EOT\145\a\STX\ACK\n\
+    \\ENQ\ENQ\b\STXF\SOH\DC2\EOT\186\a\STX\ACK\n\
     \\f\n\
-    \\EOT\ENQ\a\STXF\DC2\EOT\145\a\STX\f\n\
+    \\EOT\ENQ\b\STXF\DC2\EOT\186\a\STX\f\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXF\STX\DC2\EOT\145\a\t\v\n\
+    \\ENQ\ENQ\b\STXF\STX\DC2\EOT\186\a\t\v\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXG\SOH\DC2\EOT\146\a\STX\f\n\
+    \\ENQ\ENQ\b\STXG\SOH\DC2\EOT\187\a\STX\f\n\
     \\f\n\
-    \\EOT\ENQ\a\STXG\DC2\EOT\146\a\STX\DC2\n\
+    \\EOT\ENQ\b\STXG\DC2\EOT\187\a\STX\DC2\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXG\STX\DC2\EOT\146\a\SI\DC1\n\
+    \\ENQ\ENQ\b\STXG\STX\DC2\EOT\187\a\SI\DC1\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXH\SOH\DC2\EOT\147\a\STX\b\n\
+    \\ENQ\ENQ\b\STXH\SOH\DC2\EOT\188\a\STX\b\n\
     \\f\n\
-    \\EOT\ENQ\a\STXH\DC2\EOT\147\a\STX\SO\n\
+    \\EOT\ENQ\b\STXH\DC2\EOT\188\a\STX\SO\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXH\STX\DC2\EOT\147\a\v\r\n\
+    \\ENQ\ENQ\b\STXH\STX\DC2\EOT\188\a\v\r\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXI\SOH\DC2\EOT\148\a\STX\n\
+    \\ENQ\ENQ\b\STXI\SOH\DC2\EOT\189\a\STX\n\
     \\n\
     \\f\n\
-    \\EOT\ENQ\a\STXI\DC2\EOT\148\a\STX\DC1\n\
+    \\EOT\ENQ\b\STXI\DC2\EOT\189\a\STX\DC1\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXI\STX\DC2\EOT\148\a\r\DLE\n\
+    \\ENQ\ENQ\b\STXI\STX\DC2\EOT\189\a\r\DLE\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXJ\SOH\DC2\EOT\149\a\STX\b\n\
+    \\ENQ\ENQ\b\STXJ\SOH\DC2\EOT\190\a\STX\b\n\
     \\f\n\
-    \\EOT\ENQ\a\STXJ\DC2\EOT\149\a\STX\SO\n\
+    \\EOT\ENQ\b\STXJ\DC2\EOT\190\a\STX\SO\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXJ\STX\DC2\EOT\149\a\v\r\n\
+    \\ENQ\ENQ\b\STXJ\STX\DC2\EOT\190\a\v\r\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXK\SOH\DC2\EOT\150\a\STX\ETX\n\
+    \\ENQ\ENQ\b\STXK\SOH\DC2\EOT\191\a\STX\ETX\n\
     \\f\n\
-    \\EOT\ENQ\a\STXK\DC2\EOT\150\a\STX\t\n\
+    \\EOT\ENQ\b\STXK\DC2\EOT\191\a\STX\t\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXK\STX\DC2\EOT\150\a\ACK\b\n\
+    \\ENQ\ENQ\b\STXK\STX\DC2\EOT\191\a\ACK\b\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXL\SOH\DC2\EOT\151\a\STX\b\n\
+    \\ENQ\ENQ\b\STXL\SOH\DC2\EOT\192\a\STX\b\n\
     \\f\n\
-    \\EOT\ENQ\a\STXL\DC2\EOT\151\a\STX\SO\n\
+    \\EOT\ENQ\b\STXL\DC2\EOT\192\a\STX\SO\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXL\STX\DC2\EOT\151\a\v\r\n\
+    \\ENQ\ENQ\b\STXL\STX\DC2\EOT\192\a\v\r\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXM\SOH\DC2\EOT\152\a\STX\ACK\n\
+    \\ENQ\ENQ\b\STXM\SOH\DC2\EOT\193\a\STX\ACK\n\
     \\f\n\
-    \\EOT\ENQ\a\STXM\DC2\EOT\152\a\STX\f\n\
+    \\EOT\ENQ\b\STXM\DC2\EOT\193\a\STX\f\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXM\STX\DC2\EOT\152\a\t\v\n\
+    \\ENQ\ENQ\b\STXM\STX\DC2\EOT\193\a\t\v\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXN\SOH\DC2\EOT\153\a\STX\a\n\
+    \\ENQ\ENQ\b\STXN\SOH\DC2\EOT\194\a\STX\a\n\
     \\f\n\
-    \\EOT\ENQ\a\STXN\DC2\EOT\153\a\STX\r\n\
+    \\EOT\ENQ\b\STXN\DC2\EOT\194\a\STX\r\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXN\STX\DC2\EOT\153\a\n\
+    \\ENQ\ENQ\b\STXN\STX\DC2\EOT\194\a\n\
     \\f\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXO\SOH\DC2\EOT\154\a\STX\a\n\
+    \\ENQ\ENQ\b\STXO\SOH\DC2\EOT\195\a\STX\a\n\
     \1\n\
-    \\EOT\ENQ\a\STXO\DC2\EOT\154\a\STX\SO\"# Internal language for testing SCIP\n\
+    \\EOT\ENQ\b\STXO\DC2\EOT\195\a\STX\SO\"# Internal language for testing SCIP\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXO\STX\DC2\EOT\154\a\n\
+    \\ENQ\ENQ\b\STXO\STX\DC2\EOT\195\a\n\
     \\r\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXP\SOH\DC2\EOT\155\a\STX\ACK\n\
+    \\ENQ\ENQ\b\STXP\SOH\DC2\EOT\196\a\STX\ACK\n\
     \\f\n\
-    \\EOT\ENQ\a\STXP\DC2\EOT\155\a\STX\f\n\
+    \\EOT\ENQ\b\STXP\DC2\EOT\196\a\STX\f\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXP\STX\DC2\EOT\155\a\t\v\n\
+    \\ENQ\ENQ\b\STXP\STX\DC2\EOT\196\a\t\v\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXQ\SOH\DC2\EOT\156\a\STX\ACK\n\
+    \\ENQ\ENQ\b\STXQ\SOH\DC2\EOT\197\a\STX\ACK\n\
     \\f\n\
-    \\EOT\ENQ\a\STXQ\DC2\EOT\156\a\STX\f\n\
+    \\EOT\ENQ\b\STXQ\DC2\EOT\197\a\STX\f\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXQ\STX\DC2\EOT\156\a\t\v\n\
+    \\ENQ\ENQ\b\STXQ\STX\DC2\EOT\197\a\t\v\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXR\SOH\DC2\EOT\157\a\STX\ACK\n\
+    \\ENQ\ENQ\b\STXR\SOH\DC2\EOT\198\a\STX\ACK\n\
     \\f\n\
-    \\EOT\ENQ\a\STXR\DC2\EOT\157\a\STX\f\n\
+    \\EOT\ENQ\b\STXR\DC2\EOT\198\a\STX\f\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXR\STX\DC2\EOT\157\a\t\v\n\
+    \\ENQ\ENQ\b\STXR\STX\DC2\EOT\198\a\t\v\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXS\SOH\DC2\EOT\158\a\STX\ENQ\n\
+    \\ENQ\ENQ\b\STXS\SOH\DC2\EOT\199\a\STX\ENQ\n\
     \\f\n\
-    \\EOT\ENQ\a\STXS\DC2\EOT\158\a\STX\v\n\
+    \\EOT\ENQ\b\STXS\DC2\EOT\199\a\STX\v\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXS\STX\DC2\EOT\158\a\b\n\
+    \\ENQ\ENQ\b\STXS\STX\DC2\EOT\199\a\b\n\
     \\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXT\SOH\DC2\EOT\159\a\STX\ACK\n\
+    \\ENQ\ENQ\b\STXT\SOH\DC2\EOT\200\a\STX\ACK\n\
     \\f\n\
-    \\EOT\ENQ\a\STXT\DC2\EOT\159\a\STX\f\n\
+    \\EOT\ENQ\b\STXT\DC2\EOT\200\a\STX\f\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXT\STX\DC2\EOT\159\a\t\v\n\
+    \\ENQ\ENQ\b\STXT\STX\DC2\EOT\200\a\t\v\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXU\SOH\DC2\EOT\160\a\STX\ENQ\n\
+    \\ENQ\ENQ\b\STXU\SOH\DC2\EOT\201\a\STX\ENQ\n\
     \\f\n\
-    \\EOT\ENQ\a\STXU\DC2\EOT\160\a\STX\v\n\
+    \\EOT\ENQ\b\STXU\DC2\EOT\201\a\STX\v\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXU\STX\DC2\EOT\160\a\b\n\
+    \\ENQ\ENQ\b\STXU\STX\DC2\EOT\201\a\b\n\
     \\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXV\SOH\DC2\EOT\161\a\STX\ENQ\n\
+    \\ENQ\ENQ\b\STXV\SOH\DC2\EOT\202\a\STX\ENQ\n\
     \\f\n\
-    \\EOT\ENQ\a\STXV\DC2\EOT\161\a\STX\v\n\
+    \\EOT\ENQ\b\STXV\DC2\EOT\202\a\STX\v\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXV\STX\DC2\EOT\161\a\b\n\
+    \\ENQ\ENQ\b\STXV\STX\DC2\EOT\202\a\b\n\
     \\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXW\SOH\DC2\EOT\162\a\STX\ACK\n\
+    \\ENQ\ENQ\b\STXW\SOH\DC2\EOT\203\a\STX\ACK\n\
     \\f\n\
-    \\EOT\ENQ\a\STXW\DC2\EOT\162\a\STX\f\n\
+    \\EOT\ENQ\b\STXW\DC2\EOT\203\a\STX\f\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXW\STX\DC2\EOT\162\a\t\v\n\
+    \\ENQ\ENQ\b\STXW\STX\DC2\EOT\203\a\t\v\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXX\SOH\DC2\EOT\163\a\STX\a\n\
+    \\ENQ\ENQ\b\STXX\SOH\DC2\EOT\204\a\STX\a\n\
     \\f\n\
-    \\EOT\ENQ\a\STXX\DC2\EOT\163\a\STX\f\n\
+    \\EOT\ENQ\b\STXX\DC2\EOT\204\a\STX\f\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXX\STX\DC2\EOT\163\a\n\
+    \\ENQ\ENQ\b\STXX\STX\DC2\EOT\204\a\n\
     \\v\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXY\SOH\DC2\EOT\164\a\STX\b\n\
+    \\ENQ\ENQ\b\STXY\SOH\DC2\EOT\205\a\STX\b\n\
     \\f\n\
-    \\EOT\ENQ\a\STXY\DC2\EOT\164\a\STX\SO\n\
+    \\EOT\ENQ\b\STXY\DC2\EOT\205\a\STX\SO\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXY\STX\DC2\EOT\164\a\v\r\n\
+    \\ENQ\ENQ\b\STXY\STX\DC2\EOT\205\a\v\r\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXZ\SOH\DC2\EOT\165\a\STX\r\n\
+    \\ENQ\ENQ\b\STXZ\SOH\DC2\EOT\206\a\STX\r\n\
     \\DC3\n\
-    \\EOT\ENQ\a\STXZ\DC2\EOT\165\a\STX\DC3\"\ENQ Bash\n\
+    \\EOT\ENQ\b\STXZ\DC2\EOT\206\a\STX\DC3\"\ENQ Bash\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXZ\STX\DC2\EOT\165\a\DLE\DC2\n\
+    \\ENQ\ENQ\b\STXZ\STX\DC2\EOT\206\a\DLE\DC2\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX[\SOH\DC2\EOT\166\a\STX\t\n\
+    \\ENQ\ENQ\b\STX[\SOH\DC2\EOT\207\a\STX\t\n\
     \\f\n\
-    \\EOT\ENQ\a\STX[\DC2\EOT\166\a\STX\SI\n\
+    \\EOT\ENQ\b\STX[\DC2\EOT\207\a\STX\SI\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX[\STX\DC2\EOT\166\a\f\SO\n\
+    \\ENQ\ENQ\b\STX[\STX\DC2\EOT\207\a\f\SO\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX\\\SOH\DC2\EOT\167\a\STX\a\n\
+    \\ENQ\ENQ\b\STX\\\SOH\DC2\EOT\208\a\STX\a\n\
     \\f\n\
-    \\EOT\ENQ\a\STX\\\DC2\EOT\167\a\STX\SO\n\
+    \\EOT\ENQ\b\STX\\\DC2\EOT\208\a\STX\SO\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX\\\STX\DC2\EOT\167\a\n\
+    \\ENQ\ENQ\b\STX\\\STX\DC2\EOT\208\a\n\
     \\r\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX]\SOH\DC2\EOT\168\a\STX\n\
+    \\ENQ\ENQ\b\STX]\SOH\DC2\EOT\209\a\STX\n\
     \\n\
     \\f\n\
-    \\EOT\ENQ\a\STX]\DC2\EOT\168\a\STX\DLE\n\
+    \\EOT\ENQ\b\STX]\DC2\EOT\209\a\STX\DLE\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX]\STX\DC2\EOT\168\a\r\SI\n\
+    \\ENQ\ENQ\b\STX]\STX\DC2\EOT\209\a\r\SI\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX^\SOH\DC2\EOT\169\a\STX\b\n\
+    \\ENQ\ENQ\b\STX^\SOH\DC2\EOT\210\a\STX\b\n\
     \\f\n\
-    \\EOT\ENQ\a\STX^\DC2\EOT\169\a\STX\SI\n\
+    \\EOT\ENQ\b\STX^\DC2\EOT\210\a\STX\SI\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX^\STX\DC2\EOT\169\a\v\SO\n\
+    \\ENQ\ENQ\b\STX^\STX\DC2\EOT\210\a\v\SO\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX_\SOH\DC2\EOT\170\a\STX\a\n\
+    \\ENQ\ENQ\b\STX_\SOH\DC2\EOT\211\a\STX\a\n\
     \\f\n\
-    \\EOT\ENQ\a\STX_\DC2\EOT\170\a\STX\f\n\
+    \\EOT\ENQ\b\STX_\DC2\EOT\211\a\STX\f\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX_\STX\DC2\EOT\170\a\n\
+    \\ENQ\ENQ\b\STX_\STX\DC2\EOT\211\a\n\
     \\v\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX`\SOH\DC2\EOT\171\a\STX\ENQ\n\
+    \\ENQ\ENQ\b\STX`\SOH\DC2\EOT\212\a\STX\ENQ\n\
     \\f\n\
-    \\EOT\ENQ\a\STX`\DC2\EOT\171\a\STX\f\n\
+    \\EOT\ENQ\b\STX`\DC2\EOT\212\a\STX\f\n\
     \\r\n\
-    \\ENQ\ENQ\a\STX`\STX\DC2\EOT\171\a\b\v\n\
+    \\ENQ\ENQ\b\STX`\STX\DC2\EOT\212\a\b\v\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXa\SOH\DC2\EOT\172\a\STX\ACK\n\
+    \\ENQ\ENQ\b\STXa\SOH\DC2\EOT\213\a\STX\ACK\n\
     \\f\n\
-    \\EOT\ENQ\a\STXa\DC2\EOT\172\a\STX\f\n\
+    \\EOT\ENQ\b\STXa\DC2\EOT\213\a\STX\f\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXa\STX\DC2\EOT\172\a\t\v\n\
+    \\ENQ\ENQ\b\STXa\STX\DC2\EOT\213\a\t\v\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXb\SOH\DC2\EOT\173\a\STX\ENQ\n\
+    \\ENQ\ENQ\b\STXb\SOH\DC2\EOT\214\a\STX\ENQ\n\
     \\f\n\
-    \\EOT\ENQ\a\STXb\DC2\EOT\173\a\STX\v\n\
+    \\EOT\ENQ\b\STXb\DC2\EOT\214\a\STX\v\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXb\STX\DC2\EOT\173\a\b\n\
+    \\ENQ\ENQ\b\STXb\STX\DC2\EOT\214\a\b\n\
     \\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXc\SOH\DC2\EOT\174\a\STX\b\n\
+    \\ENQ\ENQ\b\STXc\SOH\DC2\EOT\215\a\STX\b\n\
     \\f\n\
-    \\EOT\ENQ\a\STXc\DC2\EOT\174\a\STX\SI\n\
+    \\EOT\ENQ\b\STXc\DC2\EOT\215\a\STX\SI\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXc\STX\DC2\EOT\174\a\v\SO\n\
+    \\ENQ\ENQ\b\STXc\STX\DC2\EOT\215\a\v\SO\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXd\SOH\DC2\EOT\175\a\STX\f\n\
+    \\ENQ\ENQ\b\STXd\SOH\DC2\EOT\216\a\STX\f\n\
     \\f\n\
-    \\EOT\ENQ\a\STXd\DC2\EOT\175\a\STX\DC2\n\
+    \\EOT\ENQ\b\STXd\DC2\EOT\216\a\STX\DC2\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXd\STX\DC2\EOT\175\a\SI\DC1\n\
+    \\ENQ\ENQ\b\STXd\STX\DC2\EOT\216\a\SI\DC1\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXe\SOH\DC2\EOT\176\a\STX\DC1\n\
+    \\ENQ\ENQ\b\STXe\SOH\DC2\EOT\217\a\STX\DC1\n\
     \\f\n\
-    \\EOT\ENQ\a\STXe\DC2\EOT\176\a\STX\ETB\n\
+    \\EOT\ENQ\b\STXe\DC2\EOT\217\a\STX\ETB\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXe\STX\DC2\EOT\176\a\DC4\SYN\n\
+    \\ENQ\ENQ\b\STXe\STX\DC2\EOT\217\a\DC4\SYN\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXf\SOH\DC2\EOT\177\a\STX\t\n\
+    \\ENQ\ENQ\b\STXf\SOH\DC2\EOT\218\a\STX\t\n\
     \\f\n\
-    \\EOT\ENQ\a\STXf\DC2\EOT\177\a\STX\DLE\n\
+    \\EOT\ENQ\b\STXf\DC2\EOT\218\a\STX\DLE\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXf\STX\DC2\EOT\177\a\f\SI\n\
+    \\ENQ\ENQ\b\STXf\STX\DC2\EOT\218\a\f\SI\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXg\SOH\DC2\EOT\178\a\STX\ACK\n\
+    \\ENQ\ENQ\b\STXg\SOH\DC2\EOT\219\a\STX\ACK\n\
     \\f\n\
-    \\EOT\ENQ\a\STXg\DC2\EOT\178\a\STX\r\n\
+    \\EOT\ENQ\b\STXg\DC2\EOT\219\a\STX\r\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXg\STX\DC2\EOT\178\a\t\f\n\
+    \\ENQ\ENQ\b\STXg\STX\DC2\EOT\219\a\t\f\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXh\SOH\DC2\EOT\179\a\STX\r\n\
+    \\ENQ\ENQ\b\STXh\SOH\DC2\EOT\220\a\STX\r\n\
     \\f\n\
-    \\EOT\ENQ\a\STXh\DC2\EOT\179\a\STX\DC3\n\
+    \\EOT\ENQ\b\STXh\DC2\EOT\220\a\STX\DC3\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXh\STX\DC2\EOT\179\a\DLE\DC2\n\
+    \\ENQ\ENQ\b\STXh\STX\DC2\EOT\220\a\DLE\DC2\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXi\SOH\DC2\EOT\180\a\STX\ENQ\n\
+    \\ENQ\ENQ\b\STXi\SOH\DC2\EOT\221\a\STX\ENQ\n\
     \\f\n\
-    \\EOT\ENQ\a\STXi\DC2\EOT\180\a\STX\v\n\
+    \\EOT\ENQ\b\STXi\DC2\EOT\221\a\STX\v\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXi\STX\DC2\EOT\180\a\b\n\
+    \\ENQ\ENQ\b\STXi\STX\DC2\EOT\221\a\b\n\
     \\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXj\SOH\DC2\EOT\181\a\STX\t\n\
+    \\ENQ\ENQ\b\STXj\SOH\DC2\EOT\222\a\STX\t\n\
     \\f\n\
-    \\EOT\ENQ\a\STXj\DC2\EOT\181\a\STX\SI\n\
+    \\EOT\ENQ\b\STXj\DC2\EOT\222\a\STX\SI\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXj\STX\DC2\EOT\181\a\f\SO\n\
+    \\ENQ\ENQ\b\STXj\STX\DC2\EOT\222\a\f\SO\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXk\SOH\DC2\EOT\182\a\STX\ENQ\n\
+    \\ENQ\ENQ\b\STXk\SOH\DC2\EOT\223\a\STX\ENQ\n\
     \\f\n\
-    \\EOT\ENQ\a\STXk\DC2\EOT\182\a\STX\v\n\
+    \\EOT\ENQ\b\STXk\DC2\EOT\223\a\STX\v\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXk\STX\DC2\EOT\182\a\b\n\
+    \\ENQ\ENQ\b\STXk\STX\DC2\EOT\223\a\b\n\
     \\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXl\SOH\DC2\EOT\183\a\STX\ENQ\n\
+    \\ENQ\ENQ\b\STXl\SOH\DC2\EOT\224\a\STX\ENQ\n\
     \\f\n\
-    \\EOT\ENQ\a\STXl\DC2\EOT\183\a\STX\v\n\
+    \\EOT\ENQ\b\STXl\DC2\EOT\224\a\STX\v\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXl\STX\DC2\EOT\183\a\b\n\
+    \\ENQ\ENQ\b\STXl\STX\DC2\EOT\224\a\b\n\
     \\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXm\SOH\DC2\EOT\184\a\STX\ACK\n\
+    \\ENQ\ENQ\b\STXm\SOH\DC2\EOT\225\a\STX\ACK\n\
     \\f\n\
-    \\EOT\ENQ\a\STXm\DC2\EOT\184\a\STX\f\n\
+    \\EOT\ENQ\b\STXm\DC2\EOT\225\a\STX\f\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXm\STX\DC2\EOT\184\a\t\v\n\
+    \\ENQ\ENQ\b\STXm\STX\DC2\EOT\225\a\t\v\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXn\SOH\DC2\EOT\185\a\STX\ENQ\n\
+    \\ENQ\ENQ\b\STXn\SOH\DC2\EOT\226\a\STX\ENQ\n\
     \\147\ETX\n\
-    \\EOT\ENQ\a\STXn\DC2\EOT\185\a\STX\v\"\132\ETX NextLanguage = 112;\n\
+    \\EOT\ENQ\b\STXn\DC2\EOT\226\a\STX\v\"\132\ETX NextLanguage = 112;\n\
     \ Steps add a new language:\n\
     \ 1. Copy-paste the \"NextLanguage = N\" line above\n\
     \ 2. Increment \"NextLanguage = N\" to \"NextLanguage = N+1\"\n\
@@ -10446,5 +10664,5 @@ packedFileDescriptor
     \ 5. (optional) Add a brief comment behind the language if the name is not self-explanatory\n\
     \\n\
     \\r\n\
-    \\ENQ\ENQ\a\STXn\STX\DC2\EOT\185\a\b\n\
+    \\ENQ\ENQ\b\STXn\STX\DC2\EOT\226\a\b\n\
     \b\ACKproto3"

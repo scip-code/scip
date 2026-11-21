@@ -401,6 +401,7 @@ docstring or what package it's defined it.
 |  **display_name** | string | (optional) The name of this symbol as it should be displayed to the user. For example, the symbol "com/example/MyClass#myMethod(+1)." should have the display name "myMethod". The `symbol` field is not a reliable source of the display name for several reasons:
 |  **signature_documentation** | Signature | (optional) The signature of this symbol as it's displayed in API documentation or in hover tooltips. For example, a Java method that adds two numbers would have `Signature.language = "java"` and `Signature.text = "void add(int a, int b)"`. The `language` and `text` fields are required while `occurrences` can be optionally included to support hyperlinking referenced symbols in the signature.
 |  **enclosing_symbol** | string | (optional) The enclosing symbol if this is a local symbol.  For non-local symbols, the enclosing symbol should be parsed from the `symbol` field using the `Descriptor` grammar.
+|  **visibility** | Visibility | (optional) The declared visibility of this symbol, see `Visibility`.
 
 
 
@@ -439,6 +440,15 @@ author of an indexer, the decision to use a local symbol or global symbol
 should exclusively be determined whether the local symbol is accessible
 outside the document, not by the capability to find the enclosing
 symbol.
+
+
+Additional notes on **visibility**:
+
+(optional) The declared visibility of this symbol, see `Visibility`.
+
+Indexers should leave this field empty when the language has no notion of
+visibility for this kind of symbol, for example parameters or type
+parameters.
 
 #### Kind
 
@@ -845,3 +855,30 @@ and a module in languages like Python and JavaScript.
 | 0 | UnspecifiedTextEncoding | 
 | 1 | UTF8 | 
 | 2 | UTF16 | 
+
+
+### Visibility
+
+Visibility describes who may access a symbol according to the access rules of
+its language, as declared in the source code or implied by the language's
+defaults (for example, Java members without a modifier are package-private,
+while TypeScript class members without a modifier are public).
+
+The value describes the symbol's own declaration. It does not account for
+the visibility of enclosing symbols: a public method of a private class is
+still `Public`. Consumers that need to know whether a symbol is reachable from
+outside its package can combine this field with the visibility of the
+enclosing symbols.
+
+When an access modifier does not map exactly to one of the values below,
+indexers should pick the value that best describes access from outside the
+declaring package. For example, C# `protected internal` is `Protected`, and
+C# `private protected` is `Package`.
+
+| Number | Name | Description |
+| ------ | ---- | ----------- |
+| 0 | UnspecifiedVisibility | 
+| 1 | Public | Accessible wherever the enclosing symbol is accessible. For example: `public` in Java, C#, Kotlin and TypeScript, TypeScript and JavaScript module members that are exported, Go exported identifiers and Rust `pub`.
+| 2 | Protected | Accessible from the declaring type and its subtypes. For example: `protected` in Java, C#, Kotlin, TypeScript and PHP.
+| 3 | Private | Accessible only from the declaring type, file or module. For example: `private` in Java, C#, Kotlin and TypeScript, ECMAScript `#private` class members, TypeScript and JavaScript module members that are not exported, and Rust items without `pub`.
+| 4 | PackagePrivate | Accessible from the declaring package, module, assembly or crate. For example: Java members without an access modifier, Go unexported identifiers, `internal` in C# and Kotlin, and Rust `pub(crate)`.

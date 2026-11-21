@@ -106,7 +106,7 @@ public enum DiagnosticTag
   }
   public static com.google.protobuf.Descriptors.EnumDescriptor
       getDescriptor() {
-    return org.scip_code.scip.ScipProto.getDescriptor().getEnumType(6);
+    return org.scip_code.scip.ScipProto.getDescriptor().getEnumType(7);
   }
 
   private static final DiagnosticTag[] VALUES = values();

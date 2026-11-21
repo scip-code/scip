@@ -722,7 +722,7 @@ public enum SyntaxKind
   }
   public static com.google.protobuf.Descriptors.EnumDescriptor
       getDescriptor() {
-    return org.scip_code.scip.ScipProto.getDescriptor().getEnumType(4);
+    return org.scip_code.scip.ScipProto.getDescriptor().getEnumType(5);
   }
 
   private static final SyntaxKind[] VALUES = getStaticValuesArray();

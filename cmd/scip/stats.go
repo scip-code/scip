@@ -5,7 +5,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
-	"net/url"
 	"os"
 	"path/filepath"
 
@@ -153,18 +152,19 @@ func percentile(buf []float64, percent float64) int32 {
 
 func countLinesOfCode(index *scip.Index, customProjectRoot string) (*gocloc.Result, error) {
 	var localSource string
-	root, err := url.Parse(index.Metadata.ProjectRoot)
+	rootPath, err := scip.ProjectRootToLocalPath(index.Metadata.ProjectRoot)
 	if err != nil {
 		return nil, fmt.Errorf("failed to parse Index.Metadata.ProjectRoot as a URI %s: %w", index.Metadata.ProjectRoot, err)
 	}
 	if customProjectRoot != "" {
 		localSource = customProjectRoot
 	} else {
-		_, err := os.Stat(root.Path)
+		localSource = rootPath
+		_, err := os.Stat(rootPath)
 		if errors.Is(err, os.ErrNotExist) {
 			cwd, _ := os.Getwd()
 			log.Printf("Project root [%s] doesn't exist, using current working directory [%s] instead. "+
-				"To override this behaviour, specify --project-root=<folder> option", root.Path, cwd)
+				"To override this behaviour, specify --project-root=<folder> option", rootPath, cwd)
 			localSource = cwd
 		} else if err != nil {
 			return nil, err

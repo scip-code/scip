@@ -4,7 +4,6 @@ import (
 	"errors"
 	"fmt"
 	"log"
-	"net/url"
 	"os"
 	"path/filepath"
 	"sort"
@@ -22,18 +21,17 @@ func FormatSnapshots(
 	customProjectRoot string,
 ) ([]*scip.SourceFile, error) {
 	var result []*scip.SourceFile
-	projectRootUrl, err := url.Parse(index.Metadata.ProjectRoot)
+	localSourcesRoot, err := scip.ProjectRootToLocalPath(index.Metadata.ProjectRoot)
 	if err != nil {
 		return nil, err
 	}
 
-	localSourcesRoot := projectRootUrl.Path
 	if customProjectRoot != "" {
 		localSourcesRoot = customProjectRoot
 	} else if _, err := os.Stat(localSourcesRoot); errors.Is(err, os.ErrNotExist) {
 		cwd, _ := os.Getwd()
 		log.Printf("Project root [%s] doesn't exist, using current working directory [%s] instead. "+
-			"To override this behaviour, use --project-root=<folder> option directly", projectRootUrl.Path, cwd)
+			"To override this behaviour, use --project-root=<folder> option directly", localSourcesRoot, cwd)
 		localSourcesRoot = cwd
 	}
 

@@ -5,7 +5,7 @@ go 1.26.0
 replace github.com/scip-code/scip/bindings/go/scip => ./bindings/go/scip
 
 require (
-	github.com/hhatto/gocloc v0.7.0
+	github.com/hhatto/gocloc v0.7.1
 	github.com/k0kubun/pp/v3 v3.5.4
 	github.com/klauspost/compress v1.20.5
 	github.com/montanaflynn/stats v0.14.0
